@@ -30,7 +30,7 @@ public class VelocityHtmlReport implements Report {
         super();
         try {
             Velocity.init();
-        } catch (Throwable e) {
+        } catch (Exception e) {
             throw new VsocReportException(
                     "Could not instantiate the VelocityHtmlReport because: "
                             + e.getMessage(), e);
@@ -61,7 +61,7 @@ public class VelocityHtmlReport implements Report {
             context.put("rows", rows(reportable.getResultTable()));
             context.put("legend", legend(reportable.getResultTable()));
             Template templ = Velocity.getTemplate(this.templateName);
-            BufferedWriter writer = writer = new BufferedWriter(this.outWriter);
+            BufferedWriter writer = new BufferedWriter(this.outWriter);
             templ.merge(context, writer);
             writer.flush();
             writer.close();
@@ -89,10 +89,10 @@ public class VelocityHtmlReport implements Report {
         return re;
     }
 
-    private Collection head(ResultTable resultTable) {
-        ArrayList re = new ArrayList();
+    private Collection<String> head(ResultTable resultTable) {
+        ArrayList<String> re = new ArrayList<>();
         re.add(resultTable.getSerialDesc().getId());
-        Iterator iter = resultTable.getColumnDescs().iterator();
+        Iterator<ColumnDesc> iter = resultTable.getColumnDescs().iterator();
         while (iter.hasNext()) {
             ColumnDesc desc = (ColumnDesc) iter.next();
             re.add(desc.getId());
@@ -100,22 +100,22 @@ public class VelocityHtmlReport implements Report {
         return re;
     }
 
-    private Collection rows(ResultTable resultTable) {
-        ArrayList re = new ArrayList();
-        Iterator iter = resultTable.getRows().iterator();
+    private Collection<Object> rows(ResultTable resultTable) {
+        ArrayList<Object> re = new ArrayList<>();
+        Iterator<ResultTableRow> iter = resultTable.getRows().iterator();
         while (iter.hasNext()) {
-            ResultTableRow row = (ResultTableRow) iter.next();
+            ResultTableRow row = iter.next();
             re.add(row(row, resultTable.getColumnDescs()));
         }
         return re;
     }
 
-    private Collection row(ResultTableRow row, Collection columnDescs) {
-        ArrayList re = new ArrayList();
+    private Collection<Object> row(ResultTableRow row, Collection<ColumnDesc> columnDescs) {
+        ArrayList<Object> re = new ArrayList<>();
         re.add(row.getSerialValue());
-        Iterator iter = columnDescs.iterator();
+        Iterator<ColumnDesc> iter = columnDescs.iterator();
         while (iter.hasNext()) {
-            ColumnDesc desc = (ColumnDesc) iter.next();
+            ColumnDesc desc =iter.next();
             NumberFormat format = desc.getFormat();
             Number val = row.getResultValue(desc.getId());
             String str = "";
@@ -127,12 +127,12 @@ public class VelocityHtmlReport implements Report {
         return re;
     }
 
-    private Collection properties(Properties properties) {
-        ArrayList re = new ArrayList();
-        Iterator iter = properties.keySet().iterator();
+    private Collection<List<Object>> properties(Properties properties) {
+        ArrayList<List<Object>> re = new ArrayList<>();
+        Iterator<Object> iter = properties.keySet().iterator();
         while (iter.hasNext()) {
             String key = (String) iter.next();
-            ArrayList prop = new ArrayList();
+            ArrayList<Object> prop = new ArrayList<>();
             prop.add(key);
             prop.add(properties.getProperty(key));
             re.add(prop);
