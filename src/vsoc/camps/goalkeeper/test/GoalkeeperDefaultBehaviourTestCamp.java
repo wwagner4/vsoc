@@ -76,16 +76,19 @@ public class GoalkeeperDefaultBehaviourTestCamp extends AbstractCamp {
         return null;
     }
 
-    protected Server createServer() {
-        DefaultServerFactory fac = new DefaultServerFactory();
-        fac.setEastPlayerCount(3);
-        fac.setWestPlayerCount(3);
-        return fac.createServer();
-    }
-
     protected List getMembers() {
         throw new VsocNotYetImplementedException();
     }
+
+	@Override
+	protected int eastPlayerCount() {
+		return 3;
+	}
+
+	@Override
+	protected int westPlayerCount() {
+		return 3;
+	}
 
 
 }

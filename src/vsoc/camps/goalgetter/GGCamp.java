@@ -19,8 +19,6 @@ import vsoc.camps.Member;
 import vsoc.camps.NetBehaviour;
 import vsoc.genetic.CrossableFactory;
 import vsoc.genetic.SelectionPolicy;
-import vsoc.model.DefaultServerFactory;
-import vsoc.model.Server;
 import vsoc.model.VsocPlayer;
 import vsoc.nn.Net;
 import vsoc.util.RandomIndexSelector;
@@ -57,13 +55,6 @@ public class GGCamp extends AbstractCamp {
 
     public GGCamp() {
         super();
-    }
-
-    protected Server createServer() {
-        DefaultServerFactory fac = new DefaultServerFactory();
-        fac.setEastPlayerCount(3);
-        fac.setWestPlayerCount(3);
-        return fac.createServer();
     }
 
     public int getKickFactor() {
@@ -277,5 +268,15 @@ public class GGCamp extends AbstractCamp {
     public void setZeroKickPenalty(int zeroKickPenalty) {
         this.zeroKickPenalty = zeroKickPenalty;
     }
+
+	@Override
+	protected int eastPlayerCount() {
+		return 3;
+	}
+
+	@Override
+	protected int westPlayerCount() {
+		return 3;
+	}
 
 }

@@ -17,6 +17,7 @@ import org.apache.log4j.Logger;
 import vsoc.VsocInvalidConfigurationException;
 import vsoc.genetic.CrossableFactory;
 import vsoc.genetic.SelectionPolicy;
+import vsoc.model.DefaultServerFactory;
 import vsoc.model.Server;
 import vsoc.model.VsocPlayer;
 import vsoc.nn.Net;
@@ -59,6 +60,8 @@ public abstract class AbstractCamp implements Camp {
             takeOneStep();
         }
     }
+    
+
 
     public void takeOneStep() {
         if (log.isDebugEnabled()) {
@@ -98,7 +101,15 @@ public abstract class AbstractCamp implements Camp {
         return this.server;
     }
 
-    protected abstract Server createServer();
+    protected abstract int eastPlayerCount();
+    protected abstract int westPlayerCount();
+    
+    private Server createServer() {
+        DefaultServerFactory fac = new DefaultServerFactory();
+        fac.setEastPlayerCount(eastPlayerCount());
+        fac.setWestPlayerCount(westPlayerCount());
+        return fac.createServer();
+    }
 
     public int getStepsPerMatch() {
         return this.stepsPerMatch;

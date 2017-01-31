@@ -307,6 +307,16 @@ public class GKCamp extends AbstractCamp {
         return fac.createServer();
     }
 
+	@Override
+	protected int eastPlayerCount() {
+		return 1;
+	}
+
+	@Override
+	protected int westPlayerCount() {
+		return 5;
+	}
+
     public CrossableFactory getCrossableFactory() {
         return this.crossableFactory;
     }
