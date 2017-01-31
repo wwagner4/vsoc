@@ -52,13 +52,13 @@ public class CampTest extends TestCase {
     }
 
     public void testLoadGGCampContext() {
-        new ClassPathXmlApplicationContext(
-                "ggcamp.xml");
+        assertNotNull(new ClassPathXmlApplicationContext(
+                "ggcamp.xml"));
     }
 
     private GGCamp createTestCamp(String id) {
         ApplicationContext ctx = new ClassPathXmlApplicationContext(
-                "ggcamptest00.xml");
+                "ggcamp.xml");
         GGCamp camp = (GGCamp) ctx.getBean(id);
         return camp;
     }

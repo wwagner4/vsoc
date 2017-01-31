@@ -46,7 +46,7 @@ public class GGCamp extends AbstractCamp {
 
     private SelectionPolicy<Net> selPoli = null;
 
-    private CrossableFactory crossableFactory = null;
+    private CrossableFactory<Net> crossableFactory = null;
 
     private int zeroKickPenalty = -100;
 
@@ -113,11 +113,11 @@ public class GGCamp extends AbstractCamp {
         return sb.toString();
     }
 
-    public CrossableFactory getCrossableFactory() {
+    public CrossableFactory<Net> getCrossableFactory() {
         return this.crossableFactory;
     }
 
-    public void setCrossableFactory(CrossableFactory crossableFactory) {
+    public void setCrossableFactory(CrossableFactory<Net> crossableFactory) {
         this.crossableFactory = crossableFactory;
     }
 

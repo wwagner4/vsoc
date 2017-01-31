@@ -27,6 +27,7 @@ public class GoalgetterGenerator {
 		String dirName = "conf";
 		File outDir = new File(dirName);
 		if (!outDir.exists()) {
+			outDir.mkdirs();
 			log.warn("Output direcory " + outDir + " did not exist. Was created.");
 		}
 		File file = new File(outDir, "ggcamp.ser");
