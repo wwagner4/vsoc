@@ -7,7 +7,7 @@ import org.apache.log4j.Logger;
 import vsoc.camps.Member;
 import vsoc.util.VsocUtil;
 
-public class GGMembersComparator implements Comparator {
+public class GGMembersComparator implements Comparator<Member> {
 
     private static Logger log = Logger.getLogger(GGMembersComparator.class);
 
@@ -21,6 +21,8 @@ public class GGMembersComparator implements Comparator {
 
     private int zeroKickPenalty;
 
+	private double epsilon = 0.000001;
+
     public GGMembersComparator(int goalsFactor, int ownGoalsFactor,
             int kickFactor, int kickOutFactor, int zeroKickPenalty) {
         super();
@@ -31,10 +33,8 @@ public class GGMembersComparator implements Comparator {
         this.zeroKickPenalty = zeroKickPenalty;
     }
 
-    public int compare(Object o1, Object o2) {
-        Member m1 = (Member) o1;
-        Member m2 = (Member) o2;
-        return fitness(m2).compareTo(fitness(m1));
+    public int compare(Member o1, Member o2) {
+        return fitness(o2).compareTo(fitness(o1));
     }
 
     public Double fitness(Member m) {
@@ -48,7 +48,7 @@ public class GGMembersComparator implements Comparator {
         int kf = this.kickFactor;
         int kof = this.kickOutFactor;
         int zkp = 0;
-        if (k == 0) {
+        if (isZero(k)) {
             zkp = this.zeroKickPenalty;
         }
         double fit = kf * k + gf * g + ogf * og + kof * ko + zkp;
@@ -59,7 +59,11 @@ public class GGMembersComparator implements Comparator {
                     + ">\n\tfactores<k=" + kf + " g=" + gf + " og=" + ogf
                     + " ko=" + kof + ">");
         }
-        return new Double(fit);
+        return fit;
     }
+
+	private boolean isZero(double k) {
+		return k < epsilon || k > -epsilon ;
+	}
 
 }

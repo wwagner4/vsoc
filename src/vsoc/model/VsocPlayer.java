@@ -9,6 +9,7 @@ import atan.model.*;
  * A player.
  */
 
+@SuppressWarnings("serial")
 public abstract class VsocPlayer extends MoveObject implements Player {
 
     private Controller control;

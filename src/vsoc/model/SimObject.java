@@ -10,6 +10,7 @@ import java.io.Serializable;
  * Any simulated object. E.g. Payers, Ball, Flag, ...
  */
 
+@SuppressWarnings("serial")
 public abstract class SimObject implements Serializable {
 
     private Vec2D position = null;

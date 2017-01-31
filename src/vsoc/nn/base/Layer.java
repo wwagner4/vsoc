@@ -17,7 +17,7 @@ public class Layer implements Serializable {
 
     private static final long serialVersionUID = 0L;
 
-    Vector lns;
+    Vector<LayerNode> lns;
 
     public Layer() {
         this.lns = new Vector();
@@ -58,7 +58,7 @@ public class Layer implements Serializable {
 
     public void setValuesRandom(RandomValue rv) {
         LayerNode ln;
-        Enumeration e;
+        Enumeration<LayerNode> e;
         for (e = layerNodes(); e.hasMoreElements();) {
             ln = (LayerNode) e.nextElement();
             ln.setValueRandom(rv);
@@ -139,7 +139,7 @@ public class Layer implements Serializable {
         }
     }
 
-    public Enumeration layerNodes() {
+    public Enumeration<LayerNode> layerNodes() {
         return new EnumLayerNodesOfLayer(this);
     }
 
@@ -149,7 +149,7 @@ public class Layer implements Serializable {
 
     public boolean equalsInValues(Object o) {
         LayerNode ln, thisLn;
-        Enumeration lns, thisLns;
+        Enumeration<LayerNode> lns, thisLns;
         boolean equals = true;
         Layer l;
         if (!(o instanceof Layer))
@@ -171,10 +171,12 @@ public class Layer implements Serializable {
         return false;
     }
 
-    class EnumLayerNodesOfLayer implements Enumeration {
-        Vector v;
+    // TODO Remove the Enum classes
+    class EnumLayerNodesOfLayer implements Enumeration<LayerNode> {
+        Vector<LayerNode> v;
 
-        int i, size;
+        int i;
+        int size;
 
         EnumLayerNodesOfLayer(Layer l) {
             this.v = l.lns;
@@ -186,9 +188,8 @@ public class Layer implements Serializable {
             return this.i < this.size;
         }
 
-        public Object nextElement() {
-            Object o;
-            o = this.v.elementAt(this.i);
+        public LayerNode nextElement() {
+        	LayerNode o = this.v.elementAt(this.i);
             this.i++;
             return o;
         }

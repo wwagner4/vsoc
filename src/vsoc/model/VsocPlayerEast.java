@@ -8,6 +8,7 @@ import vsoc.util.*;
  * Player of the east team.
  */
 
+@SuppressWarnings("serial")
 public class VsocPlayerEast extends VsocPlayer {
 
   public VsocPlayerEast(double x, double y, double direction) {

@@ -1,7 +1,7 @@
 package vsoc.model;
 
 /**
- * Thread prforming the server actions.
+ * Thread performing the server actions.
  */
 
 class ServerThread extends Thread {
@@ -14,6 +14,7 @@ class ServerThread extends Thread {
         this.server = s;
     }
 
+    @Override
     public void run() {
         while (this.running)
             this.server.takeStep();
