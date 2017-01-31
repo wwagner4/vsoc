@@ -20,13 +20,13 @@ public class Layer implements Serializable {
     Vector<LayerNode> lns;
 
     public Layer() {
-        this.lns = new Vector();
+        this.lns = new Vector<>();
     }
 
     public Layer(int size) {
         int i;
 
-        this.lns = new Vector();
+        this.lns = new Vector<>();
         for (i = 1; i <= size; i++) {
             this.addLayerNode(new LayerNode());
         }
@@ -45,15 +45,11 @@ public class Layer implements Serializable {
     }
 
     public void setValueAt(int i, short value) {
-        LayerNode ln;
-        ln = this.layerNodeAt(i);
-        ln.setValue(value);
+        this.layerNodeAt(i).setValue(value);
     }
 
     public short getValueAt(int i) {
-        LayerNode ln;
-        ln = this.layerNodeAt(i);
-        return (ln.getValue());
+        return this.layerNodeAt(i).getValue();
     }
 
     public void setValuesRandom(RandomValue rv) {
@@ -65,12 +61,13 @@ public class Layer implements Serializable {
         }
     }
 
+    @Override
     public String toString() {
         StringWriter sw = new StringWriter();
         try {
             toStream(sw);
         } catch (IOException e) {
-            throw new Error(e.getMessage());
+            throw new IllegalStateException(e.getMessage(), e);
         }
         return sw.toString();
     }
@@ -80,58 +77,51 @@ public class Layer implements Serializable {
         try {
             toValuesStream(sw);
         } catch (IOException e) {
-            throw new Error(e.getMessage());
+            throw new IllegalStateException(e.getMessage(), e);
         }
         return sw.toString();
     }
 
     public void toStream(Writer w) throws IOException {
-        Enumeration e;
-        LayerNode ln;
         w.write("[");
-        for (e = layerNodes(); e.hasMoreElements();) {
-            ln = (LayerNode) e.nextElement();
+        for (Enumeration<LayerNode> e = layerNodes(); e.hasMoreElements();) {
+        	LayerNode ln = e.nextElement();
             w.write(ln.toString());
         }
         w.write("]");
     }
 
     public void toValuesStream(Writer w) throws IOException {
-        Enumeration e;
         LayerNode ln;
-        for (e = layerNodes(); e.hasMoreElements();) {
-            ln = (LayerNode) e.nextElement();
+        for (Enumeration<LayerNode> e = layerNodes(); e.hasMoreElements();) {
+            ln = e.nextElement();
             w.write(ln.getValue() + "\t");
         }
     }
 
     String valuesToString() {
-        String str;
-        Enumeration e;
+        StringBuilder str = new StringBuilder();
         LayerNode ln;
-        str = "";
-        for (e = layerNodes(); e.hasMoreElements();) {
-            ln = (LayerNode) e.nextElement();
-            str = str + ln.valueToString() + ";";
+        for (Enumeration<LayerNode> e = layerNodes(); e.hasMoreElements();) {
+            ln = e.nextElement();
+            str.append(ln.valueToString() + ";");
         }
-        return str;
+        return str.toString();
     }
 
     public void resetCalculated() {
-        int i, size;
         LayerNode ln;
-        size = size();
-        for (i = 0; i < size; i++) {
+        int size = size();
+        for (int i = 0; i < size; i++) {
             ln = layerNodeAt(i);
             ln.resetCalculated();
         }
     }
 
     public void calculate() {
-        int i, size;
         LayerNode ln;
-        size = size();
-        for (i = 0; i < size; i++) {
+        int size = size();
+        for (int i = 0; i < size; i++) {
             ln = layerNodeAt(i);
             if (!ln.isCalculated()) {
                 ln.calculate();
@@ -143,23 +133,26 @@ public class Layer implements Serializable {
         return new EnumLayerNodesOfLayer(this);
     }
 
+    @Override
     public boolean equals(Object o) {
         return equalsInValues(o);
     }
+    
+    @Override
+    public int hashCode() {
+    	return 0;
+    }
 
     public boolean equalsInValues(Object o) {
-        LayerNode ln, thisLn;
-        Enumeration<LayerNode> lns, thisLns;
         boolean equals = true;
-        Layer l;
         if (!(o instanceof Layer))
             return false;
-        l = (Layer) o;
-        lns = l.layerNodes();
-        thisLns = layerNodes();
+        Layer l = (Layer) o;
+        Enumeration<LayerNode> lns = l.layerNodes();
+        Enumeration<LayerNode> thisLns = layerNodes();
         while (lns.hasMoreElements() && thisLns.hasMoreElements() && equals) {
-            ln = (LayerNode) lns.nextElement();
-            thisLn = (LayerNode) thisLns.nextElement();
+            LayerNode ln = lns.nextElement();
+            LayerNode thisLn = thisLns.nextElement();
             if (!ln.equalsInValue(thisLn))
                 equals = false;
         }
