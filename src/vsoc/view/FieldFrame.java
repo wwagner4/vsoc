@@ -7,15 +7,11 @@ import java.net.URL;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 
 import org.apache.log4j.Logger;
 
 import vsoc.camps.Camp;
 import vsoc.model.Server;
-
-import com.sun.java.swing.plaf.windows.WindowsLookAndFeel;
 
 /**
  * Contains a FieldPanel .
@@ -27,11 +23,6 @@ public class FieldFrame extends JFrame implements WindowListener {
     static Logger log = Logger.getLogger(FieldFrame.class);
 
     public FieldFrame() throws HeadlessException {
-        try {
-            UIManager.setLookAndFeel(new WindowsLookAndFeel());
-        } catch (UnsupportedLookAndFeelException e) {
-            log.info("Could not load look and feel. " + e.getMessage());
-        }
         initGuiComponents();
     }
 
