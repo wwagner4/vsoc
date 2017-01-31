@@ -44,7 +44,7 @@ public class GKCamp extends AbstractCamp {
 
     private List<Member> goalkeepers = null;
 
-    private CrossableFactory crossableFactory;
+    private CrossableFactory<Net> crossableFactory;
 
     private SelectionPolicy<Net> gkSelPoli;
 
@@ -313,11 +313,11 @@ public class GKCamp extends AbstractCamp {
 		return 5;
 	}
 
-    public CrossableFactory getCrossableFactory() {
+    public CrossableFactory<Net> getCrossableFactory() {
         return this.crossableFactory;
     }
 
-    public void setCrossableFactory(CrossableFactory gkCrossableFactory) {
+    public void setCrossableFactory(CrossableFactory<Net> gkCrossableFactory) {
         this.crossableFactory = gkCrossableFactory;
     }
 

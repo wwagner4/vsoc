@@ -2,8 +2,8 @@ package vsoc.genetic;
 
 import java.io.Serializable;
 
-public interface CrossableFactory extends Serializable {
+public interface CrossableFactory<T extends Crossable<?>> extends Serializable {
     
-    Crossable createNewCrossableWithRandomAttributes();
+    T createNewCrossableWithRandomAttributes();
 
 }

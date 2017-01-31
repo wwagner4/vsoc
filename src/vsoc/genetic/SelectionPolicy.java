@@ -5,12 +5,12 @@ import java.util.List;
 
 import vsoc.nn.Net;
 
-public interface SelectionPolicy<T extends Crossable> extends Serializable {
+public interface SelectionPolicy<T extends Crossable<?>> extends Serializable {
 
-    List<T> createNextGeneration(List<Net> currentPopulation, CrossableFactory factory,
+    List<T> createNextGeneration(List<Net> currentPopulation, CrossableFactory<T> factory,
             double mutationRate);
 
-    List<T> createNewGeneration(CrossableFactory factory);
+    List<T> createNewGeneration(CrossableFactory<T> factory);
 
     void setPopulationSize(int size);
 

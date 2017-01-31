@@ -6,6 +6,7 @@ import java.util.List;
 import vsoc.nn.Net;
 import vsoc.util.RandomIndexSelector;
 
+@SuppressWarnings("serial")
 public class AdHocSelectionPolicy implements SelectionPolicy<Net> {
 
     private int populationSize = 21;
@@ -15,8 +16,9 @@ public class AdHocSelectionPolicy implements SelectionPolicy<Net> {
     }
 
     public List<Net> createNextGeneration(List<Net> sorted,
-            CrossableFactory factory, double m) {
-    	Net cr1, cr2;
+            CrossableFactory<Net> factory, double m) {
+    	Net cr1;
+    	Net cr2;
         List<Net> resultPop = new ArrayList<>();
         cr1 = sorted.get(0);
         resultPop.add(cr1);
@@ -54,11 +56,12 @@ public class AdHocSelectionPolicy implements SelectionPolicy<Net> {
         return resultPop;
     }
 
-    public List createNewGeneration(CrossableFactory factory) {
-        List pop = new ArrayList();
+	@Override
+	public List<Net> createNewGeneration(CrossableFactory<Net> factory) {
+        List<Net> pop = new ArrayList<>();
         for (int i = 0; i < this.populationSize; i++) {
-            Crossable m = factory.createNewCrossableWithRandomAttributes();
-            pop.add(m);
+            Net mm = factory.createNewCrossableWithRandomAttributes();
+            pop.add(mm);
         }
         return pop;
     }

@@ -3,6 +3,7 @@ package vsoc.camps.goalkeeper.test;
 import java.util.Iterator;
 import java.util.List;
 
+import atan.model.Controller;
 import vsoc.VsocNotYetImplementedException;
 import vsoc.behaviour.Behaviour;
 import vsoc.behaviour.BehaviourController;
@@ -11,12 +12,9 @@ import vsoc.camps.AbstractCamp;
 import vsoc.camps.DefaultBehaviour;
 import vsoc.camps.Member;
 import vsoc.camps.goalkeeper.GoalkeeperDefaultBehaviour;
-import vsoc.model.DefaultServerFactory;
-import vsoc.model.Server;
 import vsoc.model.VsocPlayer;
 import vsoc.util.resulttable.ResultTable;
 import vsoc.view.FieldFrame;
-import atan.model.Controller;
 
 @SuppressWarnings("serial")
 public class GoalkeeperDefaultBehaviourTestCamp extends AbstractCamp {
