@@ -37,7 +37,7 @@ public class SerFactoryBean implements FactoryBean {
         return Serializer.current().deserialize(url.openStream());
     }
 
-    public Class getObjectType() {
+    public Class<?> getObjectType() {
         try {
             return getObject().getClass();
         } catch (Exception e) {

@@ -19,12 +19,12 @@ import vsoc.nn.base.RandomWgt;
 import vsoc.nn.base.Synapse;
 
 /**
- * Is an artificiel neural net. A net contains out of an ordered list of layers.
+ * Is an artificial neural net. A net contains out of an ordered list of layers.
  * The first layer is called the input-layer and the last layer is the output
  * layer. The layers are lists of layer-nodes. A layer-node is a neuron if it is
  * not in the input layer. Connections between neurons and layer-nodes can be
  * defined via synapses. The structure (its connections) of the net is defined
- * by the net-connector that must be used as an argumet to the constructor.
+ * by the net-connector that must be used as an argument to the constructor.
  * Diverse parameters for synapses and neurons can also be defined with the
  * net-Connector. see@ Neuron see@ Layer
  */
@@ -217,21 +217,20 @@ public class FFNet implements Net {
 
     public boolean equalsInValues(Object o) {
         Layer l, thisL;
-        Enumeration ls, thisLs;
         boolean equals = true;
         FFNet net;
         if (!(o instanceof Net))
             return false;
         net = (FFNet) o;
-        ls = net.layers();
-        thisLs = layers();
+        Enumeration<Layer> ls = net.layers();
+        Enumeration<Layer> thisLs = layers();
         while (ls.hasMoreElements() && thisLs.hasMoreElements() && equals) {
-            l = (Layer) ls.nextElement();
-            thisL = (Layer) thisLs.nextElement();
+            l = ls.nextElement();
+            thisL = thisLs.nextElement();
             if (!l.equalsInValues(thisL))
                 equals = false;
         }
-        if (equals == true) {
+        if (equals) {
             if (thisLs.hasMoreElements() || ls.hasMoreElements())
                 return false;
             return true;
@@ -309,11 +308,11 @@ public class FFNet implements Net {
         return new EnumSynapsesOfNet(this);
     }
 
-    Enumeration layers() {
+    Enumeration<Layer> layers() {
         return new EnumLayersOfNet(this);
     }
 
-    protected Enumeration neuronLayers() {
+    protected Enumeration<Layer> neuronLayers() {
         return new EnumNeuronLayersOfNet(this);
     }
 
@@ -348,7 +347,7 @@ public class FFNet implements Net {
 
         int index, size;
 
-        Vector enumls;
+        Vector<Layer> enumls;
 
         Object nextSyn = null;
 

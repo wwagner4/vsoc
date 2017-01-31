@@ -16,15 +16,16 @@ import javax.swing.JPanel;
 
 import vsoc.model.Server;
 
+@SuppressWarnings("serial")
 public class FieldContentPanel extends JPanel implements ActionListener {
 
     FieldCanvas fieldCanvas = new FieldCanvas();
 
     JPanel speedPanel = new JPanel();
 
-    JComboBox delayBox = new JComboBox();
+    JComboBox<Integer> delayBox = new JComboBox<>();
 
-    JComboBox stepsBox = new JComboBox();
+    JComboBox<Integer> stepsBox = new JComboBox<>();
 
     public FieldContentPanel() {
         try {
@@ -38,7 +39,7 @@ public class FieldContentPanel extends JPanel implements ActionListener {
         this.fieldCanvas.setServer(s);
     }
 
-    private void jbInit() throws Exception {
+    private void jbInit() {
         this.setLayout(new BorderLayout());
         this.speedPanel.setLayout(new GridBagLayout());
         this.delayBox.addActionListener(this);
@@ -68,32 +69,33 @@ public class FieldContentPanel extends JPanel implements ActionListener {
         return constr;
     }
 
-    private ComboBoxModel delayComboBoxModel() {
-        DefaultComboBoxModel m = new DefaultComboBoxModel();
-        m.addElement(new Integer(0));
-        m.addElement(new Integer(1));
-        m.addElement(new Integer(5));
-        m.addElement(new Integer(10));
-        m.addElement(new Integer(50));
-        m.addElement(new Integer(100));
-        m.addElement(new Integer(200));
-        m.addElement(new Integer(500));
+    private ComboBoxModel<Integer> delayComboBoxModel() {
+        DefaultComboBoxModel<Integer> m = new DefaultComboBoxModel<>();
+        m.addElement(0);
+        m.addElement(1);
+        m.addElement(5);
+        m.addElement(10);
+        m.addElement(50);
+        m.addElement(100);
+        m.addElement(200);
+        m.addElement(500);
         return m;
     }
 
-    private ComboBoxModel stepsComboBoxModel() {
-        DefaultComboBoxModel m = new DefaultComboBoxModel();
-        m.addElement(new Integer(1));
-        m.addElement(new Integer(2));
-        m.addElement(new Integer(5));
-        m.addElement(new Integer(10));
-        m.addElement(new Integer(50));
-        m.addElement(new Integer(100));
-        m.addElement(new Integer(200));
-        m.addElement(new Integer(500));
+    private ComboBoxModel<Integer> stepsComboBoxModel() {
+        DefaultComboBoxModel<Integer> m = new DefaultComboBoxModel<>();
+        m.addElement(1);
+        m.addElement(2);
+        m.addElement(5);
+        m.addElement(10);
+        m.addElement(50);
+        m.addElement(100);
+        m.addElement(200);
+        m.addElement(500);
         return m;
     }
 
+    @Override
     public void actionPerformed(ActionEvent evt) {
         if (evt.getSource() == this.delayBox) {
             Integer delay = (Integer) this.delayBox.getSelectedItem();

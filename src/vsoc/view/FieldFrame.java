@@ -16,13 +16,14 @@ import vsoc.model.Server;
 /**
  * Contains a FieldPanel .
  */
+@SuppressWarnings("serial")
 public class FieldFrame extends JFrame implements WindowListener {
 
     private FieldContentPanel fieldContentPanel;
 
     static Logger log = Logger.getLogger(FieldFrame.class);
 
-    public FieldFrame() throws HeadlessException {
+    public FieldFrame() {
         initGuiComponents();
     }
 
@@ -55,31 +56,38 @@ public class FieldFrame extends JFrame implements WindowListener {
         this.fieldContentPanel.setServer(srv);
     }
 
+    @Override
     public void windowOpened(WindowEvent e) {
         // Nothing to be done
     }
 
+    @Override
     public void windowClosing(WindowEvent e) {
         // Nothing to be done
         System.exit(0);
     }
 
+    @Override
     public void windowClosed(WindowEvent e) {
         // Nothing to be done
     }
 
+    @Override
     public void windowIconified(WindowEvent e) {
         // Nothing to be done
     }
 
+    @Override
     public void windowDeiconified(WindowEvent e) {
         // Nothing to be done
     }
 
+    @Override
     public void windowActivated(WindowEvent e) {
         // Nothing to be done
     }
 
+    @Override
     public void windowDeactivated(WindowEvent e) {
         // Nothing to be done
     }

@@ -26,7 +26,7 @@ public class Weighter implements Serializable {
 
     private static final long serialVersionUID = 0L;
 
-    private List vals = new ArrayList();
+    private List<List<Number>> vals = new ArrayList<>();
 
     public Weighter() {
         super();
@@ -43,13 +43,14 @@ public class Weighter implements Serializable {
 
     private void initVals(short maxValue, short maxWeight, float minFactor,
             float maxFactor) {
-        short val, wgt;
+        short val;
+        short wgt;
         float step;
-        List wgts;
+        List<Number> wgts;
 
         step = (maxFactor - minFactor) / maxWeight;
         for (val = 0; val < maxValue; val++) {
-            wgts = new ArrayList();
+            wgts = new ArrayList<>();
             for (wgt = 0; wgt < maxWeight; wgt++) {
                 wgts.add(result(val, wgt, minFactor, step));
             }
@@ -58,7 +59,7 @@ public class Weighter implements Serializable {
     }
 
     private Integer result(short val, short wgt, float minFactor, float step) {
-        return new Integer((int) (val * (minFactor + wgt * step)));
+        return (int) (val * (minFactor + wgt * step));
     }
 
     public int getWeightedValue(short val, short wgt) {
@@ -75,8 +76,8 @@ public class Weighter implements Serializable {
     }
 
     private int getWeightedValueForPositives(short val, short wgt) {
-        List wgts = (List) this.vals.get(val);
-        Integer i = (Integer) wgts.get(wgt);
+        List<Number> wgts = this.vals.get(val);
+        Number i = wgts.get(wgt);
         return i.intValue();
     }
 
@@ -85,7 +86,7 @@ public class Weighter implements Serializable {
     }
 
     public short maxWeight() {
-        List wgts = (List) this.vals.get(0);
+        List<Number> wgts = this.vals.get(0);
         return (short) wgts.size();
     }
 }
