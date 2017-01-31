@@ -10,12 +10,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Vector;
 
-import vsoc.VsocInvalidConfigurationException;
-import vsoc.util.Vec2D;
 import atan.model.Controller;
 import atan.model.Player;
+import vsoc.VsocInvalidConfigurationException;
+import vsoc.util.Vec2D;
 
 /**
  * Performs soccer specific actions.
@@ -35,16 +34,15 @@ public class Server implements Serializable {
 
     private long time = 0;
 
-    // TODO Remove Vectors
-    private Collection<ServerListener> listeners = new Vector<ServerListener>();
+    private Collection<ServerListener> listeners = new ArrayList<>();
 
     private ServerThread thread = null;
 
-    private Collection<SimObject> simObjects = new Vector<SimObject>();
+    private Collection<SimObject> simObjects = new ArrayList<>();
 
-    private Collection<MoveObject> playersAndBall = new Vector<>();
+    private Collection<MoveObject> playersAndBall = new ArrayList<>();
 
-    protected List<VsocPlayer> players = new Vector<>();
+    private List<VsocPlayer> players = new ArrayList<>();
 
     private Ball ball = null;
 

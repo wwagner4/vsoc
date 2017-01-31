@@ -7,27 +7,27 @@ import java.util.Map;
 
 public class ListMap {
 
-    private Map map = new HashMap();
+    private Map<Integer, List<Object>> map = new HashMap<>();
 
-    private static List emptyList = new ArrayList();
+    private static List<Object> emptyList = new ArrayList<>();
 
     public ListMap() {
         super();
     }
 
     public void put(int id, Object obj) {
-        Integer intid = new Integer(id);
-        List values = (List) this.map.get(intid);
+        Integer intid = id;
+        List<Object> values = this.map.get(intid);
         if (values == null) {
-            values = new ArrayList();
+            values = new ArrayList<>();
             this.map.put(intid, values);
         }
         values.add(obj);
     }
 
-    public List get(int id) {
-        Integer intid = new Integer(id);
-        List re = (List) this.map.get(intid);
+    public List<Object> get(int id) {
+        Integer intid = id;
+        List<Object> re = this.map.get(intid);
         if (re == null) {
             re = emptyList;
         }

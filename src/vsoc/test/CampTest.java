@@ -52,7 +52,7 @@ public class CampTest extends TestCase {
     }
 
     public void testLoadGGCampContext() {
-        ApplicationContext ctx = new ClassPathXmlApplicationContext(
+        new ClassPathXmlApplicationContext(
                 "ggcamp.xml");
     }
 
@@ -70,7 +70,7 @@ public class CampTest extends TestCase {
 
     public void testMembersComparator() {
         GGCamp camp = createTestCamp("camp1");
-        ArrayList mems = new ArrayList();
+        ArrayList<Member> mems = new ArrayList<>();
         mems.add(createTestMember(10));
         mems.add(createTestMember(20));
         mems.add(createTestMember(40));
@@ -106,12 +106,12 @@ public class CampTest extends TestCase {
     }
 
     public void testMembersGKComparator() {
-        ArrayList mems = new ArrayList();
+        ArrayList<Member> mems = new ArrayList<>();
         mems.add(createGKTestMember(5));
         mems.add(createGKTestMember(1));
         mems.add(createGKTestMember(4));
         mems.add(createGKTestMember(2));
-        Comparator comp = new GKMembersComparator();
+        Comparator<Member> comp = new GKMembersComparator();
         Collections.sort(mems, comp);
         {
             Member mem = (Member) mems.get(0);

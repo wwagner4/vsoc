@@ -177,10 +177,12 @@ public class Layer implements Serializable {
             this.size = this.v.size();
         }
 
+        @Override
         public boolean hasMoreElements() {
             return this.i < this.size;
         }
 
+        @Override
         public LayerNode nextElement() {
         	LayerNode o = this.v.elementAt(this.i);
             this.i++;

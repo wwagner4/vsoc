@@ -219,7 +219,7 @@ public abstract class AbstractCamp implements Camp {
 	}
 
 	protected void basicCreateNextGeneration(List<Member> mems, Comparator<Member> comp, double mutRate,
-			SelectionPolicy<Net> selPoli, CrossableFactory crossableFactory) {
+			SelectionPolicy<Net> selPoli, CrossableFactory<Net> crossableFactory) {
 		List<Net> pop = sortedNetsFromMembers(mems, comp);
 		List<Net> childNets = selPoli.createNextGeneration(pop, crossableFactory, mutRate);
 		addNetsToMembers(mems, childNets);
