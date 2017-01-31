@@ -6,6 +6,7 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Properties;
 
 import org.apache.velocity.Template;
@@ -70,17 +71,17 @@ public class VelocityHtmlReport implements Report {
         }
     }
 
-    private Collection legend(ResultTable resultTable) {
-        ArrayList re = new ArrayList();
+    private Collection<List<Object>> legend(ResultTable resultTable) {
+        ArrayList<List<Object>> re = new ArrayList<>();
         ColumnDesc sdesc = resultTable.getSerialDesc();
-        ArrayList sprop = new ArrayList();
+        ArrayList<Object> sprop = new ArrayList<>();
         sprop.add(sdesc.getId());
         sprop.add(sdesc.getName());
         re.add(sprop);
-        Iterator iter = resultTable.getColumnDescs().iterator();
+        Iterator<ColumnDesc> iter = resultTable.getColumnDescs().iterator();
         while (iter.hasNext()) {
             ColumnDesc desc = (ColumnDesc) iter.next();
-            ArrayList prop = new ArrayList();
+            ArrayList<Object> prop = new ArrayList<>();
             prop.add(desc.getId());
             prop.add(desc.getName());
             re.add(prop);

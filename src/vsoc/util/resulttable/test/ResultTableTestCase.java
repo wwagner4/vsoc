@@ -1,7 +1,5 @@
 package vsoc.util.resulttable.test;
 
-import java.io.OutputStreamWriter;
-import java.io.Writer;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -9,10 +7,10 @@ import java.util.List;
 
 import junit.framework.TestCase;
 import vsoc.util.resulttable.ColumnDesc;
+import vsoc.util.resulttable.LMHOutputter;
 import vsoc.util.resulttable.ResultTable;
 import vsoc.util.resulttable.ResultTableRow;
 import vsoc.util.resulttable.SimpleResultTable;
-import vsoc.util.resulttable.LMHOutputter;
 import vsoc.util.resulttable.util.Categorizer;
 import vsoc.util.resulttable.util.ListMap;
 import vsoc.util.resulttable.util.Thinner;
@@ -23,34 +21,34 @@ public class ResultTableTestCase extends TestCase {
     public void testUncompressed() {
         ResultTable rt = createSimpleTestTable();
 
-        List rows = rt.getRows();
+        List<ResultTableRow> rows = rt.getRows();
         assertEquals("Number of rows", 2, rows.size());
 
         {
             ResultTableRow row = (ResultTableRow) rows.get(0);
             assertEquals("Number of values", 3, row.getResultValues().size());
-            assertEquals(new Integer(0), row.getSerialValue());
+            assertEquals(0, row.getSerialValue());
 
             Number valA = row.getResultValue("a");
-            assertEquals(new Double(10), valA);
+            assertEquals(10.0, valA);
 
             Number valB = row.getResultValue("b");
-            assertEquals(new Integer(20), valB);
+            assertEquals(20.0, valB);
 
             Number valC = row.getResultValue("c");
-            assertEquals(new Float(33.33), valC);
+            assertEquals(33.33f, valC);
 
         }
         {
             ResultTableRow row = (ResultTableRow) rows.get(1);
             assertEquals("Number of values", 3, row.getResultValues().size());
-            assertEquals(new Integer(10), row.getSerialValue());
+            assertEquals(10, row.getSerialValue());
 
             Number valA = row.getResultValue("a");
-            assertEquals(new Double(12), valA);
+            assertEquals(12.0, valA);
 
             Number valB = row.getResultValue("b");
-            assertEquals(new Double(44.44), valB);
+            assertEquals(44.44, valB);
 
             Number valC = row.getResultValue("c");
             assertEquals(null, valC);
@@ -61,15 +59,8 @@ public class ResultTableTestCase extends TestCase {
 
     public void testOutputter() {
         ResultTable rt = createSimpleTestTable();
-        Writer wr = createStdoutWriter();
         LMHOutputter outputter = new LMHOutputter();
         outputter.setTable(rt);
-        //outputter.output(wr);
-    }
-
-    private Writer createStdoutWriter() {
-        OutputStreamWriter osw = new OutputStreamWriter(System.out);
-        return osw;
     }
 
     private ResultTable createSimpleTestTable() {
@@ -81,13 +72,13 @@ public class ResultTableTestCase extends TestCase {
         re.setSerialDesc(sdesc);
         re.setColumnDescs(createColumnDescs());
         ResultTable rt = re;
-        rt.addNextSerialValue(new Integer(0));
-        rt.setValue("a", new Double(10));
-        rt.setValue("b", new Integer(20));
-        rt.setValue("c", new Float(33.33));
-        rt.addNextSerialValue(new Integer(10));
-        rt.setValue("a", new Double(12));
-        rt.setValue("b", new Double(44.44));
+        rt.addNextSerialValue(0);
+        rt.setValue("a", 10);
+        rt.setValue("b", 20);
+        rt.setValue("c", 33.33f);
+        rt.addNextSerialValue(10);
+        rt.setValue("a", 12.0);
+        rt.setValue("b", 44.44);
         return rt;
     }
 
@@ -99,10 +90,10 @@ public class ResultTableTestCase extends TestCase {
         return re;
     }
 
-    private List createColumnDescs() {
-        List re = new ArrayList();
+    private List<ColumnDesc> createColumnDescs() {
+        List<ColumnDesc> re = new ArrayList<>();
         {
-            ColumnDesc desc = new ColumnDesc();
+        	ColumnDesc desc = new ColumnDesc();
             desc.setId("a");
             desc.setName("Hallo a");
             desc.setFormat(createFormat());
@@ -190,18 +181,18 @@ public class ResultTableTestCase extends TestCase {
     }
 
     public void testValuesJoiner00() {
-        Collection values = new ArrayList();
+        Collection<Number> values = new ArrayList<>();
         for (int i = 0; i < 30; i++) {
-            values.add(new Integer(i));
+            values.add(i);
         }
         Number re = ValuesJoiner.current().join(values);
         assertEquals(14.5, re.doubleValue(), 0.0001);
     }
 
     public void testValuesJoiner01() {
-        Collection values = new ArrayList();
+        Collection<Number> values = new ArrayList<>();
         for (int i = 0; i < 33; i++) {
-            values.add(new Integer(i));
+            values.add(i);
         }
         Number re = ValuesJoiner.current().join(values);
         assertEquals(16, re.doubleValue(), 0.0001);
@@ -209,15 +200,15 @@ public class ResultTableTestCase extends TestCase {
 
     public void testListMap() {
         ListMap lm = new ListMap();
-        lm.put(0, new Integer(1));
-        lm.put(0, new Integer(2));
-        lm.put(0, new Integer(3));
-        lm.put(0, new Integer(4));
+        lm.put(0, 1);
+        lm.put(0, 2);
+        lm.put(0, 3);
+        lm.put(0, 4);
 
-        lm.put(1, new Integer(10));
-        lm.put(1, new Integer(20));
-        lm.put(1, new Integer(30));
-        lm.put(1, new Integer(40));
+        lm.put(1, 10);
+        lm.put(1, 20);
+        lm.put(1, 30);
+        lm.put(1, 40);
 
         assertNotNull(lm.get(-1));
         assertTrue(lm.get(-1).isEmpty());
@@ -228,7 +219,7 @@ public class ResultTableTestCase extends TestCase {
         assertNotNull(lm.get(2000));
         assertTrue(lm.get(2000).isEmpty());
         {
-            List list = lm.get(0);
+            List<Object> list = lm.get(0);
             assertEquals(4, list.size());
             Integer val0 = (Integer) list.get(0);
             assertEquals(1, val0.intValue());
@@ -240,7 +231,7 @@ public class ResultTableTestCase extends TestCase {
             assertEquals(4, val3.intValue());
         }
         {
-            List list = lm.get(1);
+            List<Object> list = lm.get(1);
             assertEquals(4, list.size());
             Integer val0 = (Integer) list.get(0);
             assertEquals(10, val0.intValue());
@@ -254,15 +245,15 @@ public class ResultTableTestCase extends TestCase {
     }
 
     public void testThinner00() {
-        ArrayList in = new ArrayList();
-        in.add(new Integer(0));
-        in.add(new Integer(1));
-        in.add(new Integer(2));
-        in.add(new Integer(3));
-        in.add(new Integer(4));
-        in.add(new Integer(5));
+        ArrayList<Object> in = new ArrayList<>();
+        in.add(0);
+        in.add(1);
+        in.add(2);
+        in.add(3);
+        in.add(4);
+        in.add(5);
         Thinner t = Thinner.current();
-        List out = t.thin(in, 3);
+        List<Object> out = t.thin(in, 3);
         assertEquals(3, out.size());
         assertEquals(0, ((Integer) out.get(0)).intValue());
         assertEquals(2, ((Integer) out.get(1)).intValue());
@@ -270,15 +261,15 @@ public class ResultTableTestCase extends TestCase {
     }
 
     public void testThinner01() {
-        ArrayList in = new ArrayList();
-        in.add(new Integer(0));
-        in.add(new Integer(1));
-        in.add(new Integer(2));
-        in.add(new Integer(3));
-        in.add(new Integer(4));
-        in.add(new Integer(5));
+        ArrayList<Object> in = new ArrayList<>();
+        in.add(0);
+        in.add(1);
+        in.add(2);
+        in.add(3);
+        in.add(4);
+        in.add(5);
         Thinner t = Thinner.current();
-        List out = t.thin(in, 4);
+        List<Object> out = t.thin(in, 4);
         assertEquals(4, out.size());
         assertEquals(0, ((Integer) out.get(0)).intValue());
         assertEquals(2, ((Integer) out.get(1)).intValue());

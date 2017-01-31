@@ -31,16 +31,16 @@ public class ThinningResultTableRunner {
         ResultTable rt3 = createResultTable(100, 60, 10000, var);
         ResultTable rt4 = createResultTable(100, 60, 15000, var);
         ResultTable rt5 = createResultTable(100, 60, 20000, var);
-        List ser1 = rt1.getSerial();
-        List col1 = rt1.getColumn("a");
-        List ser2 = rt2.getSerial();
-        List col2 = rt2.getColumn("a");
-        List ser3 = rt3.getSerial();
-        List col3 = rt3.getColumn("a");
-        List ser4 = rt4.getSerial();
-        List col4 = rt4.getColumn("a");
-        List ser5 = rt5.getSerial();
-        List col5 = rt5.getColumn("a");
+        List<Number> ser1 = rt1.getSerial();
+        List<Number> col1 = rt1.getColumn("a");
+        List<Number> ser2 = rt2.getSerial();
+        List<Number> col2 = rt2.getColumn("a");
+        List<Number> ser3 = rt3.getSerial();
+        List<Number> col3 = rt3.getColumn("a");
+        List<Number> ser4 = rt4.getSerial();
+        List<Number> col4 = rt4.getColumn("a");
+        List<Number> ser5 = rt5.getSerial();
+        List<Number> col5 = rt5.getColumn("a");
         for (int i = 0; i < 100; i++) {
             printValue(ser1, i);
             printValue(col1, i);
@@ -56,9 +56,9 @@ public class ThinningResultTableRunner {
         }
     }
 
-    private void printValue(List col, int i) {
+    private void printValue(List<Number> col, int i) {
         if (i < col.size()) {
-            Number val = (Number) col.get(i);
+            Number val = col.get(i);
             if (val != null) {
                 System.out.print(format(val.doubleValue()));
             }
@@ -89,8 +89,8 @@ public class ThinningResultTableRunner {
         re.setSerialDesc(sdesc);
         re.setColumnDescs(createColumnDescs());
         for (int i = 0; i < dataSize; i++) {
-            re.addNextSerialValue(new Integer(i));
-            Double vala = new Double(i + noise(noise));
+            re.addNextSerialValue(i);
+            Double vala = i + noise(noise);
             re.setValue("a", vala);
         }
         return re;
@@ -108,8 +108,8 @@ public class ThinningResultTableRunner {
         return ran.nextDouble() * ampli * 2 - ampli;
     }
 
-    private List createColumnDescs() {
-        List re = new ArrayList();
+    private List<ColumnDesc> createColumnDescs() {
+        List<ColumnDesc> re = new ArrayList<>();
         {
             ColumnDesc desc = new ColumnDesc();
             desc.setId("a");

@@ -16,9 +16,9 @@ public interface ResultTable extends Serializable {
 
     void setValue(String id, Number val);
 
-    List getRows();
+    List<ResultTableRow> getRows();
 
-    public List getColumnDescs();
+    List<ColumnDesc> getColumnDescs();
 
     ColumnDesc getSerialDesc();
 
@@ -26,13 +26,13 @@ public interface ResultTable extends Serializable {
      * @param id The id of the column. 
      * @return A list of Number.
      */
-    List getColumn(String id);
+    List<Number> getColumn(String id);
 
     /**
      * @param id The id of the column. 
      * @return A list of Number.
      */
-    List getSerial();
+    List<Number> getSerial();
     
     String currentRowAsNameValuePairs();
 

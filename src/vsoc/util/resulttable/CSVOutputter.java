@@ -5,7 +5,7 @@ import java.io.Writer;
 import java.util.Iterator;
 
 /**
- * Creates a tab seperated output to be used in MS-Excel. See
+ * Creates a tab separated output to be used in MS-Excel. See
  * results/ChartTemplate.xls
  */
 public class CSVOutputter implements ResultTableOutputter {
@@ -34,9 +34,9 @@ public class CSVOutputter implements ResultTableOutputter {
 
     private void output(PrintWriter pw) {
         outputHeader(pw);
-        Iterator iter = this.table.getRows().iterator();
+        Iterator<ResultTableRow> iter = this.table.getRows().iterator();
         while (iter.hasNext()) {
-            ResultTableRow row = (ResultTableRow) iter.next();
+            ResultTableRow row = iter.next();
             outputRow(pw, row);
         }
     }
@@ -46,9 +46,9 @@ public class CSVOutputter implements ResultTableOutputter {
         Number sval = row.getSerialValue();
         pw.print(sdesc.getFormat().format(sval));
         pw.print(this.separator);
-        Iterator descs = this.table.getColumnDescs().iterator();
+        Iterator<ColumnDesc> descs = this.table.getColumnDescs().iterator();
         while (descs.hasNext()) {
-            ColumnDesc desc = (ColumnDesc) descs.next();
+            ColumnDesc desc = descs.next();
             Number val = row.getResultValue(desc.getId());
             pw.print(desc.getFormat().format(val));
             pw.print(this.separator);
@@ -60,9 +60,9 @@ public class CSVOutputter implements ResultTableOutputter {
         ColumnDesc sdesc = this.table.getSerialDesc();
         pw.print(sdesc.getId());
         pw.print(this.separator);
-        Iterator descs = this.table.getColumnDescs().iterator();
+        Iterator<ColumnDesc> descs = this.table.getColumnDescs().iterator();
         while (descs.hasNext()) {
-            ColumnDesc desc = (ColumnDesc) descs.next();
+            ColumnDesc desc = descs.next();
             pw.print(desc.getId());
             pw.print(this.separator);
         }

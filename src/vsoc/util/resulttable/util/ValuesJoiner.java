@@ -18,14 +18,14 @@ public class ValuesJoiner {
         return current;
     }
 
-    public Number join(Collection values) {
+    public Number join(Collection<Number> values) {
         Number re = null;
         if (!values.isEmpty()) {
             double sum = 0;
             int  count = 0;
-            Iterator iter = values.iterator();
+            Iterator<Number> iter = values.iterator();
             while (iter.hasNext()) {
-                Number val = (Number) iter.next();
+                Number val = iter.next();
                 if (val != null) {
                     sum += val.doubleValue();
                     count++;
@@ -33,7 +33,7 @@ public class ValuesJoiner {
             }
             if (count > 0) {
                 double mean = sum / count;
-                re = new Double(mean);
+                re = mean;
             }
         }
         return re;

@@ -18,12 +18,12 @@ public class Thinner {
         return current;
     }
 
-    public List thin(List inList, int amount) {
+    public List<Object> thin(List<Object> inList, int amount) {
         int size = inList.size();
         if (size <= amount) {
             return inList;
         }
-        List outList = new ArrayList();
+        List<Object> outList = new ArrayList<>();
         for (int index = 0; index < amount; index++) {
             int thinIndex = thin(size, amount, index);
             outList.add(inList.get(thinIndex));
@@ -42,7 +42,7 @@ public class Thinner {
         if (n > len)
             throw new IllegalArgumentException(
                     "n may never be greater than len. n:" + n + " len:" + len);
-        int result = -1;
+        int result;
         if (i == (n - 1)) {
             result = len - 1;
         } else {
