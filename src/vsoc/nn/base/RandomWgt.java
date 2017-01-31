@@ -9,6 +9,8 @@ import java.io.*;
  */
 public class RandomWgt extends Random {
 
+	private static final long serialVersionUID = 1L;
+	
     private static long instCount = 0;
 
     public RandomWgt() {

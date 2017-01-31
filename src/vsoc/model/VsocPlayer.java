@@ -9,9 +9,10 @@ import atan.model.*;
  * A player.
  */
 
-@SuppressWarnings("serial")
 public abstract class VsocPlayer extends MoveObject implements Player {
 
+	private static final long serialVersionUID = 1L;
+	
     private Controller control;
 
     private int ownGoalCount = 0;

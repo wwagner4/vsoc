@@ -9,8 +9,9 @@ import vsoc.camps.goalkeeper.GKCampResultColumns;
 import vsoc.util.resulttable.ColumnDesc;
 import vsoc.util.resulttable.SimpleResultTable;
 
-@SuppressWarnings("serial")
 public class GKCampResultTable extends SimpleResultTable {
+
+  	private static final long serialVersionUID = 1L;
 
     public GKCampResultTable() {
         super();

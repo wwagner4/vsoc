@@ -10,11 +10,11 @@ import atan.model.Player;
  * Turns the player a random angle if the sensors see nothing. Prevents players
  * to run away from the field.
  */
-
-@SuppressWarnings("serial")
 public class DefaultBehaviour implements Behaviour {
 
-    private Behaviour child;
+		private static final long serialVersionUID = 1L;
+    
+		private Behaviour child;
 
     private static Random random = new Random();
 

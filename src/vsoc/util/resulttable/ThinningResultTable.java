@@ -4,6 +4,8 @@ import vsoc.util.resulttable.util.Thinner;
 
 public class ThinningResultTable extends SimpleResultTable {
     
+	private static final long serialVersionUID = 1L;
+	
     private int min = 50;
     
     private int max = 100;

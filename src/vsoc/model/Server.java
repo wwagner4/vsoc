@@ -20,10 +20,10 @@ import vsoc.util.Vec2D;
  * Performs soccer specific actions.
  * 
  */
-
-@SuppressWarnings("serial")
 public class Server implements Serializable {
 
+	private static final long serialVersionUID = 1L;
+	
     private static final Color FIELD_BACKGROUND = initFieldBackground();
 
     private static final Color BACKGROUND = initBackground();

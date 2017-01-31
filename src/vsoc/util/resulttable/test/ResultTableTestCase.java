@@ -73,8 +73,8 @@ public class ResultTableTestCase extends TestCase {
         re.setColumnDescs(createColumnDescs());
         ResultTable rt = re;
         rt.addNextSerialValue(0);
-        rt.setValue("a", 10);
-        rt.setValue("b", 20);
+        rt.setValue("a", 10.0);
+        rt.setValue("b", 20.0);
         rt.setValue("c", 33.33f);
         rt.addNextSerialValue(10);
         rt.setValue("a", 12.0);

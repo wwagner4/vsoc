@@ -16,9 +16,10 @@ import javax.swing.JPanel;
 
 import vsoc.model.Server;
 
-@SuppressWarnings("serial")
 public class FieldContentPanel extends JPanel implements ActionListener {
 
+	private static final long serialVersionUID = 1L;
+	
     FieldCanvas fieldCanvas = new FieldCanvas();
 
     JPanel speedPanel = new JPanel();

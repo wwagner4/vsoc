@@ -20,6 +20,8 @@ import vsoc.model.ServerListener;
 public class FieldCanvas extends Canvas implements ServerListener,
         ComponentListener {
 
+	private static final long serialVersionUID = 1L;
+	
     private static Logger log = Logger.getLogger(FieldCanvas.class);
 
     private BufferedImage buffer;

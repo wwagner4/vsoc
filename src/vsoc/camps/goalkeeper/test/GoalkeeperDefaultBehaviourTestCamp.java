@@ -16,8 +16,9 @@ import vsoc.model.VsocPlayer;
 import vsoc.util.resulttable.ResultTable;
 import vsoc.view.FieldFrame;
 
-@SuppressWarnings("serial")
 public class GoalkeeperDefaultBehaviourTestCamp extends AbstractCamp {
+
+	private static final long serialVersionUID = 1L;
 
     public GoalkeeperDefaultBehaviourTestCamp() {
         super();

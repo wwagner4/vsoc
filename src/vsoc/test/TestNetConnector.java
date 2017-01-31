@@ -7,6 +7,8 @@ import vsoc.util.*;
 
 public class TestNetConnector extends AbstractFFNetConnector {
 
+	private static final long serialVersionUID = 1L;
+	
     public TestNetConnector() {
         super();
     }

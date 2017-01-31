@@ -9,10 +9,10 @@ import java.io.Serializable;
 /**
  * Any simulated object. E.g. Payers, Ball, Flag, ...
  */
-
-@SuppressWarnings("serial")
 public abstract class SimObject implements Serializable {
 
+	private static final long serialVersionUID = 1L;
+	
     private Vec2D position = null;
 
     private static long seed = new Date().getTime();

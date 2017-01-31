@@ -5,10 +5,10 @@ import vsoc.util.*;
 /**
  * Any simulated object. E.g. Payers, Ball, Flag, ...
  */
-
-@SuppressWarnings("serial")
 public abstract class MoveObject extends SimObject {
 
+	private static final long serialVersionUID = 1L;
+	
     private double direction = 0.0;
 
     private Server server = null;

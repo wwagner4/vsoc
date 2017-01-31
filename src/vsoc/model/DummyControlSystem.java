@@ -7,11 +7,11 @@ import atan.model.*;
 /**
  * A ControlSystem that does nothing. Can be used for initialization.
  */
-
-@SuppressWarnings("serial")
 class DummyControlSystem implements Controller, Serializable {
 
-    public DummyControlSystem() {
+	private static final long serialVersionUID = 1L;
+	
+	public DummyControlSystem() {
         super();
     }
 

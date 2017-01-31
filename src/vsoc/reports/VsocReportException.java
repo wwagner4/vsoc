@@ -2,6 +2,8 @@ package vsoc.reports;
 
 public class VsocReportException extends RuntimeException {
 
+	private static final long serialVersionUID = 1L;
+	
     public VsocReportException() {
         super();
     }

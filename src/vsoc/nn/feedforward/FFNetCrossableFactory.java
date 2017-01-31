@@ -4,9 +4,12 @@ import java.util.Random;
 
 import vsoc.genetic.Crossable;
 import vsoc.genetic.CrossableFactory;
+import vsoc.nn.Net;
 
-public class FFNetCrossableFactory implements CrossableFactory {
+public class FFNetCrossableFactory implements CrossableFactory<Net> {
 
+	private static final long serialVersionUID = 1L;
+	
     private static Random ran = new Random();
 
     private AbstractFFNetConnector connector = null;
@@ -15,7 +18,7 @@ public class FFNetCrossableFactory implements CrossableFactory {
         super();
     }
 
-    public Crossable createNewCrossableWithRandomAttributes() {
+    public Net createNewCrossableWithRandomAttributes() {
         FFNet net = null;
         if (this.connector == null) {
             net = new FFNet(new DefaultFFConnector());

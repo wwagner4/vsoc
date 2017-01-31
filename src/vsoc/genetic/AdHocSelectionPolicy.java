@@ -6,10 +6,11 @@ import java.util.List;
 import vsoc.nn.Net;
 import vsoc.util.RandomIndexSelector;
 
-@SuppressWarnings("serial")
 public class AdHocSelectionPolicy implements SelectionPolicy<Net> {
 
-    private int populationSize = 21;
+		private static final long serialVersionUID = 1L;
+    
+		private int populationSize = 21;
     
     public AdHocSelectionPolicy() {
         super();

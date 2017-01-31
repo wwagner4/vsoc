@@ -3,9 +3,10 @@ package vsoc.model;
 import org.apache.commons.lang.enums.Enum;
 
 // TODO Change to enum
-@SuppressWarnings("serial")
 public class ServerFlag extends Enum {
 
+	private static final long serialVersionUID = 1L;
+	
     public static final ServerFlag NORTH = new ServerFlag("north");
 
     public static final ServerFlag CENTER = new ServerFlag("center");

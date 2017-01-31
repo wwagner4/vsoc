@@ -3,10 +3,10 @@ package vsoc.model;
 /**
  * A Flag
  */
-
-@SuppressWarnings("serial")
 class FlagNorth extends SimObject {
 
+	private static final long serialVersionUID = 1L;
+	
     private ServerFlag type;
 
     FlagNorth(ServerFlag type, double x, double y) {

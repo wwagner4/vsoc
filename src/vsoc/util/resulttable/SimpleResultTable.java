@@ -8,9 +8,10 @@ import java.util.List;
  * Strait forward implementation of a result table. Not compressing.
  * 
  */
-@SuppressWarnings("serial")
 public class SimpleResultTable implements ResultTable {
 
+	private static final long serialVersionUID = 1L;
+	
     protected List<ColumnDesc> columnDescs = null;
 
     protected ColumnDesc serialDesc = null;

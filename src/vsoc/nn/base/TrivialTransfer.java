@@ -8,6 +8,8 @@ package vsoc.nn.base;
 */
 public class TrivialTransfer extends Transfer {
 
+	private static final long serialVersionUID = 1L;
+	
     public TrivialTransfer(int stretch) {
         super(stretch);
     }

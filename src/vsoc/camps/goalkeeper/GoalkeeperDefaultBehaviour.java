@@ -10,10 +10,11 @@ import atan.model.Player;
  * Turns the player a random angle if the sensors do not see the flags around
  * the goal.
  */
-@SuppressWarnings("serial")
 public class GoalkeeperDefaultBehaviour implements Behaviour {
 
-    private Behaviour child;
+		private static final long serialVersionUID = 1L;
+    
+		private Behaviour child;
 
     private static Random random = new Random();
 

@@ -3,10 +3,10 @@ package vsoc.model;
 /**
  * A Flag
  */
-
-@SuppressWarnings("serial")
 class FlagPenaltyWest extends SimObject {
 
+	private static final long serialVersionUID = 1L;
+	
     private ServerFlag type;
 
     FlagPenaltyWest(ServerFlag type, double x, double y) {

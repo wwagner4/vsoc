@@ -10,6 +10,8 @@ import java.util.*;
 
 public class IntVector extends Vector {
 
+	private static final long serialVersionUID = 1L;
+	
     public void addElement(int i) {
         addElement(new Integer(i));
     }

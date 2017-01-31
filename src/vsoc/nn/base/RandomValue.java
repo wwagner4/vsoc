@@ -9,6 +9,8 @@ import java.io.*;
  */
 public class RandomValue extends Random {
 
+	private static final long serialVersionUID = 1L;
+	
     public RandomValue() {
         super();
     }

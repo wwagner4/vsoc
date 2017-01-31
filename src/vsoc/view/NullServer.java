@@ -4,7 +4,6 @@ import vsoc.model.Server;
 
 public class NullServer extends Server {
 
-  public NullServer() {
-      super();
-  }
+	private static final long serialVersionUID = 1L;
+
 }

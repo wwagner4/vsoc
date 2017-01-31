@@ -16,9 +16,10 @@ import vsoc.model.Server;
 /**
  * Contains a FieldPanel .
  */
-@SuppressWarnings("serial")
 public class FieldFrame extends JFrame implements WindowListener {
 
+	private static final long serialVersionUID = 1L;
+	
     private FieldContentPanel fieldContentPanel;
 
     static Logger log = Logger.getLogger(FieldFrame.class);

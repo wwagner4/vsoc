@@ -11,8 +11,9 @@ import vsoc.util.resulttable.SimpleResultTable;
 /**
  * Result table for the changing results of a GGCamp.
  */
-@SuppressWarnings("serial")
 public class GGCampResultTable extends SimpleResultTable {
+
+		private static final long serialVersionUID = 1L;
 
     public GGCampResultTable() {
         super();

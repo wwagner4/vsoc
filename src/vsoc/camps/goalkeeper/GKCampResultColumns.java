@@ -11,8 +11,9 @@ import org.apache.commons.lang.enums.Enum;
 /**
  * IDs of the columns of the GKCamp result table.
  */
-@SuppressWarnings("serial")
 public class GKCampResultColumns extends Enum {
+
+	private static final long serialVersionUID = 1L;
 
     private String desc;
 

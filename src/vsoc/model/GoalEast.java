@@ -9,10 +9,10 @@ import atan.model.Flag;
 /**
  * A Flag
  */
-
-@SuppressWarnings("serial")
 public class GoalEast extends SimObject {
 
+	private static final long serialVersionUID = 1L;
+	
     GoalEast(double x, double y) {
         super(x, y);
     }

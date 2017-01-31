@@ -2,10 +2,11 @@ package vsoc.behaviour;
 
 import atan.model.Player;
 
-@SuppressWarnings("serial")
 public class GoAheadBehaviour implements Behaviour {
     
-    public GoAheadBehaviour() {
+	private static final long serialVersionUID = 1L;
+
+		public GoAheadBehaviour() {
         super();
     }
 

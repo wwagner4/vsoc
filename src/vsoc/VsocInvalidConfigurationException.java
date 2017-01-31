@@ -3,9 +3,10 @@ package vsoc;
 /**
  * Wrong configuration.
  */
-@SuppressWarnings("serial")
 public class VsocInvalidConfigurationException extends RuntimeException {
 
+	private static final long serialVersionUID = 1L;
+	
     public VsocInvalidConfigurationException() {
         super();
     }

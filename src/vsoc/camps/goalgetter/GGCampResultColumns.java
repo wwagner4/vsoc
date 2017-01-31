@@ -11,9 +11,10 @@ import org.apache.commons.lang.enums.Enum;
 /**
  * IDs of the columns of the GGCamp result table.
  */
-@SuppressWarnings("serial")
 public class GGCampResultColumns extends Enum {
     
+	private static final long serialVersionUID = 1L;
+
     private String desc;
     
     public static final GGCampResultColumns DIVERSITY = new GGCampResultColumns("diversity", "Diversity");
