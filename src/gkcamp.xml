@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+
+	<bean id="runner" class="vsoc.camps.goalkeeper.GKCampRunner">
+		<property name="camps">
+			<list>
+				<ref bean="camp1"/>				
+				<ref bean="camp2"/>				
+				<ref bean="camp3"/>				
+				<ref bean="camp4"/>				
+				<ref bean="camp5"/>				
+			</list>
+		</property>
+	</bean>
+	
+	<bean id = "camp1" parent="gkCamp">
+		<property name="ggMutationRate" value="0.02"/>
+	</bean>
+
+	<bean id = "camp2" parent="gkCamp">
+		<property name="ggMutationRate" value="0.04"/>
+	</bean>
+
+	<bean id = "camp3" parent="gkCamp">
+		<property name="ggMutationRate" value="0.08"/>
+	</bean>
+
+	<bean id = "camp4" parent="gkCamp">
+		<property name="ggMutationRate" value="0.16"/>
+	</bean>
+
+	<bean id = "camp5" parent="gkCamp">
+		<property name="ggMutationRate" value="0.5"/>
+	</bean>
+
+			
+	
+	<bean id="gkCamp" class="vsoc.camps.goalkeeper.GKCamp">
+		<property name="gkMutationRate" value="0.02"/>
+		<property name="stepsPerMatch" value="600"/>
+		<property name="matchesPerGeneration" value="250"/>
+		<property name="maxGenerations" value="200"/>
+		<property name="gkSelPoli" ref="gkSelPoli"/>
+		<property name="crossableFactory" ref="crossableFactory"/>
+		
+		<property name="ggMutationRate" value="0.02"/>
+		<property name="ggSelPoli" ref="ggSelPoli"/>
+		<property name="ggGoalFactor" value="100"/>
+		<property name="ggOwnGoalFactor" value="-100"/>
+		<property name="ggKickFactor" value="1"/>
+		<property name="ggKickOutFactor" value="-5"/>
+		<property name="ggZeroKickPenalty" value="0"/>
+		<property name="ggCampResourceName" value="ggcamp.ser"/>
+		
+		<property name="resultTable">
+			<bean class="vsoc.camps.goalkeeper.GKCampResultTable"/>
+		</property>
+	</bean>
+
+		
+	<bean id = "ggCamp" class="vsoc.camps.goalgetter.GGCamp">
+		<property name="mutationRate" value="0.02"/>
+		<property name="stepsPerMatch" value="200"/>
+		<property name="matchesPerGeneration" value="50"/>
+		<property name="kickFactor" value="1"/>
+		<property name="kickOutFactor" value="-5"/>
+		<property name="ownGoalFactor" value="-100"/>
+		<property name="goalFactor" value="100"/>
+		<property name="zeroKickPenalty" value="-100"/>
+		<property name="selPoli" ref="ggSelPoli"/>	
+		<property name="crossableFactory" ref="crossableFactory"/>	
+		<property name="maxGenerations" value="100"/>	
+	</bean>
+
+	<bean id="gkSelPoli" class="vsoc.genetic.AdHocSelectionPolicy">
+		<property name="populationSize" value="20"/>	
+	</bean>
+	
+	<bean id="ggSelPoli" class="vsoc.genetic.AdHocSelectionPolicy">
+		<property name="populationSize" value="21"/>	
+	</bean>
+	
+	<bean id="crossableFactory" class="vsoc.nn.feedforward.FFNetCrossableFactory"/>
+	
+</beans>

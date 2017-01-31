@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+
+	<bean id="campRunner" class="vsoc.camps.goalgetter.GGCampRunner">
+		<property name="camps">
+			<list>
+				<ref bean="camp1"/>				
+				<ref bean="camp2"/>				
+				<ref bean="camp3"/>				
+				<ref bean="camp4"/>				
+				<ref bean="camp5"/>				
+			</list>
+		</property>
+		
+	</bean>
+	
+	<bean id = "camp1" parent="defaultCamp"/>
+
+	<bean id = "camp2" parent="defaultCamp">
+		<property name="mutationRate" value="0.03"/>
+	</bean>
+
+	<bean id = "camp3" parent="defaultCamp">
+		<property name="mutationRate" value="0.04"/>
+	</bean>
+
+	<bean id = "camp4" parent="defaultCamp">
+		<property name="mutationRate" value="0.05"/>
+	</bean>
+
+	<bean id = "camp5" parent="defaultCamp">
+		<property name="mutationRate" value="0.06"/>
+	</bean>
+
+	
+	<bean id = "defaultCamp" class="vsoc.camps.goalgetter.GGCamp">
+		<property name="mutationRate" value="0.02"/>
+		<property name="stepsPerMatch" value="600"/>
+		<property name="matchesPerGeneration" value="150"/>
+		<property name="kickFactor" value="1"/>
+		<property name="kickOutFactor" value="-5"/>
+		<property name="ownGoalFactor" value="-100"/>
+		<property name="goalFactor" value="100"/>
+		<property name="selPoli" ref="selPoli"/>	
+		<property name="crossableFactory" ref="crossableFactory"/>	
+		<property name="maxGenerations" value="200"/>	
+		<property name="resultTable">
+			<bean class="vsoc.camps.goalgetter.GGCampResultTable"/>
+		</property>	
+	</bean>
+
+	<bean id="selPoli" class="vsoc.genetic.AdHocSelectionPolicy"/>
+	
+	<bean id="crossableFactory" class="vsoc.nn.feedforward.FFNetCrossableFactory"/>
+	
+</beans>

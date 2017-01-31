@@ -1,0 +1,1 @@
+package vsoc.model;import atan.model.Controller;import atan.model.Flag;class VisionGoalOther extends Vision {    private Flag type;    public VisionGoalOther(Flag type) {        this.type = type;    }    public void informControlSystem(Controller c) {        c.infoSeeFlagGoalOther(this.type, getDistance(), getDirection());    }}
