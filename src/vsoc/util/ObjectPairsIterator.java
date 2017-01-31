@@ -2,15 +2,16 @@ package vsoc.util;
 
 import java.util.List;
 
+// TODO Replace ObectPair by Pair<A, B>
 public class ObjectPairsIterator {
 
     private int index = 0;
 
     private int runningIndex = 0;
 
-    private List list;
+    private List<Object[]> list;
 
-    public ObjectPairsIterator(List l) {
+    public ObjectPairsIterator(List<Object[]> l) {
         this.index = l.size() - 1;
         this.runningIndex = this.index - 1;
         this.list = l;

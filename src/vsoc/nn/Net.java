@@ -11,7 +11,7 @@ import vsoc.genetic.Crossable;
 /**
  * Interface for a neuronal net.
  */
-public interface Net extends Crossable, Serializable {
+public interface Net extends Crossable<Net>, Serializable {
 
     public abstract void setInputValue(int index, short val);
 

@@ -3,12 +3,14 @@ package vsoc.genetic;
 import java.io.Serializable;
 import java.util.List;
 
-public interface SelectionPolicy extends Serializable {
+import vsoc.nn.Net;
 
-    List createNextGeneration(List currentPopulation, CrossableFactory factory,
+public interface SelectionPolicy<T extends Crossable> extends Serializable {
+
+    List<T> createNextGeneration(List<Net> currentPopulation, CrossableFactory factory,
             double mutationRate);
 
-    List createNewGeneration(CrossableFactory factory);
+    List<T> createNewGeneration(CrossableFactory factory);
 
     void setPopulationSize(int size);
 

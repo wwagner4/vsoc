@@ -8,6 +8,7 @@ import atan.model.*;
  * A ControlSystem that does nothing. Can be used for initialization.
  */
 
+@SuppressWarnings("serial")
 class DummyControlSystem implements Controller, Serializable {
 
     public DummyControlSystem() {

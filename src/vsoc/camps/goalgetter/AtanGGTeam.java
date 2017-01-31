@@ -28,7 +28,7 @@ public class AtanGGTeam extends Team {
             Member member = this.camp.getMember(num);
             return member.getNeuroControlSystem();
         } catch (IOException ex) {
-            throw new RuntimeException(ex.getMessage());
+            throw new IllegalStateException(ex.getMessage(), ex);
         }
     }
 

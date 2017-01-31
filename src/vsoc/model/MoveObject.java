@@ -6,6 +6,7 @@ import vsoc.util.*;
  * Any simulated object. E.g. Payers, Ball, Flag, ...
  */
 
+@SuppressWarnings("serial")
 public abstract class MoveObject extends SimObject {
 
     private double direction = 0.0;

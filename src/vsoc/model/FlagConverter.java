@@ -9,16 +9,16 @@ public class FlagConverter {
     
     private static FlagConverter current = null;
     
-    private Map forEast = initForEastMap();
+    private Map<ServerFlag, Flag> forEast = initForEastMap();
 
-    private Map forWest = initForWestMap();
+    private Map<ServerFlag, Flag> forWest = initForWestMap();
 
     private FlagConverter() {
         super();
     }
     
-    private Map initForWestMap() {
-        Map map = new HashMap();
+    private Map<ServerFlag, Flag> initForWestMap() {
+        Map<ServerFlag, Flag> map = new HashMap<>();
         map.put(ServerFlag.CENTER, Flag.FLAG_CENTER);
         map.put(ServerFlag.NORTH, Flag.FLAG_LEFT);
         map.put(ServerFlag.SOUTH, Flag.FLAG_RIGHT);
@@ -44,8 +44,8 @@ public class FlagConverter {
         return map;
     }
 
-    private Map initForEastMap() {
-        Map map = new HashMap();
+    private Map<ServerFlag, Flag> initForEastMap() {
+        Map<ServerFlag, Flag> map = new HashMap<>();
         map.put(ServerFlag.CENTER, Flag.FLAG_CENTER);
         map.put(ServerFlag.NORTH, Flag.FLAG_RIGHT);
         map.put(ServerFlag.SOUTH, Flag.FLAG_LEFT);

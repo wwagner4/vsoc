@@ -8,9 +8,10 @@ import atan.model.Player;
 
 /**
  * Turns the player a random angle if the sensors see nothing. Prevents players
- * to run away from the feeld.
+ * to run away from the field.
  */
 
+@SuppressWarnings("serial")
 public class DefaultBehaviour implements Behaviour {
 
     private Behaviour child;
@@ -69,7 +70,7 @@ public class DefaultBehaviour implements Behaviour {
             player.move(-40, -10);
             break;
         default:
-            throw new Error("number must be initialized before move");
+            throw new IllegalStateException("number must be initialized before move");
         }
     }
 

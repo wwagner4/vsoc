@@ -102,7 +102,7 @@ public class GGCamp extends AbstractCamp {
     }
 
     protected String preCreateNextGenerationInfo() {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         sb.append("diversity=");
         sb.append(VsocUtil.current().format(diversity(getMembers())));
         sb.append(" kickCount=");
@@ -152,8 +152,8 @@ public class GGCamp extends AbstractCamp {
 
     public List getMembers() {
         if (this.members == null) {
-            List mems = new ArrayList();
-            List nets = this.selPoli.createNewGeneration(this.crossableFactory);
+            List<Member> mems = new ArrayList<>();
+            List<Net> nets = this.selPoli.createNewGeneration(this.crossableFactory);
             Iterator iter = nets.iterator();
             while (iter.hasNext()) {
                 Net net = (Net) iter.next();

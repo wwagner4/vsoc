@@ -1,5 +1,6 @@
 package vsoc;
 
+@SuppressWarnings("serial")
 public class VsocInvalidDataException extends RuntimeException {
 
 /**

@@ -5,6 +5,7 @@ package vsoc.model;
  * A Flag
  */
 
+@SuppressWarnings("serial")
 class FlagWest extends SimObject {
 
     private ServerFlag type;

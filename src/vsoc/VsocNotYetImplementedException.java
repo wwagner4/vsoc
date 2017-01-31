@@ -1,5 +1,6 @@
 package vsoc;
 
+@SuppressWarnings("serial")
 public class VsocNotYetImplementedException extends RuntimeException {
 
     public VsocNotYetImplementedException() {

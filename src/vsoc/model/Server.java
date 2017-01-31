@@ -18,10 +18,11 @@ import atan.model.Controller;
 import atan.model.Player;
 
 /**
- * Performs soccer spezific actions.
+ * Performs soccer specific actions.
  * 
  */
 
+@SuppressWarnings("serial")
 public class Server implements Serializable {
 
     private static final Color FIELD_BACKGROUND = initFieldBackground();
@@ -34,15 +35,16 @@ public class Server implements Serializable {
 
     private long time = 0;
 
-    private Collection listeners = new Vector();
+    // TODO Remove Vectors
+    private Collection<ServerListener> listeners = new Vector<ServerListener>();
 
     private ServerThread thread = null;
 
-    private Collection simObjects = new Vector();
+    private Collection<SimObject> simObjects = new Vector<SimObject>();
 
-    private Collection playersAndBall = new Vector();
+    private Collection<MoveObject> playersAndBall = new Vector<>();
 
-    protected List players = new Vector();
+    protected List<VsocPlayer> players = new Vector<>();
 
     private Ball ball = null;
 
@@ -75,19 +77,19 @@ public class Server implements Serializable {
         return new Color(150, 170, 160);
     }
 
-    double getBallDecay() {
+    protected double getBallDecay() {
         return 0.94;
     }
 
-    double getPlayerDecay() {
+    protected double getPlayerDecay() {
         return 0.4;
     }
 
-    double getDashPowerRate() {
+    protected double getDashPowerRate() {
         return 0.006;
     }
 
-    double getKickPowerRate() {
+    protected double getKickPowerRate() {
         return 0.016;
     }
 
@@ -141,10 +143,10 @@ public class Server implements Serializable {
 
     public void takeStep() {
         this.time++;
-        Iterator iter = this.listeners.iterator();
+        Iterator<ServerListener> iter = this.listeners.iterator();
         if (this.time % this.steps == 0) {
             while (iter.hasNext()) {
-                ServerListener listener = (ServerListener) iter.next();
+                ServerListener listener = iter.next();
                 listener.serverChangePerformed(this);
             }
         }
@@ -165,9 +167,9 @@ public class Server implements Serializable {
     }
 
     private void takeStepOfAllControlSystems() {
-        Iterator ip = this.players.iterator();
+        Iterator<VsocPlayer> ip = this.players.iterator();
         while (ip.hasNext()) {
-            VsocPlayer p = (VsocPlayer) ip.next();
+            VsocPlayer p = ip.next();
             informController(p, p.getController());
         }
     }
@@ -178,9 +180,9 @@ public class Server implements Serializable {
 
     public void informController(VsocPlayer p, Controller c) {
         c.preInfo();
-        Iterator i = p.see().iterator();
+        Iterator<Vision> i = p.see().iterator();
         while (i.hasNext()) {
-            Vision v = (Vision) i.next();
+            Vision v = i.next();
             v.informControlSystem(c);
         }
 
@@ -189,9 +191,9 @@ public class Server implements Serializable {
     }
 
     private void moveAll() {
-        Iterator i = this.playersAndBall.iterator();
+        Iterator<MoveObject> i = this.playersAndBall.iterator();
         while (i.hasNext()) {
-            MoveObject o = (MoveObject) i.next();
+            MoveObject o = i.next();
             o.moveFromVelo();
         }
     }
@@ -278,29 +280,29 @@ public class Server implements Serializable {
         return this.ball;
     }
 
-    public List getPlayersWest() {
-        ArrayList c = new ArrayList();
-        Iterator pi = Server.this.players.iterator();
+    public List<VsocPlayer> getPlayersWest() {
+        ArrayList<VsocPlayer> c = new ArrayList<>();
+        Iterator<VsocPlayer> pi = Server.this.players.iterator();
         while (pi.hasNext()) {
-            Object o = pi.next();
+        	VsocPlayer o = pi.next();
             if (o instanceof VsocPlayerWest)
-                c.add(o);
+                c.add((VsocPlayer) o);
         }
         return c;
     }
 
-    public List getPlayersEast() {
-        ArrayList c = new ArrayList();
-        Iterator pi = Server.this.players.iterator();
+    public List<VsocPlayer> getPlayersEast() {
+        ArrayList<VsocPlayer> c = new ArrayList<>();
+        Iterator<VsocPlayer> pi = Server.this.players.iterator();
         while (pi.hasNext()) {
-            Object o = pi.next();
+        	VsocPlayer o = pi.next();
             if (o instanceof VsocPlayerEast)
-                c.add(o);
+                c.add((VsocPlayerEast) o);
         }
         return c;
     }
 
-    public List getPlayers() {
+    public List<VsocPlayer> getPlayers() {
         return this.players;
     }
 
@@ -308,8 +310,8 @@ public class Server implements Serializable {
         g.setStroke(stroke);
         g.setColor(BACKGROUND);
         g.fill(new Rectangle2D.Double(-100, -100, 200, 200));
-        double x = -WIDTH / 2;
-        double y = -HEIGHT / 2;
+        double x = -WIDTH / 2.0;
+        double y = -HEIGHT / 2.0;
         double w = WIDTH;
         double h = HEIGHT;
         Rectangle2D rect = new Rectangle2D.Double(x, y, w, h);
@@ -317,7 +319,7 @@ public class Server implements Serializable {
         g.fill(rect);
         g.setColor(Color.black);
         g.draw(rect);
-        Iterator i = this.simObjects.iterator();
+        Iterator<SimObject> i = this.simObjects.iterator();
         while (i.hasNext()) {
             SimObject so = (SimObject) i.next();
             so.paint(g);
@@ -348,15 +350,15 @@ public class Server implements Serializable {
         return this.goalWest;
     }
 
-    public Collection getSimObjects() {
+    public Collection<SimObject> getSimObjects() {
         return this.simObjects;
     }
 
     public int getActualPlayerWestCount() {
         int count = 0;
-        Iterator iter = this.playersAndBall.iterator();
+        Iterator<MoveObject> iter = this.playersAndBall.iterator();
         while (iter.hasNext()) {
-            MoveObject mo = (MoveObject) iter.next();
+            MoveObject mo = iter.next();
             if (mo instanceof Player) {
                 Player p = (Player) mo;
                 if (!p.isTeamEast()) {
@@ -369,9 +371,9 @@ public class Server implements Serializable {
 
     public int getActualPlayerEastCount() {
         int count = 0;
-        Iterator iter = this.playersAndBall.iterator();
+        Iterator<MoveObject> iter = this.playersAndBall.iterator();
         while (iter.hasNext()) {
-            MoveObject mo = (MoveObject) iter.next();
+            MoveObject mo = iter.next();
             if (mo instanceof Player) {
                 Player p = (Player) mo;
                 if (p.isTeamEast()) {
@@ -393,10 +395,10 @@ public class Server implements Serializable {
                 throw new VsocInvalidConfigurationException(
                         "Only one ball may be added.");
             }
-            Ball ball = (Ball) simObj;
-            this.ball = ball;
+            Ball ballObj = (Ball) simObj;
+            this.ball = ballObj;
             ball.setServer(this);
-            this.playersAndBall.add(ball);
+            this.playersAndBall.add(ballObj);
         } else if (simObj instanceof VsocPlayer) {
             VsocPlayer p = (VsocPlayer) simObj;
             p.setServer(this);
@@ -411,9 +413,9 @@ public class Server implements Serializable {
 
     public int getPlayersEastCount() {
         int re = 0;
-        Iterator iter = this.players.iterator();
+        Iterator<VsocPlayer> iter = this.players.iterator();
         while (iter.hasNext()) {
-            VsocPlayer player = (VsocPlayer) iter.next();
+            VsocPlayer player = iter.next();
             if (player.isTeamEast()) {
                 re++;
             }
@@ -423,9 +425,9 @@ public class Server implements Serializable {
 
     public int getPlayersWestCount() {
         int re = 0;
-        Iterator iter = this.players.iterator();
+        Iterator<VsocPlayer> iter = this.players.iterator();
         while (iter.hasNext()) {
-            VsocPlayer player = (VsocPlayer) iter.next();
+            VsocPlayer player = iter.next();
             if (!player.isTeamEast()) {
                 re++;
             }

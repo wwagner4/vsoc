@@ -29,11 +29,11 @@ import vsoc.nn.base.Synapse;
  * net-Connector. see@ Neuron see@ Layer
  */
 
-public class FFNet implements Crossable, Net {
+public class FFNet implements Net {
     
     private static final long serialVersionUID = 0L;
 
-    protected Vector ls = new Vector();
+    protected Vector<Layer> ls = new Vector<>();
 
     private AbstractFFNetConnector netConnector = null;
 
@@ -69,7 +69,7 @@ public class FFNet implements Crossable, Net {
         return getOutputLayer().getValueAt(index);
     }
 
-    public Crossable newChild(Crossable otherParent, double mutationRate) {
+    public Net newChild(Net otherParent, double mutationRate) {
         Mutator mut = new Mutator((int) (mutationRate * 1000000)); 
         FFNet otherNet, childNet;
         otherNet = (FFNet) otherParent;
@@ -79,6 +79,7 @@ public class FFNet implements Crossable, Net {
     }
 
     void setWeightsCrossover(FFNet netA, FFNet netB, CrossoverSwitch cs, Mutator mut) {
+    	// TODO Remove Enumerations
         Enumeration enumA, enumB, enumChild;
         Synapse synA, synB, synChild;
         RandomWgt rw = new RandomWgt();
@@ -110,8 +111,7 @@ public class FFNet implements Crossable, Net {
 
     private void setWeightsRandom(RandomWgt rw) {
         Synapse syn;
-        Enumeration e;
-        for (e = synapses(); e.hasMoreElements();) {
+        for (Enumeration<Synapse> e = synapses(); e.hasMoreElements();) {
             syn = (Synapse) e.nextElement();
             syn.setWeightRandom(rw);
         }
@@ -305,7 +305,7 @@ public class FFNet implements Crossable, Net {
         return false;
     }
 
-    public Enumeration synapses() {
+    public Enumeration<Synapse> synapses() {
         return new EnumSynapsesOfNet(this);
     }
 
@@ -436,4 +436,5 @@ public class FFNet implements Crossable, Net {
     public void reset() {
         // Nothing to be done by a FFNet.
     }
+
 }

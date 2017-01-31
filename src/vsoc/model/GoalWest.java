@@ -12,6 +12,7 @@ import atan.model.Flag;
  * A Flag
  */
 
+@SuppressWarnings("serial")
 public class GoalWest extends SimObject {
 
     GoalWest(double x, double y) {

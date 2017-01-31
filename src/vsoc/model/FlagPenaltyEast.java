@@ -4,6 +4,7 @@ package vsoc.model;
  * A Flag
  */
 
+@SuppressWarnings("serial")
 class FlagPenaltyEast extends SimObject {
 
     private ServerFlag type;

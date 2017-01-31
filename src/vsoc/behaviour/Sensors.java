@@ -5,38 +5,40 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import atan.model.Flag;
+import atan.model.Line;
 import atan.model.PlayMode;
 import atan.model.RefereeMessage;
 
 public class Sensors {
 
-    private Map flagsRight = null;
+    private Map<Flag, BehaviourVision> flagsRight = null;
 
-    private Map flagsLeft = null;
+    private Map<Flag, BehaviourVision> flagsLeft = null;
 
-    private Map flagsOwn = null;
+    private Map<Flag, BehaviourVision> flagsOwn = null;
 
-    private Map flagsOther = null;
+    private Map<Flag, BehaviourVision> flagsOther = null;
 
-    private Map flagsCenter = null;
+    private Map<Flag, BehaviourVision> flagsCenter = null;
 
-    private Map flagsCornerOwn = null;
+    private Map<Flag, BehaviourVision> flagsCornerOwn = null;
 
-    private Map flagsCornerOther = null;
+    private Map<Flag, BehaviourVision> flagsCornerOther = null;
 
-    private Map flagsPenaltyOwn = null;
+    private Map<Flag, BehaviourVision> flagsPenaltyOwn = null;
 
-    private Map flagsPenaltyOther = null;
+    private Map<Flag, BehaviourVision> flagsPenaltyOther = null;
 
-    private Map flagsGoalOwn = null;
+    private Map<Flag, BehaviourVision> flagsGoalOwn = null;
 
-    private Map flagsGoalOther = null;
+    private Map<Flag, BehaviourVision> flagsGoalOther = null;
 
-    private Map playersOwn = null;
+    private Map<Integer, BehaviourVision> playersOwn = null;
 
-    private Map playersOther = null;
+    private Map<Integer, BehaviourVision> playersOther = null;
 
-    private Map lines = null;
+    private Map<Line, BehaviourVision> lines = null;
 
     private BehaviourVision ball = null;
 
@@ -44,7 +46,7 @@ public class Sensors {
 
     private PlayMode playMode = null;
 
-    private List messages = null;
+    private List<Message> messages = null;
 
     private BodyState bodyState = null;
 
@@ -72,157 +74,157 @@ public class Sensors {
         this.bodyState = bodyState;
     }
 
-    public Map getFlagsCenter() {
+    public Map<Flag, BehaviourVision> getFlagsCenter() {
         if (this.flagsCenter == null) {
-            this.flagsCenter = new HashMap();
+            this.flagsCenter = new HashMap<>();
         }
         return this.flagsCenter;
     }
 
-    public void setFlagsCenter(Map flagsCenter) {
+    public void setFlagsCenter(Map<Flag, BehaviourVision> flagsCenter) {
         this.flagsCenter = flagsCenter;
     }
 
-    public Map getFlagsCornerOther() {
+    public Map<Flag, BehaviourVision> getFlagsCornerOther() {
         if (this.flagsCornerOther == null) {
-            this.flagsCornerOther = new HashMap();
+            this.flagsCornerOther = new HashMap<>();
         }
         return this.flagsCornerOther;
     }
 
-    public void setFlagsCornerOther(Map flagsCornerOther) {
+    public void setFlagsCornerOther(Map<Flag, BehaviourVision> flagsCornerOther) {
         this.flagsCornerOther = flagsCornerOther;
     }
 
-    public Map getFlagsCornerOwn() {
+    public Map<Flag, BehaviourVision> getFlagsCornerOwn() {
         if (this.flagsCornerOwn == null) {
-            this.flagsCornerOwn = new HashMap();
+            this.flagsCornerOwn = new HashMap<>();
         }
         return this.flagsCornerOwn;
     }
 
-    public void setFlagsCornerOwn(Map flagsCornerOwn) {
+    public void setFlagsCornerOwn(Map<Flag, BehaviourVision> flagsCornerOwn) {
         this.flagsCornerOwn = flagsCornerOwn;
     }
 
-    public Map getFlagsGoalOther() {
+    public Map<Flag, BehaviourVision> getFlagsGoalOther() {
         if (this.flagsGoalOther == null) {
-            this.flagsGoalOther = new HashMap();
+            this.flagsGoalOther = new HashMap<>();
         }
         return this.flagsGoalOther;
     }
 
-    public void setFlagsGoalOther(Map flagsGoalOther) {
+    public void setFlagsGoalOther(Map<Flag, BehaviourVision> flagsGoalOther) {
         this.flagsGoalOther = flagsGoalOther;
     }
 
-    public Map getFlagsGoalOwn() {
+    public Map<Flag, BehaviourVision> getFlagsGoalOwn() {
         if (this.flagsGoalOwn == null) {
-            this.flagsGoalOwn = new HashMap();
+            this.flagsGoalOwn = new HashMap<>();
         }
         return this.flagsGoalOwn;
     }
 
-    public void setFlagsGoalOwn(Map flagsGoalOwn) {
+    public void setFlagsGoalOwn(Map<Flag, BehaviourVision> flagsGoalOwn) {
         this.flagsGoalOwn = flagsGoalOwn;
     }
 
-    public Map getFlagsLeft() {
+    public Map<Flag, BehaviourVision> getFlagsLeft() {
         if (this.flagsLeft == null) {
-            this.flagsLeft = new HashMap();
+            this.flagsLeft = new HashMap<>();
         }
         return this.flagsLeft;
     }
 
-    public void setFlagsLeft(Map flagsLeft) {
+    public void setFlagsLeft(Map<Flag, BehaviourVision> flagsLeft) {
         this.flagsLeft = flagsLeft;
     }
 
-    public Map getFlagsOther() {
+    public Map<Flag, BehaviourVision> getFlagsOther() {
         if (this.flagsOther == null) {
-            this.flagsOther = new HashMap();
+            this.flagsOther = new HashMap<>();
         }
         return this.flagsOther;
     }
 
-    public void setFlagsOther(Map flagsOther) {
+    public void setFlagsOther(Map<Flag, BehaviourVision> flagsOther) {
         this.flagsOther = flagsOther;
     }
 
-    public Map getFlagsOwn() {
+    public Map<Flag, BehaviourVision> getFlagsOwn() {
         if (this.flagsOwn == null) {
-            this.flagsOwn = new HashMap();
+            this.flagsOwn = new HashMap<>();
         }
         return this.flagsOwn;
     }
 
-    public void setFlagsOwn(Map flagsOwn) {
+    public void setFlagsOwn(Map<Flag, BehaviourVision> flagsOwn) {
         this.flagsOwn = flagsOwn;
     }
 
-    public Map getFlagsPenaltyOther() {
+    public Map<Flag, BehaviourVision> getFlagsPenaltyOther() {
         if (this.flagsPenaltyOther == null) {
-            this.flagsPenaltyOther = new HashMap();
+            this.flagsPenaltyOther = new HashMap<>();
         }
         return this.flagsPenaltyOther;
     }
 
-    public void setFlagsPenaltyOther(Map flagsPenaltyOther) {
+    public void setFlagsPenaltyOther(Map<Flag, BehaviourVision> flagsPenaltyOther) {
         this.flagsPenaltyOther = flagsPenaltyOther;
     }
 
-    public Map getFlagsPenaltyOwn() {
+    public Map<Flag, BehaviourVision> getFlagsPenaltyOwn() {
         if (this.flagsPenaltyOwn == null) {
-            this.flagsPenaltyOwn = new HashMap();
+            this.flagsPenaltyOwn = new HashMap<>();
         }
         return this.flagsPenaltyOwn;
     }
 
-    public void setFlagsPenaltyOwn(Map flagsPenaltyOwn) {
+    public void setFlagsPenaltyOwn(Map<Flag, BehaviourVision> flagsPenaltyOwn) {
         this.flagsPenaltyOwn = flagsPenaltyOwn;
     }
 
-    public Map getFlagsRight() {
+    public Map<Flag, BehaviourVision> getFlagsRight() {
         if (this.flagsRight == null) {
-            this.flagsRight = new HashMap();
+            this.flagsRight = new HashMap<>();
         }
         return this.flagsRight;
     }
 
-    public void setFlagsRight(Map flagsRight) {
+    public void setFlagsRight(Map<Flag, BehaviourVision> flagsRight) {
         this.flagsRight = flagsRight;
     }
 
-    public List getMessages() {
+    public List<Message> getMessages() {
         if (this.messages == null) {
-            this.messages = new ArrayList();
+            this.messages = new ArrayList<>();
         }
         return this.messages;
     }
 
-    public void setMessages(List messages) {
+    public void setMessages(List<Message> messages) {
         this.messages = messages;
     }
 
-    public Map getPlayersOther() {
+    public Map<Integer, BehaviourVision> getPlayersOther() {
         if (this.playersOther == null) {
-            this.playersOther = new HashMap();
+            this.playersOther = new HashMap<>();
         }
         return this.playersOther;
     }
 
-    public void setPlayersOther(Map playersOther) {
+    public void setPlayersOther(Map<Integer, BehaviourVision> playersOther) {
         this.playersOther = playersOther;
     }
 
-    public Map getPlayersOwn() {
+    public Map<Integer, BehaviourVision> getPlayersOwn() {
         if (this.playersOwn == null) {
-            this.playersOwn = new HashMap();
+            this.playersOwn = new HashMap<>();
         }
         return this.playersOwn;
     }
 
-    public void setPlayersOwn(Map playersOwn) {
+    public void setPlayersOwn(Map<Integer, BehaviourVision> playersOwn) {
         this.playersOwn = playersOwn;
     }
 
@@ -242,14 +244,14 @@ public class Sensors {
         this.refereeMessage = refereeMessage;
     }
 
-    public Map getLines() {
+    public Map<Line, BehaviourVision> getLines() {
         if (this.lines == null) {
-            this.lines = new HashMap();
+            this.lines = new HashMap<>();
         }
         return this.lines;
     }
 
-    public void setLines(Map lines) {
+    public void setLines(Map<Line, BehaviourVision> lines) {
         this.lines = lines;
     }
 

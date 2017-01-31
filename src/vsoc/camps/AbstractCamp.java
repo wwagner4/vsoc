@@ -92,7 +92,7 @@ public abstract class AbstractCamp implements Camp {
         }
     }
 
-    abstract protected void initPlayersForMatch();
+    protected abstract void initPlayersForMatch();
 
     public Server getServer() {
         if (this.server == null) {
@@ -224,11 +224,11 @@ public abstract class AbstractCamp implements Camp {
         }
     }
 
-    protected void basicCreateNextGeneration(List mems, Comparator comp,
+    protected void basicCreateNextGeneration(List<Member> mems, Comparator<Member> comp,
             double mutRate, SelectionPolicy selPoli,
             CrossableFactory crossableFactory) {
-        List pop = sortedNetsFromMembers(mems, comp);
-        List childNets = selPoli.createNextGeneration(pop, crossableFactory,
+        List<Net> pop = sortedNetsFromMembers(mems, comp);
+        List<Net> childNets = selPoli.createNextGeneration(pop, crossableFactory,
                 mutRate);
         addNetsToMembers(mems, childNets);
     }
@@ -241,20 +241,19 @@ public abstract class AbstractCamp implements Camp {
         m.increaseOwnGoalsCount(p.getOwnGoalCount());
     }
 
-    private void addNetsToMembers(List mems, List nextPop) {
-        int size = nextPop.size();
-        Iterator iter = mems.iterator();
+    private void addNetsToMembers(List<Member> mems, List<Net> nextPop) {
+        Iterator<Member> iter = mems.iterator();
         int index = 0;
         while (iter.hasNext()) {
-            Member mem = (Member) iter.next();
+            Member mem = iter.next();
             mem.reset();
-            Net net = (Net) nextPop.get(index);
+            Net net = nextPop.get(index);
             mem.getNeuroControlSystem().setNet(net);
             index++;
         }
     }
 
-    abstract protected void createNextGeneration();
+    protected abstract void createNextGeneration();
 
     protected Random getRandom() {
         if (this.random == null) {
@@ -294,7 +293,7 @@ public abstract class AbstractCamp implements Camp {
         return null;
     }
 
-    protected double diversity(List mems) {
+    protected double diversity(List<Object[]> mems) {
         ObjectPairsIterator i = new ObjectPairsIterator(mems);
         int count = 0;
         double distSum = 0.0;
@@ -309,10 +308,10 @@ public abstract class AbstractCamp implements Camp {
         return distSum / count;
     }
 
-    protected double kicks(List mems) {
+    protected double kicks(List<Member> mems) {
         double kicks = 0.0;
         int count = 0;
-        Iterator iter = mems.iterator();
+        Iterator<Member> iter = mems.iterator();
         while (iter.hasNext()) {
             Member mem = (Member) iter.next();
             kicks += mem.kickPerMatch();
@@ -321,60 +320,60 @@ public abstract class AbstractCamp implements Camp {
         return kicks / count;
     }
 
-    protected double kickOuts(List mems) {
+    protected double kickOuts(List<Member> mems) {
         double kicks = 0.0;
         int count = 0;
-        Iterator iter = mems.iterator();
+        Iterator<Member> iter = mems.iterator();
         while (iter.hasNext()) {
-            Member mem = (Member) iter.next();
+            Member mem = iter.next();
             kicks += mem.kickOutPerMatch();
             count++;
         }
         return kicks / count;
     }
 
-    protected double goalsReceived(List mems) {
+    protected double goalsReceived(List<Member> mems) {
         double re = 0.0;
         int count = 0;
-        Iterator iter = mems.iterator();
+        Iterator<Member> iter = mems.iterator();
         while (iter.hasNext()) {
-            Member mem = (Member) iter.next();
+            Member mem = iter.next();
             re += mem.receivedGoalsPerMatch();
             count++;
         }
         return re / count;
     }
 
-    protected double goals(List mems) {
+    protected double goals(List<Member> mems) {
         double goals = 0.0;
         int count = 0;
-        Iterator iter = mems.iterator();
+        Iterator<Member> iter = mems.iterator();
         while (iter.hasNext()) {
-            Member mem = (Member) iter.next();
+            Member mem = iter.next();
             goals += mem.goalsPerMatch();
             count++;
         }
         return goals / count;
     }
 
-    protected double ownGoals(List mems) {
+    protected double ownGoals(List<Member> mems) {
         double goals = 0.0;
         int count = 0;
-        Iterator iter = mems.iterator();
+        Iterator<Member> iter = mems.iterator();
         while (iter.hasNext()) {
-            Member mem = (Member) iter.next();
+            Member mem = iter.next();
             goals += mem.ownGoalsPerMatch();
             count++;
         }
         return goals / count;
     }
 
-    private List sortedNetsFromMembers(List mems, Comparator comp) {
+    private List<Net> sortedNetsFromMembers(List<Member> mems, Comparator<Member> comp) {
         Collections.sort(mems, comp);
-        List pop = new ArrayList();
-        Iterator iter = mems.iterator();
+        List<Net> pop = new ArrayList<>();
+        Iterator<Member> iter = mems.iterator();
         while (iter.hasNext()) {
-            Member mem = (Member) iter.next();
+            Member mem = iter.next();
             Net net = mem.getNeuroControlSystem().getNet();
             pop.add(net);
         }

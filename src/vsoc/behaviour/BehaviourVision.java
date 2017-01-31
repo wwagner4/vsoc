@@ -36,10 +36,11 @@ public class BehaviourVision {
         this.distance = distance;
     }
 
+    @Override
     public String toString() {
         String dist = format.format(this.distance);
         String dir = format.format(this.direction);
-        StringBuffer msg = new StringBuffer("BehaviourVision[").append(dist)
+        StringBuilder msg = new StringBuilder("BehaviourVision[").append(dist)
                 .append("|").append(dir).append("]");
         return msg.toString();
     }

@@ -2,6 +2,7 @@ package vsoc.behaviour;
 
 import atan.model.Player;
 
+@SuppressWarnings("serial")
 public class GoAheadBehaviour implements Behaviour {
     
     public GoAheadBehaviour() {

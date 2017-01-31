@@ -2,6 +2,7 @@ package vsoc.model;
 
 import org.apache.commons.lang.enums.Enum;
 
+// TODO Change to enum
 public class ServerFlag extends Enum {
 
     public static final ServerFlag NORTH = new ServerFlag("north");

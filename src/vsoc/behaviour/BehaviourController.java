@@ -130,13 +130,13 @@ public class BehaviourController implements Controller, Serializable {
 
     public void infoSeePlayerOther(int number, double distance, double direction) {
         this.sensors.setSawAnything(true);
-        this.sensors.getPlayersOther().put(new Integer(number),
+        this.sensors.getPlayersOther().put(number,
                 new BehaviourVision(distance, direction));
     }
 
     public void infoSeePlayerOwn(int number, double distance, double direction) {
         this.sensors.setSawAnything(true);
-        this.sensors.getPlayersOwn().put(new Integer(number),
+        this.sensors.getPlayersOwn().put(number,
                 new BehaviourVision(distance, direction));
     }
 

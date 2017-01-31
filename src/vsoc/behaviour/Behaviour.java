@@ -7,17 +7,17 @@ import atan.model.Player;
 public interface Behaviour extends Serializable {
 
     /**
-     * Defines if the behaviour should be applyed according to the state of the
+     * Defines if the behavior should be applied according to the state of the
      * sensors.
      * 
      * @param sens
      *            The sensors.
-     * @return True if the behaviour should be applied.
+     * @return True if the behavior should be applied.
      */
     boolean shouldBeApplied(Sensors sens);
 
     /**
-     * Applyes the information of the sensors to control the player.
+     * Applies the information of the sensors to control the player.
      * 
      * @param sens
      *            The sensors.
@@ -27,10 +27,10 @@ public interface Behaviour extends Serializable {
     void apply(Sensors sens, Player player);
 
     /**
-     * Child behaviour that can be applied if this beahaviour should not be
+     * Child behavior that can be applied if this behavior should not be
      * applied.
      * 
-     * @return The child behaviour.
+     * @return The child behavior.
      */
     Behaviour getChild();
 

@@ -8,6 +8,7 @@ import java.awt.geom.*;
  * The Ball
  */
 
+@SuppressWarnings("serial")
 public class Ball extends MoveObject {
 
     private Vec2D previousPosition = new Vec2D(0, 0);

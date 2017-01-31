@@ -19,7 +19,6 @@ public class DefaultServerFactory implements FactoryBean {
         this.util.addGoalWest(srv, -Server.WIDTH / 2, 0);
         this.util.addGoalEast(srv, Server.WIDTH / 2, 0);
         this.util.addFlags(srv);
-        ServerUtil r = this.util;
         srv.addSimObject(new Ball(0, 0));
         for (int i = 0; i < this.eastPlayerCount; i++) {
             this.util.addPlayerEast(srv, new VsocPlayerEast(20, i * 10 - 10,
@@ -60,7 +59,7 @@ public class DefaultServerFactory implements FactoryBean {
         return createServer();
     }
 
-    public Class getObjectType() {
+    public Class<?> getObjectType() {
         return Server.class;
     }
 
