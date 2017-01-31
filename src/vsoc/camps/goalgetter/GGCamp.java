@@ -5,9 +5,6 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
-import java.util.SortedSet;
-import java.util.TreeSet;
-import java.util.Vector;
 
 import org.apache.log4j.Logger;
 
@@ -35,7 +32,7 @@ public class GGCamp extends AbstractCamp {
 
     private static final long serialVersionUID = 0L;
 
-    private List members = null;
+    private List<Member> members = null;
 
     private double mutationRate = 0.02;
 
@@ -47,7 +44,7 @@ public class GGCamp extends AbstractCamp {
 
     private int goalFactor = 100;
 
-    private SelectionPolicy selPoli = null;
+    private SelectionPolicy<Net> selPoli = null;
 
     private CrossableFactory crossableFactory = null;
 
@@ -124,11 +121,11 @@ public class GGCamp extends AbstractCamp {
         this.crossableFactory = crossableFactory;
     }
 
-    public SelectionPolicy getSelPoli() {
+    public SelectionPolicy<Net> getSelPoli() {
         return this.selPoli;
     }
 
-    public void setSelPoli(SelectionPolicy selPoli) {
+    public void setSelPoli(SelectionPolicy<Net> selPoli) {
         this.selPoli = selPoli;
     }
 
@@ -150,13 +147,13 @@ public class GGCamp extends AbstractCamp {
 
     }
 
-    public List getMembers() {
+    public List<Member> getMembers() {
         if (this.members == null) {
             List<Member> mems = new ArrayList<>();
             List<Net> nets = this.selPoli.createNewGeneration(this.crossableFactory);
-            Iterator iter = nets.iterator();
+            Iterator<Net> iter = nets.iterator();
             while (iter.hasNext()) {
-                Net net = (Net) iter.next();
+                Net net = iter.next();
                 BehaviourNeuroControlSystem ncs = new BehaviourNeuroControlSystem(
                         createBehaviour(net));
                 ncs.setNet(net);
@@ -170,20 +167,19 @@ public class GGCamp extends AbstractCamp {
         return this.members;
     }
 
-    public void setMembers(List members) {
+    public void setMembers(List<Member> members) {
         this.members = members;
     }
 
     protected Behaviour createBehaviour(Net net) {
         NetBehaviour nBehav = new NetBehaviour(net);
-        DefaultBehaviour dBehav = new DefaultBehaviour(nBehav);
-        return dBehav;
+        return new DefaultBehaviour(nBehav);
     }
 
     protected void initPlayersForMatch() {
         RandomIndexSelector sel = createSelector(getMembers().size(),
                 getServer().getPlayersCount());
-        Iterator players = getServer().getPlayers().iterator();
+        Iterator<VsocPlayer> players = getServer().getPlayers().iterator();
         while (players.hasNext()) {
             int index = sel.next();
             Member m = getMember(index);
@@ -197,21 +193,6 @@ public class GGCamp extends AbstractCamp {
         return (Member) getMembers().get(index);
     }
 
-    private List membersSorted() {
-        SortedSet sorted = new TreeSet();
-        List result = new Vector();
-        sorted.addAll(getMembers());
-        Iterator iter = sorted.iterator();
-        while (iter.hasNext()) {
-            result.add(iter.next());
-        }
-        return result;
-    }
-
-    public void sortMembers() {
-        setMembers(membersSorted());
-    }
-
     protected void createNextGeneration() {
         double diversity = diversity(getMembers());
         double kicks = kicks(getMembers());
@@ -220,7 +201,7 @@ public class GGCamp extends AbstractCamp {
         double ownGoals = ownGoals(getMembers());
         createNextGenerationInfo(diversity, kicks, kickOuts, goals, ownGoals);
         writeResultTable(diversity, kicks, kickOuts, goals, ownGoals);
-        Comparator comp = new GGMembersComparator(this.goalFactor,
+        Comparator<Member> comp = new GGMembersComparator(this.goalFactor,
                 this.ownGoalFactor, this.kickFactor, this.kickOutFactor, this.zeroKickPenalty );
         basicCreateNextGeneration(getMembers(), comp, this.mutationRate,
                 this.selPoli, this.crossableFactory);
@@ -231,22 +212,17 @@ public class GGCamp extends AbstractCamp {
         if (this.resultTable != null) {
             this.resultTable.addNextSerialValue(new Integer(
                     getGenerationsCount()));
-            this.resultTable.setValue(GGCampResultColumns.DIVERSITY.getName(),
-                    new Double(diversity));
-            this.resultTable.setValue(GGCampResultColumns.GOALS.getName(),
-                    new Double(goals));
-            this.resultTable.setValue(GGCampResultColumns.OWNGOALS.getName(),
-                    new Double(ownGoals));
-            this.resultTable.setValue(GGCampResultColumns.KICKS.getName(),
-                    new Double(kicks));
-            this.resultTable.setValue(GGCampResultColumns.KICKOUTS.getName(),
-                    new Double(kickOuts));
+            this.resultTable.setValue(GGCampResultColumns.DIVERSITY.getName(), diversity);
+            this.resultTable.setValue(GGCampResultColumns.GOALS.getName(), goals);
+            this.resultTable.setValue(GGCampResultColumns.OWNGOALS.getName(), ownGoals);
+            this.resultTable.setValue(GGCampResultColumns.KICKS.getName(), kicks);
+            this.resultTable.setValue(GGCampResultColumns.KICKOUTS.getName(), kickOuts);
         }
     }
 
     private void createNextGenerationInfo(double diversity, double kicks,
             double kickOuts, double goals, double ownGoals) {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         sb.append("diversity=");
         sb.append(VsocUtil.current().format(diversity));
         sb.append(" kickCount=");

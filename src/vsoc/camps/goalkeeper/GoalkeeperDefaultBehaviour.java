@@ -10,6 +10,7 @@ import atan.model.Player;
  * Turns the player a random angle if the sensors do not see the flags around
  * the goal.
  */
+@SuppressWarnings("serial")
 public class GoalkeeperDefaultBehaviour implements Behaviour {
 
     private Behaviour child;
@@ -26,13 +27,10 @@ public class GoalkeeperDefaultBehaviour implements Behaviour {
     }
 
     private boolean canSeeOwnGoalEnvironment(Sensors sens) {
-        boolean re = false;
-        if (sens.sawFlagPenaltyOwn()) {
-            re = true;
-        } else if (sens.sawFlagGoalOwn()) {
-            re = true;
-        }
-        return re;
+        if (sens.sawFlagPenaltyOwn() || sens.sawFlagGoalOwn()) {
+            return true;
+        } 
+        return false;
     }
 
     public void apply(Sensors sens, Player player) {

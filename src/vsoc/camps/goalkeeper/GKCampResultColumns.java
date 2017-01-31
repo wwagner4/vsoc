@@ -11,6 +11,7 @@ import org.apache.commons.lang.enums.Enum;
 /**
  * IDs of the columns of the GKCamp result table.
  */
+@SuppressWarnings("serial")
 public class GKCampResultColumns extends Enum {
 
     private String desc;
@@ -52,7 +53,9 @@ public class GKCampResultColumns extends Enum {
         this.desc = desc;
     }
 
-    public static List getEnumList() {
+    
+    @SuppressWarnings("unchecked")
+	public static List<GKCampResultColumns> getEnumList() {
         return Enum.getEnumList(GKCampResultColumns.class);
     }
 

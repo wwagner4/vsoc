@@ -9,6 +9,7 @@ import vsoc.camps.goalkeeper.GKCampResultColumns;
 import vsoc.util.resulttable.ColumnDesc;
 import vsoc.util.resulttable.SimpleResultTable;
 
+@SuppressWarnings("serial")
 public class GKCampResultTable extends SimpleResultTable {
 
     public GKCampResultTable() {
@@ -16,10 +17,10 @@ public class GKCampResultTable extends SimpleResultTable {
         NumberFormat format = createFormat();
         ColumnDesc sdesc = createSerialDesc(format);
         setSerialDesc(sdesc);
-        List cdescs = new ArrayList();
-        Iterator iter = GKCampResultColumns.getEnumList().iterator();
+        List<ColumnDesc> cdescs = new ArrayList<>();
+        Iterator<GKCampResultColumns> iter = GKCampResultColumns.getEnumList().iterator();
         while (iter.hasNext()) {
-            GKCampResultColumns enu = (GKCampResultColumns) iter.next();
+            GKCampResultColumns enu = iter.next();
             ColumnDesc desc = new ColumnDesc();
             desc.setFormat(format);
             desc.setId(enu.getName());

@@ -23,7 +23,7 @@ public class GGCampRunner {
 
     private String ts = initTimestamp();
 
-    private Collection camps = null;
+    private Collection<GGCamp> camps = null;
 
     public GGCampRunner() {
         super();
@@ -35,22 +35,17 @@ public class GGCampRunner {
         return df.format(now);
     }
 
-    public static void main(String[] args) {
-        try {
-            ApplicationContext ctx = new ClassPathXmlApplicationContext(
-                    "ggcamp.xml");
-            GGCampRunner runner = (GGCampRunner) ctx.getBean("campRunner");
-            runner.run();
-            System.out.println("- F I N I S H E D -");
-        } catch (Throwable e) {
-            e.printStackTrace();
-        }
+    public static void main(String[] args) throws IOException {
+		ApplicationContext ctx = new ClassPathXmlApplicationContext("ggcamp.xml");
+		GGCampRunner runner = (GGCampRunner) ctx.getBean("campRunner");
+		runner.run();
+		System.out.println("- F I N I S H E D -");
     }
 
     public void run() throws IOException {
         log.info("started");
         int num = 0;
-        Iterator iter = this.camps.iterator();
+        Iterator<GGCamp> iter = this.camps.iterator();
         while (iter.hasNext()) {
             GGCamp camp = (GGCamp) iter.next();
             run(camp, num);
@@ -96,11 +91,11 @@ public class GGCampRunner {
         return thisResultsDir;
     }
 
-    public Collection getCamps() {
+    public Collection<GGCamp> getCamps() {
         return this.camps;
     }
 
-    public void setCamps(Collection camps) {
+    public void setCamps(Collection<GGCamp> camps) {
         this.camps = camps;
     }
 

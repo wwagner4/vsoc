@@ -18,13 +18,16 @@ import vsoc.reports.velocity.VelocityHtmlReport;
 import vsoc.util.Serializer;
 import vsoc.util.VsocUtil;
 
+/**
+ * Goal keeper camp
+ */
 public class GKCampRunner {
 
     private static Logger log = Logger.getLogger(GKCampRunner.class);
 
     private String ts = initTimestamp();
 
-    private Collection camps = null;
+    private Collection<GKCamp> camps = null;
 
     public GKCampRunner() {
         super();
@@ -36,24 +39,19 @@ public class GKCampRunner {
         return df.format(now);
     }
 
-    public static void main(String[] args) {
-        try {
-            ApplicationContext ctx = new ClassPathXmlApplicationContext(
-                    "gkcamp.xml");
-            GKCampRunner runner = (GKCampRunner) ctx.getBean("runner");
-            runner.run();
-            System.out.println("- F I N I S H E D -");
-        } catch (Throwable e) {
-            e.printStackTrace();
-        }
+    public static void main(String[] args) throws IOException {
+		ApplicationContext ctx = new ClassPathXmlApplicationContext("gkcamp.xml");
+		GKCampRunner runner = (GKCampRunner) ctx.getBean("runner");
+		runner.run();
+		log.info("- F I N I S H E D -");
     }
 
     public void run() throws IOException {
         log.info("started");
         int num = 0;
-        Iterator iter = this.camps.iterator();
+        Iterator<GKCamp> iter = this.camps.iterator();
         while (iter.hasNext()) {
-            GKCamp camp = (GKCamp) iter.next();
+            GKCamp camp = iter.next();
             run(camp, num);
             num++;
         }
@@ -99,11 +97,11 @@ public class GKCampRunner {
         return thisResultsDir;
     }
 
-    public Collection getCamps() {
+    public Collection<GKCamp> getCamps() {
         return this.camps;
     }
 
-    public void setCamps(Collection camps) {
+    public void setCamps(Collection<GKCamp> camps) {
         this.camps = camps;
     }
 

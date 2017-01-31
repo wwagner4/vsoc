@@ -1,5 +1,7 @@
 package vsoc.camps.goalkeeper;
 
+import java.io.IOException;
+
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -12,21 +14,17 @@ public class GKGuiRunner {
 
     private static final String PREFIX = "GKCAMP";
 
-    public GKGuiRunner() {
+    private GKGuiRunner() {
         super();
     }
 
-    public static void main(String[] args) {
-        try {
-            Camp camp = createCamp();
-            Serializer.current().startScheduledSerialization(PREFIX, 600, camp);
-            VsocUtil u = VsocUtil.current();
-            String campProperties = u.propsToString(camp.getProperties());
-            System.out.println(campProperties);
-            FieldFrame.open(camp);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public static void main(String[] args) throws IOException {
+		Camp camp = createCamp();
+		Serializer.current().startScheduledSerialization(PREFIX, 600, camp);
+		VsocUtil u = VsocUtil.current();
+		String campProperties = u.propsToString(camp.getProperties());
+		System.out.println(campProperties);
+		FieldFrame.open(camp);
     }
 
     private static Camp createCamp() {

@@ -18,6 +18,7 @@ import vsoc.util.resulttable.ResultTable;
 import vsoc.view.FieldFrame;
 import atan.model.Controller;
 
+@SuppressWarnings("serial")
 public class GoalkeeperDefaultBehaviourTestCamp extends AbstractCamp {
 
     public GoalkeeperDefaultBehaviourTestCamp() {
@@ -26,29 +27,26 @@ public class GoalkeeperDefaultBehaviourTestCamp extends AbstractCamp {
 
     public static void main(String[] args) {
         GoalkeeperDefaultBehaviourTestCamp camp = new GoalkeeperDefaultBehaviourTestCamp();
-        DefaultServerFactory sfac = new DefaultServerFactory();
         FieldFrame.open(camp, "GoalkeeperDefaultBehaviourTestCamp");
     }
 
     protected void initPlayersForMatch() {
-        Iterator players = getServer().getPlayers().iterator();
+        Iterator<VsocPlayer> players = getServer().getPlayers().iterator();
         while (players.hasNext()) {
-            VsocPlayer p = (VsocPlayer) players.next();
+            VsocPlayer p = players.next();
             p.setController(createControlSystem());
             setRandomPosition(p);
         }
     }
 
     private Controller createControlSystem() {
-        BehaviourController cont = new BehaviourController(createBehaviour());
-        return cont;
+        return new BehaviourController(createBehaviour());
     }
 
     private Behaviour createBehaviour() {
         GoAheadBehaviour b1 = new GoAheadBehaviour();
         GoalkeeperDefaultBehaviour b2 = new GoalkeeperDefaultBehaviour(b1);
-        DefaultBehaviour b3 = new DefaultBehaviour(b2);
-        return b3;
+        return new DefaultBehaviour(b2);
     }
 
     protected void updateMembersAfterMatch() {
@@ -76,7 +74,7 @@ public class GoalkeeperDefaultBehaviourTestCamp extends AbstractCamp {
         return null;
     }
 
-    protected List getMembers() {
+    protected List<Member> getMembers() {
         throw new VsocNotYetImplementedException();
     }
 

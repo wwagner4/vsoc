@@ -11,6 +11,7 @@ import org.apache.commons.lang.enums.Enum;
 /**
  * IDs of the columns of the GGCamp result table.
  */
+@SuppressWarnings("serial")
 public class GGCampResultColumns extends Enum {
     
     private String desc;
@@ -26,7 +27,8 @@ public class GGCampResultColumns extends Enum {
         this.desc = desc;
     }
     
-    public static List getEnumList() {
+    @SuppressWarnings("unchecked")
+	public static List<GGCampResultColumns> getEnumList() {
         return Enum.getEnumList(GGCampResultColumns.class);
     }
 

@@ -11,6 +11,7 @@ import vsoc.util.resulttable.SimpleResultTable;
 /**
  * Result table for the changing results of a GGCamp.
  */
+@SuppressWarnings("serial")
 public class GGCampResultTable extends SimpleResultTable {
 
     public GGCampResultTable() {
@@ -18,8 +19,8 @@ public class GGCampResultTable extends SimpleResultTable {
         NumberFormat format = createFormat();
         ColumnDesc sdesc = createSerialDesc(format);
         setSerialDesc(sdesc);
-        List cdescs = new ArrayList();
-        Iterator iter = GGCampResultColumns.getEnumList().iterator();
+        List<ColumnDesc> cdescs = new ArrayList<>();
+        Iterator<GGCampResultColumns> iter = GGCampResultColumns.getEnumList().iterator();
         while (iter.hasNext()) {
             GGCampResultColumns enu = (GGCampResultColumns) iter.next();
             ColumnDesc desc = new ColumnDesc();
