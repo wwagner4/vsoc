@@ -1,22 +1,11 @@
 package vsoc.nn.feedforward;
 
-import java.io.IOException;
-import java.io.StringWriter;
-import java.io.Writer;
-import java.util.Enumeration;
-import java.util.Random;
-import java.util.Vector;
+import java.io.*;
+import java.util.*;
 
-import vsoc.genetic.Crossable;
-import vsoc.genetic.CrossoverSwitch;
-import vsoc.genetic.Mutator;
+import vsoc.genetic.*;
 import vsoc.nn.Net;
-import vsoc.nn.base.Layer;
-import vsoc.nn.base.LayerNode;
-import vsoc.nn.base.NeuronLayer;
-import vsoc.nn.base.RandomValue;
-import vsoc.nn.base.RandomWgt;
-import vsoc.nn.base.Synapse;
+import vsoc.nn.base.*;
 
 /**
  * Is an artificial neural net. A net contains out of an ordered list of layers.
@@ -80,16 +69,16 @@ public class FFNet implements Net {
 
     void setWeightsCrossover(FFNet netA, FFNet netB, CrossoverSwitch cs, Mutator mut) {
     	// TODO Remove Enumerations
-        Enumeration enumA, enumB, enumChild;
+        Enumeration<Synapse> enumA, enumB, enumChild;
         Synapse synA, synB, synChild;
         RandomWgt rw = new RandomWgt();
         enumA = netA.synapses();
         enumB = netB.synapses();
         enumChild = this.synapses();
         while (enumA.hasMoreElements()) {
-            synA = (Synapse) enumA.nextElement();
-            synB = (Synapse) enumB.nextElement();
-            synChild = (Synapse) enumChild.nextElement();
+            synA = enumA.nextElement();
+            synB = enumB.nextElement();
+            synChild = enumChild.nextElement();
             if (mut.isMutation())
                 synChild.setWeightRandom(rw);
             else if (cs.takeA())
@@ -119,7 +108,7 @@ public class FFNet implements Net {
 
     public void setWeightsCrossover(FFNet father, FFNet mother, Random r) {
         Synapse syn, synf, synm;
-        Enumeration e, ef, em;
+        Enumeration<Synapse> e, ef, em;
         int count, offset, interval;
         boolean fromFather;
         count = 0;
@@ -133,9 +122,9 @@ public class FFNet implements Net {
         ef = father.synapses();
         em = mother.synapses();
         while (e.hasMoreElements()) {
-            syn = (Synapse) e.nextElement();
-            synf = (Synapse) ef.nextElement();
-            synm = (Synapse) em.nextElement();
+            syn = e.nextElement();
+            synf = ef.nextElement();
+            synm = em.nextElement();
             if (fromFather) {
                 syn.setWeight(synf.getWeight());
                 if ((count + offset) % interval == 0)
@@ -184,16 +173,16 @@ public class FFNet implements Net {
         w.write("--- Net END ---\n");
     }
 
-    Vector compareWeights(FFNet net1) {
+    Vector<Integer> compareWeights(FFNet net1) {
         Synapse syn, syn1;
-        Enumeration e, e1;
+        Enumeration<Synapse> e, e1;
         short w, w1;
-        Vector result = new Vector();
+        Vector<Integer> result = new Vector<>();
         e = synapses();
         e1 = net1.synapses();
         while (e.hasMoreElements()) {
-            syn = (Synapse) e.nextElement();
-            syn1 = (Synapse) e1.nextElement();
+            syn = e.nextElement();
+            syn1 = e1.nextElement();
             w = syn.getWeight();
             w1 = syn1.getWeight();
             if (w == w1)
@@ -239,7 +228,9 @@ public class FFNet implements Net {
     }
 
     public boolean equalsInStructure(Object o) {
-        Enumeration lsa, lsb, lnsa, lnsb, synsa, synsb;
+        Enumeration<Layer> lsa, lsb;
+        Enumeration<LayerNode> lnsa, lnsb;
+        Enumeration<Synapse> synsa, synsb;
         FFNet net;
         LayerNode lna, lnb;
         Layer la, lb;
@@ -250,13 +241,13 @@ public class FFNet implements Net {
         lsa = layers();
         lsb = net.layers();
         while (lsa.hasMoreElements() && lsb.hasMoreElements()) {
-            la = (Layer) lsa.nextElement();
-            lb = (Layer) lsb.nextElement();
+            la = lsa.nextElement();
+            lb = lsb.nextElement();
             lnsa = la.layerNodes();
             lnsb = lb.layerNodes();
             while (lnsa.hasMoreElements() && lnsb.hasMoreElements()) {
-                lna = (LayerNode) lnsa.nextElement();
-                lnb = (LayerNode) lnsb.nextElement();
+                lna = lnsa.nextElement();
+                lnb = lnsb.nextElement();
                 synsa = synapses();
                 synsb = net.synapses();
                 while (synsa.hasMoreElements() && synsb.hasMoreElements()) {
@@ -282,7 +273,7 @@ public class FFNet implements Net {
 
     public boolean equalsInWeights(Object o) {
         NeuronLayer l, thisL;
-        Enumeration ls, thisLs;
+        Enumeration<Layer> ls, thisLs;
         boolean equals = true;
         FFNet net;
         if (!(o instanceof Net))
@@ -304,7 +295,7 @@ public class FFNet implements Net {
         return false;
     }
 
-    public Enumeration<Synapse> synapses() {
+	public Enumeration<Synapse> synapses() {
         return new EnumSynapsesOfNet(this);
     }
 
@@ -343,7 +334,7 @@ public class FFNet implements Net {
     }
     
     class EnumSynapsesOfNet implements Enumeration {
-        Enumeration enl;
+        Enumeration<Synapse> enl;
 
         int index, size;
 

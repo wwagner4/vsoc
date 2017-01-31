@@ -70,7 +70,7 @@ public class NeuronLayer extends Layer implements Serializable {
         return false;
     }
 
-    public Enumeration synapses() {
+    public Enumeration<Synapse> synapses() {
         return new EnumSynapsesOfNeuronLayer(this);
     }
 
