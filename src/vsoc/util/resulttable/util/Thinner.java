@@ -18,12 +18,12 @@ public class Thinner {
         return current;
     }
 
-    public List<Object> thin(List<Object> inList, int amount) {
+    public <T> List<T> thin(List<T> inList, int amount) {
         int size = inList.size();
         if (size <= amount) {
             return inList;
         }
-        List<Object> outList = new ArrayList<>();
+        List<T> outList = new ArrayList<>();
         for (int index = 0; index < amount; index++) {
             int thinIndex = thin(size, amount, index);
             outList.add(inList.get(thinIndex));

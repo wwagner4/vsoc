@@ -5,16 +5,17 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * Steight forward implementation of a result table. Not compressing.
+ * Strait forward implementation of a result table. Not compressing.
  * 
  */
+@SuppressWarnings("serial")
 public class SimpleResultTable implements ResultTable {
 
-    protected List columnDescs = null;
+    protected List<ColumnDesc> columnDescs = null;
 
     protected ColumnDesc serialDesc = null;
 
-    protected List rows = new ArrayList();
+    protected List<ResultTableRow> rows = new ArrayList<>();
 
     public SimpleResultTable() {
         super();
@@ -23,9 +24,9 @@ public class SimpleResultTable implements ResultTable {
     public void addNextSerialValue(Number sval) {
         ResultTableRow row = new ResultTableRow();
         row.setSerialValue(sval);
-        Iterator iter = this.columnDescs.iterator();
+        Iterator<ColumnDesc> iter = this.columnDescs.iterator();
         while (iter.hasNext()) {
-            ColumnDesc desc = (ColumnDesc) iter.next();
+            ColumnDesc desc = iter.next();
             row.getResultValues().put(desc.getId(), null);
         }
         this.rows.add(row);
@@ -49,15 +50,15 @@ public class SimpleResultTable implements ResultTable {
         return re;
     }
 
-    public List getRows() {
+    public List<ResultTableRow> getRows() {
         return this.rows;
     }
 
-    public List getColumnDescs() {
+    public List<ColumnDesc> getColumnDescs() {
         return this.columnDescs;
     }
 
-    public void setColumnDescs(List columnDescs) {
+    public void setColumnDescs(List<ColumnDesc> columnDescs) {
         this.columnDescs = columnDescs;
     }
 
@@ -69,47 +70,50 @@ public class SimpleResultTable implements ResultTable {
         this.serialDesc = serialDesc;
     }
 
-    public List getColumn(String id) {
-        List re = new ArrayList();
-        Iterator iter = this.rows.iterator();
+    public List<Number> getColumn(String id) {
+        List<Number> re = new ArrayList<>();
+        Iterator<ResultTableRow> iter = this.rows.iterator();
         while (iter.hasNext()) {
-            ResultTableRow row = (ResultTableRow) iter.next();
+            ResultTableRow row = iter.next();
             re.add(row.getResultValue(id));
         }
         return re;
     }
 
-    public List getSerial() {
-        List re = new ArrayList();
-        Iterator iter = this.rows.iterator();
+    public List<Number> getSerial() {
+        List<Number> re = new ArrayList<>();
+        Iterator<ResultTableRow> iter = this.rows.iterator();
         while (iter.hasNext()) {
-            ResultTableRow row = (ResultTableRow) iter.next();
+            ResultTableRow row = iter.next();
             re.add(row.getSerialValue());
         }
         return re;
     }
 
     public String currentRowAsNameValuePairs() {
-        StringBuffer out = new StringBuffer();
+        StringBuilder out = new StringBuilder();
         out.append("<");
-        appendNameValue(out, this.serialDesc.getId(), this.serialDesc
-                .getFormat().format(getActualRow().getSerialValue()));
-        Iterator iter = this.columnDescs.iterator();
-        while (iter.hasNext()) {
-            ColumnDesc desc = (ColumnDesc) iter.next();
-            out.append("|");
-            Number val = getActualRow().getResultValue(desc.getId());
-            if (val == null) {
-                appendNameValue(out, desc.getId(), "null");
-            } else {
-                appendNameValue(out, desc.getId(), desc.getFormat().format(val));
+        ResultTableRow actualRow = getActualRow();
+        if (actualRow != null) {
+    		appendNameValue(out, this.serialDesc.getId(), this.serialDesc
+                    .getFormat().format(actualRow.getSerialValue()));
+            Iterator<ColumnDesc> iter = this.columnDescs.iterator();
+            while (iter.hasNext()) {
+                ColumnDesc desc = iter.next();
+                out.append("|");
+                Number val = actualRow.getResultValue(desc.getId());
+                if (val == null) {
+                    appendNameValue(out, desc.getId(), "null");
+                } else {
+                    appendNameValue(out, desc.getId(), desc.getFormat().format(val));
+                }
             }
         }
         out.append(">");
         return out.toString();
     }
 
-    private void appendNameValue(StringBuffer out, String name, String value) {
+    private void appendNameValue(StringBuilder out, String name, String value) {
         out.append(name);
         out.append("=");
         out.append(value);

@@ -12,21 +12,21 @@ public class ResultTableRow implements Serializable {
 
     private Number serialValue;
 
-    private Map resultValues = new HashMap();
+    private transient Map<String, Number> resultValues = new HashMap<>();
 
     public ResultTableRow() {
         super();
     }
 
-    public Map getResultValues() {
+    public Map<String, Number> getResultValues() {
         return this.resultValues;
     }
 
     public Number getResultValue(String id) {
-        return (Number) this.resultValues.get(id);
+        return this.resultValues.get(id);
     }
 
-    public void setResultValues(Map resultValues) {
+    public void setResultValues(Map<String, Number> resultValues) {
         this.resultValues = resultValues;
     }
 
