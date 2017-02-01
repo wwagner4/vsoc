@@ -40,6 +40,8 @@ public class FieldCanvas extends Canvas implements ServerListener,
     public void setServer(Server s) {
         this.server = s;
         s.addListener(this);
+        this.setSteps(Integer.MAX_VALUE);
+        this.setDelay(0);
     }
 
     public void paint(Graphics g) {
@@ -112,12 +114,10 @@ public class FieldCanvas extends Canvas implements ServerListener,
     }
 
     public void setDelay(int val) {
-        log.info("set delay to: " + val);
         this.delay = val;
     }
 
     public void setSteps(int steps) {
-        log.info("set steps to: " + steps);
         this.server.setSteps(steps);
     }
 }
