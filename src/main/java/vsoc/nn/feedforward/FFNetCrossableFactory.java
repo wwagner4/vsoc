@@ -2,7 +2,6 @@ package vsoc.nn.feedforward;
 
 import java.util.Random;
 
-import vsoc.genetic.Crossable;
 import vsoc.genetic.CrossableFactory;
 import vsoc.nn.Net;
 
