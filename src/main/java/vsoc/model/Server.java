@@ -68,11 +68,11 @@ public class Server implements Serializable {
     }
 
     private static Color initFieldBackground() {
-        return new Color(100, 170, 90);
+        return new Color(150, 170, 160);
     }
 
     private static Color initBackground() {
-        return new Color(150, 170, 160);
+        return new Color(160, 170, 170);
     }
 
     protected double getBallDecay() {
