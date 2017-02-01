@@ -29,7 +29,7 @@ public class FieldFrame extends JFrame implements WindowListener {
         addWindowListener(this);
         this.fieldContentPanel = new FieldContentPanel();
         setContentPane(this.fieldContentPanel);
-        setSize(600, 300);
+        setSize(1200, 900);
         setLocation(0, 0);
         URL iconUrl = getClass().getClassLoader().getResource("logo.jpg");
         ImageIcon ii = new ImageIcon(iconUrl);

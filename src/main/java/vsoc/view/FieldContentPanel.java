@@ -1,9 +1,6 @@
 package vsoc.view;
 
-import java.awt.BorderLayout;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -40,35 +37,22 @@ public class FieldContentPanel extends JPanel implements ActionListener, ChangeL
 
 	private void jbInit() {
 		this.setLayout(new BorderLayout());
-		this.speedPanel.setLayout(new GridBagLayout());
+		this.speedPanel.setLayout(new FlowLayout());
 		speedSlider.setModel(speedSliderModel());
 		speedSlider.addChangeListener(this);
 		animateButton.addActionListener(this);
 		this.speedPanel.setOpaque(false);
-		this.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+		this.setBorder(BorderFactory.createEmptyBorder(15, 5, 5, 5));
 		this.add(this.fieldCanvas, BorderLayout.CENTER);
-		this.add(this.speedPanel, BorderLayout.EAST);
-		this.speedPanel.add(new JLabel(""), createGridBagConstraints(0, 0));
-		this.speedPanel.add(this.animateButton, createGridBagConstraints(1, 0));
-		this.speedPanel.add(new JLabel("speed"), createGridBagConstraints(0, 1));
-		this.speedPanel.add(this.speedSlider, createGridBagConstraints(1, 1));
-		JPanel fillPanel = new JPanel();
-		GridBagConstraints fillConstr = createGridBagConstraints(0, 2);
-		fillConstr.weighty = 1.0;
-		this.speedPanel.add(fillPanel, fillConstr);
+		this.add(this.speedPanel, BorderLayout.SOUTH);
+		
+		this.speedPanel.add(this.animateButton);
+		this.speedPanel.add(this.speedSlider);
+		
 	}
 
 	private BoundedRangeModel speedSliderModel() {
 		return new DefaultBoundedRangeModel(0, 5, 0, 100);
-	}
-
-	private GridBagConstraints createGridBagConstraints(int gx, int gy) {
-		GridBagConstraints constr = new GridBagConstraints();
-		constr.gridx = gx;
-		constr.gridy = gy;
-		constr.fill = GridBagConstraints.BOTH;
-		constr.insets = new Insets(0, 5, 0, 0);
-		return constr;
 	}
 
 	@Override
