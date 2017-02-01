@@ -62,7 +62,7 @@ public class Serializer {
                         + " does not exist.");
             }
             String[] list = sDir.list();
-            SortedSet names = new TreeSet();
+            SortedSet<String> names = new TreeSet<>();
             for (int i = 0; i < list.length; i++) {
                 if (list[i].startsWith(prefix)) {
                     names.add(list[i]);
