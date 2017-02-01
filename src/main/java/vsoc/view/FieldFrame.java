@@ -1,12 +1,9 @@
 package vsoc.view;
 
-import java.awt.HeadlessException;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
+import java.awt.event.*;
 import java.net.URL;
 
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
+import javax.swing.*;
 
 import org.apache.log4j.Logger;
 

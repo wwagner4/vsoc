@@ -1,9 +1,6 @@
 package vsoc.test;
 
-import vsoc.model.Ball;
-import vsoc.model.Server;
-import vsoc.model.ServerUtil;
-import vsoc.model.VsocPlayer;
+import vsoc.model.*;
 import vsoc.util.Vec2D;
 
 /**

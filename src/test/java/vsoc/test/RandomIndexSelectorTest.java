@@ -35,7 +35,7 @@ public class RandomIndexSelectorTest extends TestCase {
   }
   public void testSize01a () {
     try {
-      RandomIndexSelector sel = new  RandomIndexSelector (0, 1, 3);
+      new  RandomIndexSelector (0, 1, 3);
       fail("Error expected");
     } catch (VsocInvalidConfigurationException err) {
       assertEquals("count must always be bigger than (to-from) in RandomIndexSelector", 
@@ -45,7 +45,7 @@ public class RandomIndexSelectorTest extends TestCase {
   }
   public void testSize01b () {
     try {
-      RandomIndexSelector sel = new  RandomIndexSelector (5, 1, 3);
+      new  RandomIndexSelector (5, 1, 3);
       fail("Error expected");
     } catch (Error err) {
       assertEquals("to '1' must always be bigger than from '5' in RandomIndexSelector", 

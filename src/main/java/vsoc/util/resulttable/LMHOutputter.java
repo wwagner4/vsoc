@@ -33,8 +33,7 @@ public class LMHOutputter implements ResultTableOutputter {
     }
 
     private void output(PrintWriter pw) {
-        ColumnDesc sdesc = this.table.getSerialDesc();
-        Iterator descs = this.table.getColumnDescs().iterator();
+        Iterator<ColumnDesc> descs = this.table.getColumnDescs().iterator();
         while (descs.hasNext()) {
             ColumnDesc desc = (ColumnDesc) descs.next();
             outputColumn(pw, desc);
@@ -54,9 +53,9 @@ public class LMHOutputter implements ResultTableOutputter {
         pw.print("M");
         pw.print(SEPERATOR);
         pw.println();
-        Iterator iter = this.table.getRows().iterator();
+        Iterator<ResultTableRow> iter = this.table.getRows().iterator();
         while (iter.hasNext()) {
-            ResultTableRow row = (ResultTableRow) iter.next();
+            ResultTableRow row = iter.next();
             Number val = row.getResultValue(desc.getId());
             pw.print(format(desc, row.getSerialValue()));
             pw.print(SEPERATOR);

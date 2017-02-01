@@ -9,9 +9,9 @@ import vsoc.VsocInvalidConfigurationException;
 
 public class RandomIndexSelector {
 
-    private Set ints = new HashSet();
+    private Set<Integer> ints = new HashSet<>();
 
-    private Iterator iter;
+    private Iterator<Integer> iter;
 
     private static Random ran = new Random();
 

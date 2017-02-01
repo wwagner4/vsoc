@@ -2,7 +2,6 @@ package vsoc.test;
 
 import vsoc.model.Ball;
 import vsoc.model.Server;
-import vsoc.model.ServerUtil;
 import vsoc.model.VsocPlayer;
 import vsoc.util.Vec2D;
 
@@ -117,7 +116,6 @@ public class TestKick extends AbstractTest {
         Server s = new Server();
         TestController c = new TestController();
         addPlayerWest(s, c, xPos, yPos, dir);
-        ServerUtil r = ServerUtil.current();
         s.addSimObject(new Ball(0, 0));
         c.getPlayer().kick(10, kickDir);
         s.takeStep();
@@ -131,7 +129,6 @@ public class TestKick extends AbstractTest {
         Server s = new Server();
         TestController c = new TestController();
         addPlayerEast(s, c, xPos, yPos, dir + 180);
-        ServerUtil r = ServerUtil.current();
         s.addSimObject(new Ball(0, 0));
         c.getPlayer().kick(10, kickDir);
         s.takeStep();
@@ -144,7 +141,6 @@ public class TestKick extends AbstractTest {
         Server s = new Server();
         TestController c = new TestController();
         addPlayerEast(s, c, 0.1, 0, 180);
-        ServerUtil r = ServerUtil.current();
         s.addSimObject(new Ball(0, 0));
         c.getPlayer().kick(10, 0);
         s.takeStep();
