@@ -311,11 +311,11 @@ public class FFNet implements Net {
         FFNet ffnet = (FFNet) net;
         int synCount = 0;
         int distSum = 0;
-        Enumeration enum1 = this.synapses();
-        Enumeration enum2 = ffnet.synapses();
+        Enumeration<Synapse> enum1 = this.synapses();
+        Enumeration<Synapse> enum2 = ffnet.synapses();
         while (enum1.hasMoreElements()) {
-            Synapse syn1 = (Synapse) enum1.nextElement();
-            Synapse syn2 = (Synapse) enum2.nextElement();
+            Synapse syn1 = enum1.nextElement();
+            Synapse syn2 = enum2.nextElement();
             distSum += Math.abs(syn1.getWeight() - syn2.getWeight());
             synCount++;
         }
@@ -333,14 +333,14 @@ public class FFNet implements Net {
         return this.crossoverSwitsh;
     }
     
-    class EnumSynapsesOfNet implements Enumeration {
+    class EnumSynapsesOfNet implements Enumeration<Synapse> {
         Enumeration<Synapse> enl;
 
         int index, size;
 
         Vector<Layer> enumls;
 
-        Object nextSyn = null;
+        Synapse nextSyn = null;
 
         EnumSynapsesOfNet(FFNet net) {
             this.size = net.layerCount();
@@ -354,9 +354,9 @@ public class FFNet implements Net {
             }
         }
 
-        Object nextSyn() {
+        private Synapse nextSyn() {
             NeuronLayer nl;
-            Object re = null;
+            Synapse re = null;
             if (this.enl.hasMoreElements()) {
                 re = this.enl.nextElement();
             } else if (this.index < this.size) {
@@ -372,19 +372,20 @@ public class FFNet implements Net {
             return this.nextSyn != null;
         }
 
-        public Object nextElement() {
-            Object o = this.nextSyn;
+        public Synapse nextElement() {
+        	Synapse o = this.nextSyn;
             this.nextSyn = nextSyn();
             return o;
         }
     }
 
-    class EnumLayersOfNet implements Enumeration {
-        int index, size;
+    class EnumLayersOfNet implements Enumeration<Layer> {
+        
+    	private int index, size;
 
-        Vector els;
+        private Vector<Layer> els;
 
-        EnumLayersOfNet(FFNet net) {
+        public EnumLayersOfNet(FFNet net) {
             this.size = net.layerCount();
             this.index = 0;
             this.els = net.ls;
@@ -394,17 +395,19 @@ public class FFNet implements Net {
             return this.index < this.size;
         }
 
-        public Object nextElement() {
-            Object o = this.els.elementAt(this.index);
+        public Layer nextElement() {
+        	Layer o = this.els.elementAt(this.index);
             this.index++;
             return o;
         }
     }
 
-    class EnumNeuronLayersOfNet implements Enumeration {
-        int index, size;
+    // TODO Can be replaced by net.ls
+    class EnumNeuronLayersOfNet implements Enumeration<Layer> {
+    	
+        private int index, size;
 
-        Vector els1;
+        private Vector<Layer> els1;
 
         EnumNeuronLayersOfNet(FFNet net) {
             this.size = net.layerCount();
@@ -416,8 +419,8 @@ public class FFNet implements Net {
             return this.index < this.size;
         }
 
-        public Object nextElement() {
-            Object o = this.els1.elementAt(this.index);
+        public Layer nextElement() {
+        	Layer o = this.els1.elementAt(this.index);
             this.index++;
             return o;
         }
