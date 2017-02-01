@@ -73,21 +73,18 @@ public class FieldContentPanel extends JPanel implements ActionListener {
     private ComboBoxModel<Integer> delayComboBoxModel() {
         DefaultComboBoxModel<Integer> m = new DefaultComboBoxModel<>();
         m.addElement(0);
-        m.addElement(1);
         m.addElement(5);
         m.addElement(10);
+        m.addElement(20);
         m.addElement(50);
+        m.addElement(70);
         m.addElement(100);
-        m.addElement(200);
-        m.addElement(500);
         return m;
     }
 
     private ComboBoxModel<Integer> stepsComboBoxModel() {
         DefaultComboBoxModel<Integer> m = new DefaultComboBoxModel<>();
         m.addElement(1);
-        m.addElement(2);
-        m.addElement(5);
         m.addElement(10);
         m.addElement(50);
         m.addElement(100);
