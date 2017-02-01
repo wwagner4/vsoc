@@ -93,15 +93,15 @@ public abstract class AbstractFFNetConnector implements Serializable {
 
     void initCMNeuronFrom(Vector nfrom, int nfromi, int lfromi) {
         int ltoi;
-        Vector lto;
+        Vector<Integer> lto;
         for (ltoi = 0; ltoi < lfromi; ltoi++) {
-            lto = new Vector();
+            lto = new Vector<>();
             initCMLayerTo(lto, ltoi, nfromi, lfromi);
             nfrom.insertElementAt(lto, ltoi);
         }
     }
 
-    void initCMLayerTo(Vector lto, int ltoi, int nfromi, int lfromi) {
+    void initCMLayerTo(Vector<Integer> lto, int ltoi, int nfromi, int lfromi) {
         int ntoi;
         for (ntoi = 0; ntoi < this.nodesPerLayer.intAt(ltoi); ntoi++) {
             if (hasConnection(ltoi, lfromi)) {
