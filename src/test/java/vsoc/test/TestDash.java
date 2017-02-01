@@ -19,7 +19,6 @@ public class TestDash extends AbstractTest {
         Server s = new Server();
         TestController c = new TestController();
         addPlayerWest(s, c, 0, 0, 0);
-        ServerUtil r = ServerUtil.current();
         s.addSimObject(new Ball(4, 0));
         c.getPlayer().dash(10);
         s.takeStep();
@@ -39,7 +38,6 @@ public class TestDash extends AbstractTest {
         Server s = new Server();
         TestController c = new TestController();
         addPlayerWest(s, c, 0, 0, 0);
-        ServerUtil r = ServerUtil.current();
         s.addSimObject(new Ball(4, 0));
         c.getPlayer().dash(-10);
         s.takeStep();
@@ -59,7 +57,6 @@ public class TestDash extends AbstractTest {
         Server s = new Server();
         TestController c = new TestController();
         addPlayerEast(s, c, 0, 0, 225 + 180);
-        ServerUtil r = ServerUtil.current();
         s.addSimObject(new Ball(1, 1));
         c.getPlayer().dash(20);
         s.takeStep();
@@ -79,7 +76,6 @@ public class TestDash extends AbstractTest {
         Server s = new Server();
         TestController c = new TestController();
         addPlayerEast(s, c, 0, 0, 45);
-        ServerUtil r = ServerUtil.current();
         s.addSimObject(new Ball(1, 1));
         c.getPlayer().dash(-20);
         s.takeStep();

@@ -22,10 +22,7 @@ public class TestTurn extends AbstractTest {
     public void testTurn00() {
         Server s = new Server();
         TestController lp = new TestController();
-        TestController lf1 = new TestController();
-        TestController lf2 = new TestController();
         addPlayerWest(s, lp, 0, 0, 0);
-        ServerUtil r = ServerUtil.current();
         s.addSimObject(new Ball(4, 0));
         ServerUtil.current().addFlagEast(s, ServerFlag.CENTER, 4, 2);
         // Flag type is irrelevant for that test
@@ -51,10 +48,7 @@ public class TestTurn extends AbstractTest {
     public void testTurn01() {
         Server s = new Server();
         TestController lp = new TestController();
-        TestController lf1 = new TestController();
-        TestController lf2 = new TestController();
         addPlayerWest(s, lp, 0, 0, 0);
-        ServerUtil r = ServerUtil.current();
         s.addSimObject(new Ball(4, 0));
         ServerUtil.current().addFlagEast(s, ServerFlag.CENTER, 4, 2);
         ServerUtil.current().addFlagEast(s, ServerFlag.CENTER, -1, 4);

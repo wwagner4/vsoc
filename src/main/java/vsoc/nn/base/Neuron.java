@@ -16,7 +16,7 @@ public class Neuron extends LayerNode implements Serializable {
 
     private TransferManager transferManager = null;
 
-    private Vector syns;
+    private Vector<Synapse> syns;
 
     private boolean isCalculated;
 
@@ -25,7 +25,7 @@ public class Neuron extends LayerNode implements Serializable {
     public Neuron(TransferManager transManager) {
         this.transferManager = transManager;
         this.isCalculated = false;
-        this.syns = new Vector();
+        this.syns = new Vector<>();
         setValue((short) 0);
     }
 
@@ -56,7 +56,6 @@ public class Neuron extends LayerNode implements Serializable {
     void calculate() {
         int i, size, wval, sum;
         Synapse syn;
-        LayerNode ln;
 
         if (!isCalculated()) {
             size = synapseCount();

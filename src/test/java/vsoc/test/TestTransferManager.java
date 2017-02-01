@@ -2,11 +2,7 @@ package vsoc.test;
 
 import java.util.Enumeration;
 
-import vsoc.nn.base.Layer;
-import vsoc.nn.base.NeuronLayer;
-import vsoc.nn.base.Synapse;
-import vsoc.nn.base.TransferManager;
-import vsoc.nn.base.Weighter;
+import vsoc.nn.base.*;
 import vsoc.nn.feedforward.AbstractFFNetConnector;
 import vsoc.nn.feedforward.FFNet;
 import vsoc.util.IntVector;
@@ -173,11 +169,11 @@ public class TestTransferManager extends AbstractTest {
 
 	private void assertCreateOneNeuronNetInputLayerCount01(FFNet n, int count) {
 		Layer in = n.getInputLayer();
-		Enumeration enu = in.layerNodes();
+		Enumeration<LayerNode> enu = in.layerNodes();
 		int i = 1;
 		for (; i <= count; i++) {
 			assertTrue("Input layer has " + i + " LayerNode(s)", enu.hasMoreElements());
-			Object o = enu.nextElement();
+			enu.nextElement();
 		}
 		assertTrue("Input layer has more than " + i + " LayerNode(s)", !enu.hasMoreElements());
 	}
@@ -209,9 +205,9 @@ public class TestTransferManager extends AbstractTest {
 
 	private void assertCreateOneNeuronNetOutputLayerCount(FFNet n) {
 		Layer l = n.getOutputLayer();
-		Enumeration enu = l.layerNodes();
+		Enumeration<LayerNode> enu = l.layerNodes();
 		assertTrue("Input layer has one LayerNode", enu.hasMoreElements());
-		Object o = enu.nextElement();
+		enu.nextElement();
 		assertTrue("Input layer has not two LayerNode", !enu.hasMoreElements());
 	}
 
@@ -219,10 +215,10 @@ public class TestTransferManager extends AbstractTest {
 		AbstractFFNetConnector c = oneNeuronConnector(synapseCount);
 		FFNet net = new FFNet(c);
 		NeuronLayer l = net.getOutputLayer();
-		Enumeration enu = l.synapses();
+		Enumeration<Synapse> enu = l.synapses();
 		boolean isPos = true;
 		while (enu.hasMoreElements()) {
-			Synapse syn = (Synapse) enu.nextElement();
+			Synapse syn = enu.nextElement();
 			if (isPos)
 				syn.setWeight((short) 6);
 			else
