@@ -8,7 +8,7 @@ import java.util.*;
  * Allows you to build a tree of integer values.
  */
 
-public class IntVector extends Vector {
+public class IntVector extends Vector<Object> {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -58,7 +58,7 @@ public class IntVector extends Vector {
         iv = (IntVector) o;
         if (iv.size() != size())
             return false;
-        Enumeration enum1, enum2;
+        Enumeration<Object> enum1, enum2;
         Object elem1, elem2;
         enum1 = elements();
         enum2 = iv.elements();
@@ -78,5 +78,10 @@ public class IntVector extends Vector {
                 return false;
         }
         return true;
+    }
+    
+    @Override
+    public synchronized int hashCode() {
+    	return 0;
     }
 }

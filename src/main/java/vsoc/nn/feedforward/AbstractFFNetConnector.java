@@ -2,14 +2,8 @@ package vsoc.nn.feedforward;
 
 import java.io.Serializable;
 import java.util.Random;
-import java.util.Vector;
 
-import vsoc.nn.base.Layer;
-import vsoc.nn.base.Neuron;
-import vsoc.nn.base.NeuronLayer;
-import vsoc.nn.base.Synapse;
-import vsoc.nn.base.TransferManager;
-import vsoc.nn.base.Weighter;
+import vsoc.nn.base.*;
 import vsoc.util.IntVector;
 
 /**
@@ -29,7 +23,7 @@ public abstract class AbstractFFNetConnector implements Serializable {
 
     private Random ran;
 
-    private Vector connMatrix = new Vector();
+    private IntVector connMatrix = new IntVector();
 
     private Weighter wgt;
 
@@ -69,39 +63,39 @@ public abstract class AbstractFFNetConnector implements Serializable {
 
     void initConnMatrix() {
         int lfromi;
-        Vector lfrom;
+        IntVector lfrom;
         int lCount = this.nodesPerLayer.size();
 
-        this.ran = new Random(this.seed);
-        this.connMatrix.insertElementAt(new Vector(), 0);
+        this.ran = new Random(this.seed);               
+        this.connMatrix.insertElementAt(new IntVector(), 0);
         for (lfromi = 1; lfromi < lCount; lfromi++) {
-            lfrom = new Vector();
+            lfrom = new IntVector();
             initCMLayerFrom(lfrom, lfromi);
             this.connMatrix.insertElementAt(lfrom, lfromi);
         }
     }
 
-    void initCMLayerFrom(Vector lfrom, int lfromi) {
+    void initCMLayerFrom(IntVector lfrom, int lfromi) {
         int nfromi;
-        Vector nfrom;
+        IntVector nfrom;
         for (nfromi = 0; nfromi < this.nodesPerLayer.intAt(lfromi); nfromi++) {
-            nfrom = new Vector();
+            nfrom = new IntVector();
             initCMNeuronFrom(nfrom, nfromi, lfromi);
             lfrom.insertElementAt(nfrom, nfromi);
         }
     }
 
-    void initCMNeuronFrom(Vector nfrom, int nfromi, int lfromi) {
+    void initCMNeuronFrom(IntVector nfrom, int nfromi, int lfromi) {
         int ltoi;
-        Vector<Integer> lto;
+        IntVector lto;
         for (ltoi = 0; ltoi < lfromi; ltoi++) {
-            lto = new Vector<>();
+            lto = new IntVector();
             initCMLayerTo(lto, ltoi, nfromi, lfromi);
             nfrom.insertElementAt(lto, ltoi);
         }
     }
 
-    void initCMLayerTo(Vector<Integer> lto, int ltoi, int nfromi, int lfromi) {
+    void initCMLayerTo(IntVector lto, int ltoi, int nfromi, int lfromi) {
         int ntoi;
         for (ntoi = 0; ntoi < this.nodesPerLayer.intAt(ltoi); ntoi++) {
             if (hasConnection(ltoi, lfromi)) {
@@ -168,22 +162,15 @@ public abstract class AbstractFFNetConnector implements Serializable {
         }
     }
 
-    void connectNeuronToLayer(FFNet net, int lfromi, int nfromi, Neuron nfrom,
-            int ltoi) {
-        Layer lto;
-        Vector vlfrom, vnfrom, vlto;
-        int i, size;
-        Integer indexTo;
-        Synapse syn;
-
-        lto = net.layerAt(ltoi);
-        vlfrom = (Vector) this.connMatrix.elementAt(lfromi);
-        vnfrom = (Vector) vlfrom.elementAt(nfromi);
-        vlto = (Vector) vnfrom.elementAt(ltoi);
-        size = vlto.size();
-        for (i = 0; i < size; i++) {
-            indexTo = (Integer) vlto.elementAt(i);
-            syn = getNewSynapse();
+    void connectNeuronToLayer(FFNet net, int lfromi, int nfromi, Neuron nfrom, int ltoi) {
+        Layer lto = net.layerAt(ltoi);
+        IntVector vlfrom = (IntVector)this.connMatrix.elementAt(lfromi);
+        IntVector vnfrom = (IntVector)vlfrom.elementAt(nfromi);
+        IntVector vlto = (IntVector)vnfrom.elementAt(ltoi);
+        int size = vlto.size();
+        for (int i = 0; i < size; i++) {
+            Integer indexTo = (Integer) vlto.elementAt(i);
+            Synapse syn = getNewSynapse();
             syn.connectLayerNode(lto.layerNodeAt(indexTo.intValue()));
             nfrom.addSynapse(syn);
         }
