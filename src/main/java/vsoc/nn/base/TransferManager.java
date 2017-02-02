@@ -12,7 +12,7 @@ public class TransferManager implements Serializable {
 
     private static final long serialVersionUID = 0L;
 
-    private Map values = new HashMap();
+    private Map<Integer, Transfer> values = new HashMap<>();
 
     public TransferManager() {
         super();

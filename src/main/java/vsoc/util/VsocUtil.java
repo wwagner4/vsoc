@@ -45,8 +45,8 @@ public class VsocUtil {
     public String propsToString(Properties properties) throws IOException {
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw);
-        SortedSet keys = keysSorted(properties);
-        Iterator iter = keys.iterator();
+        SortedSet<Object> keys = keysSorted(properties);
+        Iterator<Object> iter = keys.iterator();
         while (iter.hasNext()) {
             String key  =(String) iter.next();
             pw.print(key);
@@ -58,9 +58,9 @@ public class VsocUtil {
         return sw.getBuffer().toString();
     }
 
-    private SortedSet keysSorted(Properties properties) {
-        SortedSet keys = new TreeSet();
-        Iterator iter = properties.keySet().iterator();
+    private SortedSet<Object> keysSorted(Properties properties) {
+        SortedSet<Object> keys = new TreeSet<>();
+        Iterator<Object> iter = properties.keySet().iterator();
         while (iter.hasNext()) {
             keys.add(iter.next());
         }

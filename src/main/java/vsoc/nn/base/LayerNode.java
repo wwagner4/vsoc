@@ -99,7 +99,7 @@ public class LayerNode implements Serializable {
      * in the subclass Neuron of layernode.
      */
 
-    Enumeration connections() {
-        return new Vector().elements();
+    Enumeration<LayerNode> connections() {
+        return new Vector<LayerNode>().elements();
     }
 }

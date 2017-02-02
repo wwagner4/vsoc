@@ -13,7 +13,7 @@ public class Transfer implements Serializable {
 
     private static final long serialVersionUID = 0L;
 
-    private Vector vals = new Vector();
+    private Vector<Integer> vals = new Vector<>();
 
     private int maxIndex;
 

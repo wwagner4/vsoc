@@ -33,10 +33,10 @@ public class NeuronLayer extends Layer implements Serializable {
     }
 
     void setWeightsRandom(RandomWgt rw) {
-        Enumeration e;
+        Enumeration<Synapse> e;
         Synapse syn;
         for (e = synapses(); e.hasMoreElements();) {
-            syn = (Synapse) e.nextElement();
+            syn = e.nextElement();
             syn.setWeightRandom(rw);
         }
     }
@@ -47,7 +47,8 @@ public class NeuronLayer extends Layer implements Serializable {
 
     public boolean equalsInWeights(Object o) {
         Neuron neu, thisNeu;
-        Enumeration neus, thisNeus;
+        Enumeration<? extends LayerNode> neus; 
+        Enumeration<? extends LayerNode> thisNeus;
         boolean equals = true;
         NeuronLayer nl;
         if (!(o instanceof NeuronLayer))
@@ -74,10 +75,11 @@ public class NeuronLayer extends Layer implements Serializable {
         return new EnumSynapsesOfNeuronLayer(this);
     }
 
-    class EnumSynapsesOfNeuronLayer implements Enumeration {
-        Enumeration en, es;
+    class EnumSynapsesOfNeuronLayer implements Enumeration<Synapse> {
+        Enumeration<LayerNode> en; 
+        Enumeration<Synapse> es;
 
-        Object nextSyn = null;
+        Synapse nextSyn = null;
 
         EnumSynapsesOfNeuronLayer(NeuronLayer nl) {
             Neuron neu;
@@ -89,7 +91,7 @@ public class NeuronLayer extends Layer implements Serializable {
             }
         }
 
-        Object nextSyn() {
+        Synapse nextSyn() {
             Neuron neu;
             if (this.es.hasMoreElements()) {
                 return this.es.nextElement();
@@ -105,8 +107,8 @@ public class NeuronLayer extends Layer implements Serializable {
             return this.nextSyn != null;
         }
 
-        public Object nextElement() {
-            Object o;
+        public Synapse nextElement() {
+            Synapse o;
             o = this.nextSyn;
             this.nextSyn = nextSyn();
             return o;
