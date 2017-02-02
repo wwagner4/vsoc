@@ -99,7 +99,7 @@ public abstract class AbstractFFNetConnector implements Serializable {
         int ntoi;
         for (ntoi = 0; ntoi < this.nodesPerLayer.intAt(ltoi); ntoi++) {
             if (hasConnection(ltoi, lfromi)) {
-                lto.addElement(new Integer(ntoi));
+                lto.addElement(ntoi);
             }
         }
     }
@@ -111,24 +111,18 @@ public abstract class AbstractFFNetConnector implements Serializable {
     double prob(int ltoi, int lfromi) {
         double prob;
         IntVector connProbIntVector;
-        // System.out.println ("++ prob ltoi="+ltoi+" lfromi="+lfromi);
         connProbIntVector = this.connProbMatrix.intVectorAt(lfromi);
         prob = ((double) connProbIntVector.intAt(ltoi)) / 100.0;
-        // System.out.println ("prob="+prob);
         return prob;
     }
 
     public void initLayers(FFNet net) {
-        int i, j, lCount;
-        Layer l;
-        NeuronLayer nl;
-
-        l = new Layer(this.nodesPerLayer.intAt(0));
+        Layer l = new Layer(this.nodesPerLayer.intAt(0));
         net.addLayer(l);
-        lCount = this.nodesPerLayer.size();
-        for (i = 1; i < lCount; i++) {
-            nl = new NeuronLayer();
-            for (j = 0; j < this.nodesPerLayer.intAt(i); j++) {
+        int lCount = this.nodesPerLayer.size();
+        for (int i = 1; i < lCount; i++) {
+        	NeuronLayer nl = new NeuronLayer();
+            for (int j = 0; j < this.nodesPerLayer.intAt(i); j++) {
                 nl.addNeuron(getNewNeuron());
             }
             net.addLayer(nl);
@@ -136,19 +130,17 @@ public abstract class AbstractFFNetConnector implements Serializable {
     }
 
     public void connectNet(FFNet net) {
-        int lfromi, size;
-        size = net.layerCount();
-        for (lfromi = 1; lfromi < size; lfromi++) {
+        int size = net.layerCount();
+        for (int lfromi = 1; lfromi < size; lfromi++) {
             connectLayer(net, lfromi);
         }
     }
 
     void connectLayer(FFNet net, int lfromi) {
         Layer lfrom;
-        int nfromi, size;
         lfrom = net.layerAt(lfromi);
-        size = lfrom.size();
-        for (nfromi = 0; nfromi < size; nfromi++) {
+        int size = lfrom.size();
+        for (int nfromi = 0; nfromi < size; nfromi++) {
             connectNeuron(net, lfromi, nfromi, lfrom);
         }
     }

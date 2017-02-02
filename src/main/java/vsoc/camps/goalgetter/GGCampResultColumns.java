@@ -4,41 +4,38 @@
 
 package vsoc.camps.goalgetter;
 
+import java.util.Arrays;
 import java.util.List;
-
-import org.apache.commons.lang.enums.Enum;
 
 /**
  * IDs of the columns of the GGCamp result table.
  */
-public class GGCampResultColumns extends Enum {
+public enum GGCampResultColumns {
     
-	private static final long serialVersionUID = 1L;
+    DIVERSITY("diversity", "Diversity"),
+    GOALS("goals", "Average number of golas shot by a goalgetter per match"),
+    OWNGOALS("owngoals", "Average number of own golas shot by a goalgetter per match"),
+    KICKS("kicks", "Average number of ball kicks of a goalgetter per match"),
+    KICKOUTS("kickouts", "Average number of ball kick outs of a goalgetter per match");
 
-    private String desc;
-    
-    public static final GGCampResultColumns DIVERSITY = new GGCampResultColumns("diversity", "Diversity");
-    public static final GGCampResultColumns GOALS = new GGCampResultColumns("goals", "Average number of golas shot by a goalgetter per match");
-    public static final GGCampResultColumns OWNGOALS = new GGCampResultColumns("owngoals", "Average number of own golas shot by a goalgetter per match");
-    public static final GGCampResultColumns KICKS = new GGCampResultColumns("kicks", "Average number of ball kicks of a goalgetter per match");
-    public static final GGCampResultColumns KICKOUTS = new GGCampResultColumns("kickouts", "Average number of ball kick outs of a goalgetter per match");
-
-    public GGCampResultColumns(String name, String desc) {
-        super(name);
+	private String name;
+	private String desc;
+	
+    private GGCampResultColumns(String name, String desc) {
+    	this.name = name;
         this.desc = desc;
     }
     
-    @SuppressWarnings("unchecked")
-	public static List<GGCampResultColumns> getEnumList() {
-        return Enum.getEnumList(GGCampResultColumns.class);
-    }
-
     public String getDesc() {
         return this.desc;
     }
 
-    public void setDesc(String desc) {
-        this.desc = desc;
+    public String getName() {
+        return this.name;
     }
+
+	public static List<GGCampResultColumns> getEnumList() {
+		return Arrays.asList(GGCampResultColumns.values());
+	}
 
 }

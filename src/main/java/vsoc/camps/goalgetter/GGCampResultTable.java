@@ -21,7 +21,7 @@ public class GGCampResultTable extends SimpleResultTable {
         ColumnDesc sdesc = createSerialDesc(format);
         setSerialDesc(sdesc);
         List<ColumnDesc> cdescs = new ArrayList<>();
-        Iterator<GGCampResultColumns> iter = GGCampResultColumns.getEnumList().iterator();
+        Iterator<GGCampResultColumns> iter = GGCampResultColumns.getEnumList() .iterator();
         while (iter.hasNext()) {
             GGCampResultColumns enu = (GGCampResultColumns) iter.next();
             ColumnDesc desc = new ColumnDesc();

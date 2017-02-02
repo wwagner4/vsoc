@@ -1,52 +1,53 @@
 package vsoc.model;
 
-import org.apache.commons.lang.enums.Enum;
+public enum ServerFlag {
 
-// TODO Change to enum
-public class ServerFlag extends Enum {
+	NORTH("north"),
 
-	private static final long serialVersionUID = 1L;
-	
-    public static final ServerFlag NORTH = new ServerFlag("north");
+	CENTER("center"),
 
-    public static final ServerFlag CENTER = new ServerFlag("center");
+	SOUTH("south"),
 
-    public static final ServerFlag SOUTH = new ServerFlag("south");
+	EAST_10("east10"),
 
-    public static final ServerFlag EAST_10 = new ServerFlag("east10");
+	EAST_20("east20"),
 
-    public static final ServerFlag EAST_20 = new ServerFlag("east20");
+	EAST_30("east30"),
 
-    public static final ServerFlag EAST_30 = new ServerFlag("east30");
+	EAST_40("east40"),
 
-    public static final ServerFlag EAST_40 = new ServerFlag("east40");
+	EAST_50("east50"),
 
-    public static final ServerFlag EAST_50 = new ServerFlag("east50");
+	WEST_10("west10"),
 
-    public static final ServerFlag WEST_10 = new ServerFlag("west10");
+	WEST_20("west20"),
 
-    public static final ServerFlag WEST_20 = new ServerFlag("west20");
+	WEST_30("west30"),
 
-    public static final ServerFlag WEST_30 = new ServerFlag("west30");
+	WEST_40("west40"),
 
-    public static final ServerFlag WEST_40 = new ServerFlag("west40");
+	WEST_50("west50"),
 
-    public static final ServerFlag WEST_50 = new ServerFlag("west50");
+	NORTH_10("north10"),
 
-    public static final ServerFlag NORTH_10 = new ServerFlag("north10");
+	NORTH_20("north20"),
 
-    public static final ServerFlag NORTH_20 = new ServerFlag("north20");
+	NORTH_30("north30"),
 
-    public static final ServerFlag NORTH_30 = new ServerFlag("north30");
+	SOUTH_10("south10"),
 
-    public static final ServerFlag SOUTH_10 = new ServerFlag("south10");
+	SOUTH_20("south20"),
 
-    public static final ServerFlag SOUTH_20 = new ServerFlag("south20");
+	SOUTH_30("south30");
 
-    public static final ServerFlag SOUTH_30 = new ServerFlag("south30");
+	private String name;
 
-    public ServerFlag(String name) {
-        super(name);
-    }
+	private ServerFlag(String name) {
+		this.name = name;
+	}
+
+	public String getName() {
+		return name;
+	}
 
 }

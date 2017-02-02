@@ -39,7 +39,7 @@ public class GGCampRunner {
 		ApplicationContext ctx = new ClassPathXmlApplicationContext("ggcamp.xml");
 		GGCampRunner runner = (GGCampRunner) ctx.getBean("campRunner");
 		runner.run();
-		System.out.println("- F I N I S H E D -");
+		log.info("- F I N I S H E D -");
     }
 
     public void run() throws IOException {

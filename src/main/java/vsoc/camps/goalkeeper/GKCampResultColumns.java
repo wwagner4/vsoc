@@ -4,68 +4,67 @@
 
 package vsoc.camps.goalkeeper;
 
+import java.util.Arrays;
 import java.util.List;
-
-import org.apache.commons.lang.enums.Enum;
 
 /**
  * IDs of the columns of the GKCamp result table.
  */
-public class GKCampResultColumns extends Enum {
+public enum GKCampResultColumns {
 
-	private static final long serialVersionUID = 1L;
+    GG_DIVERSITY(
+            "gg_diversity", "Goalgetter diversity"),
 
-    private String desc;
-
-    public static final GKCampResultColumns GG_DIVERSITY = new GKCampResultColumns(
-            "gg_diversity", "Goalgetter diversity");
-
-    public static final GKCampResultColumns GG_GOALS = new GKCampResultColumns(
+    GG_GOALS(
             "gg_goals",
-            "Average number of goals shot by a goalgetter per match");
+            "Average number of goals shot by a goalgetter per match"),
 
-    public static final GKCampResultColumns GG_OWNGOALS = new GKCampResultColumns(
+    GG_OWNGOALS(
             "gg_owngoals",
-            "Average number of own goals shot by a goalgetter per match");
+            "Average number of own goals shot by a goalgetter per match"),
 
-    public static final GKCampResultColumns GG_KICKS = new GKCampResultColumns(
-            "gg_kicks", "Average number of kicks of a goalgetter per match");
+    GG_KICKS(
+            "gg_kicks", "Average number of kicks of a goalgetter per match"),
 
-    public static final GKCampResultColumns GG_KICKOUTS = new GKCampResultColumns(
+    GG_KICKOUTS(
             "gg_kickouts",
-            "Average number of kick outs of a goalgetter per match");
+            "Average number of kick outs of a goalgetter per match"),
 
-    public static final GKCampResultColumns GK_DIVERSITY = new GKCampResultColumns(
-            "gk_diversity", "Goalkeepers diversity");
+    GK_DIVERSITY(
+            "gk_diversity", "Goalkeepers diversity"),
 
-    public static final GKCampResultColumns GK_KICKS = new GKCampResultColumns(
-            "gk_kicks", "Average number of kicks of a goalkeeper per match");
+    GK_KICKS(
+            "gk_kicks", "Average number of kicks of a goalkeeper per match"),
 
-    public static final GKCampResultColumns GK_KICKOUTS = new GKCampResultColumns(
+    GK_KICKOUTS(
             "gk_kickouts",
-            "Average number of kickouts of a goalkeeper per match");
+            "Average number of kickouts of a goalkeeper per match"),
 
-    public static final GKCampResultColumns GK_GOALS_RECEIVED = new GKCampResultColumns(
+    GK_GOALS_RECEIVED(
             "gk_received_goals",
             "Average number of goals a goaly received per match");
 
-    public GKCampResultColumns(String name, String desc) {
-        super(name);
+    private String desc;
+    private String name;
+
+    private GKCampResultColumns(String name, String desc) {
+    	this.name = name;
         this.desc = desc;
     }
 
     
-    @SuppressWarnings("unchecked")
 	public static List<GKCampResultColumns> getEnumList() {
-        return Enum.getEnumList(GKCampResultColumns.class);
+        return Arrays.asList(GKCampResultColumns.values());
     }
 
     public String getDesc() {
         return this.desc;
     }
 
-    public void setDesc(String desc) {
-        this.desc = desc;
-    }
+
+	public String getName() {
+		return name;
+	}
+
 
 }

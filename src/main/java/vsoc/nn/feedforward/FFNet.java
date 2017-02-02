@@ -107,24 +107,21 @@ public class FFNet implements Net {
     }
 
     public void setWeightsCrossover(FFNet father, FFNet mother, Random r) {
-        Synapse syn, synf, synm;
-        Enumeration<Synapse> e, ef, em;
-        int count, offset, interval;
+        int count = 0;
+        int interval = 20;
         boolean fromFather;
-        count = 0;
-        interval = 20;
         if (Math.abs(r.nextInt() % 1000) > 500)
             fromFather = true;
         else
             fromFather = false;
-        offset = Math.abs(r.nextInt() % 20);
-        e = synapses();
-        ef = father.synapses();
-        em = mother.synapses();
+        int offset = Math.abs(r.nextInt() % 20);
+        Enumeration<Synapse> e = synapses();
+        Enumeration<Synapse> ef = father.synapses();
+        Enumeration<Synapse> em = mother.synapses();
         while (e.hasMoreElements()) {
-            syn = e.nextElement();
-            synf = ef.nextElement();
-            synm = em.nextElement();
+        	Synapse syn = e.nextElement();
+        	Synapse synf = ef.nextElement();
+        	Synapse synm = em.nextElement();
             if (fromFather) {
                 syn.setWeight(synf.getWeight());
                 if ((count + offset) % interval == 0)
@@ -150,21 +147,21 @@ public class FFNet implements Net {
         return this.ls.size();
     }
 
+    @Override
     public String toString() {
         StringWriter sw = new StringWriter();
         try {
             toStream(sw);
         } catch (IOException e) {
-            throw new Error(e.getMessage());
+            throw new IllegalStateException(e.getMessage(), e);
         }
         return sw.toString();
     }
 
     void toStream(Writer w) throws IOException {
-        int i, size;
-        size = this.layerCount();
+        int size = this.layerCount();
         w.write("--- Net BEGIN ---\n");
-        for (i = 0; i < size; i++) {
+        for (int i = 0; i < size; i++) {
             Layer l;
             l = this.layerAt(i);
             l.toStream(w);
@@ -174,15 +171,14 @@ public class FFNet implements Net {
     }
 
     Vector<Integer> compareWeights(FFNet net1) {
-        Synapse syn, syn1;
         Enumeration<Synapse> e, e1;
         short w, w1;
         Vector<Integer> result = new Vector<>();
         e = synapses();
         e1 = net1.synapses();
         while (e.hasMoreElements()) {
-            syn = e.nextElement();
-            syn1 = e1.nextElement();
+            Synapse syn = e.nextElement();
+            Synapse syn1 = e1.nextElement();
             w = syn.getWeight();
             w1 = syn1.getWeight();
             if (w == w1)

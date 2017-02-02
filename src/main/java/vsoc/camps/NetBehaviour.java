@@ -49,7 +49,7 @@ public class NetBehaviour implements Behaviour {
 			debugSensors(sens);
 		}
 		initRetinas(sens);
-		setInputLayer(sens);
+		setInputLayer();
 		this.net.calculate();
 		addCommandsFromOutputLayer(sens, player);
 	}
@@ -86,61 +86,61 @@ public class NetBehaviour implements Behaviour {
 		}
 		this.retinaFlagLeft.reset();
 		if (sens.sawFlagLeft()) {
-			Iterator iter = sens.getFlagsLeft().values().iterator();
+			Iterator<BehaviourVision> iter = sens.getFlagsLeft().values().iterator();
 			while (iter.hasNext()) {
-				BehaviourVision vis = (BehaviourVision) iter.next();
+				BehaviourVision vis = iter.next();
 				this.retinaFlagLeft.addVision(vis.getDistance(), -vis.getDirection());
 
 			}
 		}
 		this.retinaFlagOwn.reset();
 		if (sens.sawFlagOwn()) {
-			Iterator iter = sens.getFlagsOwn().values().iterator();
+			Iterator<BehaviourVision> iter = sens.getFlagsOwn().values().iterator();
 			while (iter.hasNext()) {
-				BehaviourVision vis = (BehaviourVision) iter.next();
+				BehaviourVision vis = iter.next();
 				this.retinaFlagOwn.addVision(vis.getDistance(), -vis.getDirection());
 
 			}
 		}
 		this.retinaFlagPenaltyOther.reset();
 		if (sens.sawFlagPenaltyOther()) {
-			Iterator iter = sens.getFlagsOwn().values().iterator();
+			Iterator<BehaviourVision> iter = sens.getFlagsOwn().values().iterator();
 			while (iter.hasNext()) {
-				BehaviourVision vis = (BehaviourVision) iter.next();
+				BehaviourVision vis = iter.next();
 				this.retinaFlagPenaltyOther.addVision(vis.getDistance(), -vis.getDirection());
 
 			}
 		}
 		this.retinaFlagRight.reset();
 		if (sens.sawFlagRight()) {
-			Iterator iter = sens.getFlagsOwn().values().iterator();
+			Iterator<BehaviourVision> iter = sens.getFlagsOwn().values().iterator();
 			while (iter.hasNext()) {
-				BehaviourVision vis = (BehaviourVision) iter.next();
+				BehaviourVision vis = iter.next();
 				this.retinaFlagRight.addVision(vis.getDistance(), -vis.getDirection());
 			}
 		}
 		this.retinaGoalOther.reset();
 		if (sens.sawFlagGoalOther()) {
-			Iterator iter = sens.getFlagsOwn().values().iterator();
+			Iterator<BehaviourVision> iter = sens.getFlagsOwn().values().iterator();
 			while (iter.hasNext()) {
-				BehaviourVision vis = (BehaviourVision) iter.next();
+				BehaviourVision vis = iter.next();
 				this.retinaGoalOther.addVision(vis.getDistance(), -vis.getDirection());
 			}
 		}
 		this.retinaPlayerOther.reset();
 		if (sens.sawPlayerOther()) {
-			Iterator iter = sens.getFlagsOwn().values().iterator();
+			Iterator<BehaviourVision> iter = sens.getFlagsOwn().values().iterator();
 			while (iter.hasNext()) {
-				BehaviourVision vis = (BehaviourVision) iter.next();
+				BehaviourVision vis = iter.next();
 				this.retinaPlayerOther.addVision(vis.getDistance(), -vis.getDirection());
 
 			}
 		}
 		this.retinaPlayerOwn.reset();
 		if (sens.sawPlayerOwn()) {
-			Iterator iter = sens.getFlagsOwn().values().iterator();
+			Iterator<BehaviourVision> iter = sens.getFlagsOwn().values().iterator();
 			while (iter.hasNext()) {
-				BehaviourVision vis = (BehaviourVision) iter.next();
+				BehaviourVision vis = iter.next();
 				this.retinaPlayerOwn.addVision(vis.getDistance(), -vis.getDirection());
 
 			}
@@ -189,8 +189,6 @@ public class NetBehaviour implements Behaviour {
 			player.kick(power, 20);
 			break;
 		case 12:
-			player.kick(power, 0);
-			break;
 		case 13:
 			player.kick(power, 0);
 			break;
@@ -203,6 +201,8 @@ public class NetBehaviour implements Behaviour {
 		case 16:
 			player.kick(power, -60);
 			break;
+		default:
+			// Nothing to do
 		}
 	}
 
@@ -246,13 +246,13 @@ public class NetBehaviour implements Behaviour {
 		case 17:
 			return 98;
 		case 18:
-			return 99;
 		case 19:
 			return 99;
 		case 20:
 			return 100;
+		default: 
+			throw new IllegalStateException("invalid activation value " + val);
 		}
-		throw new Error("invalid activation value " + val);
 	}
 
 	private void addTurnCommandFromOutputLayer(Player player) {
@@ -276,8 +276,6 @@ public class NetBehaviour implements Behaviour {
 			player.turn(10);
 			break;
 		case 3:
-			player.turn(0);
-			break;
 		case 4:
 			player.turn(0);
 			break;
@@ -290,10 +288,12 @@ public class NetBehaviour implements Behaviour {
 		case 7:
 			player.turn(-50);
 			break;
+		default:
+			// Nothing to do
 		}
 	}
 
-	private void setInputLayer(Sensors sens) {
+	private void setInputLayer() {
 		this.net.setInputValue(0, this.retinaFlagLeft.getA());
 		this.net.setInputValue(1, this.retinaFlagLeft.getB());
 		this.net.setInputValue(2, this.retinaFlagLeft.getC());
