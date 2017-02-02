@@ -130,14 +130,15 @@ public class Neuron extends LayerNode implements Serializable {
         return is;
     }
 
-    Enumeration synapses() {
+    Enumeration<Synapse> synapses() {
         return this.syns.elements();
     }
 
-    void readObject(java.io.ObjectInputStream stream) {
+	@SuppressWarnings("unchecked")
+	void readObject(java.io.ObjectInputStream stream) {
         super.readObject(stream);
         try {
-            this.syns = (Vector) stream.readObject();
+            this.syns = (Vector<Synapse>) stream.readObject();
         } catch (IOException e) {
             throw new RuntimeException(e);
         } catch (ClassNotFoundException e) {
@@ -156,7 +157,7 @@ public class Neuron extends LayerNode implements Serializable {
 
     public boolean equalsInWeights(Object o) {
         Synapse syn, thisSyn;
-        Enumeration syns, thisSyns;
+        Enumeration<Synapse> syns, thisSyns;
         boolean equals = true;
         Neuron neu;
 
@@ -187,12 +188,12 @@ public class Neuron extends LayerNode implements Serializable {
      * LayerNodes to which the current neuron node is connected.
      */
 
-    public Enumeration connections() {
-        Vector lns = new Vector();
-        Enumeration enu = synapses();
+    public Enumeration<LayerNode> connections() {
+        Vector<LayerNode> lns = new Vector<>();
+        Enumeration<Synapse> enu = synapses();
         Synapse syn;
         while (enu.hasMoreElements()) {
-            syn = (Synapse) enu.nextElement();
+            syn = enu.nextElement();
             lns.addElement(syn.getLayerNode());
         }
         return lns.elements();
