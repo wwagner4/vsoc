@@ -1,4 +1,4 @@
-package vsoc.test;
+package vsoc;
 
 import vsoc.model.*;
 import vsoc.util.Vec2D;

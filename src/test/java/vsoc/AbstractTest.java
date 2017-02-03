@@ -1,4 +1,4 @@
-package vsoc.test;
+package vsoc;
 
 import junit.framework.TestCase;
 import vsoc.model.Server;

@@ -1,4 +1,4 @@
-package vsoc.test;
+package vsoc;
 
 import java.io.Serializable;
 

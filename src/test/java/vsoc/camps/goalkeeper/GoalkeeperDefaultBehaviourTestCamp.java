@@ -1,4 +1,4 @@
-package vsoc.camps.goalkeeper.test;
+package vsoc.camps.goalkeeper;
 
 import java.util.Iterator;
 import java.util.List;

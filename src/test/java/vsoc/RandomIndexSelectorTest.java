@@ -1,4 +1,4 @@
-package vsoc.test;
+package vsoc;
 
 import junit.framework.*;
 import junit.textui.*;
@@ -195,6 +195,6 @@ public class RandomIndexSelectorTest extends TestCase {
     assertTrue("tested", true);
   }
   public static void main(String[] args) {
-    TestRunner.run(new TestSuite(vsoc.test.RandomIndexSelectorTest.class));
+    TestRunner.run(new TestSuite(vsoc.RandomIndexSelectorTest.class));
   }
 }

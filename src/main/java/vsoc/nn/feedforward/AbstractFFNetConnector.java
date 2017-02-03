@@ -156,12 +156,12 @@ public abstract class AbstractFFNetConnector implements Serializable {
 
     void connectNeuronToLayer(FFNet net, int lfromi, int nfromi, Neuron nfrom, int ltoi) {
         Layer lto = net.layerAt(ltoi);
-        IntVector vlfrom = (IntVector)this.connMatrix.elementAt(lfromi);
-        IntVector vnfrom = (IntVector)vlfrom.elementAt(nfromi);
-        IntVector vlto = (IntVector)vnfrom.elementAt(ltoi);
+        IntVector vlfrom = (IntVector)this.connMatrix.get(lfromi);
+        IntVector vnfrom = (IntVector)vlfrom.get(nfromi);
+        IntVector vlto = (IntVector)vnfrom.get(ltoi);
         int size = vlto.size();
         for (int i = 0; i < size; i++) {
-            Integer indexTo = (Integer) vlto.elementAt(i);
+            Integer indexTo = (Integer) vlto.get(i);
             Synapse syn = getNewSynapse();
             syn.connectLayerNode(lto.layerNodeAt(indexTo.intValue()));
             nfrom.addSynapse(syn);

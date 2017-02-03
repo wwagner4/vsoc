@@ -4,8 +4,10 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.io.StringWriter;
 import java.io.Writer;
-import java.util.Enumeration;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.NoSuchElementException;
 
 /**
  * A set of layer nodes.
@@ -17,16 +19,16 @@ public class Layer implements Serializable {
 
     private static final long serialVersionUID = 0L;
 
-    Vector<LayerNode> lns;
+    private List<LayerNode> lns;
 
     public Layer() {
-        this.lns = new Vector<>();
+        this.lns = new ArrayList<>();
     }
 
     public Layer(int size) {
         int i;
 
-        this.lns = new Vector<>();
+        this.lns = new ArrayList<>();
         for (i = 1; i <= size; i++) {
             this.addLayerNode(new LayerNode());
         }
@@ -37,11 +39,11 @@ public class Layer implements Serializable {
     }
 
     public LayerNode layerNodeAt(int i) {
-        return (LayerNode) this.lns.elementAt(i);
+        return (LayerNode) this.lns.get(i);
     }
 
     public void addLayerNode(LayerNode ln) {
-        this.lns.addElement(ln);
+        this.lns.add(ln);
     }
 
     public void setValueAt(int i, short value) {
@@ -54,9 +56,9 @@ public class Layer implements Serializable {
 
     public void setValuesRandom(RandomValue rv) {
         LayerNode ln;
-        Enumeration<LayerNode> e;
-        for (e = layerNodes(); e.hasMoreElements();) {
-            ln = (LayerNode) e.nextElement();
+        Iterator<LayerNode> e;
+        for (e = layerNodes(); e.hasNext();) {
+            ln = (LayerNode) e.next();
             ln.setValueRandom(rv);
         }
     }
@@ -84,8 +86,8 @@ public class Layer implements Serializable {
 
     public void toStream(Writer w) throws IOException {
         w.write("[");
-        for (Enumeration<LayerNode> e = layerNodes(); e.hasMoreElements();) {
-        	LayerNode ln = e.nextElement();
+        for (Iterator<LayerNode> e = layerNodes(); e.hasNext();) {
+        	LayerNode ln = e.next();
             w.write(ln.toString());
         }
         w.write("]");
@@ -93,8 +95,8 @@ public class Layer implements Serializable {
 
     public void toValuesStream(Writer w) throws IOException {
         LayerNode ln;
-        for (Enumeration<LayerNode> e = layerNodes(); e.hasMoreElements();) {
-            ln = e.nextElement();
+        for (Iterator<LayerNode> e = layerNodes(); e.hasNext();) {
+            ln = e.next();
             w.write(ln.getValue() + "\t");
         }
     }
@@ -102,8 +104,8 @@ public class Layer implements Serializable {
     String valuesToString() {
         StringBuilder str = new StringBuilder();
         LayerNode ln;
-        for (Enumeration<LayerNode> e = layerNodes(); e.hasMoreElements();) {
-            ln = e.nextElement();
+        for (Iterator<LayerNode> e = layerNodes(); e.hasNext();) {
+            ln = e.next();
             str.append(ln.valueToString() + ";");
         }
         return str.toString();
@@ -129,7 +131,7 @@ public class Layer implements Serializable {
         }
     }
 
-    public Enumeration<LayerNode> layerNodes() {
+    public Iterator<LayerNode> layerNodes() {
         return new EnumLayerNodesOfLayer(this);
     }
 
@@ -148,16 +150,16 @@ public class Layer implements Serializable {
         if (!(o instanceof Layer))
             return false;
         Layer l = (Layer) o;
-        Enumeration<LayerNode> lns = l.layerNodes();
-        Enumeration<LayerNode> thisLns = layerNodes();
-        while (lns.hasMoreElements() && thisLns.hasMoreElements() && equals) {
-            LayerNode ln = lns.nextElement();
-            LayerNode thisLn = thisLns.nextElement();
+        Iterator<LayerNode> lns1 = l.layerNodes();
+        Iterator<LayerNode> thisLns = layerNodes();
+        while (lns1.hasNext() && thisLns.hasNext() && equals) {
+            LayerNode ln = lns1.next();
+            LayerNode thisLn = thisLns.next();
             if (!ln.equalsInValue(thisLn))
                 equals = false;
         }
-        if (equals == true) {
-            if (thisLns.hasMoreElements() || lns.hasMoreElements())
+        if (equals) {
+            if (thisLns.hasNext() || lns1.hasNext())
                 return false;
             return true;
         }
@@ -165,8 +167,8 @@ public class Layer implements Serializable {
     }
 
     // TODO Remove the Enum classes
-    class EnumLayerNodesOfLayer implements Enumeration<LayerNode> {
-        Vector<LayerNode> v;
+    class EnumLayerNodesOfLayer implements Iterator<LayerNode> {
+        List<LayerNode> v;
 
         int i;
         int size;
@@ -178,13 +180,16 @@ public class Layer implements Serializable {
         }
 
         @Override
-        public boolean hasMoreElements() {
+        public boolean hasNext() {
             return this.i < this.size;
         }
 
         @Override
-        public LayerNode nextElement() {
-        	LayerNode o = this.v.elementAt(this.i);
+        public LayerNode next() {
+        	LayerNode o = this.v.get(this.i);
+        	if (o == null) {
+        		throw new NoSuchElementException();
+        	}
             this.i++;
             return o;
         }

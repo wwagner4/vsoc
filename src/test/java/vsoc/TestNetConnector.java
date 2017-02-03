@@ -1,4 +1,4 @@
-package vsoc.test;
+package vsoc;
 
 import vsoc.nn.base.TransferManager;
 import vsoc.nn.base.Weighter;

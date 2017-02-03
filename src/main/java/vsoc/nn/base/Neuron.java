@@ -2,8 +2,9 @@ package vsoc.nn.base;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.Enumeration;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * A neuron. Holds an activation level and is connected with other neurons or
@@ -16,7 +17,7 @@ public class Neuron extends LayerNode implements Serializable {
 
     private TransferManager transferManager = null;
 
-    private Vector<Synapse> syns;
+    private List<Synapse> syns;
 
     private boolean isCalculated;
 
@@ -25,7 +26,7 @@ public class Neuron extends LayerNode implements Serializable {
     public Neuron(TransferManager transManager) {
         this.transferManager = transManager;
         this.isCalculated = false;
-        this.syns = new Vector<>();
+        this.syns = new ArrayList<>();
         setValue((short) 0);
     }
 
@@ -54,15 +55,12 @@ public class Neuron extends LayerNode implements Serializable {
     }
 
     void calculate() {
-        int i, size, wval, sum;
-        Synapse syn;
-
         if (!isCalculated()) {
-            size = synapseCount();
-            sum = 0;
-            for (i = 0; i < size; i++) {
-                syn = synapseAt(i);
-                wval = syn.getWeightedCalculatedValue();
+            int size = synapseCount();
+            int sum = 0;
+            for (int i = 0; i < size; i++) {
+                Synapse syn = synapseAt(i);
+                int wval = syn.getWeightedCalculatedValue();
                 sum = sum + wval;
             }
             setValue(getTransfer().getValue(sum));
@@ -71,7 +69,7 @@ public class Neuron extends LayerNode implements Serializable {
     }
 
     public void addSynapse(Synapse syn) {
-        this.syns.addElement(syn);
+        this.syns.add(syn);
     }
 
     protected int synapseCount() {
@@ -79,16 +77,13 @@ public class Neuron extends LayerNode implements Serializable {
     }
 
     public Synapse synapseAt(int i) {
-        return (Synapse) this.syns.elementAt(i);
+        return (Synapse) this.syns.get(i);
     }
 
     public void setWeightsRandom(RandomWgt rw) {
-        int i, size;
-        Synapse syn;
-
-        size = synapseCount();
-        for (i = 0; i < size; i++) {
-            syn = synapseAt(i);
+        int size = synapseCount();
+        for (int i = 0; i < size; i++) {
+            Synapse syn = synapseAt(i);
             syn.setWeightRandom(rw);
         }
     }
@@ -115,13 +110,10 @@ public class Neuron extends LayerNode implements Serializable {
     }
 
     boolean isConnectedToLayerNode(LayerNode ln) {
-        int i, size;
         boolean is = false;
-        Synapse syn;
-
-        size = synapseCount();
-        for (i = 0; i < size; i++) {
-            syn = synapseAt(i);
+        int size = synapseCount();
+        for (int i = 0; i < size; i++) {
+            Synapse syn = synapseAt(i);
             if (syn.layerNode() == ln) {
                 is = true;
                 break;
@@ -130,72 +122,73 @@ public class Neuron extends LayerNode implements Serializable {
         return is;
     }
 
-    Enumeration<Synapse> synapses() {
-        return this.syns.elements();
+    Iterator<Synapse> synapses() {
+        return this.syns.iterator();
     }
 
 	@SuppressWarnings("unchecked")
 	void readObject(java.io.ObjectInputStream stream) {
         super.readObject(stream);
         try {
-            this.syns = (Vector<Synapse>) stream.readObject();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
+            this.syns = (List<Synapse>) stream.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            throw new IllegalStateException("Error reading object. " + e.getMessage(), e);
+        } 
     }
 
+	@Override
     void writeObject(java.io.ObjectOutputStream stream) {
         super.writeObject(stream);
         try {
             stream.writeObject(this.syns);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new IllegalStateException(e);
         }
     }
 
     public boolean equalsInWeights(Object o) {
-        Synapse syn, thisSyn;
-        Enumeration<Synapse> syns, thisSyns;
         boolean equals = true;
-        Neuron neu;
-
         if (!(o instanceof Neuron))
             return false;
-        neu = (Neuron) o;
-        syns = neu.synapses();
-        thisSyns = synapses();
-        while (syns.hasMoreElements() && thisSyns.hasMoreElements() && equals) {
-            syn = (Synapse) syns.nextElement();
-            thisSyn = (Synapse) thisSyns.nextElement();
+        Neuron neu = (Neuron) o;
+        Iterator<Synapse> syns1 = neu.synapses();
+        Iterator<Synapse> thisSyns = synapses();
+        while (syns1.hasNext() && thisSyns.hasNext() && equals) {
+        	Synapse syn = (Synapse) syns1.next();
+        	Synapse thisSyn = (Synapse) thisSyns.next();
             if (!syn.equals(thisSyn))
                 equals = false;
         }
-        if (equals == true) {
-            if (thisSyns.hasMoreElements() || syns.hasMoreElements())
+        if (equals) {
+            if (thisSyns.hasNext() || syns1.hasNext())
                 return false;
             return true;
         }
         return false;
     }
 
+    @Override
     public boolean equals(Object o) {
-        return (equalsInValue(o) && equalsInWeights(o));
+        return equalsInValue(o) && equalsInWeights(o);
+    }
+    
+    @Override
+    public int hashCode() {
+    	return 0;
     }
 
     /**
      * LayerNodes to which the current neuron node is connected.
      */
 
-    public Enumeration<LayerNode> connections() {
-        Vector<LayerNode> lns = new Vector<>();
-        Enumeration<Synapse> enu = synapses();
+    public Iterator<LayerNode> connections() {
+        List<LayerNode> lns = new ArrayList<>();
+        Iterator<Synapse> enu = synapses();
         Synapse syn;
-        while (enu.hasMoreElements()) {
-            syn = enu.nextElement();
-            lns.addElement(syn.getLayerNode());
+        while (enu.hasNext()) {
+            syn = enu.next();
+            lns.add(syn.getLayerNode());
         }
-        return lns.elements();
+        return lns.iterator();
     }
 }

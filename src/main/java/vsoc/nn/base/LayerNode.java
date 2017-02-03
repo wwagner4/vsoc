@@ -40,15 +40,16 @@ public class LayerNode implements Serializable {
         return this.value;
     }
 
+    @Override
     public String toString() {
         if (isCalculated()) {
-            return ("<C" + this.value + ">");
+            return "<C" + this.value + ">";
         }
-        return ("<U" + this.value + ">");
+        return "<U" + this.value + ">";
     }
 
     String valueToString() {
-        return (this.value + "");
+        return Short.toString(value);
     }
 
     boolean isConnectedToLayerNode(LayerNode ln) {
@@ -79,8 +80,14 @@ public class LayerNode implements Serializable {
         // nothing to be done
     }
 
+    @Override
     public boolean equals(Object o) {
         return equalsInValue(o);
+    }
+    
+    @Override
+    public int hashCode() {
+    	return 0;
     }
 
     public boolean equalsInValue(Object o) {
@@ -99,7 +106,7 @@ public class LayerNode implements Serializable {
      * in the subclass Neuron of layernode.
      */
 
-    Enumeration<LayerNode> connections() {
-        return new Vector<LayerNode>().elements();
+    Iterator<LayerNode> connections() {
+        return new ArrayList<LayerNode>().iterator();
     }
 }

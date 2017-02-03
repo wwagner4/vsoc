@@ -61,7 +61,7 @@ public abstract class VsocPlayer extends MoveObject implements Player {
     abstract Vision createVision(SimObject o);
 
     public Collection<Vision> see() {
-        Collection<Vision> coll = new Vector<>();
+        Collection<Vision> coll = new ArrayList<>();
         Iterator<SimObject> simObjects = getServer().getSimObjects().iterator();
 
         while (simObjects.hasNext()) {

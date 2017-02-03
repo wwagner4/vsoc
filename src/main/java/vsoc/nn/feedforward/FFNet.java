@@ -22,7 +22,7 @@ public class FFNet implements Net {
     
     private static final long serialVersionUID = 0L;
 
-    protected Vector<Layer> ls = new Vector<>();
+    protected List<Layer> ls = new ArrayList<>();
 
     private AbstractFFNetConnector netConnector = null;
 
@@ -47,7 +47,7 @@ public class FFNet implements Net {
     }
 
     public Layer getInputLayer() {
-        return (layerAt(0));
+        return layerAt(0);
     }
     
     public void setInputValue(int index, short val)   {
@@ -60,25 +60,21 @@ public class FFNet implements Net {
 
     public Net newChild(Net otherParent, double mutationRate) {
         Mutator mut = new Mutator((int) (mutationRate * 1000000)); 
-        FFNet otherNet, childNet;
-        otherNet = (FFNet) otherParent;
-        childNet = new FFNet(this.netConnector);
+        FFNet otherNet = (FFNet) otherParent;
+        FFNet childNet = new FFNet(this.netConnector);
         childNet.setWeightsCrossover(this, otherNet, getCrossoverSwitsh(), mut);
         return childNet;
     }
 
     void setWeightsCrossover(FFNet netA, FFNet netB, CrossoverSwitch cs, Mutator mut) {
-    	// TODO Remove Enumerations
-        Enumeration<Synapse> enumA, enumB, enumChild;
-        Synapse synA, synB, synChild;
         RandomWgt rw = new RandomWgt();
-        enumA = netA.synapses();
-        enumB = netB.synapses();
-        enumChild = this.synapses();
-        while (enumA.hasMoreElements()) {
-            synA = enumA.nextElement();
-            synB = enumB.nextElement();
-            synChild = enumChild.nextElement();
+        Iterator<Synapse> enumA = netA.synapses();
+        Iterator<Synapse> enumB = netB.synapses();
+        Iterator<Synapse> enumChild = this.synapses();
+        while (enumA.hasNext()) {
+        	Synapse synA = enumA.next();
+        	Synapse synB = enumB.next();
+        	Synapse synChild = enumChild.next();
             if (mut.isMutation())
                 synChild.setWeightRandom(rw);
             else if (cs.takeA())
@@ -100,8 +96,8 @@ public class FFNet implements Net {
 
     private void setWeightsRandom(RandomWgt rw) {
         Synapse syn;
-        for (Enumeration<Synapse> e = synapses(); e.hasMoreElements();) {
-            syn = (Synapse) e.nextElement();
+        for (Iterator<Synapse> e = synapses(); e.hasNext();) {
+            syn = (Synapse) e.next();
             syn.setWeightRandom(rw);
         }
     }
@@ -115,13 +111,13 @@ public class FFNet implements Net {
         else
             fromFather = false;
         int offset = Math.abs(r.nextInt() % 20);
-        Enumeration<Synapse> e = synapses();
-        Enumeration<Synapse> ef = father.synapses();
-        Enumeration<Synapse> em = mother.synapses();
-        while (e.hasMoreElements()) {
-        	Synapse syn = e.nextElement();
-        	Synapse synf = ef.nextElement();
-        	Synapse synm = em.nextElement();
+        Iterator<Synapse> e = synapses();
+        Iterator<Synapse> ef = father.synapses();
+        Iterator<Synapse> em = mother.synapses();
+        while (e.hasNext()) {
+        	Synapse syn = e.next();
+        	Synapse synf = ef.next();
+        	Synapse synm = em.next();
             if (fromFather) {
                 syn.setWeight(synf.getWeight());
                 if ((count + offset) % interval == 0)
@@ -136,11 +132,11 @@ public class FFNet implements Net {
     }
 
     void addLayer(Layer l) {
-        this.ls.addElement(l);
+        this.ls.add(l);
     }
 
     public Layer layerAt(int i) {
-        return (Layer) this.ls.elementAt(i);
+        return (Layer) this.ls.get(i);
     }
 
     int layerCount() {
@@ -170,21 +166,19 @@ public class FFNet implements Net {
         w.write("--- Net END ---\n");
     }
 
-    Vector<Integer> compareWeights(FFNet net1) {
-        Enumeration<Synapse> e, e1;
-        short w, w1;
-        Vector<Integer> result = new Vector<>();
-        e = synapses();
-        e1 = net1.synapses();
-        while (e.hasMoreElements()) {
-            Synapse syn = e.nextElement();
-            Synapse syn1 = e1.nextElement();
-            w = syn.getWeight();
-            w1 = syn1.getWeight();
+    List<Integer> compareWeights(FFNet net1) {
+        List<Integer> result = new ArrayList<>();
+        Iterator<Synapse> e = synapses();
+        Iterator<Synapse> e1 = net1.synapses();
+        while (e.hasNext()) {
+            Synapse syn = e.next();
+            Synapse syn1 = e1.next();
+            short w = syn.getWeight();
+            short w1 = syn1.getWeight();
             if (w == w1)
-                result.addElement(new Integer(0));
+                result.add(0);
             else
-                result.addElement(new Integer(1));
+                result.add(1);
         }
         return result;
     }
@@ -201,22 +195,20 @@ public class FFNet implements Net {
     }
 
     public boolean equalsInValues(Object o) {
-        Layer l, thisL;
         boolean equals = true;
-        FFNet net;
         if (!(o instanceof Net))
             return false;
-        net = (FFNet) o;
-        Enumeration<Layer> ls = net.layers();
-        Enumeration<Layer> thisLs = layers();
-        while (ls.hasMoreElements() && thisLs.hasMoreElements() && equals) {
-            l = ls.nextElement();
-            thisL = thisLs.nextElement();
+        FFNet net = (FFNet) o;
+        Iterator<Layer> ls1 = net.layers();
+        Iterator<Layer> thisLs = layers();
+        while (ls1.hasNext() && thisLs.hasNext() && equals) {
+            Layer l = ls1.next();
+            Layer thisL = thisLs.next();
             if (!l.equalsInValues(thisL))
                 equals = false;
         }
         if (equals) {
-            if (thisLs.hasMoreElements() || ls.hasMoreElements())
+            if (thisLs.hasNext() || ls1.hasNext())
                 return false;
             return true;
         }
@@ -224,31 +216,24 @@ public class FFNet implements Net {
     }
 
     public boolean equalsInStructure(Object o) {
-        Enumeration<Layer> lsa, lsb;
-        Enumeration<LayerNode> lnsa, lnsb;
-        Enumeration<Synapse> synsa, synsb;
-        FFNet net;
-        LayerNode lna, lnb;
-        Layer la, lb;
-        Synapse syna, synb;
         if (!(o instanceof Net))
             return false;
-        net = (FFNet) o;
-        lsa = layers();
-        lsb = net.layers();
-        while (lsa.hasMoreElements() && lsb.hasMoreElements()) {
-            la = lsa.nextElement();
-            lb = lsb.nextElement();
-            lnsa = la.layerNodes();
-            lnsb = lb.layerNodes();
-            while (lnsa.hasMoreElements() && lnsb.hasMoreElements()) {
-                lna = lnsa.nextElement();
-                lnb = lnsb.nextElement();
-                synsa = synapses();
-                synsb = net.synapses();
-                while (synsa.hasMoreElements() && synsb.hasMoreElements()) {
-                    syna = (Synapse) synsa.nextElement();
-                    synb = (Synapse) synsb.nextElement();
+        FFNet net = (FFNet) o;
+        Iterator<Layer> lsa = layers();
+        Iterator<Layer> lsb = net.layers();
+        while (lsa.hasNext() && lsb.hasNext()) {
+        	Layer la = lsa.next();
+        	Layer lb = lsb.next();
+            Iterator<LayerNode> lnsa = la.layerNodes();
+            Iterator<LayerNode> lnsb = lb.layerNodes();
+            while (lnsa.hasNext() && lnsb.hasNext()) {
+            	LayerNode lna = lnsa.next();
+            	LayerNode lnb = lnsb.next();
+                Iterator<Synapse> synsa = synapses();
+                Iterator<Synapse>  synsb = net.synapses();
+                while (synsa.hasNext() && synsb.hasNext()) {
+                	Synapse syna = synsa.next();
+                	Synapse  synb = synsb.next();
                     if ((syna.layerNode() == lna)
                             && (synb.layerNode() != lnb))
                         return false;
@@ -256,50 +241,48 @@ public class FFNet implements Net {
                             && (syna.layerNode() != lna))
                         return false;
                 }
-                if (synsa.hasMoreElements() || synsb.hasMoreElements())
+                if (synsa.hasNext() || synsb.hasNext())
                     return false;
             }
-            if (lnsa.hasMoreElements() || lnsb.hasMoreElements())
+            if (lnsa.hasNext() || lnsb.hasNext())
                 return false;
         }
-        if (lsa.hasMoreElements() || lsb.hasMoreElements())
+        if (lsa.hasNext() || lsb.hasNext())
             return false;
         return true;
     }
 
     public boolean equalsInWeights(Object o) {
-        NeuronLayer l, thisL;
-        Enumeration<Layer> ls, thisLs;
         boolean equals = true;
         FFNet net;
         if (!(o instanceof Net))
             return false;
         net = (FFNet) o;
-        ls = net.neuronLayers();
-        thisLs = neuronLayers();
-        while (ls.hasMoreElements() && thisLs.hasMoreElements() && equals) {
-            l = (NeuronLayer) ls.nextElement();
-            thisL = (NeuronLayer) thisLs.nextElement();
+        Iterator<Layer> ls1 = net.neuronLayers();
+        Iterator<Layer> thisLs = neuronLayers();
+        while (ls1.hasNext() && thisLs.hasNext() && equals) {
+        	NeuronLayer l = (NeuronLayer) ls1.next();
+        	NeuronLayer thisL = (NeuronLayer) thisLs.next();
             if (!l.equalsInWeights(thisL))
                 equals = false;
         }
-        if (equals == true) {
-            if (thisLs.hasMoreElements() || ls.hasMoreElements())
+        if (equals) {
+            if (thisLs.hasNext() || ls1.hasNext())
                 return false;
             return true;
         }
         return false;
     }
 
-	public Enumeration<Synapse> synapses() {
+	public Iterator<Synapse> synapses() {
         return new EnumSynapsesOfNet(this);
     }
 
-    Enumeration<Layer> layers() {
+    Iterator<Layer> layers() {
         return new EnumLayersOfNet(this);
     }
 
-    protected Enumeration<Layer> neuronLayers() {
+    protected Iterator<Layer> neuronLayers() {
         return new EnumNeuronLayersOfNet(this);
     }
 
@@ -307,11 +290,11 @@ public class FFNet implements Net {
         FFNet ffnet = (FFNet) net;
         int synCount = 0;
         int distSum = 0;
-        Enumeration<Synapse> enum1 = this.synapses();
-        Enumeration<Synapse> enum2 = ffnet.synapses();
-        while (enum1.hasMoreElements()) {
-            Synapse syn1 = enum1.nextElement();
-            Synapse syn2 = enum2.nextElement();
+        Iterator<Synapse> enum1 = this.synapses();
+        Iterator<Synapse> enum2 = ffnet.synapses();
+        while (enum1.hasNext()) {
+            Synapse syn1 = enum1.next();
+            Synapse syn2 = enum2.next();
             distSum += Math.abs(syn1.getWeight() - syn2.getWeight());
             synCount++;
         }
@@ -329,12 +312,12 @@ public class FFNet implements Net {
         return this.crossoverSwitsh;
     }
     
-    class EnumSynapsesOfNet implements Enumeration<Synapse> {
-        Enumeration<Synapse> enl;
+    class EnumSynapsesOfNet implements Iterator<Synapse> {
+        Iterator<Synapse> enl;
 
-        int index, size;
-
-        Vector<Layer> enumls;
+        int size;
+        int index;
+        List<Layer> enumls;
 
         Synapse nextSyn = null;
 
@@ -343,7 +326,7 @@ public class FFNet implements Net {
             if (this.size >= 2) {
                 this.index = 1;
                 this.enumls = net.ls;
-                NeuronLayer nl = (NeuronLayer) this.enumls.elementAt(this.index);
+                NeuronLayer nl = (NeuronLayer) this.enumls.get(this.index);
                 this.index++;
                 this.enl = nl.synapses();
                 this.nextSyn = nextSyn();
@@ -353,10 +336,10 @@ public class FFNet implements Net {
         private Synapse nextSyn() {
             NeuronLayer nl;
             Synapse re = null;
-            if (this.enl.hasMoreElements()) {
-                re = this.enl.nextElement();
+            if (this.enl.hasNext()) {
+                re = this.enl.next();
             } else if (this.index < this.size) {
-                nl = (NeuronLayer) this.enumls.elementAt(this.index);
+                nl = (NeuronLayer) this.enumls.get(this.index);
                 this.index++;
                 this.enl = nl.synapses();
                 re = nextSyn();
@@ -364,22 +347,27 @@ public class FFNet implements Net {
             return re;
         }
 
-        public boolean hasMoreElements() {
+        @Override
+        public boolean hasNext() {
             return this.nextSyn != null;
         }
 
-        public Synapse nextElement() {
+        @Override
+        public Synapse next() {
         	Synapse o = this.nextSyn;
+        	if (o == null) {
+        		throw new NoSuchElementException();
+        	}
             this.nextSyn = nextSyn();
             return o;
         }
     }
 
-    class EnumLayersOfNet implements Enumeration<Layer> {
+    class EnumLayersOfNet implements Iterator<Layer> {
         
-    	private int index, size;
-
-        private Vector<Layer> els;
+    	private int size;
+    	private int index;
+        private List<Layer> els;
 
         public EnumLayersOfNet(FFNet net) {
             this.size = net.layerCount();
@@ -387,23 +375,28 @@ public class FFNet implements Net {
             this.els = net.ls;
         }
 
-        public boolean hasMoreElements() {
+        @Override
+        public boolean hasNext() {
             return this.index < this.size;
         }
 
-        public Layer nextElement() {
-        	Layer o = this.els.elementAt(this.index);
+        @Override
+        public Layer next() {
+        	Layer o = this.els.get(this.index);
+        	if (o == null) {
+        		throw new NoSuchElementException();
+        	}
             this.index++;
             return o;
         }
     }
 
     // TODO Can be replaced by net.ls
-    class EnumNeuronLayersOfNet implements Enumeration<Layer> {
+    class EnumNeuronLayersOfNet implements Iterator<Layer> {
     	
-        private int index, size;
-
-        private Vector<Layer> els1;
+        private int index;
+        private int size;
+        private List<Layer> els1;
 
         EnumNeuronLayersOfNet(FFNet net) {
             this.size = net.layerCount();
@@ -411,12 +404,17 @@ public class FFNet implements Net {
             this.els1 = net.ls;
         }
 
-        public boolean hasMoreElements() {
+        @Override
+        public boolean hasNext() {
             return this.index < this.size;
         }
 
-        public Layer nextElement() {
-        	Layer o = this.els1.elementAt(this.index);
+        @Override
+        public Layer next() {
+        	Layer o = this.els1.get(this.index);
+        	if (o == null) {
+        		throw new NoSuchElementException();
+        	}
             this.index++;
             return o;
         }

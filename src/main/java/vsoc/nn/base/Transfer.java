@@ -2,7 +2,8 @@ package vsoc.nn.base;
 
 import java.io.PrintWriter;
 import java.io.Serializable;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Implements the transfer function for neurons. The values are calculated at
@@ -13,7 +14,7 @@ public class Transfer implements Serializable {
 
     private static final long serialVersionUID = 0L;
 
-    private Vector<Integer> vals = new Vector<>();
+    private List<Integer> vals = new ArrayList<>();
 
     private int maxIndex;
 
@@ -27,16 +28,12 @@ public class Transfer implements Serializable {
     }
 
     void initTransfer(short maxValue, int stretch) {
-        int i;
-        Integer val;
-        double dVal;
-
         this.maxValue = maxValue;
         initMaxIndex(stretch);
-        for (i = 0; i < this.maxIndex; i++) {
-            dVal = 1.0 / (1.0 + Math.exp(-i / (double) stretch)) * (maxValue);
-            val = new Integer((int) (dVal));
-            this.vals.addElement(val);
+        for (int i = 0; i < this.maxIndex; i++) {
+        	double dVal = 1.0 / (1.0 + Math.exp(-i / (double) stretch)) * (maxValue);
+            Integer val = (int)(dVal);
+            this.vals.add(val);
         }
     }
 
@@ -57,26 +54,24 @@ public class Transfer implements Serializable {
             if (in >= this.maxIndex) {
                 return (short) (this.maxValue - 1);
             }
-            val = (Integer) this.vals.elementAt(in);
+            val = this.vals.get(in);
             return (short) val.intValue();
         }
         if (-in >= this.maxIndex) {
             return (short) 0;
         }
-        val = (Integer) this.vals.elementAt(-in);
+        val = this.vals.get(-in);
         return (short) (this.maxValue - (short) val.intValue());
 
     }
 
     void writeToStream(PrintWriter str) {
         short result;
-        int val, from, to;
-
-        from = (int) (-this.maxIndex * 1.1);
-        to = (int) (this.maxIndex * 1.1);
+        int from = (int) (-this.maxIndex * 1.1);
+        int to = (int) (this.maxIndex * 1.1);
 
         str.println("val;result");
-        for (val = from; val <= to; val++) {
+        for (int val = from; val <= to; val++) {
             result = getValue(val);
             str.println(val + ";" + result);
         }

@@ -1,4 +1,4 @@
-package vsoc.util.resulttable.test;
+package vsoc.util.resulttable;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package vsoc.reports.test;
+package vsoc.reports;
 
 import java.io.FileWriter;
 import java.io.IOException;

@@ -1,4 +1,4 @@
-package vsoc.test;
+package vsoc;
 
 import vsoc.genetic.CrossoverSwitch;
 import vsoc.genetic.Mutator;

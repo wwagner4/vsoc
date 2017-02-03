@@ -1,4 +1,4 @@
-package vsoc.test;
+package vsoc;
 
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -37,6 +37,6 @@ public class DirectionConverterTest extends TestCase {
         assertEquals(this.conv.getB(3), -99);
     }
     public static void main(String[] args) {
-        TestRunner.run(new TestSuite(vsoc.test.DirectionConverterTest.class));
+        TestRunner.run(new TestSuite(vsoc.DirectionConverterTest.class));
     }
 }

@@ -1,4 +1,4 @@
-package vsoc.test;
+package vsoc;
 
 import junit.framework.TestSuite;
 import junit.textui.TestRunner;
@@ -136,6 +136,6 @@ public class TestSee extends AbstractTest {
     }
 
     public static void main(String[] args) {
-        TestRunner.run(new TestSuite(vsoc.test.TestSee.class));
+        TestRunner.run(new TestSuite(vsoc.TestSee.class));
     }
 }

@@ -1,4 +1,4 @@
-package vsoc.test;
+package vsoc;
 
 import junit.framework.*;
 import junit.textui.*;
@@ -739,6 +739,6 @@ public class Test2D extends AbstractTest {
     }
 
     public static void main(String[] args) {
-        TestRunner.run(new TestSuite(vsoc.test.Test2D.class));
+        TestRunner.run(new TestSuite(vsoc.Test2D.class));
     }
 }

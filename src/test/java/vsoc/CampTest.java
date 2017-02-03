@@ -2,7 +2,7 @@
  * $Revision: 1.12 $ $Author: wwan $ $Date: 2005/11/29 18:24:28 $ 
  */
 
-package vsoc.test;
+package vsoc;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
