@@ -2,6 +2,5 @@
 /vsoc.log
 /*.object
 /scheduler/
+/log/
 /.DS_Store
-/vsoc.log.2017-01-31
-/vsoc.log.2017-02-01
