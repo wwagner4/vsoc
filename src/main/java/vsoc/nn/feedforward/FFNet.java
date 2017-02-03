@@ -283,7 +283,7 @@ public class FFNet implements Net {
     }
 
     protected Iterator<Layer> neuronLayers() {
-        return new EnumNeuronLayersOfNet(this);
+        return new NeuronLayersOfNet(this);
     }
 
     public double distance(Net net) {
@@ -392,16 +392,16 @@ public class FFNet implements Net {
     }
 
     // TODO Can be replaced by net.ls
-    class EnumNeuronLayersOfNet implements Iterator<Layer> {
+    class NeuronLayersOfNet implements Iterator<Layer> {
     	
         private int index;
         private int size;
-        private List<Layer> els1;
+        private List<Layer> layers;
 
-        EnumNeuronLayersOfNet(FFNet net) {
+        NeuronLayersOfNet(FFNet net) {
             this.size = net.layerCount();
             this.index = 1;
-            this.els1 = net.ls;
+            this.layers = net.ls;
         }
 
         @Override
@@ -411,7 +411,7 @@ public class FFNet implements Net {
 
         @Override
         public Layer next() {
-        	Layer o = this.els1.get(this.index);
+        	Layer o = this.layers.get(this.index);
         	if (o == null) {
         		throw new NoSuchElementException();
         	}
