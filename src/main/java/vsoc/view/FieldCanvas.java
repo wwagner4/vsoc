@@ -40,8 +40,6 @@ public class FieldCanvas extends Canvas implements ServerListener,
     public void setServer(Server s) {
         this.server = s;
         s.addListener(this);
-        this.setSteps(Integer.MAX_VALUE);
-        this.setDelay(0);
     }
 
     public void paint(Graphics g) {
