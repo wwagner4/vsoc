@@ -3,10 +3,9 @@ package vsoc.genetic;
 import java.util.ArrayList;
 import java.util.List;
 
-import vsoc.nn.Net;
 import vsoc.util.RandomIndexSelector;
 
-public class AdHocSelectionPolicy implements SelectionPolicy<Net> {
+public class AdHocSelectionPolicy<T extends Crossable<T>> implements SelectionPolicy<T> {
 
 		private static final long serialVersionUID = 1L;
     
@@ -16,11 +15,11 @@ public class AdHocSelectionPolicy implements SelectionPolicy<Net> {
         super();
     }
 
-    public List<Net> createNextGeneration(List<Net> sorted,
-            CrossableFactory<Net> factory, double m) {
-    	Net cr1;
-    	Net cr2;
-        List<Net> resultPop = new ArrayList<>();
+    public List<T> createNextGeneration(List<T> sorted,
+            CrossableFactory<T> factory, double m) {
+    	T cr1;
+    	T cr2;
+        List<T> resultPop = new ArrayList<>();
         cr1 = sorted.get(0);
         resultPop.add(cr1);
         cr1 = sorted.get(1);
@@ -58,10 +57,10 @@ public class AdHocSelectionPolicy implements SelectionPolicy<Net> {
     }
 
 	@Override
-	public List<Net> createNewGeneration(CrossableFactory<Net> factory) {
-        List<Net> pop = new ArrayList<>();
+	public List<T> createNewGeneration(CrossableFactory<T> factory) {
+        List<T> pop = new ArrayList<>();
         for (int i = 0; i < this.populationSize; i++) {
-            Net mm = factory.createNewCrossableWithRandomAttributes();
+            T mm = factory.createNewCrossableWithRandomAttributes();
             pop.add(mm);
         }
         return pop;
