@@ -1,1 +1,0 @@
-package vsoc.model;import atan.model.Controller;import atan.model.Flag;class VisionFlagPenaltyOther extends Vision {    private Flag type;    public VisionFlagPenaltyOther(Flag type) {        this.type = type;    }    public void informControlSystem(Controller c) {        c.infoSeeFlagPenaltyOther(this.type, getDistance(), getDirection());    }}

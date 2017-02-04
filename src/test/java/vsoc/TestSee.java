@@ -2,10 +2,7 @@ package vsoc;
 
 import junit.framework.TestSuite;
 import junit.textui.TestRunner;
-import vsoc.model.Server;
-import vsoc.model.ServerFlag;
-import vsoc.model.ServerUtil;
-import vsoc.model.VsocPlayer;
+import vsoc.server.*;
 import vsoc.util.Vec2D;
 import atan.model.Controller;
 

@@ -2,8 +2,8 @@ package vsoc.camps;
 
 import java.io.Serializable;
 
-import vsoc.model.Server;
 import vsoc.reports.Reportable;
+import vsoc.server.Server;
 
 public interface Camp extends Serializable, Runnable, Reportable {
 

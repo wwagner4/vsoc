@@ -12,7 +12,7 @@ import vsoc.camps.AbstractCamp;
 import vsoc.camps.DefaultBehaviour;
 import vsoc.camps.Member;
 import vsoc.camps.goalkeeper.GoalkeeperDefaultBehaviour;
-import vsoc.model.VsocPlayer;
+import vsoc.server.VsocPlayer;
 import vsoc.util.resulttable.ResultTable;
 import vsoc.view.FieldFrame;
 

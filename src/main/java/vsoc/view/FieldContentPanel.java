@@ -7,7 +7,7 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 import javax.swing.event.*;
 
-import vsoc.model.Server;
+import vsoc.server.Server;
 
 public class FieldContentPanel extends JPanel implements ActionListener, ChangeListener {
 

@@ -1,1 +1,0 @@
-package vsoc.model;import atan.model.Controller;class VisionPlayerOther extends Vision {        private int num;    public VisionPlayerOther(int num) {        this.num = num;    }    public void informControlSystem(Controller c) {        c.infoSeePlayerOther(this.num, this.getDistance(), this.getDirection());    }}

@@ -1,9 +1,8 @@
 package vsoc;
 
-import vsoc.model.FlagConverter;
-import vsoc.model.ServerFlag;
 import atan.model.Flag;
 import junit.framework.TestCase;
+import vsoc.server.*;
 
 public class FlagConverterTestCase extends TestCase {
     

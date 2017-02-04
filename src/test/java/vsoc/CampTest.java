@@ -19,7 +19,7 @@ import vsoc.camps.Member;
 import vsoc.camps.goalgetter.GGCamp;
 import vsoc.camps.goalgetter.GGMembersComparator;
 import vsoc.camps.goalkeeper.GKMembersComparator;
-import vsoc.model.Server;
+import vsoc.server.Server;
 import vsoc.util.Serializer;
 
 /**

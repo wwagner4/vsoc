@@ -10,8 +10,7 @@ import java.awt.image.BufferedImage;
 
 import org.apache.log4j.Logger;
 
-import vsoc.model.Server;
-import vsoc.model.ServerListener;
+import vsoc.server.*;
 
 /**
  * A component that can display a Server

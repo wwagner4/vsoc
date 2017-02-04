@@ -1,6 +1,6 @@
 package vsoc.view;
 
-import vsoc.model.Server;
+import vsoc.server.Server;
 
 public class NullServer extends Server {
 

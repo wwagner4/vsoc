@@ -1,10 +1,7 @@
 package vsoc;
 
 import junit.framework.TestCase;
-import vsoc.model.Server;
-import vsoc.model.ServerUtil;
-import vsoc.model.VsocPlayerEast;
-import vsoc.model.VsocPlayerWest;
+import vsoc.server.*;
 import vsoc.util.Vec2D;
 import atan.model.Controller;
 

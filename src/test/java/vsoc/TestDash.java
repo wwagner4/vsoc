@@ -1,6 +1,6 @@
 package vsoc;
 
-import vsoc.model.*;
+import vsoc.server.*;
 import vsoc.util.Vec2D;
 
 /**

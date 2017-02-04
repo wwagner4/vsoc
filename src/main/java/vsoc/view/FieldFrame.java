@@ -8,7 +8,7 @@ import javax.swing.*;
 import org.apache.log4j.Logger;
 
 import vsoc.camps.Camp;
-import vsoc.model.Server;
+import vsoc.server.Server;
 
 /**
  * Contains a FieldPanel .

@@ -16,8 +16,8 @@ import vsoc.camps.Member;
 import vsoc.camps.NetBehaviour;
 import vsoc.genetic.CrossableFactory;
 import vsoc.genetic.SelectionPolicy;
-import vsoc.model.VsocPlayer;
 import vsoc.nn.Net;
+import vsoc.server.VsocPlayer;
 import vsoc.util.RandomIndexSelector;
 import vsoc.util.VsocUtil;
 
