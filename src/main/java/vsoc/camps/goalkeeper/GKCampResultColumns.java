@@ -4,8 +4,7 @@
 
 package vsoc.camps.goalkeeper;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 /**
  * IDs of the columns of the GKCamp result table.

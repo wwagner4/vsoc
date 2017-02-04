@@ -1,13 +1,9 @@
 package vsoc.camps.goalkeeper;
 
 import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
-import vsoc.camps.goalkeeper.GKCampResultColumns;
-import vsoc.util.resulttable.ColumnDesc;
-import vsoc.util.resulttable.SimpleResultTable;
+import vsoc.util.resulttable.*;
 
 public class GKCampResultTable extends SimpleResultTable {
 

@@ -2,9 +2,8 @@ package vsoc.camps.goalkeeper;
 
 import java.util.Random;
 
-import vsoc.behaviour.Behaviour;
-import vsoc.behaviour.Sensors;
 import atan.model.Player;
+import vsoc.behaviour.*;
 
 /**
  * Turns the player a random angle if the sensors do not see the flags around

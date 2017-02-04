@@ -1,31 +1,18 @@
 package vsoc.camps.goalkeeper;
 
-import java.io.IOException;
-import java.io.StringWriter;
+import java.io.*;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 
 import org.apache.log4j.Logger;
 
 import vsoc.behaviour.Behaviour;
-import vsoc.camps.AbstractCamp;
-import vsoc.camps.BehaviourNeuroControlSystem;
-import vsoc.camps.DefaultBehaviour;
-import vsoc.camps.Member;
-import vsoc.camps.NetBehaviour;
-import vsoc.camps.goalgetter.GGCamp;
-import vsoc.camps.goalgetter.GGMembersComparator;
-import vsoc.genetic.CrossableFactory;
-import vsoc.genetic.SelectionPolicy;
+import vsoc.camps.*;
+import vsoc.camps.goalgetter.*;
+import vsoc.genetic.*;
 import vsoc.nn.Net;
 import vsoc.server.*;
-import vsoc.util.RandomIndexSelector;
-import vsoc.util.Serializer;
-import vsoc.util.VsocUtil;
+import vsoc.util.*;
 import vsoc.util.resulttable.CSVOutputter;
 
 /**

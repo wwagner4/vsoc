@@ -1,24 +1,14 @@
 package vsoc.reports.velocity;
 
-import java.io.BufferedWriter;
-import java.io.Writer;
+import java.io.*;
 import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 
-import org.apache.velocity.Template;
-import org.apache.velocity.VelocityContext;
+import org.apache.velocity.*;
 import org.apache.velocity.app.Velocity;
 
-import vsoc.reports.Report;
-import vsoc.reports.Reportable;
-import vsoc.reports.VsocReportException;
-import vsoc.util.resulttable.ColumnDesc;
-import vsoc.util.resulttable.ResultTable;
-import vsoc.util.resulttable.ResultTableRow;
+import vsoc.reports.*;
+import vsoc.util.resulttable.*;
 
 public class VelocityHtmlReport implements Report {
 
