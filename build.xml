@@ -1,0 +1,5 @@
+<project name="postcheckout" default="action">
+	<target name="action">
+	  <mkdir dir="log" />
+	</target>
+</project>
