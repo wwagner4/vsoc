@@ -24,9 +24,7 @@ public class FieldContentPanel extends JPanel implements ActionListener, ChangeL
 
 	public FieldContentPanel() {
 		try {
-			jbInit();
-			this.fieldCanvas.setSteps(Integer.MAX_VALUE);
-			this.fieldCanvas.setDelay(0);
+			init();
 			this.speedUpButton.setSelected(false);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -38,7 +36,7 @@ public class FieldContentPanel extends JPanel implements ActionListener, ChangeL
 		ctrlSpeed();
 	}
 
-	private void jbInit() {
+	private void init() {
 		this.setLayout(new BorderLayout());
 		this.ctrlPanel.setLayout(new FlowLayout());
 		speedSlider.setModel(speedSliderModel());
@@ -55,24 +53,10 @@ public class FieldContentPanel extends JPanel implements ActionListener, ChangeL
 		
 	}
 
-	private BoundedRangeModel speedSliderModel() {
-		return new DefaultBoundedRangeModel(0, 5, 0, 100);
-	}
-
 	@Override
 	public void actionPerformed(ActionEvent evt) {
 		if (evt.getSource() == this.speedUpButton) {
 			ctrlSpeed();
-		}
-	}
-
-	private void ctrlSpeed() {
-		if (this.speedUpButton.isSelected()) {
-			this.fieldCanvas.setDelay(0);
-			this.fieldCanvas.setSteps(Integer.MAX_VALUE);
-		} else {
-			this.fieldCanvas.setDelay(adjust(this.speedSlider.getValue()));
-			this.fieldCanvas.setSteps(1);
 		}
 	}
 
@@ -82,6 +66,20 @@ public class FieldContentPanel extends JPanel implements ActionListener, ChangeL
 			if (!this.speedUpButton.isSelected()) {
 				this.fieldCanvas.setDelay(adjust(this.speedSlider.getValue()));
 			}
+		}
+	}
+
+	private BoundedRangeModel speedSliderModel() {
+		return new DefaultBoundedRangeModel(0, 5, 0, 100);
+	}
+
+	private void ctrlSpeed() {
+		if (this.speedUpButton.isSelected()) {
+			this.fieldCanvas.setDelay(0);
+			this.fieldCanvas.setSteps(Integer.MAX_VALUE);
+		} else {
+			this.fieldCanvas.setDelay(adjust(this.speedSlider.getValue()));
+			this.fieldCanvas.setSteps(1);
 		}
 	}
 
