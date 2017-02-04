@@ -279,7 +279,7 @@ public class FFNet implements Net {
     }
 
     Iterator<Layer> layers() {
-        return new EnumLayersOfNet(this);
+        return ls.iterator();
     }
 
     protected Iterator<Layer> neuronLayers() {
@@ -363,35 +363,7 @@ public class FFNet implements Net {
         }
     }
 
-    class EnumLayersOfNet implements Iterator<Layer> {
-        
-    	private int size;
-    	private int index;
-        private List<Layer> els;
-
-        public EnumLayersOfNet(FFNet net) {
-            this.size = net.layerCount();
-            this.index = 0;
-            this.els = net.ls;
-        }
-
-        @Override
-        public boolean hasNext() {
-            return this.index < this.size;
-        }
-
-        @Override
-        public Layer next() {
-        	Layer o = this.els.get(this.index);
-        	if (o == null) {
-        		throw new NoSuchElementException();
-        	}
-            this.index++;
-            return o;
-        }
-    }
-
-    // TODO Can be replaced by net.ls
+    // Iterator over all Neuron layers of a NN
     class NeuronLayersOfNet implements Iterator<Layer> {
     	
         private int index;
@@ -411,12 +383,12 @@ public class FFNet implements Net {
 
         @Override
         public Layer next() {
-        	Layer o = this.layers.get(this.index);
-        	if (o == null) {
+        	Layer layer = this.layers.get(this.index);
+        	if (layer == null) {
         		throw new NoSuchElementException();
         	}
             this.index++;
-            return o;
+            return layer;
         }
     }
 
