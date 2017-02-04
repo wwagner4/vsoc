@@ -14,7 +14,6 @@ import java.util.Random;
 
 import org.apache.log4j.Logger;
 
-import vsoc.VsocInvalidConfigurationException;
 import vsoc.genetic.CrossableFactory;
 import vsoc.genetic.SelectionPolicy;
 import vsoc.nn.Net;
@@ -255,8 +254,8 @@ public abstract class AbstractCamp implements Camp {
 		RandomIndexSelector sel;
 		try {
 			sel = new RandomIndexSelector(0, membersCount - 1, playersCount);
-		} catch (VsocInvalidConfigurationException e) {
-			throw new VsocInvalidConfigurationException(
+		} catch (IllegalStateException e) {
+			throw new IllegalStateException(
 					"Members count (=" + membersCount + ") too small for players count (=" + playersCount + ").", e);
 		}
 		return sel;

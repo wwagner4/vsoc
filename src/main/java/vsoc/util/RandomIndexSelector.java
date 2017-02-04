@@ -5,8 +5,6 @@ import java.util.Iterator;
 import java.util.Random;
 import java.util.Set;
 
-import vsoc.VsocInvalidConfigurationException;
-
 public class RandomIndexSelector {
 
     private Set<Integer> ints = new HashSet<>();
@@ -17,12 +15,12 @@ public class RandomIndexSelector {
 
     private int baseIndex;
 
-    public RandomIndexSelector(int from, int to, int count) throws VsocInvalidConfigurationException {
+    public RandomIndexSelector(int from, int to, int count) throws IllegalStateException {
         if (to < from)
             throw new Error("to '" + to + "' must always be bigger than from '"
                     + from + "' in RandomIndexSelector");
         if (count > (to - from))
-            throw new VsocInvalidConfigurationException (
+            throw new IllegalStateException (
                     "count must always be bigger than (to-from) in RandomIndexSelector");
         this.baseIndex = from;
         initSet(to - from + 1, count);

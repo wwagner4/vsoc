@@ -2,7 +2,6 @@ package vsoc.camps;
 
 import java.io.Serializable;
 
-import vsoc.VsocInvalidConfigurationException;
 import vsoc.behaviour.Behaviour;
 import vsoc.behaviour.BehaviourController;
 import vsoc.nn.Net;
@@ -30,7 +29,7 @@ public class BehaviourNeuroControlSystem extends BehaviourController implements
 
     private NetBehaviour getNetBehaviour(Behaviour behav) {
         if (behav == null) {
-            throw new VsocInvalidConfigurationException(
+            throw new IllegalStateException(
                     "The Behaviour of a NeuroControlSystem must contain exactly one net NetBehaviour.");
         } else if (behav instanceof NetBehaviour) {
             return (NetBehaviour) behav;

@@ -13,7 +13,6 @@ import java.util.List;
 
 import atan.model.Controller;
 import atan.model.Player;
-import vsoc.VsocInvalidConfigurationException;
 import vsoc.util.Vec2D;
 
 /**
@@ -390,7 +389,7 @@ public class Server implements Serializable {
         this.simObjects.add(simObj);
         if (simObj instanceof Ball) {
             if (this.ball != null) {
-                throw new VsocInvalidConfigurationException(
+                throw new IllegalStateException(
                         "Only one ball may be added.");
             }
             Ball ballObj = (Ball) simObj;

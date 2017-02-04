@@ -11,8 +11,6 @@ import java.util.Properties;
 
 import org.apache.log4j.Logger;
 
-import vsoc.VsocInvalidConfigurationException;
-import vsoc.VsocInvalidDataException;
 import vsoc.behaviour.Behaviour;
 import vsoc.camps.AbstractCamp;
 import vsoc.camps.BehaviourNeuroControlSystem;
@@ -203,7 +201,7 @@ public class GKCamp extends AbstractCamp {
 			try {
 				this.goalgetters = loadGoalgetters(this.ggCampResourceName);
 			} catch (IOException e) {
-				throw new VsocInvalidDataException("Could not load goalgetters. " + e.getMessage(), e);
+				throw new IllegalStateException("Could not load goalgetters. " + e.getMessage(), e);
 			}
 		}
 		return this.goalgetters;
@@ -222,7 +220,7 @@ public class GKCamp extends AbstractCamp {
 			String a = resName;
 			int x = members.size();
 			int y = this.ggSelPoli.getPopulationSize();
-			throw new VsocInvalidConfigurationException("The number of members from the serialized gg camp '" + a + "' is "
+			throw new IllegalStateException("The number of members from the serialized gg camp '" + a + "' is "
 			    + x + ". It must be the same as the populaton size of the gg selection policy which is " + y + ".");
 		}
 		return members;

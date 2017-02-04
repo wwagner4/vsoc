@@ -1,17 +1,10 @@
 package vsoc.camps.goalkeeper;
 
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 import atan.model.Controller;
-import vsoc.VsocNotYetImplementedException;
-import vsoc.behaviour.Behaviour;
-import vsoc.behaviour.BehaviourController;
-import vsoc.behaviour.GoAheadBehaviour;
-import vsoc.camps.AbstractCamp;
-import vsoc.camps.DefaultBehaviour;
-import vsoc.camps.Member;
-import vsoc.camps.goalkeeper.GoalkeeperDefaultBehaviour;
+import vsoc.behaviour.*;
+import vsoc.camps.*;
 import vsoc.server.VsocPlayer;
 import vsoc.util.resulttable.ResultTable;
 import vsoc.view.FieldFrame;
@@ -61,20 +54,23 @@ public class GoalkeeperDefaultBehaviourTestCamp extends AbstractCamp {
         return null;
     }
 
+    @Override
     public void setMaxGenerations(int i) {
         // to be ignored.
     }
 
+    @Override
     public boolean isFinished() {
         return false;
     }
 
+    @Override
     public ResultTable getResultTable() {
         return null;
     }
 
     protected List<Member> getMembers() {
-        throw new VsocNotYetImplementedException();
+    	throw new IllegalStateException("Not yet implemented");
     }
 
 	@Override

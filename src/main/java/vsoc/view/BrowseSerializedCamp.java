@@ -5,7 +5,6 @@ import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
-import vsoc.VsocInvalidDataException;
 import vsoc.camps.Camp;
 import vsoc.util.Serializer;
 
@@ -31,7 +30,7 @@ public class BrowseSerializedCamp {
                 if (obj instanceof Camp) {
                     FieldFrame.open((Camp) obj);
                 } else {
-                    throw new VsocInvalidDataException("The selected file '"
+                    throw new IllegalStateException("The selected file '"
                             + file + "' does not contain a camp but "
                             + obj.getClass());
                 }

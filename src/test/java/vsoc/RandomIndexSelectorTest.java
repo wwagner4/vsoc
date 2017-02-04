@@ -2,7 +2,6 @@ package vsoc;
 
 import junit.framework.*;
 import junit.textui.*;
-import vsoc.VsocInvalidConfigurationException;
 import vsoc.util.*;
 
 public class RandomIndexSelectorTest extends TestCase {
@@ -37,7 +36,7 @@ public class RandomIndexSelectorTest extends TestCase {
     try {
       new  RandomIndexSelector (0, 1, 3);
       fail("Error expected");
-    } catch (VsocInvalidConfigurationException err) {
+    } catch (IllegalStateException err) {
       assertEquals("count must always be bigger than (to-from) in RandomIndexSelector", 
         err.getMessage());
     }

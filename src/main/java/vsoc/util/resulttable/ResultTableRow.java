@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-import vsoc.VsocInvalidConfigurationException;
 
 public class ResultTableRow implements Serializable {
 
@@ -32,7 +31,7 @@ public class ResultTableRow implements Serializable {
 
     public void setResultValue(String id, Number value) {
         if (!this.resultValues.containsKey(id)) {
-            throw new VsocInvalidConfigurationException("No column with id '"
+            throw new IllegalStateException("No column with id '"
                     + id + "' defined.");
         }
         this.resultValues.put(id, value);
