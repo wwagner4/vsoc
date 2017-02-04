@@ -24,7 +24,7 @@ public class GoalgetterGenerator {
 		while (!camp.isFinished()) {
 			camp.takeOneStep();
 		}
-		String dirName = "conf";
+		String dirName = "tmp";
 		File outDir = new File(dirName);
 		if (!outDir.exists()) {
 			outDir.mkdirs();

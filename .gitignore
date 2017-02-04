@@ -3,4 +3,5 @@
 /*.object
 /scheduler/
 /log/
+/tmp/
 /.DS_Store
