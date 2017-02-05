@@ -23,7 +23,7 @@ public class GGGuiRunner {
             VsocUtil u = VsocUtil.current();
             String campProperties = u.propsToString(camp.getProperties());
             System.out.println(campProperties);
-            FieldFrame.open(camp);
+            FieldFrame.open(camp, "GG camp");
         } catch (Exception e) {
             e.printStackTrace();
         }

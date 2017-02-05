@@ -35,21 +35,17 @@ public class FieldFrame extends JFrame implements WindowListener {
     }
 
 
-    public static void open(SimulationContainer camp, String string) {
+    public static void open(SimulationContainer simCont, String name) {
         FieldFrame ff = new FieldFrame();
-        ff.setTitle("vsoc " + string);
-        ff.setServer(camp.getSimulation());
-        Thread campThread = new Thread(camp, "Camp");
-        campThread.start();
+        ff.setTitle("vsoc " + name);
+        ff.setSim(simCont.getSimulation());
+        Thread simThread = new Thread(simCont, name);
+        simThread.start();
         ff.setVisible(true);
     }
 
-    public static void open(SimulationContainer camp) {
-        open(camp, "");
-    }
-    
-    public void setServer(Simulation srv) {
-        this.fieldContentPanel.setServer(srv);
+    public void setSim(Simulation srv) {
+        this.fieldContentPanel.setSim(srv);
     }
 
     @Override

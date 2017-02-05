@@ -2,7 +2,7 @@ package vsoc.view;
 
 import java.awt.Graphics2D;
 
-public class NullServer implements Simulation {
+public class NullSimulation implements Simulation {
 
 	@Override
 	public void addListener(SimulationChangeListener fieldCanvas) {

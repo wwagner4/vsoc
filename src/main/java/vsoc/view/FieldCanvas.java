@@ -11,7 +11,7 @@ import java.awt.image.BufferedImage;
 import org.apache.log4j.Logger;
 
 /**
- * A component that can display a Server
+ * A component that can display a Simulation
  */
 
 public class FieldCanvas extends Canvas implements SimulationChangeListener,
@@ -25,7 +25,7 @@ public class FieldCanvas extends Canvas implements SimulationChangeListener,
 
     private Graphics2D bg;
 
-    private Simulation server = new NullServer();
+    private Simulation sim = new NullSimulation();
 
     private int delay = 0;
 
@@ -34,8 +34,8 @@ public class FieldCanvas extends Canvas implements SimulationChangeListener,
         addComponentListener(this);
     }
 
-    public void setServer(Simulation s) {
-        this.server = s;
+    public void setSim(Simulation s) {
+        this.sim = s;
         s.addListener(this);
     }
 
@@ -43,7 +43,7 @@ public class FieldCanvas extends Canvas implements SimulationChangeListener,
         try {
             if (this.isShowing()) {
                 initBuffer();
-                this.server.paint(this.bg);
+                this.sim.paint(this.bg);
                 g.drawImage(this.buffer, 0, 0, this);
             }
         } catch (Exception ex) {
@@ -114,7 +114,7 @@ public class FieldCanvas extends Canvas implements SimulationChangeListener,
     }
 
     public void setSteps(int steps) {
-        this.server.setSteps(steps);
+        this.sim.setSteps(steps);
     }
 
 }

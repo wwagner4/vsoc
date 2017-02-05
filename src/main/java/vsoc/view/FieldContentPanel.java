@@ -29,8 +29,8 @@ public class FieldContentPanel extends JPanel implements ActionListener, ChangeL
 		}
 	}
 
-	public void setServer(Simulation s) {
-		this.fieldCanvas.setServer(s);
+	public void setSim(Simulation s) {
+		this.fieldCanvas.setSim(s);
 		ctrlSpeed();
 	}
 

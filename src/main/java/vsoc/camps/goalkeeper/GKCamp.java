@@ -1,6 +1,5 @@
 package vsoc.camps.goalkeeper;
 
-import java.awt.Graphics2D;
 import java.io.*;
 import java.net.URL;
 import java.util.*;
@@ -15,7 +14,6 @@ import vsoc.nn.Net;
 import vsoc.server.*;
 import vsoc.util.*;
 import vsoc.util.resulttable.CSVOutputter;
-import vsoc.view.FieldCanvas;
 
 /**
  * Camp for breeding goal keepers.

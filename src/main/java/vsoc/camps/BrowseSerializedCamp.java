@@ -28,7 +28,7 @@ public class BrowseSerializedCamp {
                 File file = chooser.getSelectedFile();
                 Object obj = Serializer.current().deserialize(file);
                 if (obj instanceof Camp) {
-                    FieldFrame.open((Camp) obj);
+                    FieldFrame.open((Camp) obj, "camp");
                 } else {
                     throw new IllegalStateException("The selected file '"
                             + file + "' does not contain a camp but "

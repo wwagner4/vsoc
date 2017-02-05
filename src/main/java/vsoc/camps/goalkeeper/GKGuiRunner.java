@@ -24,7 +24,7 @@ public class GKGuiRunner {
 		VsocUtil u = VsocUtil.current();
 		String campProperties = u.propsToString(camp.getProperties());
 		System.out.println(campProperties);
-		FieldFrame.open(camp);
+		FieldFrame.open(camp, "GK camp");
     }
 
     private static Camp createCamp() {
