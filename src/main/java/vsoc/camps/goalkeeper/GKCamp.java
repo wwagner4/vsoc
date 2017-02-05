@@ -13,7 +13,6 @@ import vsoc.genetic.*;
 import vsoc.nn.Net;
 import vsoc.server.*;
 import vsoc.util.*;
-import vsoc.util.resulttable.CSVOutputter;
 
 /**
  * Camp for breeding goal keepers.
@@ -124,62 +123,12 @@ public class GKCamp extends AbstractCamp {
 	}
 
 	protected void createNextGeneration() {
-		saveResultValues();
-		debug();
-
 		Comparator<Member> comp = new GGMembersComparator(this.ggGoalFactor, this.ggOwnGoalFactor, this.ggKickFactor,
 		    this.ggKickOutFactor, this.ggZeroKickPenalty);
 		basicCreateNextGeneration(getGoalgetters(), comp, this.ggMutationRate, this.ggSelPoli, this.crossableFactory);
 
 		Comparator<Member> gkComp = new GKMembersComparator();
 		basicCreateNextGeneration(getGoalkeepers(), gkComp, this.gkMutationRate, this.gkSelPoli, this.crossableFactory);
-	}
-
-	private void saveResultValues() {
-		if (this.resultTable != null) {
-			this.resultTable.addNextSerialValue(new Integer(getGenerationsCount()));
-			this.resultTable.setValue(GKCampResultColumns.GG_DIVERSITY.getName(), new Double(diversity(getGoalgetters())));
-			this.resultTable.setValue(GKCampResultColumns.GG_GOALS.getName(), new Double(goals(getGoalgetters())));
-			this.resultTable.setValue(GKCampResultColumns.GG_KICKOUTS.getName(), new Double(kickOuts(getGoalgetters())));
-			this.resultTable.setValue(GKCampResultColumns.GG_KICKS.getName(), new Double(kicks(getGoalgetters())));
-			this.resultTable.setValue(GKCampResultColumns.GG_OWNGOALS.getName(), new Double(ownGoals(getGoalgetters())));
-			this.resultTable.setValue(GKCampResultColumns.GK_DIVERSITY.getName(), new Double(diversity(getGoalkeepers())));
-			this.resultTable.setValue(GKCampResultColumns.GK_KICKOUTS.getName(), new Double(kickOuts(getGoalkeepers())));
-			this.resultTable.setValue(GKCampResultColumns.GK_KICKS.getName(), new Double(kicks(getGoalkeepers())));
-			this.resultTable.setValue(GKCampResultColumns.GK_GOALS_RECEIVED.getName(),
-			    new Double(goalsReceived(getGoalkeepers())));
-		}
-	}
-
-	private void debug() {
-		if (this.resultTable != null) {
-			if (log.isDebugEnabled()) {
-				String tab = createTableString();
-				log.debug("Creating a new generation. " + this.resultTable.currentRowAsNameValuePairs() + "\n" + tab);
-			} else {
-				log.info("Creating a new generation. " + this.resultTable.currentRowAsNameValuePairs());
-			}
-		} else {
-			log.info("Creating a new generation. " + this.getGenerationsCount() + " No result table defined.");
-		}
-	}
-
-	private String createTableString() {
-		String re = "";
-		try {
-			CSVOutputter op = new CSVOutputter();
-			op.setSeparator('\t');
-			op.setTable(getResultTable());
-			StringWriter w = new StringWriter();
-			op.output(w);
-			w.close();
-			re = w.getBuffer().toString();
-		} catch (IOException e) {
-			String msg = "[createTableString] Could not create because: " + e.getMessage();
-			log.error(msg, e);
-			re = msg;
-		}
-		return re;
 	}
 
 	public List<Member> getGoalgetters() {

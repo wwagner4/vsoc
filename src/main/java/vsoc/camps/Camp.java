@@ -1,12 +1,12 @@
 package vsoc.camps;
 
 import java.io.Serializable;
+import java.util.Properties;
 
-import vsoc.reports.Reportable;
 import vsoc.server.Server;
 import vsoc.view.*;
 
-public interface Camp extends Serializable, SimulationContainer, Reportable {
+public interface Camp extends Serializable, SimulationContainer {
 
     Server getServer();
 
@@ -19,5 +19,7 @@ public interface Camp extends Serializable, SimulationContainer, Reportable {
     default Simulation getSimulation() {
     	return getServer();
     }
+
+	Properties getProperties();
     
 }

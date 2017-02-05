@@ -45,9 +45,6 @@
 		<property name="selPoli" ref="selPoli"/>	
 		<property name="crossableFactory" ref="crossableFactory"/>	
 		<property name="maxGenerations" value="200"/>	
-		<property name="resultTable">
-			<bean class="vsoc.camps.goalgetter.GGCampResultTable"/>
-		</property>	
 	</bean>
 
 	<bean id="selPoli" class="vsoc.genetic.AdHocSelectionPolicy"/>

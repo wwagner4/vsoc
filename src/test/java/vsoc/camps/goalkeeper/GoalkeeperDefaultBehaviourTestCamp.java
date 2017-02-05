@@ -6,7 +6,6 @@ import atan.model.Controller;
 import vsoc.behaviour.*;
 import vsoc.camps.*;
 import vsoc.server.VsocPlayer;
-import vsoc.util.resulttable.ResultTable;
 import vsoc.view.FieldFrame;
 
 public class GoalkeeperDefaultBehaviourTestCamp extends AbstractCamp {
@@ -62,11 +61,6 @@ public class GoalkeeperDefaultBehaviourTestCamp extends AbstractCamp {
     @Override
     public boolean isFinished() {
         return false;
-    }
-
-    @Override
-    public ResultTable getResultTable() {
-        return null;
     }
 
     protected List<Member> getMembers() {

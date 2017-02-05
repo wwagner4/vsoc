@@ -52,10 +52,6 @@
 		<property name="ggKickOutFactor" value="-5"/>
 		<property name="ggZeroKickPenalty" value="0"/>
 		<property name="ggCampResourceName" value="ggcamp.ser"/>
-		
-		<property name="resultTable">
-			<bean class="vsoc.camps.goalkeeper.GKCampResultTable"/>
-		</property>
 	</bean>
 
 		

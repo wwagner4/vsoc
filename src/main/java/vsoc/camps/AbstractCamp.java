@@ -21,7 +21,6 @@ import vsoc.server.*;
 import vsoc.util.RandomIndexSelector;
 import vsoc.util.Vec2D;
 import vsoc.util.VsocUtil;
-import vsoc.util.resulttable.ResultTable;
 import atan.model.Controller;
 import atan.model.Player;
 
@@ -38,8 +37,6 @@ public abstract class AbstractCamp implements Camp {
 	private int matchCount = 0;
 
 	private int generationsCount = 0;
-
-	protected ResultTable resultTable = null;
 
 	protected int maxGenerations;
 
@@ -129,14 +126,6 @@ public abstract class AbstractCamp implements Camp {
 
 	public void setMatchesPerGeneration(int matchesPerGeneration) {
 		this.matchesPerGeneration = matchesPerGeneration;
-	}
-
-	public ResultTable getResultTable() {
-		return this.resultTable;
-	}
-
-	public void setResultTable(ResultTable resultTable) {
-		this.resultTable = resultTable;
 	}
 
 	public void setMaxGenerations(int maxGenerations) {

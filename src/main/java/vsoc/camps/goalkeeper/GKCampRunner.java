@@ -4,13 +4,10 @@ import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import vsoc.camps.Camp;
-import vsoc.reports.velocity.VelocityHtmlReport;
 import vsoc.util.*;
 
 /**
@@ -61,16 +58,6 @@ public class GKCampRunner {
         }
         File dir = getResultDir(num);
         serialize(camp, dir);
-        report(camp, dir);
-    }
-
-    private void report(Camp camp, File dir) throws IOException {
-        VelocityHtmlReport report = new VelocityHtmlReport();
-        File file = new File(dir, "report.html");
-        report.setOutWriter(new FileWriter(file));
-        report.setTemplateName("reports/ReportTemplate.vl");
-        FileUtils.copyFileToDirectory(new File("reports/Report.css"), dir);
-        report.build(camp);
     }
 
     private void serialize(GKCamp camp, File dir) throws IOException {

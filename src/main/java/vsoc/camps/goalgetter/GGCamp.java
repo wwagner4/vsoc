@@ -190,24 +190,10 @@ public class GGCamp extends AbstractCamp {
         double goals = goals(getMembers());
         double ownGoals = ownGoals(getMembers());
         createNextGenerationInfo(diversity, kicks, kickOuts, goals, ownGoals);
-        writeResultTable(diversity, kicks, kickOuts, goals, ownGoals);
         Comparator<Member> comp = new GGMembersComparator(this.goalFactor,
                 this.ownGoalFactor, this.kickFactor, this.kickOutFactor, this.zeroKickPenalty );
         basicCreateNextGeneration(getMembers(), comp, this.mutationRate,
                 this.selPoli, this.crossableFactory);
-    }
-
-    private void writeResultTable(double diversity, double kicks,
-            double kickOuts, double goals, double ownGoals) {
-        if (this.resultTable != null) {
-            this.resultTable.addNextSerialValue(new Integer(
-                    getGenerationsCount()));
-            this.resultTable.setValue(GGCampResultColumns.DIVERSITY.getName(), diversity);
-            this.resultTable.setValue(GGCampResultColumns.GOALS.getName(), goals);
-            this.resultTable.setValue(GGCampResultColumns.OWNGOALS.getName(), ownGoals);
-            this.resultTable.setValue(GGCampResultColumns.KICKS.getName(), kicks);
-            this.resultTable.setValue(GGCampResultColumns.KICKOUTS.getName(), kickOuts);
-        }
     }
 
     private void createNextGenerationInfo(double diversity, double kicks,
