@@ -1,9 +1,10 @@
 package vsoc.camps.goalgetter;
 
-import java.io.IOException;
-
 import vsoc.camps.Member;
 import vsoc.util.Serializer;
+
+import java.io.*;
+
 import atan.model.Controller;
 import atan.model.Team;
 
@@ -23,7 +24,8 @@ public class AtanGGTeam extends Team {
     public Controller getNewController(int num) {
         try {
             if (this.camp == null) {
-                this.camp = (GGCamp) Serializer.current().deserialize(getTeamName() + ".object");
+                File file = new File(getTeamName() + ".object");
+				this.camp = (GGCamp) Serializer.current().deserialize(file);
             }
             Member member = this.camp.getMember(num);
             return member.getNeuroControlSystem();

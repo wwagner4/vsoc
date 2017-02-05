@@ -3,20 +3,9 @@ package vsoc.util;
 /**
  * Static Methods to be used for Serializable Objects.
  */
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.Serializable;
-import java.net.URL;
+import java.io.*;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.SortedSet;
-import java.util.TreeSet;
+import java.util.*;
 
 import org.apache.commons.lang.SerializationUtils;
 import org.apache.log4j.Logger;
@@ -38,11 +27,6 @@ public class Serializer {
             current = new Serializer();
         }
         return current;
-    }
-
-    public void serialize(Serializable p, String fileName) throws IOException {
-        OutputStream out = new FileOutputStream(fileName);
-        serialize(p, out);
     }
 
     public void serialize(Serializable p, OutputStream out) {
@@ -81,29 +65,13 @@ public class Serializer {
         }
     }
 
-    public Object deserialize(String fileName) throws IOException {
-        File file = new File(fileName);
-        Object re = null;
-        if (file.exists()) {
-            InputStream in = new FileInputStream(file);
-            re = deserialize(in);
-        } else {
-            URL url = getClass().getClassLoader().getResource(fileName);
-            if (url != null) {
-                InputStream in = url.openStream();
-                re = deserialize(in);
-            } else {
-                log.info("file or url " + fileName + " not found");
-            }
-        }
-        return re;
-    }
-
     public Object deserialize(File file) throws IOException {
         Object re = null;
         if (file.exists()) {
             InputStream in = new FileInputStream(file);
             re = deserialize(in);
+        } else {
+			throw new IOException("File " + file + " does not exist");
         }
         return re;
     }

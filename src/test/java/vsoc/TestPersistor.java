@@ -51,9 +51,9 @@ public class TestPersistor extends AbstractTest {
         b.stringValue = str;
         b.doubleValue = doubleVal;
         b.intValue = intVal;
-        this.ser.serialize(b, "test.object");
+        this.ser.serialize(b, TestUtil.tmp("test.object"));
         b = null;
-        b = (PersB) this.ser.deserialize("test.object");
+        b = (PersB) this.ser.deserialize(TestUtil.tmp("test.object"));
         assertEquals(str, b.stringValue);
         assertEquals(doubleVal, b.doubleValue, 0.00001);
         assertEquals(intVal, b.intValue);
@@ -61,16 +61,16 @@ public class TestPersistor extends AbstractTest {
     public void testPersANull() throws Exception {
         PersA a = new PersA();
         a.persB = null;
-        this.ser.serialize(a, "test.object");
+        this.ser.serialize(a, TestUtil.tmp("test.object"));
         a = null;
-        a = (PersA) this.ser.deserialize("test.object");
+        a = (PersA) this.ser.deserialize(TestUtil.tmp("test.object"));
         assertTrue("b is null", a.persB == null);
     }
     public void testNet() throws Exception {
         FFNet n = new FFNet(new TestNetConnector());
         n.setWeightsRandom(System.currentTimeMillis());
-        this.ser.serialize(n, "net.object");
-        Object p1 = this.ser.deserialize("net.object");
+        this.ser.serialize(n, TestUtil.tmp("net.object"));
+        Object p1 = this.ser.deserialize(TestUtil.tmp("net.object"));
         FFNet n1 = (FFNet) p1;
         assertTrue("equals in structure", n1.equalsInStructure(n));
         assertTrue("equals in weights", n1.equalsInWeights(n));
