@@ -14,12 +14,13 @@ import java.util.List;
 import atan.model.Controller;
 import atan.model.Player;
 import vsoc.util.Vec2D;
+import vsoc.view.*;
 
 /**
  * Performs soccer specific actions.
  * 
  */
-public class Server implements Serializable {
+public class Server implements Serializable, Simulation {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -33,7 +34,7 @@ public class Server implements Serializable {
 
     private long time = 0;
 
-    private Collection<ServerListener> listeners = new ArrayList<>();
+    private Collection<SimulationChangeListener> listeners = new ArrayList<>();
 
     private ServerThread thread = null;
 
@@ -134,17 +135,18 @@ public class Server implements Serializable {
         }
     }
 
-    public void addListener(ServerListener l) {
+	@Override
+	public void addListener(SimulationChangeListener l) {
         this.listeners.add(l);
-    }
+	}
 
     public void takeStep() {
         this.time++;
-        Iterator<ServerListener> iter = this.listeners.iterator();
+        Iterator<SimulationChangeListener> iter = this.listeners.iterator();
         if (this.time % this.steps == 0) {
             while (iter.hasNext()) {
-                ServerListener listener = iter.next();
-                listener.serverChangePerformed(this);
+            	SimulationChangeListener listener = iter.next();
+                listener.simulationChangePerformed(this);
             }
         }
         takeStepOfAllControlSystems();

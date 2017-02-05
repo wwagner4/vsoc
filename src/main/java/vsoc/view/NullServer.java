@@ -1,9 +1,27 @@
 package vsoc.view;
 
-import vsoc.server.Server;
+import java.awt.Graphics2D;
 
-public class NullServer extends Server {
+public class NullServer implements Simulation {
 
-	private static final long serialVersionUID = 1L;
+	@Override
+	public void addListener(SimulationChangeListener fieldCanvas) {
+		// Nothing to do
+	}
+
+	@Override
+	public void paint(Graphics2D bg) {
+		// Nothing to do
+	}
+
+	@Override
+	public void setSteps(int steps) {
+		// Nothing to do
+	}
+
+	@Override
+	public void setDelay(int delay) {
+		// Nothing to do
+	}
 
 }

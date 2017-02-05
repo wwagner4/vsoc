@@ -4,15 +4,20 @@ import java.io.Serializable;
 
 import vsoc.reports.Reportable;
 import vsoc.server.Server;
+import vsoc.view.*;
 
-public interface Camp extends Serializable, Runnable, Reportable {
+public interface Camp extends Serializable, SimulationContainer, Reportable {
 
-    public Server getServer();
+    Server getServer();
 
-    public void setMaxGenerations(int i);
+    void setMaxGenerations(int i);
 
-    public boolean isFinished();
+    boolean isFinished();
 
-    public void takeOneStep();
-
+    void takeOneStep();
+    
+    default Simulation getSimulation() {
+    	return getServer();
+    }
+    
 }

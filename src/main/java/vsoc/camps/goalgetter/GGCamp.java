@@ -1,25 +1,15 @@
 package vsoc.camps.goalgetter;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 
 import org.apache.log4j.Logger;
 
 import vsoc.behaviour.Behaviour;
-import vsoc.camps.AbstractCamp;
-import vsoc.camps.BehaviourNeuroControlSystem;
-import vsoc.camps.DefaultBehaviour;
-import vsoc.camps.Member;
-import vsoc.camps.NetBehaviour;
-import vsoc.genetic.CrossableFactory;
-import vsoc.genetic.SelectionPolicy;
+import vsoc.camps.*;
+import vsoc.genetic.*;
 import vsoc.nn.Net;
 import vsoc.server.VsocPlayer;
-import vsoc.util.RandomIndexSelector;
-import vsoc.util.VsocUtil;
+import vsoc.util.*;
 
 /**
  * Camp for breeding goal getters. Goal for the members is to shoot as many

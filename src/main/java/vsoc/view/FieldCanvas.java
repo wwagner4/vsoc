@@ -10,13 +10,11 @@ import java.awt.image.BufferedImage;
 
 import org.apache.log4j.Logger;
 
-import vsoc.server.*;
-
 /**
  * A component that can display a Server
  */
 
-public class FieldCanvas extends Canvas implements ServerListener,
+public class FieldCanvas extends Canvas implements SimulationChangeListener,
         ComponentListener {
 
 	private static final long serialVersionUID = 1L;
@@ -27,7 +25,7 @@ public class FieldCanvas extends Canvas implements ServerListener,
 
     private Graphics2D bg;
 
-    private Server server = new NullServer();
+    private Simulation server = new NullServer();
 
     private int delay = 0;
 
@@ -36,7 +34,7 @@ public class FieldCanvas extends Canvas implements ServerListener,
         addComponentListener(this);
     }
 
-    public void setServer(Server s) {
+    public void setServer(Simulation s) {
         this.server = s;
         s.addListener(this);
     }
@@ -82,15 +80,16 @@ public class FieldCanvas extends Canvas implements ServerListener,
         paint(g);
     }
 
-    public void serverChangePerformed(Server s) {
+	@Override
+	public void simulationChangePerformed(Simulation s) {
         repaint();
         if (this.isShowing())
             s.setDelay(this.getDelay());
         else
             s.setDelay(0);
-    }
+	}
 
-    public void componentResized(ComponentEvent e) {
+	public void componentResized(ComponentEvent e) {
         setTransform();
     }
 
@@ -117,4 +116,5 @@ public class FieldCanvas extends Canvas implements ServerListener,
     public void setSteps(int steps) {
         this.server.setSteps(steps);
     }
+
 }

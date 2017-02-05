@@ -7,8 +7,6 @@ import javax.swing.*;
 
 import org.apache.log4j.Logger;
 
-import vsoc.camps.Camp;
-import vsoc.server.Server;
 
 /**
  * Contains a FieldPanel .
@@ -37,20 +35,20 @@ public class FieldFrame extends JFrame implements WindowListener {
     }
 
 
-    public static void open(Camp camp, String string) {
+    public static void open(SimulationContainer camp, String string) {
         FieldFrame ff = new FieldFrame();
         ff.setTitle("vsoc " + string);
-        ff.setServer(camp.getServer());
+        ff.setServer(camp.getSimulation());
         Thread campThread = new Thread(camp, "Camp");
         campThread.start();
         ff.setVisible(true);
     }
 
-    public static void open(Camp camp) {
+    public static void open(SimulationContainer camp) {
         open(camp, "");
     }
     
-    public void setServer(Server srv) {
+    public void setServer(Simulation srv) {
         this.fieldContentPanel.setServer(srv);
     }
 

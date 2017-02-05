@@ -7,8 +7,6 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 import javax.swing.event.*;
 
-import vsoc.server.Server;
-
 public class FieldContentPanel extends JPanel implements ActionListener, ChangeListener {
 
 	private static final long serialVersionUID = 1L;
@@ -31,7 +29,7 @@ public class FieldContentPanel extends JPanel implements ActionListener, ChangeL
 		}
 	}
 
-	public void setServer(Server s) {
+	public void setServer(Simulation s) {
 		this.fieldCanvas.setServer(s);
 		ctrlSpeed();
 	}
