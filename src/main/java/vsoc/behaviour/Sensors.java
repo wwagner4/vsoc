@@ -10,6 +10,10 @@ import atan.model.Line;
 import atan.model.PlayMode;
 import atan.model.RefereeMessage;
 
+/**
+ * Transforms the input to the controllers to sensors that can be 
+ * used for interpretation of the environment
+ */
 public class Sensors {
 
     private Map<Flag, DistDirVision> flagsRight = null;

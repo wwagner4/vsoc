@@ -2,6 +2,9 @@ package vsoc.behaviour;
 
 import atan.model.Player;
 
+/**
+ * No matter what the sensors tell. The player is running straight ahead
+ */
 public class GoAheadBehaviour implements Behaviour {
     
 	private static final long serialVersionUID = 1L;

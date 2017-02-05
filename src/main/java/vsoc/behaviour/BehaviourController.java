@@ -11,6 +11,10 @@ import atan.model.RefereeMessage;
 import atan.model.ViewAngle;
 import atan.model.ViewQuality;
 
+/**
+ * Controller delegating the infos it gets from the atan environment to 
+ * Sensors. The output of the sensors can be used to control the players
+ */
 public class BehaviourController implements Controller, Serializable {
     
     private static final long serialVersionUID = 0L;
