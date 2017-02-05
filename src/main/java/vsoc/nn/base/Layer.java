@@ -132,7 +132,7 @@ public class Layer implements Serializable {
     }
 
     public Iterator<LayerNode> layerNodes() {
-        return new EnumLayerNodesOfLayer(this);
+        return new LayerNodesOfLayerIterator(this);
     }
 
     @Override
@@ -166,14 +166,13 @@ public class Layer implements Serializable {
         return false;
     }
 
-    // TODO Remove the Enum classes
-    class EnumLayerNodesOfLayer implements Iterator<LayerNode> {
+    class LayerNodesOfLayerIterator implements Iterator<LayerNode> {
         List<LayerNode> v;
 
         int i;
         int size;
 
-        EnumLayerNodesOfLayer(Layer l) {
+        LayerNodesOfLayerIterator(Layer l) {
             this.v = l.lns;
             this.i = 0;
             this.size = this.v.size();
