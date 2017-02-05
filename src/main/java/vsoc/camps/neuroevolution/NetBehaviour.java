@@ -1,4 +1,4 @@
-package vsoc.camps;
+package vsoc.camps.neuroevolution;
 
 import java.util.Iterator;
 

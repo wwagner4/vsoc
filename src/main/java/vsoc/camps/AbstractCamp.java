@@ -3,28 +3,15 @@ package vsoc.camps;
 /**
  * Runns a Camp in a seperate Thread
  */
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Properties;
-import java.util.Random;
+import java.util.*;
 
 import org.apache.log4j.Logger;
 
-import vsoc.genetic.CrossableFactory;
-import vsoc.genetic.SelectionPolicy;
-import vsoc.nn.Net;
+import atan.model.*;
 import vsoc.server.*;
-import vsoc.util.RandomIndexSelector;
-import vsoc.util.Vec2D;
-import vsoc.util.VsocUtil;
-import atan.model.Controller;
-import atan.model.Player;
+import vsoc.util.*;
 
-public abstract class AbstractCamp implements Camp {
+public abstract class AbstractCamp<M extends Member<?>> implements Camp<M> {
 
 	private static final long serialVersionUID = 0L;
 
@@ -53,7 +40,7 @@ public abstract class AbstractCamp implements Camp {
 			takeOneStep();
 		}
 	}
-
+	
 	public void takeOneStep() {
 		if (log.isDebugEnabled()) {
 			log.debug("Started running a new match. matchCount:" + this.matchCount + " selectionCount:"
@@ -152,7 +139,11 @@ public abstract class AbstractCamp implements Camp {
 		this.generationsCount = generationsCount;
 	}
 
-	protected abstract List<Member> getMembers();
+	protected abstract List<M> getMembers();
+	
+    public M getMember(int index) {
+        return getMembers().get(index);
+    }
 
 	protected void setRandomPosition(Player p) {
 		p.move(ran.nextInt(100) - 50, ran.nextInt(60) - 30);
@@ -161,15 +152,15 @@ public abstract class AbstractCamp implements Camp {
 
 	private void updateMembersAfterMatch() {
 		int eastGoals = 0;
-		ArrayList<Member> eastMembers = new ArrayList<>();
+		ArrayList<M> eastMembers = new ArrayList<>();
 		int westGoals = 0;
-		ArrayList<Member> westMembers = new ArrayList<>();
+		ArrayList<M> westMembers = new ArrayList<>();
 		{
 			Iterator<VsocPlayer> it = getServer().getPlayersEast().iterator();
 			while (it.hasNext()) {
 				VsocPlayer p = it.next();
 				eastGoals += p.getOtherGoalCount();
-				Member m = getMemberByControlSystem(getMembers(), p.getController());
+				M m = getMemberByControlSystem(getMembers(), p.getController());
 				if (m != null) {
 					eastMembers.add(m);
 					updateMemberFromPlayer(p, m);
@@ -181,7 +172,7 @@ public abstract class AbstractCamp implements Camp {
 			while (it.hasNext()) {
 				VsocPlayer p = it.next();
 				westGoals += p.getOtherGoalCount();
-				Member m = getMemberByControlSystem(getMembers(), p.getController());
+				M m = getMemberByControlSystem(getMembers(), p.getController());
 				if (m != null) {
 					westMembers.add(m);
 					updateMemberFromPlayer(p, m);
@@ -189,49 +180,24 @@ public abstract class AbstractCamp implements Camp {
 			}
 		}
 		{
-			Iterator<Member> iter = eastMembers.iterator();
+			Iterator<M> iter = eastMembers.iterator();
 			while (iter.hasNext()) {
-				Member mem = iter.next();
+				M mem = iter.next();
 				mem.increaseReceivedGoalsCount(westGoals);
 			}
 		}
 		{
-			Iterator<Member> iter = westMembers.iterator();
+			Iterator<M> iter = westMembers.iterator();
 			while (iter.hasNext()) {
-				Member mem = iter.next();
+				M mem = iter.next();
 				mem.increaseReceivedGoalsCount(eastGoals);
 			}
 		}
 	}
 
-	protected void basicCreateNextGeneration(List<Member> mems, Comparator<Member> comp, double mutRate,
-			SelectionPolicy<Net> selPoli, CrossableFactory<Net> crossableFactory) {
-		List<Net> pop = sortedNetsFromMembers(mems, comp);
-		List<Net> childNets = selPoli.createNextGeneration(pop, crossableFactory, mutRate);
-		addNetsToMembers(mems, childNets);
-	}
-
-	private void updateMemberFromPlayer(VsocPlayer p, Member m) {
-		m.increaseMatchCount();
-		m.increaseKickCount(p.getKickCount());
-		m.increaseKickOutCount(p.getKickOutCount());
-		m.increaseOtherGoalsCount(p.getOtherGoalCount());
-		m.increaseOwnGoalsCount(p.getOwnGoalCount());
-	}
-
-	private void addNetsToMembers(List<Member> mems, List<Net> nextPop) {
-		Iterator<Member> iter = mems.iterator();
-		int index = 0;
-		while (iter.hasNext()) {
-			Member mem = iter.next();
-			mem.reset();
-			Net net = nextPop.get(index);
-			mem.getNeuroControlSystem().setNet(net);
-			index++;
-		}
-	}
-
 	protected abstract void createNextGeneration();
+	
+	protected abstract void updateMemberFromPlayer(VsocPlayer player, M member);
 
 	protected void addProperties(Properties re) {
 		re.setProperty("steps per match", VsocUtil.current().format(this.stepsPerMatch));
@@ -250,99 +216,74 @@ public abstract class AbstractCamp implements Camp {
 		return sel;
 	}
 
-	protected Member getMemberByControlSystem(List<Member> mems, Controller c) {
-		Iterator<Member> i = mems.iterator();
+	protected M getMemberByControlSystem(List<M> mems, Controller c) {
+		Iterator<M> i = mems.iterator();
 		while (i.hasNext()) {
-			Member m = i.next();
-			if (m.getNeuroControlSystem() == c)
+			M m = i.next();
+			if (m.getController() == c)
 				return m;
 		}
 		return null;
 	}
 
-	protected double diversity(List<Member> mems) {
-		int count = 0;
-		double distSum = 0.0;
-		Iterator<Member> i = mems.iterator();
-		while (i.hasNext()) {
-			Member m1 = i.next();
-			Member m2 = mems.get(ran.nextInt(mems.size()));
-			distSum += m1.getNeuroControlSystem().getNet().distance(m2.getNeuroControlSystem().getNet());
-			count++;
-		}
-		return distSum / count;
-	}
-
-	protected double kicks(List<Member> mems) {
+	protected double kicks(List<M> mems) {
 		double kicks = 0.0;
 		int count = 0;
-		Iterator<Member> iter = mems.iterator();
+		Iterator<M> iter = mems.iterator();
 		while (iter.hasNext()) {
-			Member mem = (Member) iter.next();
+			M mem = iter.next();
 			kicks += mem.kickPerMatch();
 			count++;
 		}
 		return kicks / count;
 	}
 
-	protected double kickOuts(List<Member> mems) {
+	protected double kickOuts(List<M> mems) {
 		double kicks = 0.0;
 		int count = 0;
-		Iterator<Member> iter = mems.iterator();
+		Iterator<M> iter = mems.iterator();
 		while (iter.hasNext()) {
-			Member mem = iter.next();
+			M mem = iter.next();
 			kicks += mem.kickOutPerMatch();
 			count++;
 		}
 		return kicks / count;
 	}
 
-	protected double goalsReceived(List<Member> mems) {
+	protected double goalsReceived(List<M> mems) {
 		double re = 0.0;
 		int count = 0;
-		Iterator<Member> iter = mems.iterator();
+		Iterator<M> iter = mems.iterator();
 		while (iter.hasNext()) {
-			Member mem = iter.next();
+			M mem = iter.next();
 			re += mem.receivedGoalsPerMatch();
 			count++;
 		}
 		return re / count;
 	}
 
-	protected double goals(List<Member> mems) {
+	protected double goals(List<M> mems) {
 		double goals = 0.0;
 		int count = 0;
-		Iterator<Member> iter = mems.iterator();
+		Iterator<M> iter = mems.iterator();
 		while (iter.hasNext()) {
-			Member mem = iter.next();
+			M mem = iter.next();
 			goals += mem.goalsPerMatch();
 			count++;
 		}
 		return goals / count;
 	}
 
-	protected double ownGoals(List<Member> mems) {
+	protected double ownGoals(List<M> mems) {
 		double goals = 0.0;
 		int count = 0;
-		Iterator<Member> iter = mems.iterator();
+		Iterator<M> iter = mems.iterator();
 		while (iter.hasNext()) {
-			Member mem = iter.next();
+			M mem = iter.next();
 			goals += mem.ownGoalsPerMatch();
 			count++;
 		}
 		return goals / count;
-	}
-
-	private List<Net> sortedNetsFromMembers(List<Member> mems, Comparator<Member> comp) {
-		Collections.sort(mems, comp);
-		List<Net> pop = new ArrayList<>();
-		Iterator<Member> iter = mems.iterator();
-		while (iter.hasNext()) {
-			Member mem = iter.next();
-			Net net = mem.getNeuroControlSystem().getNet();
-			pop.add(net);
-		}
-		return pop;
 	}
 
 }

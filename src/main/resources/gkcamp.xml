@@ -2,7 +2,7 @@
 <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
 <beans>
 
-	<bean id="runner" class="vsoc.camps.goalkeeper.GKCampRunner">
+	<bean id="runner" class="vsoc.camps.neuroevolution.goalkeeper.GKCampRunner">
 		<property name="camps">
 			<list>
 				<ref bean="camp1"/>				
@@ -36,7 +36,7 @@
 
 			
 	
-	<bean id="gkCamp" class="vsoc.camps.goalkeeper.GKCamp">
+	<bean id="gkCamp" class="vsoc.camps.neuroevolution.goalkeeper.GKCamp">
 		<property name="gkMutationRate" value="0.02"/>
 		<property name="stepsPerMatch" value="600"/>
 		<property name="matchesPerGeneration" value="250"/>
@@ -55,7 +55,7 @@
 	</bean>
 
 		
-	<bean id = "ggCamp" class="vsoc.camps.goalgetter.GGCamp">
+	<bean id = "ggCamp" class="vsoc.camps.neuroevolution.goalgetter.GGCamp">
 		<property name="mutationRate" value="0.02"/>
 		<property name="stepsPerMatch" value="200"/>
 		<property name="matchesPerGeneration" value="50"/>

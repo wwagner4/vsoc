@@ -6,7 +6,7 @@ import java.util.Properties;
 import vsoc.server.Server;
 import vsoc.view.*;
 
-public interface Camp extends Serializable, SimulationContainer {
+public interface Camp<M extends Member<?>> extends Serializable, SimulationContainer {
 
     Server getServer();
 
@@ -16,10 +16,12 @@ public interface Camp extends Serializable, SimulationContainer {
 
     void takeOneStep();
     
+	Properties getProperties();
+
+	M getMember(int num);
+    
     default Simulation getSimulation() {
     	return getServer();
     }
 
-	Properties getProperties();
-    
 }

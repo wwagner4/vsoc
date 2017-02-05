@@ -1,9 +1,9 @@
-package vsoc.camps.goalgetter;
+package vsoc.camps.neuroevolution.goalgetter;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import vsoc.camps.Camp;
+import vsoc.camps.*;
 import vsoc.util.Serializer;
 import vsoc.util.VsocUtil;
 import vsoc.view.FieldFrame;
@@ -18,7 +18,7 @@ public class GGGuiRunner {
 
     public static void main(String[] args) {
         try {
-            Camp camp = loadCamp();
+        	Camp<?> camp = loadCamp();
             Serializer.current().startScheduledSerialization(PREFIX, 600, camp);
             VsocUtil u = VsocUtil.current();
             String campProperties = u.propsToString(camp.getProperties());
@@ -29,13 +29,13 @@ public class GGGuiRunner {
         }
     }
 
-    private static Camp loadCamp() {
-        Camp camp = (Camp) Serializer.current()
+	private static Camp<?> loadCamp() {
+    	Camp<?> camp = (Camp<?>) Serializer.current()
                 .deserializeFromScheduled(PREFIX);
         if (camp == null) {
             ApplicationContext ctx = new ClassPathXmlApplicationContext(
                     "ggcamp.xml");
-            camp = (Camp) ctx.getBean("camp1");
+            camp = (Camp<?>) ctx.getBean("camp1");
         }
         return camp;
     }

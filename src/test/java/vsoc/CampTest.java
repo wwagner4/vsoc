@@ -16,9 +16,9 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import vsoc.camps.Member;
-import vsoc.camps.goalgetter.GGCamp;
-import vsoc.camps.goalgetter.GGMembersComparator;
-import vsoc.camps.goalkeeper.GKMembersComparator;
+import vsoc.camps.neuroevolution.NetBehaviourController;
+import vsoc.camps.neuroevolution.goalgetter.*;
+import vsoc.camps.neuroevolution.goalkeeper.GKMembersComparator;
 import vsoc.server.Server;
 import vsoc.util.Serializer;
 
@@ -63,14 +63,14 @@ public class CampTest extends TestCase {
         return camp;
     }
 
-    private void assertEquals(String msg, Member m1, Member m2) {
+    private void assertEquals(String msg, Member<NetBehaviourController> m1, Member<NetBehaviourController> m2) {
         assertEquals("kickOutPerMatch", m1.kickOutPerMatch(), m2
                 .kickOutPerMatch(), 0.01);
     }
 
     public void testMembersComparator() {
         GGCamp camp = createTestCamp("camp1");
-        ArrayList<Member> mems = new ArrayList<>();
+        ArrayList<Member<NetBehaviourController>> mems = new ArrayList<>();
         mems.add(createTestMember(10));
         mems.add(createTestMember(20));
         mems.add(createTestMember(40));
@@ -80,25 +80,25 @@ public class CampTest extends TestCase {
                         .getKickFactor(), camp.getKickOutFactor(), -100);
         Collections.sort(mems, comp);
         {
-            Member mem = (Member) mems.get(0);
+            Member<NetBehaviourController> mem = mems.get(0);
             assertEquals(40.0, mem.goalsPerMatch(), 0.001);
         }
         {
-            Member mem = (Member) mems.get(1);
+        	Member<NetBehaviourController> mem = mems.get(1);
             assertEquals(20.0, mem.goalsPerMatch(), 0.001);
         }
         {
-            Member mem = (Member) mems.get(2);
+        	Member<NetBehaviourController> mem = mems.get(2);
             assertEquals(10.0, mem.goalsPerMatch(), 0.001);
         }
         {
-            Member mem = (Member) mems.get(3);
+        	Member<NetBehaviourController> mem = mems.get(3);
             assertEquals(5.0, mem.goalsPerMatch(), 0.001);
         }
     }
 
-    private Member createTestMember(int ownGoalCount) {
-        Member mem = new Member();
+    private Member<NetBehaviourController> createTestMember(int ownGoalCount) {
+    	Member<NetBehaviourController> mem = new Member<>();
         mem.reset();
         mem.increaseOtherGoalsCount(ownGoalCount);
         mem.increaseMatchCount();
@@ -106,33 +106,33 @@ public class CampTest extends TestCase {
     }
 
     public void testMembersGKComparator() {
-        ArrayList<Member> mems = new ArrayList<>();
+        ArrayList<Member<NetBehaviourController>> mems = new ArrayList<>();
         mems.add(createGKTestMember(5));
         mems.add(createGKTestMember(1));
         mems.add(createGKTestMember(4));
         mems.add(createGKTestMember(2));
-        Comparator<Member> comp = new GKMembersComparator();
+        Comparator<Member<NetBehaviourController>> comp = new GKMembersComparator();
         Collections.sort(mems, comp);
         {
-            Member mem = (Member) mems.get(0);
+        	Member<NetBehaviourController> mem = mems.get(0);
             assertEquals(1.0, mem.kickPerMatch(), 0.001);
         }
         {
-            Member mem = (Member) mems.get(1);
+        	Member<NetBehaviourController> mem = mems.get(1);
             assertEquals(0.8, mem.kickPerMatch(), 0.001);
         }
         {
-            Member mem = (Member) mems.get(2);
+        	Member<NetBehaviourController> mem = mems.get(2);
             assertEquals(0.4, mem.kickPerMatch(), 0.001);
         }
         {
-            Member mem = (Member) mems.get(3);
+        	Member<NetBehaviourController> mem = mems.get(3);
             assertEquals(0.2, mem.kickPerMatch(), 0.001);
         }
     }
 
-    private Member createGKTestMember(int count) {
-        Member mem = new Member();
+    private Member<NetBehaviourController> createGKTestMember(int count) {
+    	Member<NetBehaviourController> mem = new Member<>();
         mem.reset();
         mem.increaseKickCount(count);
         mem.increaseMatchCount();

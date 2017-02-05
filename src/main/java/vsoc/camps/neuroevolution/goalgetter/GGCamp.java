@@ -1,11 +1,12 @@
-package vsoc.camps.goalgetter;
+package vsoc.camps.neuroevolution.goalgetter;
 
 import java.util.*;
 
 import org.apache.log4j.Logger;
 
 import vsoc.behaviour.*;
-import vsoc.camps.*;
+import vsoc.camps.Member;
+import vsoc.camps.neuroevolution.*;
 import vsoc.genetic.*;
 import vsoc.nn.Net;
 import vsoc.server.VsocPlayer;
@@ -16,13 +17,13 @@ import vsoc.util.*;
  * goals as possible.
  * 
  */
-public class GGCamp extends AbstractCamp {
+public class GGCamp extends AbstractNeuroevolutionCamp {
 
     private static Logger log = Logger.getLogger(GGCamp.class);
 
     private static final long serialVersionUID = 0L;
 
-    private List<Member> members = null;
+    private List<Member<NetBehaviourController>> members = null;
 
     private double mutationRate = 0.02;
 
@@ -137,9 +138,9 @@ public class GGCamp extends AbstractCamp {
 
     }
 
-    public List<Member> getMembers() {
+    public List<Member<NetBehaviourController>> getMembers() {
         if (this.members == null) {
-            List<Member> mems = new ArrayList<>();
+            List<Member<NetBehaviourController>> mems = new ArrayList<>();
             List<Net> nets = this.selPoli.createNewGeneration(this.crossableFactory);
             Iterator<Net> iter = nets.iterator();
             while (iter.hasNext()) {
@@ -147,8 +148,8 @@ public class GGCamp extends AbstractCamp {
                 NetBehaviourController ncs = new NetBehaviourController(
                         createBehaviour(net));
                 ncs.setNet(net);
-                Member mem = new Member();
-                mem.setNeuroControlSystem(ncs);
+                Member<NetBehaviourController> mem = new Member<>();
+                mem.setController(ncs);
                 mem.reset();
                 mems.add(mem);
             }
@@ -157,7 +158,7 @@ public class GGCamp extends AbstractCamp {
         return this.members;
     }
 
-    public void setMembers(List<Member> members) {
+    public void setMembers(List<Member<NetBehaviourController>> members) {
         this.members = members;
     }
 
@@ -172,15 +173,11 @@ public class GGCamp extends AbstractCamp {
         Iterator<VsocPlayer> players = getServer().getPlayers().iterator();
         while (players.hasNext()) {
             int index = sel.next();
-            Member m = getMember(index);
+            Member<NetBehaviourController> m = getMember(index);
             VsocPlayer p = (VsocPlayer) players.next();
-            p.setController(m.getNeuroControlSystem());
+            p.setController(m.getController());
             setRandomPosition(p);
         }
-    }
-
-    public Member getMember(int index) {
-        return (Member) getMembers().get(index);
     }
 
     protected void createNextGeneration() {
@@ -190,7 +187,7 @@ public class GGCamp extends AbstractCamp {
         double goals = goals(getMembers());
         double ownGoals = ownGoals(getMembers());
         createNextGenerationInfo(diversity, kicks, kickOuts, goals, ownGoals);
-        Comparator<Member> comp = new GGMembersComparator(this.goalFactor,
+        Comparator<Member<NetBehaviourController>> comp = new GGMembersComparator(this.goalFactor,
                 this.ownGoalFactor, this.kickFactor, this.kickOutFactor, this.zeroKickPenalty );
         basicCreateNextGeneration(getMembers(), comp, this.mutationRate,
                 this.selPoli, this.crossableFactory);

@@ -1,4 +1,4 @@
-package vsoc.camps.goalkeeper;
+package vsoc.camps.neuroevolution.goalkeeper;
 
 import java.io.*;
 import java.net.URL;
@@ -8,7 +8,8 @@ import org.apache.log4j.Logger;
 
 import vsoc.behaviour.*;
 import vsoc.camps.*;
-import vsoc.camps.goalgetter.*;
+import vsoc.camps.neuroevolution.*;
+import vsoc.camps.neuroevolution.goalgetter.*;
 import vsoc.genetic.*;
 import vsoc.nn.Net;
 import vsoc.server.*;
@@ -17,15 +18,15 @@ import vsoc.util.*;
 /**
  * Camp for breeding goal keepers.
  */
-public class GKCamp extends AbstractCamp {
+public class GKCamp extends AbstractNeuroevolutionCamp {
 
 	private static final long serialVersionUID = 1L;
 
 	private static Logger log = Logger.getLogger(GKCamp.class);
 
-	private List<Member> goalgetters = null;
+	private List<Member<NetBehaviourController>> goalgetters = null;
 
-	private List<Member> goalkeepers = null;
+	private List<Member<NetBehaviourController>> goalkeepers = null;
 
 	private CrossableFactory<Net> crossableFactory;
 
@@ -103,9 +104,9 @@ public class GKCamp extends AbstractCamp {
 		Iterator<VsocPlayer> iter = getServer().getPlayersWest().iterator();
 		while (iter.hasNext()) {
 			int index = sel.next();
-			Member m = getGoalgetters().get(index);
+			Member<NetBehaviourController> m = getGoalgetters().get(index);
 			VsocPlayer p = (VsocPlayer) iter.next();
-			p.setController(m.getNeuroControlSystem());
+			p.setController(m.getController());
 			setRandomPosition(p);
 		}
 	}
@@ -115,23 +116,23 @@ public class GKCamp extends AbstractCamp {
 		Iterator<VsocPlayer> iter = getServer().getPlayersEast().iterator();
 		while (iter.hasNext()) {
 			int index = sel.next();
-			Member m = (Member) getGoalkeepers().get(index);
+			Member<NetBehaviourController> m = getGoalkeepers().get(index);
 			VsocPlayer p = (VsocPlayer) iter.next();
-			p.setController(m.getNeuroControlSystem());
+			p.setController(m.getController());
 			p.move(-50, 0);
 		}
 	}
 
 	protected void createNextGeneration() {
-		Comparator<Member> comp = new GGMembersComparator(this.ggGoalFactor, this.ggOwnGoalFactor, this.ggKickFactor,
+		Comparator<Member<NetBehaviourController>> comp = new GGMembersComparator(this.ggGoalFactor, this.ggOwnGoalFactor, this.ggKickFactor,
 		    this.ggKickOutFactor, this.ggZeroKickPenalty);
 		basicCreateNextGeneration(getGoalgetters(), comp, this.ggMutationRate, this.ggSelPoli, this.crossableFactory);
 
-		Comparator<Member> gkComp = new GKMembersComparator();
+		Comparator<Member<NetBehaviourController>> gkComp = new GKMembersComparator();
 		basicCreateNextGeneration(getGoalkeepers(), gkComp, this.gkMutationRate, this.gkSelPoli, this.crossableFactory);
 	}
 
-	public List<Member> getGoalgetters() {
+	public List<Member<NetBehaviourController>> getGoalgetters() {
 		if (this.goalgetters == null) {
 			log.info("[getGoalgetter ] not yet initialized -> loading from " + this.ggCampResourceName + ".");
 			try {
@@ -143,7 +144,7 @@ public class GKCamp extends AbstractCamp {
 		return this.goalgetters;
 	}
 
-	private List<Member> loadGoalgetters(String resName) throws IOException {
+	private List<Member<NetBehaviourController>> loadGoalgetters(String resName) throws IOException {
 		URL res = getClass().getClassLoader().getResource(resName);
 		if (res == null) {
 			throw new IOException("Could not find resource '" + resName + "' in classpath.");
@@ -151,7 +152,7 @@ public class GKCamp extends AbstractCamp {
 			log.info("found resource " + res + " to load GKCamp");
 		}
 		GGCamp camp = (GGCamp) Serializer.current().deserialize(res.openStream());
-		List<Member> members = camp.getMembers();
+		List<Member<NetBehaviourController>> members = camp.getMembers();
 		if (this.ggSelPoli.getPopulationSize() != members.size()) {
 			String a = resName;
 			int x = members.size();
@@ -162,27 +163,27 @@ public class GKCamp extends AbstractCamp {
 		return members;
 	}
 
-	public void setGoalgetters(List<Member> goalgetter) {
+	public void setGoalgetters(List<Member<NetBehaviourController>> goalgetter) {
 		this.goalgetters = goalgetter;
 	}
 
-	public List<Member> getGoalkeepers() {
+	public List<Member<NetBehaviourController>> getGoalkeepers() {
 		if (this.goalkeepers == null) {
 			this.goalkeepers = createGoalkeepers();
 		}
 		return this.goalkeepers;
 	}
 
-	private List<Member> createGoalkeepers() {
-		List<Member> mems = new ArrayList<>();
+	private List<Member<NetBehaviourController>> createGoalkeepers() {
+		List<Member<NetBehaviourController>> mems = new ArrayList<>();
 		List<Net> nets = this.gkSelPoli.createNewGeneration(this.crossableFactory);
 		Iterator<Net> iter = nets.iterator();
 		while (iter.hasNext()) {
 			Net net = iter.next();
 			NetBehaviourController ncs = new NetBehaviourController(createGkBehaviour(net));
 			ncs.setNet(net);
-			Member mem = new Member();
-			mem.setNeuroControlSystem(ncs);
+			Member<NetBehaviourController> mem = new Member<NetBehaviourController>();
+			mem.setController(ncs);
 			mem.reset();
 			mems.add(mem);
 		}
@@ -195,7 +196,7 @@ public class GKCamp extends AbstractCamp {
 		return new DefaultBehaviour(b2);
 	}
 
-	public void setGoalkeepers(List<Member> goalkeeper) {
+	public void setGoalkeepers(List<Member<NetBehaviourController>> goalkeeper) {
 		this.goalkeepers = goalkeeper;
 	}
 
@@ -232,8 +233,8 @@ public class GKCamp extends AbstractCamp {
 		this.gkSelPoli = gkSelPoli;
 	}
 
-	protected List<Member> getMembers() {
-		ArrayList<Member> re = new ArrayList<>();
+	protected List<Member<NetBehaviourController>> getMembers() {
+		ArrayList<Member<NetBehaviourController>> re = new ArrayList<>();
 		re.addAll(getGoalgetters());
 		re.addAll(getGoalkeepers());
 		return re;

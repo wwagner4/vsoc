@@ -1,23 +1,20 @@
-package vsoc.camps.goalgetter;
-
-import vsoc.camps.Member;
-import vsoc.util.Serializer;
+package vsoc.camps;
 
 import java.io.*;
 
-import atan.model.Controller;
-import atan.model.Team;
+import atan.model.*;
+import vsoc.util.Serializer;
 
 /*
  * Implements an atan Team. Reads the contents of a Camp
  * object file and takes the first 11 players as atan Players.
  */
 
-public class AtanGGTeam extends Team {
+public class AtanCampTeam extends Team {
 
-    private GGCamp camp = null;
+    private Camp<?> camp = null;
 
-    public AtanGGTeam(String teamName, int port, String hostname) {
+    public AtanCampTeam(String teamName, int port, String hostname) {
         super(teamName, port, hostname);
     }
     
@@ -25,17 +22,17 @@ public class AtanGGTeam extends Team {
         try {
             if (this.camp == null) {
                 File file = new File(getTeamName() + ".object");
-				this.camp = (GGCamp) Serializer.current().deserialize(file);
+				this.camp = (Camp<?>) Serializer.current().deserialize(file);
             }
-            Member member = this.camp.getMember(num);
-            return member.getNeuroControlSystem();
+            Member<?> member = this.camp.getMember(num);
+            return member.getController();
         } catch (IOException ex) {
             throw new IllegalStateException(ex.getMessage(), ex);
         }
     }
 
     public static void main(String[] args) {
-        AtanGGTeam team = new AtanGGTeam(args[0], 6000, "localhost");
+        AtanCampTeam team = new AtanCampTeam(args[0], 6000, "localhost");
         team.connectAll();
     }
 }

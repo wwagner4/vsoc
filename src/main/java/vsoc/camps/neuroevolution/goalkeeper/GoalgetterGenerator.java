@@ -1,4 +1,4 @@
-package vsoc.camps.goalkeeper;
+package vsoc.camps.neuroevolution.goalkeeper;
 
 import java.io.*;
 
@@ -6,7 +6,7 @@ import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import vsoc.camps.goalgetter.GGCamp;
+import vsoc.camps.neuroevolution.goalgetter.GGCamp;
 import vsoc.util.Serializer;
 
 public class GoalgetterGenerator {

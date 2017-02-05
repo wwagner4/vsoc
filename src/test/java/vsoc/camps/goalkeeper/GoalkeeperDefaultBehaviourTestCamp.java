@@ -5,10 +5,12 @@ import java.util.*;
 import atan.model.Controller;
 import vsoc.behaviour.*;
 import vsoc.camps.*;
+import vsoc.camps.neuroevolution.*;
+import vsoc.camps.neuroevolution.goalkeeper.GoalkeeperDefaultBehaviour;
 import vsoc.server.VsocPlayer;
 import vsoc.view.FieldFrame;
 
-public class GoalkeeperDefaultBehaviourTestCamp extends AbstractCamp {
+public class GoalkeeperDefaultBehaviourTestCamp extends AbstractNeuroevolutionCamp {
 
 	private static final long serialVersionUID = 1L;
 
@@ -49,10 +51,6 @@ public class GoalkeeperDefaultBehaviourTestCamp extends AbstractCamp {
         
     }
 
-    public Member getMember(int index) {
-        return null;
-    }
-
     @Override
     public void setMaxGenerations(int i) {
         // to be ignored.
@@ -63,7 +61,7 @@ public class GoalkeeperDefaultBehaviourTestCamp extends AbstractCamp {
         return false;
     }
 
-    protected List<Member> getMembers() {
+    protected List<Member<NetBehaviourController>> getMembers() {
     	throw new IllegalStateException("Not yet implemented");
     }
 

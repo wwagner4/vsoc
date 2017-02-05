@@ -2,7 +2,9 @@ package vsoc.camps;
 
 import java.io.Serializable;
 
-public class Member implements Serializable {
+import atan.model.Controller;
+
+public class Member<C extends Controller> implements Serializable {
 
     private static final long serialVersionUID = 0L;
 
@@ -18,14 +20,10 @@ public class Member implements Serializable {
 
     private int receivedGoalsCount = 0;
     
-    private NetBehaviourController controlSystem = null;
+    private C controller = null;
 
     public Member() {
         super();
-    }
-
-    public void setNeuroControlSystem(NetBehaviourController cs) {
-        this.controlSystem = cs;
     }
 
     public void reset() {
@@ -77,10 +75,12 @@ public class Member implements Serializable {
         return re;
     }
 
-
+    public void setController(C cs) {
+        this.controller = cs;
+    }
     
-    public NetBehaviourController getNeuroControlSystem() {
-        return this.controlSystem;
+    public C getController() {
+        return this.controller;
     }
 
     public void increaseMatchCount() {
@@ -105,10 +105,6 @@ public class Member implements Serializable {
 
     public void increaseReceivedGoalsCount(int val) {
         this.receivedGoalsCount += val;
-    }
-
-    public void setWeightsRandom(long seed) {
-        this.controlSystem.getNet().setWeightsRandom(seed);
     }
 
 }

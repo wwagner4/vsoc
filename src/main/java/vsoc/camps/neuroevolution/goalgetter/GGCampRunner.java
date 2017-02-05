@@ -1,4 +1,4 @@
-package vsoc.camps.goalkeeper;
+package vsoc.camps.neuroevolution.goalgetter;
 
 import java.io.*;
 import java.text.SimpleDateFormat;
@@ -8,20 +8,17 @@ import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import vsoc.util.*;
+import vsoc.util.Serializer;
 
-/**
- * Goal keeper camp
- */
-public class GKCampRunner {
+public class GGCampRunner {
 
-    private static Logger log = Logger.getLogger(GKCampRunner.class);
+    private static Logger log = Logger.getLogger(GGCampRunner.class);
 
     private String ts = initTimestamp();
 
-    private Collection<GKCamp> camps = null;
+    private Collection<GGCamp> camps = null;
 
-    public GKCampRunner() {
+    public GGCampRunner() {
         super();
     }
 
@@ -32,8 +29,8 @@ public class GKCampRunner {
     }
 
     public static void main(String[] args) throws IOException {
-		ApplicationContext ctx = new ClassPathXmlApplicationContext("gkcamp.xml");
-		GKCampRunner runner = (GKCampRunner) ctx.getBean("runner");
+		ApplicationContext ctx = new ClassPathXmlApplicationContext("ggcamp.xml");
+		GGCampRunner runner = (GGCampRunner) ctx.getBean("campRunner");
 		runner.run();
 		log.info("- F I N I S H E D -");
     }
@@ -41,18 +38,16 @@ public class GKCampRunner {
     public void run() throws IOException {
         log.info("started");
         int num = 0;
-        Iterator<GKCamp> iter = this.camps.iterator();
+        Iterator<GGCamp> iter = this.camps.iterator();
         while (iter.hasNext()) {
-            GKCamp camp = iter.next();
+            GGCamp camp = (GGCamp) iter.next();
             run(camp, num);
             num++;
         }
     }
 
-    private void run(GKCamp camp, int num) throws IOException {
-        VsocUtil u = VsocUtil.current();
-        String campProperties = u.propsToString(camp.getProperties());
-        log.info("started GGCamp " + num + "\n" + campProperties);
+    private void run(GGCamp camp, int num) throws IOException {
+        log.info("started GGCamp " + num);
         while (!camp.isFinished()) {
             camp.takeOneStep();
         }
@@ -60,14 +55,14 @@ public class GKCampRunner {
         serialize(camp, dir);
     }
 
-    private void serialize(GKCamp camp, File dir) throws IOException {
+    private void serialize(GGCamp camp, File dir) throws IOException {
         File file = new File(dir, "ggcamp.ser");
         Serializer.current().serialize(camp, file);
         log.info("saved ggcamp to " + file);
     }
 
     private File getResultDir(int num) {
-        File allResultsDir = new File("results/gkcamprunner");
+        File allResultsDir = new File("results/ggcamprunner");
         if (!allResultsDir.exists()) {
             allResultsDir.mkdirs();
         }
@@ -79,11 +74,11 @@ public class GKCampRunner {
         return thisResultsDir;
     }
 
-    public Collection<GKCamp> getCamps() {
+    public Collection<GGCamp> getCamps() {
         return this.camps;
     }
 
-    public void setCamps(Collection<GKCamp> camps) {
+    public void setCamps(Collection<GGCamp> camps) {
         this.camps = camps;
     }
 
