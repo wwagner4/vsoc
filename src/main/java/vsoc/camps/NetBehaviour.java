@@ -4,11 +4,9 @@ import java.util.Iterator;
 
 import org.apache.log4j.Logger;
 
-import vsoc.behaviour.Behaviour;
-import vsoc.behaviour.Sensors;
-import vsoc.behaviour.BehaviourVision;
+import vsoc.behaviour.*;
 import vsoc.nn.Net;
-import vsoc.util.Retina;
+import vsoc.util.*;
 import atan.model.Player;
 
 public class NetBehaviour implements Behaviour {
@@ -80,67 +78,67 @@ public class NetBehaviour implements Behaviour {
 
 	private void initRetinas(Sensors sens) {
 		this.retinaBall.reset();
-		BehaviourVision ball = sens.getBall();
+		DistDirVision ball = sens.getBall();
 		if (ball != null) {
 			this.retinaBall.addVision(ball.getDistance(), -ball.getDirection());
 		}
 		this.retinaFlagLeft.reset();
 		if (sens.sawFlagLeft()) {
-			Iterator<BehaviourVision> iter = sens.getFlagsLeft().values().iterator();
+			Iterator<DistDirVision> iter = sens.getFlagsLeft().values().iterator();
 			while (iter.hasNext()) {
-				BehaviourVision vis = iter.next();
+				DistDirVision vis = iter.next();
 				this.retinaFlagLeft.addVision(vis.getDistance(), -vis.getDirection());
 
 			}
 		}
 		this.retinaFlagOwn.reset();
 		if (sens.sawFlagOwn()) {
-			Iterator<BehaviourVision> iter = sens.getFlagsOwn().values().iterator();
+			Iterator<DistDirVision> iter = sens.getFlagsOwn().values().iterator();
 			while (iter.hasNext()) {
-				BehaviourVision vis = iter.next();
+				DistDirVision vis = iter.next();
 				this.retinaFlagOwn.addVision(vis.getDistance(), -vis.getDirection());
 
 			}
 		}
 		this.retinaFlagPenaltyOther.reset();
 		if (sens.sawFlagPenaltyOther()) {
-			Iterator<BehaviourVision> iter = sens.getFlagsOwn().values().iterator();
+			Iterator<DistDirVision> iter = sens.getFlagsOwn().values().iterator();
 			while (iter.hasNext()) {
-				BehaviourVision vis = iter.next();
+				DistDirVision vis = iter.next();
 				this.retinaFlagPenaltyOther.addVision(vis.getDistance(), -vis.getDirection());
 
 			}
 		}
 		this.retinaFlagRight.reset();
 		if (sens.sawFlagRight()) {
-			Iterator<BehaviourVision> iter = sens.getFlagsOwn().values().iterator();
+			Iterator<DistDirVision> iter = sens.getFlagsOwn().values().iterator();
 			while (iter.hasNext()) {
-				BehaviourVision vis = iter.next();
+				DistDirVision vis = iter.next();
 				this.retinaFlagRight.addVision(vis.getDistance(), -vis.getDirection());
 			}
 		}
 		this.retinaGoalOther.reset();
 		if (sens.sawFlagGoalOther()) {
-			Iterator<BehaviourVision> iter = sens.getFlagsOwn().values().iterator();
+			Iterator<DistDirVision> iter = sens.getFlagsOwn().values().iterator();
 			while (iter.hasNext()) {
-				BehaviourVision vis = iter.next();
+				DistDirVision vis = iter.next();
 				this.retinaGoalOther.addVision(vis.getDistance(), -vis.getDirection());
 			}
 		}
 		this.retinaPlayerOther.reset();
 		if (sens.sawPlayerOther()) {
-			Iterator<BehaviourVision> iter = sens.getFlagsOwn().values().iterator();
+			Iterator<DistDirVision> iter = sens.getFlagsOwn().values().iterator();
 			while (iter.hasNext()) {
-				BehaviourVision vis = iter.next();
+				DistDirVision vis = iter.next();
 				this.retinaPlayerOther.addVision(vis.getDistance(), -vis.getDirection());
 
 			}
 		}
 		this.retinaPlayerOwn.reset();
 		if (sens.sawPlayerOwn()) {
-			Iterator<BehaviourVision> iter = sens.getFlagsOwn().values().iterator();
+			Iterator<DistDirVision> iter = sens.getFlagsOwn().values().iterator();
 			while (iter.hasNext()) {
-				BehaviourVision vis = iter.next();
+				DistDirVision vis = iter.next();
 				this.retinaPlayerOwn.addVision(vis.getDistance(), -vis.getDirection());
 
 			}

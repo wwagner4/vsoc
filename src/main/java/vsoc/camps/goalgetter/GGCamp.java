@@ -144,7 +144,7 @@ public class GGCamp extends AbstractCamp {
             Iterator<Net> iter = nets.iterator();
             while (iter.hasNext()) {
                 Net net = iter.next();
-                BehaviourNeuroControlSystem ncs = new BehaviourNeuroControlSystem(
+                NetBehaviourController ncs = new NetBehaviourController(
                         createBehaviour(net));
                 ncs.setNet(net);
                 Member mem = new Member();

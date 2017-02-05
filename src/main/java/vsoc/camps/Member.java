@@ -18,13 +18,13 @@ public class Member implements Serializable {
 
     private int receivedGoalsCount = 0;
     
-    private BehaviourNeuroControlSystem controlSystem = null;
+    private NetBehaviourController controlSystem = null;
 
     public Member() {
         super();
     }
 
-    public void setNeuroControlSystem(BehaviourNeuroControlSystem cs) {
+    public void setNeuroControlSystem(NetBehaviourController cs) {
         this.controlSystem = cs;
     }
 
@@ -79,7 +79,7 @@ public class Member implements Serializable {
 
 
     
-    public BehaviourNeuroControlSystem getNeuroControlSystem() {
+    public NetBehaviourController getNeuroControlSystem() {
         return this.controlSystem;
     }
 

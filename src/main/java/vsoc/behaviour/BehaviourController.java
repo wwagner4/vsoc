@@ -58,91 +58,91 @@ public class BehaviourController implements Controller, Serializable {
 
     public void infoSeeFlagRight(Flag flag, double distance, double direction) {
         this.sensors.setSawAnything(true);
-        this.sensors.getFlagsRight().put(flag, new BehaviourVision(distance, direction));
+        this.sensors.getFlagsRight().put(flag, new DistDirVision(distance, direction));
     }
 
     public void infoSeeFlagLeft(Flag flag, double distance, double direction) {
         this.sensors.setSawAnything(true);
-        this.sensors.getFlagsLeft().put(flag, new BehaviourVision(distance, direction));
+        this.sensors.getFlagsLeft().put(flag, new DistDirVision(distance, direction));
     }
 
     public void infoSeeFlagOwn(Flag flag, double distance, double direction) {
         this.sensors.setSawAnything(true);
-        this.sensors.getFlagsOwn().put(flag, new BehaviourVision(distance, direction));
+        this.sensors.getFlagsOwn().put(flag, new DistDirVision(distance, direction));
     }
 
     public void infoSeeFlagOther(Flag flag, double distance, double direction) {
         this.sensors.setSawAnything(true);
-        this.sensors.getFlagsOther().put(flag, new BehaviourVision(distance, direction));
+        this.sensors.getFlagsOther().put(flag, new DistDirVision(distance, direction));
     }
 
     public void infoSeeFlagCenter(Flag flag, double distance, double direction) {
         this.sensors.setSawAnything(true);
         this.sensors.getFlagsCenter()
-                .put(flag, new BehaviourVision(distance, direction));
+                .put(flag, new DistDirVision(distance, direction));
     }
 
     public void infoSeeFlagCornerOwn(Flag flag, double distance,
             double direction) {
         this.sensors.setSawAnything(true);
         this.sensors.getFlagsCornerOwn().put(flag,
-                new BehaviourVision(distance, direction));
+                new DistDirVision(distance, direction));
     }
 
     public void infoSeeFlagCornerOther(Flag flag, double distance,
             double direction) {
         this.sensors.setSawAnything(true);
         this.sensors.getFlagsCornerOther().put(flag,
-                new BehaviourVision(distance, direction));
+                new DistDirVision(distance, direction));
     }
 
     public void infoSeeFlagPenaltyOwn(Flag flag, double distance,
             double direction) {
         this.sensors.setSawAnything(true);
         this.sensors.getFlagsPenaltyOwn().put(flag,
-                new BehaviourVision(distance, direction));
+                new DistDirVision(distance, direction));
     }
 
     public void infoSeeFlagPenaltyOther(Flag flag, double distance,
             double direction) {
         this.sensors.setSawAnything(true);
         this.sensors.getFlagsPenaltyOther().put(flag,
-                new BehaviourVision(distance, direction));
+                new DistDirVision(distance, direction));
     }
 
     public void infoSeeFlagGoalOwn(Flag flag, double distance, double direction) {
         this.sensors.setSawAnything(true);
         this.sensors.getFlagsGoalOwn().put(flag,
-                new BehaviourVision(distance, direction));
+                new DistDirVision(distance, direction));
     }
 
     public void infoSeeFlagGoalOther(Flag flag, double distance,
             double direction) {
         this.sensors.setSawAnything(true);
         this.sensors.getFlagsGoalOther().put(flag,
-                new BehaviourVision(distance, direction));
+                new DistDirVision(distance, direction));
     }
 
     public void infoSeeLine(Line line, double distance, double direction) {
         this.sensors.setSawAnything(true);
-        this.sensors.getLines().put(line, new BehaviourVision(distance, direction));
+        this.sensors.getLines().put(line, new DistDirVision(distance, direction));
     }
 
     public void infoSeePlayerOther(int number, double distance, double direction) {
         this.sensors.setSawAnything(true);
         this.sensors.getPlayersOther().put(number,
-                new BehaviourVision(distance, direction));
+                new DistDirVision(distance, direction));
     }
 
     public void infoSeePlayerOwn(int number, double distance, double direction) {
         this.sensors.setSawAnything(true);
         this.sensors.getPlayersOwn().put(number,
-                new BehaviourVision(distance, direction));
+                new DistDirVision(distance, direction));
     }
 
     public void infoSeeBall(double distance, double direction) {
         this.sensors.setSawAnything(true);
-        this.sensors.setBall(new BehaviourVision(distance, direction));
+        this.sensors.setBall(new DistDirVision(distance, direction));
     }
 
     public void infoHearReferee(RefereeMessage refereeMessage) {

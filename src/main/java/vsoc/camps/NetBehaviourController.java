@@ -11,18 +11,18 @@ import vsoc.nn.feedforward.DefaultFFConnector;
 /**
  * Atan control system that controls the robots by means of a neural network.
  */
-public class BehaviourNeuroControlSystem extends BehaviourController implements
+public class NetBehaviourController extends BehaviourController implements
         Serializable {
 
     private static final long serialVersionUID = 0L;
 
     private NetBehaviour netBehaviour = null;
 
-    public BehaviourNeuroControlSystem() {
+    public NetBehaviourController() {
         super();
     }
     
-    public BehaviourNeuroControlSystem(Behaviour behaviour) {
+    public NetBehaviourController(Behaviour behaviour) {
         super(behaviour);
         this.netBehaviour = getNetBehaviour(behaviour);
     }

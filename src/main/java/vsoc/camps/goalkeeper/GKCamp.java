@@ -179,7 +179,7 @@ public class GKCamp extends AbstractCamp {
 		Iterator<Net> iter = nets.iterator();
 		while (iter.hasNext()) {
 			Net net = iter.next();
-			BehaviourNeuroControlSystem ncs = new BehaviourNeuroControlSystem(createGkBehaviour(net));
+			NetBehaviourController ncs = new NetBehaviourController(createGkBehaviour(net));
 			ncs.setNet(net);
 			Member mem = new Member();
 			mem.setNeuroControlSystem(ncs);
