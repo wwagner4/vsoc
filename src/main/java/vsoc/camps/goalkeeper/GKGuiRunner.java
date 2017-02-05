@@ -1,4 +1,4 @@
-package vsoc.view;
+package vsoc.camps.goalkeeper;
 
 import java.io.IOException;
 
@@ -8,6 +8,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import vsoc.camps.Camp;
 import vsoc.util.Serializer;
 import vsoc.util.VsocUtil;
+import vsoc.view.FieldFrame;
 
 public class GKGuiRunner {
 

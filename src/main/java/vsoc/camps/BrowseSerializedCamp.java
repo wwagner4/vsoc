@@ -1,12 +1,12 @@
-package vsoc.view;
+package vsoc.camps;
 
 import java.io.File;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
-import vsoc.camps.Camp;
 import vsoc.util.Serializer;
+import vsoc.view.FieldFrame;
 
 public class BrowseSerializedCamp {
 

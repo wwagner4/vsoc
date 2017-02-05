@@ -1,4 +1,4 @@
-package vsoc.view;
+package vsoc.camps.goalgetter;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -6,6 +6,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import vsoc.camps.Camp;
 import vsoc.util.Serializer;
 import vsoc.util.VsocUtil;
+import vsoc.view.FieldFrame;
 
 public class GGGuiRunner {
 
