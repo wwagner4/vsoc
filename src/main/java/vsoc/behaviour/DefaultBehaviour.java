@@ -1,9 +1,7 @@
-package vsoc.camps;
+package vsoc.behaviour;
 
 import java.util.Random;
 
-import vsoc.behaviour.Behaviour;
-import vsoc.behaviour.Sensors;
 import atan.model.Player;
 
 /**

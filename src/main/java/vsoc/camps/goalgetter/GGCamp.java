@@ -4,7 +4,7 @@ import java.util.*;
 
 import org.apache.log4j.Logger;
 
-import vsoc.behaviour.Behaviour;
+import vsoc.behaviour.*;
 import vsoc.camps.*;
 import vsoc.genetic.*;
 import vsoc.nn.Net;
