@@ -1,18 +1,21 @@
 package vsoc.camps.neuroevolution.goalgetter;
 
+import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import vsoc.camps.*;
+import vsoc.server.gui.FieldFrame;
 import vsoc.util.Serializer;
 import vsoc.util.VsocUtil;
-import vsoc.view.FieldFrame;
 
 public class GGGuiRunner {
 
-    private static final String PREFIX = "GGCAMP";
+	private static final Logger log = Logger.getLogger(AbstractCamp.class);
+	
+	private static final String PREFIX = "GGCAMP";
 
-    public GGGuiRunner() {
+    private GGGuiRunner() {
         super();
     }
 
@@ -22,10 +25,10 @@ public class GGGuiRunner {
             Serializer.current().startScheduledSerialization(PREFIX, 600, camp);
             VsocUtil u = VsocUtil.current();
             String campProperties = u.propsToString(camp.getProperties());
-            System.out.println(campProperties);
+            log.info("\n" + campProperties);
             FieldFrame.open(camp, "GG camp");
         } catch (Exception e) {
-            e.printStackTrace();
+        	log.error("Could not run 'GGGuiRunner'. " + e.getMessage(), e);
         }
     }
 

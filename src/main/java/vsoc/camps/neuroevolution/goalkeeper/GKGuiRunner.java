@@ -6,8 +6,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import vsoc.camps.*;
+import vsoc.server.gui.FieldFrame;
 import vsoc.util.*;
-import vsoc.view.FieldFrame;
 
 public class GKGuiRunner {
 

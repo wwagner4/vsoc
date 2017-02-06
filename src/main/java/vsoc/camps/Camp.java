@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Properties;
 
 import vsoc.server.Server;
-import vsoc.view.*;
+import vsoc.server.gui.*;
 
 public interface Camp<M extends Member<?>> extends Serializable, SimulationContainer {
 

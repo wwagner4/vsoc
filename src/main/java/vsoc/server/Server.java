@@ -13,8 +13,8 @@ import java.util.List;
 
 import atan.model.Controller;
 import atan.model.Player;
+import vsoc.server.gui.*;
 import vsoc.util.Vec2D;
-import vsoc.view.*;
 
 /**
  * Performs soccer specific actions.

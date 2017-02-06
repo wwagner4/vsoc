@@ -5,10 +5,14 @@ import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
+import org.apache.log4j.Logger;
+
+import vsoc.server.gui.FieldFrame;
 import vsoc.util.Serializer;
-import vsoc.view.FieldFrame;
 
 public class BrowseSerializedCamp {
+	
+	private static Logger log = Logger.getLogger(BrowseSerializedCamp.class);
 
     public BrowseSerializedCamp() {
         super();
@@ -41,7 +45,7 @@ public class BrowseSerializedCamp {
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage()
                     + " !\nProgram aborted.");
-            e.printStackTrace();
+            log.error("Could not browse serialized camp. " + e.getMessage(), e);
         }
     }
 

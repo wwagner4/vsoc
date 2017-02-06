@@ -8,7 +8,7 @@ import vsoc.camps.*;
 import vsoc.camps.neuroevolution.*;
 import vsoc.camps.neuroevolution.goalkeeper.GoalkeeperDefaultBehaviour;
 import vsoc.server.VsocPlayer;
-import vsoc.view.FieldFrame;
+import vsoc.server.gui.FieldFrame;
 
 public class GoalkeeperDefaultBehaviourTestCamp extends AbstractNeuroevolutionCamp {
 

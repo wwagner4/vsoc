@@ -147,7 +147,10 @@ public class GKCamp extends AbstractNeuroevolutionCamp {
 	private List<Member<NetBehaviourController>> loadGoalgetters(String resName) throws IOException {
 		URL res = getClass().getClassLoader().getResource(resName);
 		if (res == null) {
-			throw new IOException("Could not find resource '" + resName + "' in classpath.");
+			throw new IOException("Could not find resource '" + resName + "' in classpath."
+					+ "\n - Run vsoc.camps.neuroevolution.goalkeeper.GoalgetterGenerator "
+					+ "\n - Copy the resultiong .ser file into the classpath ('src/main/resources')." 
+					+ "\n - Rename the .ser file to '" + resName + "'.");
 		} else {
 			log.info("found resource " + res + " to load GKCamp");
 		}
@@ -182,7 +185,7 @@ public class GKCamp extends AbstractNeuroevolutionCamp {
 			Net net = iter.next();
 			NetBehaviourController ncs = new NetBehaviourController(createGkBehaviour(net));
 			ncs.setNet(net);
-			Member<NetBehaviourController> mem = new Member<NetBehaviourController>();
+			Member<NetBehaviourController> mem = new Member<>();
 			mem.setController(ncs);
 			mem.reset();
 			mems.add(mem);

@@ -9,7 +9,7 @@ import java.io.Serializable;
 import vsoc.genetic.Crossable;
 
 /**
- * Interface for a neuronal net.
+ * Interface for a neural net.
  */
 public interface Net extends Crossable<Net>, Serializable {
 

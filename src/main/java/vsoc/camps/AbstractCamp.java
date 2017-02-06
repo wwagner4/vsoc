@@ -43,7 +43,7 @@ public abstract class AbstractCamp<M extends Member<?>> implements Camp<M> {
 	
 	public void takeOneStep() {
 		if (log.isDebugEnabled()) {
-			log.debug("Started running a new match. matchCount:" + this.matchCount + " selectionCount:"
+			log.debug("Started running a new match. matchCount:" + this.matchCount + " generationCount:"
 					+ this.generationsCount);
 		}
 		runMatch();

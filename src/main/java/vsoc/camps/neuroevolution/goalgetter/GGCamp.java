@@ -206,7 +206,7 @@ public class GGCamp extends AbstractNeuroevolutionCamp {
         sb.append(VsocUtil.current().format(goals));
         sb.append(" ownGoalCount=");
         sb.append(VsocUtil.current().format(ownGoals));
-        log.info("Select new members. selectionCount:" + getGenerationsCount()
+        log.info("New generation. generationCount:" + getGenerationsCount()
                 + " info:<" + sb + ">");
     }
 
