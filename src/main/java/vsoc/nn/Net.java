@@ -19,6 +19,4 @@ public interface Net extends Crossable<Net>, Serializable {
 
     public abstract void calculate();
 
-    public abstract double distance(Net n);
-    
 }
