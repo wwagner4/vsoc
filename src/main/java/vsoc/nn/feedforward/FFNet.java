@@ -89,7 +89,7 @@ public class FFNet implements Net {
         il.setValuesRandom(rv);
     }
 
-    public void setWeightsRandom(long seed) {
+    public void setParametersRandom(long seed) {
         RandomWgt rw = new RandomWgt(seed);
         setWeightsRandom(rw);
     }

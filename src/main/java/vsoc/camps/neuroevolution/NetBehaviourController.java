@@ -11,12 +11,12 @@ import vsoc.nn.feedforward.DefaultFFConnector;
 /**
  * Atan control system that controls the robots by means of a neural network.
  */
-public class NetBehaviourController extends BehaviourController implements
+public class NetBehaviourController<N extends Net> extends BehaviourController implements
         Serializable {
 
     private static final long serialVersionUID = 0L;
 
-    private NetBehaviour netBehaviour = null;
+    private NetBehaviour<N> netBehaviour = null;
 
     public NetBehaviourController() {
         super();
@@ -27,22 +27,23 @@ public class NetBehaviourController extends BehaviourController implements
         this.netBehaviour = getNetBehaviour(behaviour);
     }
 
-    private NetBehaviour getNetBehaviour(Behaviour behav) {
+    @SuppressWarnings("unchecked")
+	private NetBehaviour<N> getNetBehaviour(Behaviour behav) {
         if (behav == null) {
             throw new IllegalStateException(
                     "The Behaviour of a NeuroControlSystem must contain exactly one net NetBehaviour.");
         } else if (behav instanceof NetBehaviour) {
-            return (NetBehaviour) behav;
+            return (NetBehaviour<N>) behav;
         } else {
             return getNetBehaviour(behav.getChild());
         }
     }
 
-    public Net getNet() {
+    public N getNet() {
         return this.netBehaviour.getNet();
     }
 
-    public void setNet(Net net) {
+    public void setNet(N net) {
         this.netBehaviour.setNet(net);
     }
 

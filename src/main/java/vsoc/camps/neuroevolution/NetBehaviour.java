@@ -9,13 +9,13 @@ import vsoc.nn.Net;
 import vsoc.util.*;
 import atan.model.Player;
 
-public class NetBehaviour implements Behaviour {
+public class NetBehaviour<N extends Net> implements Behaviour {
 
 	private static final long serialVersionUID = 1L;
 
 	private static Logger log = Logger.getLogger(NetBehaviour.class);
 
-	private Net net = null;
+	private N net = null;
 
 	private Retina retinaFlagLeft = new Retina();
 
@@ -33,7 +33,7 @@ public class NetBehaviour implements Behaviour {
 
 	private Retina retinaBall = new Retina();
 
-	public NetBehaviour(Net net) {
+	public NetBehaviour(N net) {
 		super();
 		this.net = net;
 	}
@@ -326,11 +326,11 @@ public class NetBehaviour implements Behaviour {
 		this.net.setInputValue(31, this.retinaBall.getD());
 	}
 
-	public Net getNet() {
+	public N getNet() {
 		return this.net;
 	}
 
-	public void setNet(Net net) {
+	public void setNet(N net) {
 		this.net = net;
 	}
 }

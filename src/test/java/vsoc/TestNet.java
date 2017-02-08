@@ -20,18 +20,18 @@ public TestNet(String name) {
   public void testDistance01 () {
     for (int i=0; i<100; i++) {
       FFNet n1 = new FFNet(new vsoc.TestNetConnector());
-      n1.setWeightsRandom(this.ran.nextLong());
+      n1.setParametersRandom(this.ran.nextLong());
       FFNet n2 = new FFNet(new vsoc.TestNetConnector());
-      n2.setWeightsRandom(this.ran.nextLong());
+      n2.setParametersRandom(this.ran.nextLong());
       assertTrue("distance <= 5.0", n1.distance(n2) > 5.0);
     }
   }
   public void xtestDistance02 () {
     for (int i=0; i<100; i++) {
       FFNet n1 = new FFNet(new vsoc.TestNetConnector());
-      n1.setWeightsRandom(this.ran.nextLong());
+      n1.setParametersRandom(this.ran.nextLong());
       FFNet n2 = new FFNet(new vsoc.TestNetConnector());
-      n2.setWeightsRandom(this.ran.nextLong());
+      n2.setParametersRandom(this.ran.nextLong());
       System.out.println(n1.distance(n2));
     }
   }

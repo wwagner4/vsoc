@@ -24,7 +24,7 @@ public class FFNetCrossableFactory implements CrossableFactory<Net> {
         } else {
             net = new FFNet(this.connector);
         }
-        net.setWeightsRandom(ran.nextLong());
+        net.setParametersRandom(ran.nextLong());
         return net;
     }
 

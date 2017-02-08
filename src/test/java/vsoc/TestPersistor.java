@@ -68,7 +68,7 @@ public class TestPersistor extends AbstractTest {
     }
     public void testNet() throws Exception {
         FFNet n = new FFNet(new TestNetConnector());
-        n.setWeightsRandom(System.currentTimeMillis());
+        n.setParametersRandom(System.currentTimeMillis());
         this.ser.serialize(n, TestUtil.tmp("net.object"));
         Object p1 = this.ser.deserialize(TestUtil.tmp("net.object"));
         FFNet n1 = (FFNet) p1;
