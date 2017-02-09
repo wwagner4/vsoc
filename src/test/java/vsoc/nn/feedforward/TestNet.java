@@ -44,6 +44,7 @@ public TestNet(String name) {
   private FFNet createTestNet() {
 	  AbstractFFNetConnector c = new vsoc.TestNetConnector();
 	  FFNet n = new FFNet();
+	  c.initLayers(n);
 	  c.connectNet(n);
 	  return n;
   }

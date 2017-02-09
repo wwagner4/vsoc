@@ -213,6 +213,7 @@ public class TestTransferManager extends AbstractTest {
 	private FFNet createOneNeuronNet(int synapseCount) {
 		AbstractFFNetConnector c = oneNeuronConnector(synapseCount);
 		FFNet net = new FFNet();
+		c.initLayers(net);
 		c.connectNet(net);
 		NeuronLayer l = net.getOutputLayer();
 		Iterator<Synapse> enu = l.synapses();

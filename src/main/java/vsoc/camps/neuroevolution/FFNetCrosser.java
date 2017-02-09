@@ -1,10 +1,13 @@
 package vsoc.camps.neuroevolution;
 
+import java.io.Serializable;
+
 import vsoc.genetic.*;
 import vsoc.nn.feedforward.*;
 
-public class FFNetCrosser implements Crosser<FFNet> {
+public class FFNetCrosser implements Crosser<FFNet>, Serializable {
 
+	private static final long serialVersionUID = 1L;
 	private AbstractFFNetConnector connector = new DefaultFFConnector();
 	private CrossoverSwitch crossoverSwitch = new CrossoverSwitch(50, 20);
 	
@@ -20,6 +23,7 @@ public class FFNetCrosser implements Crosser<FFNet> {
 	@Override
 	public FFNet create(long seed) {
 		FFNet n = new FFNet();
+		connector.initLayers(n);
 		connector.connectNet(n);
 		n.setParametersRandom(seed);
 		return n;

@@ -49,6 +49,7 @@ public class FFNet implements Net {
     public FFNet newChild(FFNet otherParent, double mutationRate, CrossoverSwitch crossoverSwitch, AbstractFFNetConnector connector) {
         Mutator mut = new Mutator((int) (mutationRate * 1000000)); 
         FFNet childNet = new FFNet();
+        connector.initLayers(childNet);
         connector.connectNet(childNet);
         childNet.setWeightsCrossover(this, otherParent, crossoverSwitch, mut);
         return childNet;

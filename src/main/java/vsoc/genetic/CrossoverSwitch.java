@@ -7,9 +7,11 @@ import java.io.*;
  * A Crossover switch which generates a boolean that switches from true to false
  * after random intervals. The interval length is normal distributed.
  */
-public class CrossoverSwitch {
+public class CrossoverSwitch implements Serializable {
 
-    private Random ran;
+	private static final long serialVersionUID = 1L;
+
+	private Random ran;
 
     private int mean;
 
