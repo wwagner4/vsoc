@@ -42,7 +42,7 @@
 		<property name="matchesPerGeneration" value="250"/>
 		<property name="maxGenerations" value="200"/>
 		<property name="gkSelPoli" ref="gkSelPoli"/>
-		<property name="crossableFactory" ref="crossableFactory"/>
+		<property name="crosser" ref="netCrosser"/>
 		
 		<property name="ggMutationRate" value="0.02"/>
 		<property name="ggSelPoli" ref="ggSelPoli"/>
@@ -64,9 +64,9 @@
 		<property name="ownGoalFactor" value="-100"/>
 		<property name="goalFactor" value="100"/>
 		<property name="zeroKickPenalty" value="-100"/>
-		<property name="selPoli" ref="ggSelPoli"/>	
     <property name="maxGenerations" value="400"/> 
 
+    <property name="selPoli" ref="ggSelPoli"/>  
 		<property name="crosser" ref="netCrosser"/>	
 	</bean>
 
@@ -78,5 +78,10 @@
 		<property name="populationSize" value="21"/>	
 	</bean>
 	
-  <bean id="netCrosser" class="vsoc.camps.neuroevolution.NetCrosser" />
+  <bean id="netCrosser" class="vsoc.camps.neuroevolution.FFNetCrosser">
+    <constructor-arg ref="connector" />
+  </bean>
+
+  <bean id="connector" class="vsoc.nn.feedforward.DefaultFFConnector" />
+
 </beans>

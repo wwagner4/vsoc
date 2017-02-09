@@ -24,22 +24,8 @@ public class FFNet implements Net {
 
     protected List<Layer> ls = new ArrayList<>();
 
-    private AbstractFFNetConnector netConnector = null;
-
-    private transient CrossoverSwitch crossoverSwitsh = null;
-
     public FFNet() {
         super();
-    }
-
-    public FFNet(AbstractFFNetConnector nc) {
-        this();
-        this.connect(nc);
-    }
-
-    void connect(AbstractFFNetConnector nc) {
-        this.netConnector = nc;
-        nc.connect(this);
     }
 
     public NeuronLayer getOutputLayer() {
@@ -60,10 +46,11 @@ public class FFNet implements Net {
         return getOutputLayer().getValueAt(index);
     }
 
-    public FFNet newChild(FFNet otherParent, double mutationRate) {
+    public FFNet newChild(FFNet otherParent, double mutationRate, CrossoverSwitch crossoverSwitch, AbstractFFNetConnector connector) {
         Mutator mut = new Mutator((int) (mutationRate * 1000000)); 
-        FFNet childNet = new FFNet(this.netConnector);
-        childNet.setWeightsCrossover(this, otherParent, getCrossoverSwitsh(), mut);
+        FFNet childNet = new FFNet();
+        connector.connectNet(childNet);
+        childNet.setWeightsCrossover(this, otherParent, crossoverSwitch, mut);
         return childNet;
     }
 
@@ -286,17 +273,6 @@ public class FFNet implements Net {
         return (double) distSum / synCount;
     }
 
-    void setCrossoverSwitsh(CrossoverSwitch crossoverSwitsh) {
-        this.crossoverSwitsh = crossoverSwitsh;
-    }
-
-    private CrossoverSwitch getCrossoverSwitsh() {
-        if (this.crossoverSwitsh == null) {
-            this.crossoverSwitsh = new CrossoverSwitch(50, 20);
-        }
-        return this.crossoverSwitsh;
-    }
-    
     private class EnumSynapsesOfNet implements Iterator<Synapse> {
         Iterator<Synapse> enl;
 
