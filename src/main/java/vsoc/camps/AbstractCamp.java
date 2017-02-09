@@ -23,8 +23,6 @@ public abstract class AbstractCamp<M extends Member<?>, N extends Net> implement
 	
 	private transient Server server = null;
 	
-	private Crosser<N> crosser;
-
 	private int matchCount = 0;
 
 	private int generationsCount = 0;
@@ -34,10 +32,6 @@ public abstract class AbstractCamp<M extends Member<?>, N extends Net> implement
 	private int stepsPerMatch = 600;
 
 	private int matchesPerGeneration = 150;
-
-	public AbstractCamp() {
-		super();
-	}
 
 	public void run() {
 		while (true) {
@@ -56,9 +50,11 @@ public abstract class AbstractCamp<M extends Member<?>, N extends Net> implement
 		if (this.matchCount >= this.matchesPerGeneration) {
 			this.matchCount = 0;
 			this.generationsCount++;
-			createNextGeneration(this.crosser);
+			createNextGeneration(getCrosser());
 		}
 	}
+
+	abstract protected Crosser<N> getCrosser();
 
 	abstract protected void createNextGeneration(Crosser<N> crosser);
 

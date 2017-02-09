@@ -10,7 +10,6 @@ import vsoc.camps.neuroevolution.*;
 import vsoc.genetic.*;
 import vsoc.nn.Net;
 import vsoc.server.VsocPlayer;
-import vsoc.server.gui.Simulation;
 import vsoc.util.*;
 
 /**
@@ -20,11 +19,11 @@ import vsoc.util.*;
  */
 public class GGCamp extends AbstractNeuroevolutionCamp {
 
-    private static Logger log = Logger.getLogger(GGCamp.class);
+	private static Logger log = Logger.getLogger(GGCamp.class);
 
     private static final long serialVersionUID = 0L;
 
-    private List<Member<NetBehaviourController<Net>>> members = null;
+    private List<Member<NetBehaviourController<Net>>> members;
 
     private double mutationRate = 0.02;
 
@@ -36,15 +35,11 @@ public class GGCamp extends AbstractNeuroevolutionCamp {
 
     private int goalFactor = 100;
 
-    private SelectionPolicy<Net> selPoli = null;
+    private SelectionPolicy<Net> selPoli;
 
-    private CrossableFactory<Net> crossableFactory = null;
-
-    private int zeroKickPenalty = -100;
-
-    public GGCamp() {
-        super();
-    }
+    private Crosser<Net> crosser;
+    
+	private int zeroKickPenalty = -100;
 
     public int getKickFactor() {
         return this.kickFactor;
@@ -105,14 +100,6 @@ public class GGCamp extends AbstractNeuroevolutionCamp {
         return sb.toString();
     }
 
-    public CrossableFactory<Net> getCrossableFactory() {
-        return this.crossableFactory;
-    }
-
-    public void setCrossableFactory(CrossableFactory<Net> crossableFactory) {
-        this.crossableFactory = crossableFactory;
-    }
-
     public SelectionPolicy<Net> getSelPoli() {
         return this.selPoli;
     }
@@ -142,7 +129,7 @@ public class GGCamp extends AbstractNeuroevolutionCamp {
     public List<Member<NetBehaviourController<Net>>> getMembers() {
         if (this.members == null) {
             List<Member<NetBehaviourController<Net>>> mems = new ArrayList<>();
-            List<Net> nets = this.selPoli.createNewGeneration(this.crossableFactory);
+            List<Net> nets = this.selPoli.createNewGeneration(this.crosser);
             Iterator<Net> iter = nets.iterator();
             while (iter.hasNext()) {
                 Net net = iter.next();
@@ -164,7 +151,7 @@ public class GGCamp extends AbstractNeuroevolutionCamp {
     }
 
     protected Behaviour createBehaviour(Net net) {
-        NetBehaviour nBehav = new NetBehaviour(net);
+        NetBehaviour<Net> nBehav = new NetBehaviour<Net>(net);
         return new DefaultBehaviour(nBehav);
     }
 
@@ -191,7 +178,7 @@ public class GGCamp extends AbstractNeuroevolutionCamp {
         Comparator<Member<?>> comp = new GGMembersComparator(this.goalFactor,
                 this.ownGoalFactor, this.kickFactor, this.kickOutFactor, this.zeroKickPenalty );
         basicCreateNextGeneration(getMembers(), crosser, comp, this.mutationRate,
-                this.selPoli, this.crossableFactory);
+                this.selPoli);
     }
 
     private void createNextGenerationInfo(double diversity, double kicks,
@@ -219,20 +206,20 @@ public class GGCamp extends AbstractNeuroevolutionCamp {
         this.zeroKickPenalty = zeroKickPenalty;
     }
 
-	@Override
 	protected int eastPlayerCount() {
 		return 3;
 	}
 
-	@Override
 	protected int westPlayerCount() {
 		return 3;
 	}
 
-	@Override
-	public Simulation getSimulation() {
-		// TODO Auto-generated method stub
-		return null;
+	protected Crosser<Net> getCrosser() {
+		return this.crosser;
+	}
+
+    public void setCrosser(Crosser<Net> crosser) {
+		this.crosser = crosser;
 	}
 
 }

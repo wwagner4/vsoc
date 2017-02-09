@@ -5,50 +5,50 @@
 	<bean id="campRunner" class="vsoc.camps.neuroevolution.goalgetter.GGCampRunner">
 		<property name="camps">
 			<list>
-				<ref bean="camp1"/>				
-				<ref bean="camp2"/>				
-				<ref bean="camp3"/>				
-				<ref bean="camp4"/>				
-				<ref bean="camp5"/>				
+				<ref bean="camp1" />
+				<ref bean="camp2" />
+				<ref bean="camp3" />
+				<ref bean="camp4" />
+				<ref bean="camp5" />
 			</list>
 		</property>
-		
-	</bean>
-	
-	<bean id = "camp1" parent="defaultCamp"/>
 
-	<bean id = "camp2" parent="defaultCamp">
-		<property name="mutationRate" value="0.03"/>
 	</bean>
 
-	<bean id = "camp3" parent="defaultCamp">
-		<property name="mutationRate" value="0.04"/>
+	<bean id="camp1" parent="defaultCamp" />
+
+	<bean id="camp2" parent="defaultCamp">
+		<property name="mutationRate" value="0.03" />
 	</bean>
 
-	<bean id = "camp4" parent="defaultCamp">
-		<property name="mutationRate" value="0.05"/>
+	<bean id="camp3" parent="defaultCamp">
+		<property name="mutationRate" value="0.04" />
 	</bean>
 
-	<bean id = "camp5" parent="defaultCamp">
-		<property name="mutationRate" value="0.06"/>
+	<bean id="camp4" parent="defaultCamp">
+		<property name="mutationRate" value="0.05" />
 	</bean>
 
-	
-	<bean id = "defaultCamp" class="vsoc.camps.neuroevolution.goalgetter.GGCamp">
-		<property name="mutationRate" value="0.02"/>
-		<property name="stepsPerMatch" value="600"/>
-		<property name="matchesPerGeneration" value="150"/>
-		<property name="kickFactor" value="1"/>
-		<property name="kickOutFactor" value="-5"/>
-		<property name="ownGoalFactor" value="-100"/>
-		<property name="goalFactor" value="100"/>
-		<property name="selPoli" ref="selPoli"/>	
-		<property name="crossableFactory" ref="crossableFactory"/>	
-		<property name="maxGenerations" value="200"/>	
+	<bean id="camp5" parent="defaultCamp">
+		<property name="mutationRate" value="0.06" />
 	</bean>
 
-	<bean id="selPoli" class="vsoc.genetic.AdHocSelectionPolicy"/>
-	
-	<bean id="crossableFactory" class="vsoc.nn.feedforward.FFNetCrossableFactory"/>
-	
+	<bean id="defaultCamp" class="vsoc.camps.neuroevolution.goalgetter.GGCamp">
+		<property name="mutationRate" value="0.02" />
+		<property name="stepsPerMatch" value="600" />
+		<property name="matchesPerGeneration" value="150" />
+		<property name="kickFactor" value="1" />
+		<property name="kickOutFactor" value="-5" />
+		<property name="ownGoalFactor" value="-100" />
+		<property name="goalFactor" value="100" />
+		<property name="selPoli" ref="selPoli" />
+		<property name="maxGenerations" value="200" />
+
+		<property name="crosser" ref="netCrosser" />
+	</bean>
+
+	<bean id="selPoli" class="vsoc.genetic.AdHocSelectionPolicy" />
+
+	<bean id="netCrosser" class="vsoc.camps.neuroevolution.NetCrosser" />
+
 </beans>

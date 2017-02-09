@@ -1,10 +1,7 @@
 package vsoc.util;
 
-import junit.framework.TestSuite;
-import junit.textui.TestRunner;
 import vsoc.*;
 import vsoc.nn.feedforward.FFNet;
-import vsoc.util.Serializer;
 
 /**
  * Testcases for Persistance

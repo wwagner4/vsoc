@@ -60,11 +60,10 @@ public class FFNet implements Net {
         return getOutputLayer().getValueAt(index);
     }
 
-    Net newChild(Net otherParent, double mutationRate) {
+    public FFNet newChild(FFNet otherParent, double mutationRate) {
         Mutator mut = new Mutator((int) (mutationRate * 1000000)); 
-        FFNet otherNet = (FFNet) otherParent;
         FFNet childNet = new FFNet(this.netConnector);
-        childNet.setWeightsCrossover(this, otherNet, getCrossoverSwitsh(), mut);
+        childNet.setWeightsCrossover(this, otherParent, getCrossoverSwitsh(), mut);
         return childNet;
     }
 
@@ -166,23 +165,6 @@ public class FFNet implements Net {
             w.write("\n");
         }
         w.write("--- Net END ---\n");
-    }
-
-    private List<Integer> compareWeights(FFNet net1) {
-        List<Integer> result = new ArrayList<>();
-        Iterator<Synapse> e = synapses();
-        Iterator<Synapse> e1 = net1.synapses();
-        while (e.hasNext()) {
-            Synapse syn = e.next();
-            Synapse syn1 = e1.next();
-            short w = syn.getWeight();
-            short w1 = syn1.getWeight();
-            if (w == w1)
-                result.add(0);
-            else
-                result.add(1);
-        }
-        return result;
     }
 
     void resetCalculated() {
@@ -379,12 +361,10 @@ public class FFNet implements Net {
             this.layers = net.ls;
         }
 
-        @Override
         public boolean hasNext() {
             return this.index < this.size;
         }
 
-        @Override
         public Layer next() {
         	Layer layer = this.layers.get(this.index);
         	if (layer == null) {
@@ -398,20 +378,5 @@ public class FFNet implements Net {
     public void reset() {
         // Nothing to be done by a FFNet.
     }
-
-	@Override
-	public int paramCount() {
-		throw new IllegalStateException("Not yet implemented");
-	}
-
-	@Override
-	public void setParam(Number[] params) {
-		throw new IllegalStateException("Not yet implemented");
-	}
-
-	@Override
-	public Number[] getParam() {
-		throw new IllegalStateException("Not yet implemented");
-	}
 
 }

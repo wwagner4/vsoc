@@ -1,13 +1,13 @@
 package vsoc.camps.neuroevolution.goalkeeper;
 
-import java.io.*;
+import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 
 import org.apache.log4j.Logger;
 
 import vsoc.behaviour.*;
-import vsoc.camps.*;
+import vsoc.camps.Member;
 import vsoc.camps.neuroevolution.*;
 import vsoc.camps.neuroevolution.goalgetter.*;
 import vsoc.genetic.*;
@@ -28,9 +28,9 @@ public class GKCamp extends AbstractNeuroevolutionCamp {
 
 	private List<Member<NetBehaviourController<Net>>> goalkeepers = null;
 
-	private CrossableFactory<Net> crossableFactory;
-
 	private SelectionPolicy<Net> gkSelPoli;
+	
+	private Crosser<Net> crosser;
 
 	private double gkMutationRate = 0.01;
 
@@ -126,10 +126,10 @@ public class GKCamp extends AbstractNeuroevolutionCamp {
 	protected void createNextGeneration(Crosser<Net> crosser) {
 		Comparator<Member<?>> comp = new GGMembersComparator(this.ggGoalFactor, this.ggOwnGoalFactor, this.ggKickFactor,
 		    this.ggKickOutFactor, this.ggZeroKickPenalty);
-		basicCreateNextGeneration(getGoalgetters(), crosser, comp, this.ggMutationRate, this.ggSelPoli, this.crossableFactory);
+		basicCreateNextGeneration(getGoalgetters(), crosser, comp, this.ggMutationRate, this.ggSelPoli);
 
 		Comparator<Member<?>> gkComp = new GKMembersComparator();
-		basicCreateNextGeneration(getGoalkeepers(), crosser, gkComp, this.gkMutationRate, this.gkSelPoli, this.crossableFactory);
+		basicCreateNextGeneration(getGoalkeepers(), crosser, gkComp, this.gkMutationRate, this.gkSelPoli);
 	}
 
 	public List<Member<NetBehaviourController<Net>>> getGoalgetters() {
@@ -179,7 +179,7 @@ public class GKCamp extends AbstractNeuroevolutionCamp {
 
 	private List<Member<NetBehaviourController<Net>>> createGoalkeepers() {
 		List<Member<NetBehaviourController<Net>>> mems = new ArrayList<>();
-		List<Net> nets = this.gkSelPoli.createNewGeneration(this.crossableFactory);
+		List<Net> nets = this.gkSelPoli.createNewGeneration(this.crosser);
 		Iterator<Net> iter = nets.iterator();
 		while (iter.hasNext()) {
 			Net net = iter.next();
@@ -218,14 +218,6 @@ public class GKCamp extends AbstractNeuroevolutionCamp {
 	@Override
 	protected int westPlayerCount() {
 		return 5;
-	}
-
-	public CrossableFactory<Net> getCrossableFactory() {
-		return this.crossableFactory;
-	}
-
-	public void setCrossableFactory(CrossableFactory<Net> gkCrossableFactory) {
-		this.crossableFactory = gkCrossableFactory;
 	}
 
 	public SelectionPolicy<Net> getGkSelPoli() {
@@ -292,7 +284,15 @@ public class GKCamp extends AbstractNeuroevolutionCamp {
 		re.setProperty("GG own goal factor", u.format(this.ggOwnGoalFactor));
 		re.setProperty("GG zero kick penalty", u.format(this.ggZeroKickPenalty));
 		re.setProperty("GG selection policy", this.ggSelPoli.getClass().getName());
-		re.setProperty("Crossable factory", this.crossableFactory.getClass().getName());
+		re.setProperty("Crossable factory", this.crosser.getClass().getName());
+	}
+
+	protected Crosser<Net> getCrosser() {
+		return this.crosser;
+	}
+
+	public void setCrosser(Crosser<Net> crosser) {
+		this.crosser = crosser;
 	}
 
 }

@@ -1,7 +1,6 @@
 package vsoc.genetic;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import vsoc.util.RandomIndexSelector;
 
@@ -15,7 +14,7 @@ public class AdHocSelectionPolicy<T> implements SelectionPolicy<T> {
         super();
     }
 
-    public List<T> createNextGeneration(List<T> sorted, Crosser<T> crosser, CrossableFactory<T> factory, double m) {
+    public List<T> createNextGeneration(List<T> sorted, Crosser<T> crosser, double m) {
     	T cr1;
     	T cr2;
         List<T> resultPop = new ArrayList<>();
@@ -56,10 +55,10 @@ public class AdHocSelectionPolicy<T> implements SelectionPolicy<T> {
     }
 
 	@Override
-	public List<T> createNewGeneration(CrossableFactory<T> factory) {
+	public List<T> createNewGeneration(Crosser<T> crosser) {
         List<T> pop = new ArrayList<>();
         for (int i = 0; i < this.populationSize; i++) {
-            T mm = factory.createNewCrossableWithRandomAttributes();
+            T mm = crosser.create(12341L);
             pop.add(mm);
         }
         return pop;

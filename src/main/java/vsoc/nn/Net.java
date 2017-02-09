@@ -18,10 +18,4 @@ public interface Net extends Serializable {
 
     void calculate();
     
-    int paramCount();
-    
-    void setParam(Number[] params);
-
-    Number[] getParam();
-
 }

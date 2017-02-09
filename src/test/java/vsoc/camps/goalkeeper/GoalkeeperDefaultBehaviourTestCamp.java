@@ -15,13 +15,9 @@ import vsoc.server.gui.*;
 public class GoalkeeperDefaultBehaviourTestCamp extends AbstractNeuroevolutionCamp {
 
 	private static final long serialVersionUID = 1L;
-
-    public GoalkeeperDefaultBehaviourTestCamp() {
-        super();
-    }
-
+	
     public static void main(String[] args) {
-        GoalkeeperDefaultBehaviourTestCamp camp = new GoalkeeperDefaultBehaviourTestCamp();
+		GoalkeeperDefaultBehaviourTestCamp camp = new GoalkeeperDefaultBehaviourTestCamp();
         FieldFrame.open(camp, "GoalkeeperDefaultBehaviourTestCamp");
     }
 
@@ -77,5 +73,8 @@ public class GoalkeeperDefaultBehaviourTestCamp extends AbstractNeuroevolutionCa
     	throw new IllegalStateException("Not yet implemented");
 	}
 
-
+	@Override
+	protected Crosser<Net> getCrosser() {
+		throw new IllegalStateException("Should not be called");
+	}
 }

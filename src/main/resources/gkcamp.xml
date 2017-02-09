@@ -65,8 +65,9 @@
 		<property name="goalFactor" value="100"/>
 		<property name="zeroKickPenalty" value="-100"/>
 		<property name="selPoli" ref="ggSelPoli"/>	
-		<property name="crossableFactory" ref="crossableFactory"/>	
-		<property name="maxGenerations" value="400"/>	
+    <property name="maxGenerations" value="400"/> 
+
+		<property name="crosser" ref="netCrosser"/>	
 	</bean>
 
 	<bean id="gkSelPoli" class="vsoc.genetic.AdHocSelectionPolicy">
@@ -77,6 +78,5 @@
 		<property name="populationSize" value="21"/>	
 	</bean>
 	
-	<bean id="crossableFactory" class="vsoc.nn.feedforward.FFNetCrossableFactory"/>
-	
+  <bean id="netCrosser" class="vsoc.camps.neuroevolution.NetCrosser" />
 </beans>

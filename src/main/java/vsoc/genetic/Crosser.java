@@ -8,7 +8,7 @@ public interface Crosser<T> {
     */
     T newChild(T c1, T c2, double mutationRate);
 
-    void setParametersRandom(T c, long seed);
+    T create(long seed);
     
     double distance(T c1, T c2);
     

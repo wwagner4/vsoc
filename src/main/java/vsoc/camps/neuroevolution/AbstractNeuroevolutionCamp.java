@@ -12,9 +12,9 @@ abstract public class AbstractNeuroevolutionCamp extends AbstractCamp<Member<Net
 	private static final long serialVersionUID = 1L;
 
 	protected void basicCreateNextGeneration(List<Member<NetBehaviourController<Net>>> mems, Crosser<Net> crosser, Comparator<Member<?>> comp, double mutRate,
-			SelectionPolicy<Net> selPoli, CrossableFactory<Net> crossableFactory) {
+			SelectionPolicy<Net> selPoli) {
 		List<Net> pop = sortedNetsFromMembers(mems, comp);
-		List<Net> childNets = selPoli.createNextGeneration(pop, crosser, crossableFactory, mutRate);
+		List<Net> childNets = selPoli.createNextGeneration(pop, crosser, mutRate);
 		addNetsToMembers(mems, childNets);
 	}
 	
