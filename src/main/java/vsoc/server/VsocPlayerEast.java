@@ -1,8 +1,8 @@
 package vsoc.server;
 
-import java.awt.*;
-import java.awt.geom.*;
-import vsoc.util.*;
+import java.awt.Color;
+
+import vsoc.util.Vec2D;
 
 /**
  * Player of the east team.
@@ -40,20 +40,8 @@ public class VsocPlayerEast extends VsocPlayer {
 		return "EAST";
 	}
 
-	public void paint(Graphics2D g) {
-		double x = getPosition().getX();
-		double y = getPosition().getY();
-		double w = 2;
-		double h = 2;
-		Shape s = new Rectangle2D.Double(x - 1, y - 1, w, h);
-		g.setColor(Color.orange);
-		g.fill(s);
-		g.setColor(Color.black);
-		g.draw(s);
-		double a = 1 * Math.cos(getDirection());
-		double b = 1 * Math.sin(getDirection());
-		Line2D l = new Line2D.Double(x, y, x + a, y + b);
-		g.draw(l);
+	protected Color color() {
+		return Color.ORANGE;
 	}
 
 	public String getTeamName() {

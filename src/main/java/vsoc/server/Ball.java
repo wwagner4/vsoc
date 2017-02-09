@@ -67,9 +67,9 @@ public class Ball extends MoveObject {
     public void paint(Graphics2D g) {
         double x = getPosition().getX();
         double y = getPosition().getY();
-        double w = 1;
-        double h = 1;
-        Shape s = new Rectangle2D.Double(x - 0.5, y - 0.5, w, h);
+        double w = 2;
+        double h = 2;
+        Shape s = new Ellipse2D.Double(x - 1, y - 1, w, h);
         g.setColor(Color.white);
         g.fill(s);
         g.setColor(Color.black);

@@ -2,6 +2,9 @@ package vsoc.server;
 
 import java.util.*;
 import vsoc.util.*;
+
+import java.awt.*;
+import java.awt.geom.*;
 import java.io.*;
 import atan.model.*;
 
@@ -24,6 +27,10 @@ public abstract class VsocPlayer extends MoveObject implements Player {
     private int kickCount = 0;
 
     private int number = -1;
+    
+    protected final double shapeWidth = 3.5;
+    protected final double sw = shapeWidth;
+    protected final double swh = shapeWidth / 2.0;
 
     VsocPlayer(double x, double y, double angle) {
         super(x, y, angle);
@@ -78,6 +85,24 @@ public abstract class VsocPlayer extends MoveObject implements Player {
         }
         return coll;
     }
+
+	public void paint(Graphics2D g) {
+		double x = getPosition().getX();
+		double y = getPosition().getY();
+		double w = this.sw;
+		double h = this.sw;
+		Shape s = new Ellipse2D.Double(x - this.swh, y - this.swh, w, h);
+		g.setColor(color());
+		g.fill(s);
+		g.setColor(Color.black);
+		g.draw(s);
+		double a = this.swh * Math.cos(getDirection());
+		double b = this.swh * Math.sin(getDirection());
+		Line2D l = new Line2D.Double(x, y, x + a, y + b);
+		g.draw(l);
+	}
+
+	abstract protected Color color();
 
     abstract void increaseWestGoalCount();
 

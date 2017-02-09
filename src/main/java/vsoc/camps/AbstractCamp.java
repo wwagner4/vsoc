@@ -47,6 +47,7 @@ public abstract class AbstractCamp<M extends Member<?>, N extends Net> implement
 		runMatch();
 		this.matchCount++;
 		updateMembersAfterMatch();
+//		log.info("match " + this.matchCount + " >= " + this.matchesPerGeneration);
 		if (this.matchCount >= this.matchesPerGeneration) {
 			this.matchCount = 0;
 			this.generationsCount++;
