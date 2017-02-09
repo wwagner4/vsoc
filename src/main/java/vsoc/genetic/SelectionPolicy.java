@@ -4,9 +4,9 @@ import java.io.Serializable;
 import java.util.List;
 
 
-public interface SelectionPolicy<T extends Crossable<?>> extends Serializable {
+public interface SelectionPolicy<T> extends Serializable {
 
-    List<T> createNextGeneration(List<T> currentPopulation, CrossableFactory<T> factory,
+    List<T> createNextGeneration(List<T> currentPopulation, Crosser<T> crosser, CrossableFactory<T> factory,
             double mutationRate);
 
     List<T> createNewGeneration(CrossableFactory<T> factory);

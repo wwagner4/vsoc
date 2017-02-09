@@ -1,7 +1,8 @@
-package vsoc;
+package vsoc.util;
 
 import junit.framework.TestSuite;
 import junit.textui.TestRunner;
+import vsoc.*;
 import vsoc.nn.feedforward.FFNet;
 import vsoc.util.Serializer;
 
@@ -74,8 +75,5 @@ public class TestPersistor extends AbstractTest {
         FFNet n1 = (FFNet) p1;
         assertTrue("equals in structure", n1.equalsInStructure(n));
         assertTrue("equals in weights", n1.equalsInWeights(n));
-    }
-    public static void main(String[] args) {
-        TestRunner.run(new TestSuite(vsoc.TestPersistor.class));
     }
 }

@@ -50,15 +50,17 @@ public class FFNet implements Net {
         return layerAt(0);
     }
     
+    @Override
     public void setInputValue(int index, short val)   {
         getInputLayer().setValueAt(index, val);
     }
 
+    @Override
     public short getOutputValue(int index)   {
         return getOutputLayer().getValueAt(index);
     }
 
-    public Net newChild(Net otherParent, double mutationRate) {
+    Net newChild(Net otherParent, double mutationRate) {
         Mutator mut = new Mutator((int) (mutationRate * 1000000)); 
         FFNet otherNet = (FFNet) otherParent;
         FFNet childNet = new FFNet(this.netConnector);
@@ -66,7 +68,7 @@ public class FFNet implements Net {
         return childNet;
     }
 
-    void setWeightsCrossover(FFNet netA, FFNet netB, CrossoverSwitch cs, Mutator mut) {
+    private void setWeightsCrossover(FFNet netA, FFNet netB, CrossoverSwitch cs, Mutator mut) {
         RandomWgt rw = new RandomWgt();
         Iterator<Synapse> enumA = netA.synapses();
         Iterator<Synapse> enumB = netB.synapses();
@@ -84,7 +86,7 @@ public class FFNet implements Net {
         }
     }
 
-    public void setInputLayerValuesRandom(RandomValue rv) {
+    void setInputLayerValuesRandom(RandomValue rv) {
         Layer il = getInputLayer();
         il.setValuesRandom(rv);
     }
@@ -102,7 +104,7 @@ public class FFNet implements Net {
         }
     }
 
-    public void setWeightsCrossover(FFNet father, FFNet mother, Random r) {
+    void setWeightsCrossover(FFNet father, FFNet mother, Random r) {
         int count = 0;
         int interval = 20;
         boolean fromFather;
@@ -135,7 +137,7 @@ public class FFNet implements Net {
         this.ls.add(l);
     }
 
-    public Layer layerAt(int i) {
+    Layer layerAt(int i) {
         return (Layer) this.ls.get(i);
     }
 
@@ -154,7 +156,7 @@ public class FFNet implements Net {
         return sw.toString();
     }
 
-    void toStream(Writer w) throws IOException {
+    private void toStream(Writer w) throws IOException {
         int size = this.layerCount();
         w.write("--- Net BEGIN ---\n");
         for (int i = 0; i < size; i++) {
@@ -166,7 +168,7 @@ public class FFNet implements Net {
         w.write("--- Net END ---\n");
     }
 
-    List<Integer> compareWeights(FFNet net1) {
+    private List<Integer> compareWeights(FFNet net1) {
         List<Integer> result = new ArrayList<>();
         Iterator<Synapse> e = synapses();
         Iterator<Synapse> e1 = net1.synapses();
@@ -183,18 +185,19 @@ public class FFNet implements Net {
         return result;
     }
 
-    public void resetCalculated() {
+    void resetCalculated() {
         for (int i = 1; i < layerCount(); i++) {
             layerAt(i).resetCalculated();
         }
     }
 
+    @Override
     public void calculate() {
         resetCalculated();
         getOutputLayer().calculate();
     }
 
-    public boolean equalsInValues(Object o) {
+    boolean equalsInValues(Object o) {
         boolean equals = true;
         if (!(o instanceof Net))
             return false;
@@ -274,19 +277,19 @@ public class FFNet implements Net {
         return false;
     }
 
-	public Iterator<Synapse> synapses() {
+	Iterator<Synapse> synapses() {
         return new EnumSynapsesOfNet(this);
     }
 
-    Iterator<Layer> layers() {
+    private Iterator<Layer> layers() {
         return ls.iterator();
     }
 
-    protected Iterator<Layer> neuronLayers() {
+    private Iterator<Layer> neuronLayers() {
         return new NeuronLayersOfNet(this);
     }
 
-    public double distance(Net net) {
+    double distance(Net net) {
         FFNet ffnet = (FFNet) net;
         int synCount = 0;
         int distSum = 0;
@@ -301,7 +304,7 @@ public class FFNet implements Net {
         return (double) distSum / synCount;
     }
 
-    public void setCrossoverSwitsh(CrossoverSwitch crossoverSwitsh) {
+    void setCrossoverSwitsh(CrossoverSwitch crossoverSwitsh) {
         this.crossoverSwitsh = crossoverSwitsh;
     }
 
@@ -312,7 +315,7 @@ public class FFNet implements Net {
         return this.crossoverSwitsh;
     }
     
-    class EnumSynapsesOfNet implements Iterator<Synapse> {
+    private class EnumSynapsesOfNet implements Iterator<Synapse> {
         Iterator<Synapse> enl;
 
         int size;
@@ -395,5 +398,20 @@ public class FFNet implements Net {
     public void reset() {
         // Nothing to be done by a FFNet.
     }
+
+	@Override
+	public int paramCount() {
+		throw new IllegalStateException("Not yet implemented");
+	}
+
+	@Override
+	public void setParam(Number[] params) {
+		throw new IllegalStateException("Not yet implemented");
+	}
+
+	@Override
+	public Number[] getParam() {
+		throw new IllegalStateException("Not yet implemented");
+	}
 
 }

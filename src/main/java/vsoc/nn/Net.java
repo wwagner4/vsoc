@@ -6,17 +6,22 @@ package vsoc.nn;
 
 import java.io.Serializable;
 
-import vsoc.genetic.Crossable;
 
 /**
  * Interface for a neural net.
  */
-public interface Net extends Crossable<Net>, Serializable {
+public interface Net extends Serializable {
 
-    public abstract void setInputValue(int index, short val);
+    void setInputValue(int index, short val);
 
-    public abstract short getOutputValue(int index);
+    short getOutputValue(int index);
 
-    public abstract void calculate();
+    void calculate();
+    
+    int paramCount();
+    
+    void setParam(Number[] params);
+
+    Number[] getParam();
 
 }

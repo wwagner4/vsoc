@@ -7,8 +7,10 @@ import vsoc.behaviour.*;
 import vsoc.camps.*;
 import vsoc.camps.neuroevolution.*;
 import vsoc.camps.neuroevolution.goalkeeper.GoalkeeperDefaultBehaviour;
+import vsoc.genetic.Crosser;
+import vsoc.nn.Net;
 import vsoc.server.VsocPlayer;
-import vsoc.server.gui.FieldFrame;
+import vsoc.server.gui.*;
 
 public class GoalkeeperDefaultBehaviourTestCamp extends AbstractNeuroevolutionCamp {
 
@@ -46,11 +48,6 @@ public class GoalkeeperDefaultBehaviourTestCamp extends AbstractNeuroevolutionCa
         // Nothing to be done.
     }
 
-    protected void createNextGeneration() {
-        // Nothing to be done.
-        
-    }
-
     @Override
     public void setMaxGenerations(int i) {
         // to be ignored.
@@ -61,7 +58,7 @@ public class GoalkeeperDefaultBehaviourTestCamp extends AbstractNeuroevolutionCa
         return false;
     }
 
-    protected List<Member<NetBehaviourController>> getMembers() {
+    protected List<Member<NetBehaviourController<Net>>> getMembers() {
     	throw new IllegalStateException("Not yet implemented");
     }
 
@@ -73,6 +70,11 @@ public class GoalkeeperDefaultBehaviourTestCamp extends AbstractNeuroevolutionCa
 	@Override
 	protected int westPlayerCount() {
 		return 3;
+	}
+
+	@Override
+	protected void createNextGeneration(Crosser<Net> crosser) {
+    	throw new IllegalStateException("Not yet implemented");
 	}
 
 

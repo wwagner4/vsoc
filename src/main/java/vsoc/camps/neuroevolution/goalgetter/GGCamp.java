@@ -10,6 +10,7 @@ import vsoc.camps.neuroevolution.*;
 import vsoc.genetic.*;
 import vsoc.nn.Net;
 import vsoc.server.VsocPlayer;
+import vsoc.server.gui.Simulation;
 import vsoc.util.*;
 
 /**
@@ -23,7 +24,7 @@ public class GGCamp extends AbstractNeuroevolutionCamp {
 
     private static final long serialVersionUID = 0L;
 
-    private List<Member<NetBehaviourController>> members = null;
+    private List<Member<NetBehaviourController<Net>>> members = null;
 
     private double mutationRate = 0.02;
 
@@ -89,10 +90,10 @@ public class GGCamp extends AbstractNeuroevolutionCamp {
         return getMembers().size();
     }
 
-    protected String preCreateNextGenerationInfo() {
+    protected String preCreateNextGenerationInfo(Crosser<Net> crosser) {
         StringBuilder sb = new StringBuilder();
         sb.append("diversity=");
-        sb.append(VsocUtil.current().format(diversity(getMembers())));
+        sb.append(VsocUtil.current().format(diversity(getMembers(), crosser)));
         sb.append(" kickCount=");
         sb.append(VsocUtil.current().format(kicks(getMembers())));
         sb.append(" kickOutCount=");
@@ -138,17 +139,17 @@ public class GGCamp extends AbstractNeuroevolutionCamp {
 
     }
 
-    public List<Member<NetBehaviourController>> getMembers() {
+    public List<Member<NetBehaviourController<Net>>> getMembers() {
         if (this.members == null) {
-            List<Member<NetBehaviourController>> mems = new ArrayList<>();
+            List<Member<NetBehaviourController<Net>>> mems = new ArrayList<>();
             List<Net> nets = this.selPoli.createNewGeneration(this.crossableFactory);
             Iterator<Net> iter = nets.iterator();
             while (iter.hasNext()) {
                 Net net = iter.next();
-                NetBehaviourController ncs = new NetBehaviourController(
+                NetBehaviourController<Net> ncs = new NetBehaviourController<>(
                         createBehaviour(net));
                 ncs.setNet(net);
-                Member<NetBehaviourController> mem = new Member<>();
+                Member<NetBehaviourController<Net>> mem = new Member<>();
                 mem.setController(ncs);
                 mem.reset();
                 mems.add(mem);
@@ -158,7 +159,7 @@ public class GGCamp extends AbstractNeuroevolutionCamp {
         return this.members;
     }
 
-    public void setMembers(List<Member<NetBehaviourController>> members) {
+    public void setMembers(List<Member<NetBehaviourController<Net>>> members) {
         this.members = members;
     }
 
@@ -173,23 +174,23 @@ public class GGCamp extends AbstractNeuroevolutionCamp {
         Iterator<VsocPlayer> players = getServer().getPlayers().iterator();
         while (players.hasNext()) {
             int index = sel.next();
-            Member<NetBehaviourController> m = getMember(index);
+            Member<NetBehaviourController<Net>> m = getMember(index);
             VsocPlayer p = (VsocPlayer) players.next();
             p.setController(m.getController());
             setRandomPosition(p);
         }
     }
 
-    protected void createNextGeneration() {
-        double diversity = diversity(getMembers());
+    protected void createNextGeneration(Crosser<Net> crosser) {
+        double diversity = diversity(getMembers(), crosser);
         double kicks = kicks(getMembers());
         double kickOuts = kickOuts(getMembers());
         double goals = goals(getMembers());
         double ownGoals = ownGoals(getMembers());
         createNextGenerationInfo(diversity, kicks, kickOuts, goals, ownGoals);
-        Comparator<Member<NetBehaviourController>> comp = new GGMembersComparator(this.goalFactor,
+        Comparator<Member<?>> comp = new GGMembersComparator(this.goalFactor,
                 this.ownGoalFactor, this.kickFactor, this.kickOutFactor, this.zeroKickPenalty );
-        basicCreateNextGeneration(getMembers(), comp, this.mutationRate,
+        basicCreateNextGeneration(getMembers(), crosser, comp, this.mutationRate,
                 this.selPoli, this.crossableFactory);
     }
 
@@ -226,6 +227,12 @@ public class GGCamp extends AbstractNeuroevolutionCamp {
 	@Override
 	protected int westPlayerCount() {
 		return 3;
+	}
+
+	@Override
+	public Simulation getSimulation() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

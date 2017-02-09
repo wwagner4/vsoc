@@ -5,10 +5,9 @@ import java.util.Comparator;
 import org.apache.log4j.Logger;
 
 import vsoc.camps.Member;
-import vsoc.camps.neuroevolution.NetBehaviourController;
 import vsoc.util.VsocUtil;
 
-public class GGMembersComparator implements Comparator<Member<NetBehaviourController>> {
+public class GGMembersComparator implements Comparator<Member<?>> {
 
     private static Logger log = Logger.getLogger(GGMembersComparator.class);
 
@@ -34,11 +33,11 @@ public class GGMembersComparator implements Comparator<Member<NetBehaviourContro
         this.zeroKickPenalty = zeroKickPenalty;
     }
 
-    public int compare(Member<NetBehaviourController> o1, Member<NetBehaviourController> o2) {
+    public int compare(Member<?> o1, Member<?> o2) {
         return fitness(o2).compareTo(fitness(o1));
     }
 
-    public Double fitness(Member<NetBehaviourController> m) {
+    public Double fitness(Member<?> m) {
         VsocUtil u = VsocUtil.current();
         double k = m.kickPerMatch();
         double og = m.ownGoalsPerMatch();

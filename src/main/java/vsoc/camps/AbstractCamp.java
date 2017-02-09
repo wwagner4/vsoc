@@ -8,10 +8,12 @@ import java.util.*;
 import org.apache.log4j.Logger;
 
 import atan.model.*;
+import vsoc.genetic.Crosser;
+import vsoc.nn.Net;
 import vsoc.server.*;
 import vsoc.util.*;
 
-public abstract class AbstractCamp<M extends Member<?>> implements Camp<M> {
+public abstract class AbstractCamp<M extends Member<?>, N extends Net> implements Camp<M> {
 
 	private static final long serialVersionUID = 0L;
 
@@ -20,6 +22,8 @@ public abstract class AbstractCamp<M extends Member<?>> implements Camp<M> {
 	protected final Random ran = new Random();
 	
 	private transient Server server = null;
+	
+	private Crosser<N> crosser;
 
 	private int matchCount = 0;
 
@@ -52,9 +56,11 @@ public abstract class AbstractCamp<M extends Member<?>> implements Camp<M> {
 		if (this.matchCount >= this.matchesPerGeneration) {
 			this.matchCount = 0;
 			this.generationsCount++;
-			createNextGeneration();
+			createNextGeneration(this.crosser);
 		}
 	}
+
+	abstract protected void createNextGeneration(Crosser<N> crosser);
 
 	public boolean isFinished() {
 		return getGenerationsCount() >= this.maxGenerations;
@@ -195,8 +201,6 @@ public abstract class AbstractCamp<M extends Member<?>> implements Camp<M> {
 		}
 	}
 
-	protected abstract void createNextGeneration();
-	
 	protected abstract void updateMemberFromPlayer(VsocPlayer player, M member);
 
 	protected void addProperties(Properties re) {

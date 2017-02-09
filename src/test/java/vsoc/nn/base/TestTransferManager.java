@@ -1,7 +1,8 @@
-package vsoc;
+package vsoc.nn.base;
 
 import java.util.Iterator;
 
+import vsoc.AbstractTest;
 import vsoc.nn.base.*;
 import vsoc.nn.feedforward.AbstractFFNetConnector;
 import vsoc.nn.feedforward.FFNet;
