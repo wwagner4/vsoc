@@ -31,7 +31,7 @@ public class FFNetCrosser implements Crosser<FFNet>, Serializable {
 	
 	@Override
 	public double distance(FFNet c1, FFNet c2) {
-		throw new IllegalStateException("Not yet implemented");
+		return c1.distance(c2);
 	}
 
 }

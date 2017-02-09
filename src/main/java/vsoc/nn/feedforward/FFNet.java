@@ -259,7 +259,7 @@ public class FFNet implements Net {
         return new NeuronLayersOfNet(this);
     }
 
-    double distance(Net net) {
+    public double distance(Net net) {
         FFNet ffnet = (FFNet) net;
         int synCount = 0;
         int distSum = 0;
