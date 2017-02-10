@@ -1,18 +1,12 @@
 package vsoc.server;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.Stroke;
+import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
+import java.util.*;
 import java.util.List;
 
-import atan.model.Controller;
-import atan.model.Player;
+import atan.model.*;
 import vsoc.server.gui.*;
 import vsoc.util.Vec2D;
 

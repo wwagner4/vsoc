@@ -83,10 +83,7 @@ public class FieldCanvas extends Canvas implements SimulationChangeListener,
 	@Override
 	public void simulationChangePerformed(Simulation s) {
         repaint();
-        if (this.isShowing())
-            s.setDelay(this.getDelay());
-        else
-            s.setDelay(0);
+        s.setDelay(this.getDelay());
 	}
 
 	public void componentResized(ComponentEvent e) {
@@ -110,6 +107,7 @@ public class FieldCanvas extends Canvas implements SimulationChangeListener,
     }
 
     public void setDelay(int val) {
+    	sim.setDelay(val);
         this.delay = val;
     }
 
