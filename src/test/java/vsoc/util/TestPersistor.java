@@ -1,7 +1,6 @@
 package vsoc.util;
 
 import vsoc.*;
-import vsoc.nn.feedforward.*;
 
 /**
  * Testcases for Persistance
@@ -9,8 +8,8 @@ import vsoc.nn.feedforward.*;
 
 public class TestPersistor extends AbstractTest {
 
-    private Serializer ser = Serializer.current();
-    
+	private Serializer ser = Serializer.current();
+
     public TestPersistor(String name) {
         super(name);
     }
@@ -63,16 +62,5 @@ public class TestPersistor extends AbstractTest {
         a = null;
         a = (PersA) this.ser.deserialize(TestUtil.tmp("test.object"));
         assertTrue("b is null", a.persB == null);
-    }
-    public void testNet() throws Exception {
-    	AbstractFFNetConnector c = new TestNetConnector();
-        FFNet n = new FFNet();
-        c.connectNet(n);
-        n.setParametersRandom(System.currentTimeMillis());
-        this.ser.serialize(n, TestUtil.tmp("net.object"));
-        Object p1 = this.ser.deserialize(TestUtil.tmp("net.object"));
-        FFNet n1 = (FFNet) p1;
-        assertTrue("equals in structure", n1.equalsInStructure(n));
-        assertTrue("equals in weights", n1.equalsInWeights(n));
     }
 }
