@@ -1,4 +1,4 @@
-package vsoc.nn.base;
+package vsoc.nn.feedforward;
 
 import vsoc.nn.base.TransferManager;
 import vsoc.nn.base.Weighter;

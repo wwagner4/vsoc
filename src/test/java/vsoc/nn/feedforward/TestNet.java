@@ -4,7 +4,6 @@ import java.util.Random;
 
 import junit.framework.TestSuite;
 import junit.textui.TestRunner;
-import vsoc.nn.base.TestNetConnector;
 import vsoc.util.*;
 
 public class TestNet extends AbstractTest {
@@ -47,7 +46,7 @@ public class TestNet extends AbstractTest {
 	}
 
 	private FFNet createTestNet() {
-		AbstractFFNetConnector c = new vsoc.nn.base.TestNetConnector();
+		AbstractFFNetConnector c = new vsoc.nn.feedforward.TestNetConnector();
 		FFNet n = new FFNet();
 		c.initLayers(n);
 		c.connectNet(n);
