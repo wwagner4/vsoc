@@ -3,13 +3,12 @@ package vsoc.util;
 import junit.framework.TestSuite;
 import junit.textui.TestRunner;
 import vsoc.server.*;
-import vsoc.util.Vec2D;
 
 /**
  * Testcases for vec2D
  */
 
-public class TestTurn extends AbstractTest {
+public class TestTurn extends AbstractServerTest {
 
     public TestTurn(String name) {
         super(name);

@@ -1,13 +1,12 @@
 package vsoc.util;
 
 import vsoc.server.*;
-import vsoc.util.Vec2D;
 
 /**
  * Testcases for vec2D
  */
 
-public class TestDash extends AbstractTest {
+public class TestDash extends AbstractServerTest {
 
     public TestDash(String name) {
         super(name);

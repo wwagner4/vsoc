@@ -1,9 +1,6 @@
 package vsoc.util;
 
 import junit.framework.TestCase;
-import vsoc.server.*;
-import vsoc.util.Vec2D;
-import atan.model.Controller;
 
 /**
  * General test behaviour.
@@ -33,18 +30,6 @@ public abstract class AbstractTest extends TestCase {
 
     void assertEquals(Vec2D a, Vec2D b) {
         assertEquals("Vec2D:", a, b);
-    }
-
-    void addPlayerWest(Server s, Controller c, double x, double y, double dir) {
-        VsocPlayerWest p = new VsocPlayerWest(x, y, dir);
-        p.setController(c);
-        ServerUtil.current().addPlayerWest(s, p);
-    }
-
-    void addPlayerEast(Server s, Controller c, double x, double y, double dir) {
-        VsocPlayerEast p = new VsocPlayerEast(x, y, dir);
-        p.setController(c);
-        ServerUtil.current().addPlayerEast(s, p);
     }
 
     protected synchronized void pause(int ms) {

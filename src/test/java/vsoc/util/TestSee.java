@@ -1,16 +1,15 @@
 package vsoc.util;
 
+import atan.model.Controller;
 import junit.framework.TestSuite;
 import junit.textui.TestRunner;
 import vsoc.server.*;
-import vsoc.util.Vec2D;
-import atan.model.Controller;
 
 /**
  * Testcases for vec2D
  */
 
-public class TestSee extends AbstractTest {
+public class TestSee extends AbstractServerTest {
 
     public TestSee(String name) {
         super(name);
