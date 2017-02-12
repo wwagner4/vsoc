@@ -8,9 +8,9 @@ import junit.framework.TestCase;
 
 public abstract class AbstractTest extends TestCase {
 
-    static final double S2 = Math.sqrt(2);
+    public static final double S2 = Math.sqrt(2);
 
-    static final double S3 = Math.sqrt(3);
+    public static final double S3 = Math.sqrt(3);
 
     public AbstractTest(String name) {
         super(name);
@@ -20,7 +20,7 @@ public abstract class AbstractTest extends TestCase {
         return Math.round(x * 1000.0) / 1000.0;
     }
 
-    void assertEquals(String info, Vec2D a, Vec2D b) {
+    protected void assertEquals(String info, Vec2D a, Vec2D b) {
         double dx = Math.abs(a.getX() - b.getX());
         double dy = Math.abs(a.getY() - b.getY());
         if ((dx > 0.001) || (dy > 0.001))
@@ -28,7 +28,7 @@ public abstract class AbstractTest extends TestCase {
                     + "," + round(dy) + ")");
     }
 
-    void assertEquals(Vec2D a, Vec2D b) {
+    protected void assertEquals(Vec2D a, Vec2D b) {
         assertEquals("Vec2D:", a, b);
     }
 

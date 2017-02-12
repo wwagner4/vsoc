@@ -1,8 +1,8 @@
-package vsoc.util;
+package vsoc.server;
 
 import junit.framework.TestSuite;
 import junit.textui.TestRunner;
-import vsoc.server.*;
+import vsoc.util.Vec2D;
 
 /**
  * Testcases for vec2D
@@ -57,6 +57,6 @@ public class TestTurn extends AbstractServerTest {
     }
 
     public static void main(String[] args) {
-        TestRunner.run(new TestSuite(vsoc.util.TestTurn.class));
+        TestRunner.run(new TestSuite(vsoc.server.TestTurn.class));
     }
 }

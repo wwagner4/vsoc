@@ -1,6 +1,6 @@
-package vsoc.util;
+package vsoc.server;
 
-import vsoc.server.*;
+import vsoc.util.Vec2D;
 
 /**
  * Testcases for vec2D

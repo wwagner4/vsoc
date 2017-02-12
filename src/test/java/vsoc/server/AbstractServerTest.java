@@ -1,9 +1,9 @@
-package vsoc.util;
+package vsoc.server;
 
 import atan.model.Controller;
-import vsoc.server.*;
+import vsoc.util.AbstractTest;
 
-public class AbstractServerTest extends AbstractTest {
+public abstract class AbstractServerTest extends AbstractTest {
 
 	public AbstractServerTest(String name) {
 		super(name);
@@ -19,10 +19,6 @@ public class AbstractServerTest extends AbstractTest {
         VsocPlayerEast p = new VsocPlayerEast(x, y, dir);
         p.setController(c);
         ServerUtil.current().addPlayerEast(s, p);
-    }
-
-    public void test() {
-    	
     }
 
 }
