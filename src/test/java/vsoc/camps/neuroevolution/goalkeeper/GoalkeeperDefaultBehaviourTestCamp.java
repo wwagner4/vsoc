@@ -1,4 +1,4 @@
-package vsoc.camps.goalkeeper;
+package vsoc.camps.neuroevolution.goalkeeper;
 
 import java.util.*;
 

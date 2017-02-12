@@ -1,4 +1,4 @@
-package vsoc;
+package vsoc.util;
 
 import vsoc.server.*;
 import vsoc.util.Vec2D;

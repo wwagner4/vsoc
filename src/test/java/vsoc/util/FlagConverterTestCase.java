@@ -1,4 +1,4 @@
-package vsoc;
+package vsoc.util;
 
 import atan.model.Flag;
 import junit.framework.TestCase;

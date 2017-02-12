@@ -2,9 +2,8 @@ package vsoc.nn.feedforward;
 
 import java.util.Iterator;
 
-import vsoc.AbstractTest;
 import vsoc.nn.base.*;
-import vsoc.util.IntVector;
+import vsoc.util.*;
 
 public class TestTransferManager extends AbstractTest {
 

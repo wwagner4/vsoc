@@ -1,4 +1,4 @@
-package vsoc;
+package vsoc.util;
 
 import java.io.File;
 

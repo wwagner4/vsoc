@@ -2,7 +2,7 @@
  * $Revision: 1.12 $ $Author: wwan $ $Date: 2005/11/29 18:24:28 $ 
  */
 
-package vsoc.camps.neuroevolution;
+package vsoc.camps.neuroevolution.goalkeeper;
 
 import java.io.*;
 import java.util.*;
@@ -12,6 +12,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import junit.framework.TestCase;
 import vsoc.camps.Member;
+import vsoc.camps.neuroevolution.NetBehaviourController;
 import vsoc.camps.neuroevolution.goalgetter.*;
 import vsoc.camps.neuroevolution.goalkeeper.GKMembersComparator;
 import vsoc.nn.Net;
