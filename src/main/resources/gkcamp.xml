@@ -78,6 +78,6 @@
 		<property name="populationSize" value="21"/>	
 	</bean>
 	
-  <bean id="netCrosser" class="vsoc.camps.neuroevolution.FFNetCrosser"/>
+  <bean id="netCrosser" class="vsoc.camps.neuroevolution.goalgetter.FFNetCrosser"/>
 
 </beans>

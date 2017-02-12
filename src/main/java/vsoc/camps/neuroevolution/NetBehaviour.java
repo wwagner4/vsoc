@@ -4,12 +4,12 @@ import java.util.Iterator;
 
 import org.apache.log4j.Logger;
 
-import vsoc.behaviour.*;
-import vsoc.nn.Net;
-import vsoc.util.*;
 import atan.model.Player;
+import vsoc.behaviour.*;
+import vsoc.camps.VectorFunction;
+import vsoc.util.Retina;
 
-public class NetBehaviour<N extends Net> implements Behaviour {
+public class NetBehaviour<N extends VectorFunction> implements Behaviour {
 
 	private static final long serialVersionUID = 1L;
 
@@ -33,6 +33,8 @@ public class NetBehaviour<N extends Net> implements Behaviour {
 
 	private Retina retinaBall = new Retina();
 
+	private double[] out;
+
 	public NetBehaviour(N net) {
 		super();
 		this.net = net;
@@ -47,8 +49,8 @@ public class NetBehaviour<N extends Net> implements Behaviour {
 			debugSensors(sens);
 		}
 		initRetinas(sens);
-		setInputLayer();
-		this.net.calculate();
+		double[] in = inputLayer();
+		this.out = this.net.apply(in);
 		addCommandsFromOutputLayer(sens, player);
 	}
 
@@ -151,7 +153,7 @@ public class NetBehaviour<N extends Net> implements Behaviour {
 
 	private void addCommandsFromOutputLayer(Sensors sens, Player player) {
 		addTurnCommandFromOutputLayer(player);
-		player.dash(powerValueFromNeuroActivation(this.net.getOutputValue(8)));
+		player.dash(powerValueFromNeuroActivation(this.out[8]));
 		if ((sawBall(sens)) && (distBall(sens) < 0.7)) {
 			addKickCommandFromOutputLayer(player);
 		}
@@ -166,16 +168,16 @@ public class NetBehaviour<N extends Net> implements Behaviour {
 	}
 
 	private void addKickCommandFromOutputLayer(Player player) {
-		short maxVal = (short) 0;
+		double maxVal = 0.0;
 		int maxIndex = 9;
 		for (int i = 9; i < 16; i++) {
-			short val = this.net.getOutputValue(i);
+			double val = this.out[i];
 			if (val > maxVal) {
 				maxIndex = i;
 				maxVal = val;
 			}
 		}
-		int power = powerValueFromNeuroActivation(this.net.getOutputValue(17));
+		int power = powerValueFromNeuroActivation(this.out[17]);
 		switch (maxIndex) {
 		case 9:
 			player.kick(power, 60);
@@ -204,8 +206,8 @@ public class NetBehaviour<N extends Net> implements Behaviour {
 		}
 	}
 
-	private int powerValueFromNeuroActivation(short val) {
-		int index = val / 5;
+	private int powerValueFromNeuroActivation(double val) {
+		int index = (int) (val / 5.0);
 		switch (index) {
 		case 0:
 			return -100;
@@ -246,18 +248,16 @@ public class NetBehaviour<N extends Net> implements Behaviour {
 		case 18:
 		case 19:
 			return 99;
-		case 20:
+		default:
 			return 100;
-		default: 
-			throw new IllegalStateException("invalid activation value " + val);
 		}
 	}
 
 	private void addTurnCommandFromOutputLayer(Player player) {
-		short maxVal = (short) 0;
+		double maxVal = 0.0;
 		int maxIndex = 0;
 		for (int i = 0; i < 8; i++) {
-			short val = this.net.getOutputValue(i);
+			double val = this.out[i];
 			if (val > maxVal) {
 				maxIndex = i;
 				maxVal = val;
@@ -291,39 +291,41 @@ public class NetBehaviour<N extends Net> implements Behaviour {
 		}
 	}
 
-	private void setInputLayer() {
-		this.net.setInputValue(0, this.retinaFlagLeft.getA());
-		this.net.setInputValue(1, this.retinaFlagLeft.getB());
-		this.net.setInputValue(2, this.retinaFlagLeft.getC());
-		this.net.setInputValue(3, this.retinaFlagLeft.getD());
-		this.net.setInputValue(4, this.retinaFlagRight.getA());
-		this.net.setInputValue(5, this.retinaFlagRight.getB());
-		this.net.setInputValue(6, this.retinaFlagRight.getC());
-		this.net.setInputValue(7, this.retinaFlagRight.getD());
-		this.net.setInputValue(8, this.retinaFlagOwn.getA());
-		this.net.setInputValue(9, this.retinaFlagOwn.getB());
-		this.net.setInputValue(10, this.retinaFlagOwn.getC());
-		this.net.setInputValue(11, this.retinaFlagOwn.getD());
-		this.net.setInputValue(12, this.retinaFlagPenaltyOther.getA());
-		this.net.setInputValue(13, this.retinaFlagPenaltyOther.getB());
-		this.net.setInputValue(14, this.retinaFlagPenaltyOther.getC());
-		this.net.setInputValue(15, this.retinaFlagPenaltyOther.getD());
-		this.net.setInputValue(16, this.retinaGoalOther.getA());
-		this.net.setInputValue(17, this.retinaGoalOther.getB());
-		this.net.setInputValue(18, this.retinaGoalOther.getC());
-		this.net.setInputValue(19, this.retinaGoalOther.getD());
-		this.net.setInputValue(20, this.retinaPlayerOther.getA());
-		this.net.setInputValue(21, this.retinaPlayerOther.getB());
-		this.net.setInputValue(22, this.retinaPlayerOther.getC());
-		this.net.setInputValue(23, this.retinaPlayerOther.getD());
-		this.net.setInputValue(24, this.retinaPlayerOwn.getA());
-		this.net.setInputValue(25, this.retinaPlayerOwn.getB());
-		this.net.setInputValue(26, this.retinaPlayerOwn.getC());
-		this.net.setInputValue(27, this.retinaPlayerOwn.getD());
-		this.net.setInputValue(28, this.retinaBall.getA());
-		this.net.setInputValue(29, this.retinaBall.getB());
-		this.net.setInputValue(30, this.retinaBall.getC());
-		this.net.setInputValue(31, this.retinaBall.getD());
+	private double[] inputLayer() {
+		double[] in = new double[32];
+		in[0] = this.retinaFlagLeft.getA();
+		in[1] = this.retinaFlagLeft.getB();
+		in[2] = this.retinaFlagLeft.getC();
+		in[3] = this.retinaFlagLeft.getD();
+		in[4] = this.retinaFlagRight.getA();
+		in[5] = this.retinaFlagRight.getB();
+		in[6] = this.retinaFlagRight.getC();
+		in[7] = this.retinaFlagRight.getD();
+		in[8] = this.retinaFlagOwn.getA();
+		in[9] = this.retinaFlagOwn.getB();
+		in[10] = this.retinaFlagOwn.getC();
+		in[11] = this.retinaFlagOwn.getD();
+		in[12] = this.retinaFlagPenaltyOther.getA();
+		in[13] = this.retinaFlagPenaltyOther.getB();
+		in[14] = this.retinaFlagPenaltyOther.getC();
+		in[15] = this.retinaFlagPenaltyOther.getD();
+		in[16] = this.retinaGoalOther.getA();
+		in[17] = this.retinaGoalOther.getB();
+		in[18] = this.retinaGoalOther.getC();
+		in[19] = this.retinaGoalOther.getD();
+		in[20] = this.retinaPlayerOther.getA();
+		in[21] = this.retinaPlayerOther.getB();
+		in[22] = this.retinaPlayerOther.getC();
+		in[23] = this.retinaPlayerOther.getD();
+		in[24] = this.retinaPlayerOwn.getA();
+		in[25] = this.retinaPlayerOwn.getB();
+		in[26] = this.retinaPlayerOwn.getC();
+		in[27] = this.retinaPlayerOwn.getD();
+		in[28] = this.retinaBall.getA();
+		in[29] = this.retinaBall.getB();
+		in[30] = this.retinaBall.getC();
+		in[31] = this.retinaBall.getD();
+		return in;
 	}
 
 	public N getNet() {

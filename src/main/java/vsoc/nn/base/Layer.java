@@ -53,6 +53,13 @@ public class Layer implements Serializable {
     public short getValueAt(int i) {
         return this.layerNodeAt(i).getValue();
     }
+    
+    public double[] values() {
+    	return this.lns.stream()
+    			.map(ln -> ln.getValue())
+    			.mapToDouble(s -> (double)s)
+    			.toArray();
+    }
 
     public void setValuesRandom(RandomValue rv) {
         LayerNode ln;

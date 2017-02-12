@@ -3,8 +3,7 @@ package vsoc.nn.feedforward;
 import java.io.*;
 import java.util.*;
 
-import vsoc.genetic.*;
-import vsoc.nn.Net;
+import vsoc.camps.VectorFunction;
 import vsoc.nn.base.*;
 
 /**
@@ -18,7 +17,7 @@ import vsoc.nn.base.*;
  * net-Connector. see@ Neuron see@ Layer
  */
 
-public class FFNet implements Net {
+public class FFNet implements VectorFunction {
     
     private static final long serialVersionUID = 0L;
 
@@ -36,42 +35,33 @@ public class FFNet implements Net {
         return layerAt(0);
     }
     
-    @Override
     public void setInputValue(int index, short val)   {
         getInputLayer().setValueAt(index, val);
     }
 
-    @Override
     public short getOutputValue(int index)   {
         return getOutputLayer().getValueAt(index);
     }
-
-    public FFNet newChild(FFNet otherParent, double mutationRate, CrossoverSwitch crossoverSwitch, AbstractFFNetConnector connector) {
-        Mutator mut = new Mutator((int) (mutationRate * 1000000)); 
-        FFNet childNet = new FFNet();
-        connector.initLayers(childNet);
-        connector.connectNet(childNet);
-        childNet.setWeightsCrossover(this, otherParent, crossoverSwitch, mut);
-        return childNet;
+    
+    public void calculate() {
+        resetCalculated();
+        getOutputLayer().calculate();
     }
 
-    private void setWeightsCrossover(FFNet netA, FFNet netB, CrossoverSwitch cs, Mutator mut) {
-        RandomWgt rw = new RandomWgt();
-        Iterator<Synapse> enumA = netA.synapses();
-        Iterator<Synapse> enumB = netB.synapses();
-        Iterator<Synapse> enumChild = this.synapses();
-        while (enumA.hasNext()) {
-        	Synapse synA = enumA.next();
-        	Synapse synB = enumB.next();
-        	Synapse synChild = enumChild.next();
-            if (mut.isMutation())
-                synChild.setWeightRandom(rw);
-            else if (cs.takeA())
-                synChild.setWeight(synA.getWeight());
-            else
-                synChild.setWeight(synB.getWeight());
-        }
-    }
+    @Override
+	public double[] apply(double[] in) {
+    	Layer il = getInputLayer();
+		for(int i = 0; i< il.size(); i++) {
+        	il.setValueAt(i, (short)in[i]);
+    	}
+    	calculate();
+    	NeuronLayer ol = getOutputLayer();
+    	double[] out  = new double[ol.size()];
+    	for (int i = 0; i< ol.size(); i++) {
+    		out[i] = ol.getValueAt(i);
+    	}
+		return out;
+	}
 
     void setInputLayerValuesRandom(RandomValue rv) {
         Layer il = getInputLayer();
@@ -161,15 +151,9 @@ public class FFNet implements Net {
         }
     }
 
-    @Override
-    public void calculate() {
-        resetCalculated();
-        getOutputLayer().calculate();
-    }
-
     boolean equalsInValues(Object o) {
         boolean equals = true;
-        if (!(o instanceof Net))
+        if (!(o instanceof VectorFunction))
             return false;
         FFNet net = (FFNet) o;
         Iterator<Layer> ls1 = net.layers();
@@ -189,7 +173,7 @@ public class FFNet implements Net {
     }
 
     public boolean equalsInStructure(Object o) {
-        if (!(o instanceof Net))
+        if (!(o instanceof VectorFunction))
             return false;
         FFNet net = (FFNet) o;
         Iterator<Layer> lsa = layers();
@@ -228,7 +212,7 @@ public class FFNet implements Net {
     public boolean equalsInWeights(Object o) {
         boolean equals = true;
         FFNet net;
-        if (!(o instanceof Net))
+        if (!(o instanceof VectorFunction))
             return false;
         net = (FFNet) o;
         Iterator<Layer> ls1 = net.neuronLayers();
@@ -247,7 +231,7 @@ public class FFNet implements Net {
         return false;
     }
 
-	Iterator<Synapse> synapses() {
+	public Iterator<Synapse> synapses() {
         return new EnumSynapsesOfNet(this);
     }
 
@@ -259,7 +243,7 @@ public class FFNet implements Net {
         return new NeuronLayersOfNet(this);
     }
 
-    public double distance(Net net) {
+    public double distance(VectorFunction net) {
         FFNet ffnet = (FFNet) net;
         int synCount = 0;
         int distSum = 0;

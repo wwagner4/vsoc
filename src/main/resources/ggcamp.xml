@@ -49,6 +49,6 @@
 
 	<bean id="selPoli" class="vsoc.genetic.AdHocSelectionPolicy" />
 
-	<bean id="netCrosser" class="vsoc.camps.neuroevolution.FFNetCrosser"/>
+	<bean id="netCrosser" class="vsoc.camps.neuroevolution.goalgetter.FFNetCrosser"/>
 
 </beans>

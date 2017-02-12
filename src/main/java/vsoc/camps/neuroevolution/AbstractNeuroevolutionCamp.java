@@ -4,22 +4,21 @@ import java.util.*;
 
 import vsoc.camps.*;
 import vsoc.genetic.*;
-import vsoc.nn.Net;
 import vsoc.server.VsocPlayer;
 
-abstract public class AbstractNeuroevolutionCamp extends AbstractCamp<Member<NetBehaviourController<Net>>, Net> {
+abstract public class AbstractNeuroevolutionCamp extends AbstractCamp<Member<NetBehaviourController<VectorFunction>>, VectorFunction> {
 	
 	private static final long serialVersionUID = 1L;
 
-	protected void basicCreateNextGeneration(List<Member<NetBehaviourController<Net>>> mems, Crosser<Net> crosser, Comparator<Member<?>> comp, double mutRate,
-			SelectionPolicy<Net> selPoli) {
-		List<Net> pop = sortedNetsFromMembers(mems, comp);
-		List<Net> childNets = selPoli.createNextGeneration(pop, crosser, mutRate);
+	protected void basicCreateNextGeneration(List<Member<NetBehaviourController<VectorFunction>>> mems, Crosser<VectorFunction> crosser, Comparator<Member<?>> comp, double mutRate,
+			SelectionPolicy<VectorFunction> selPoli) {
+		List<VectorFunction> pop = sortedNetsFromMembers(mems, comp);
+		List<VectorFunction> childNets = selPoli.createNextGeneration(pop, crosser, mutRate);
 		addNetsToMembers(mems, childNets);
 	}
 	
 	@Override
-	protected void updateMemberFromPlayer(VsocPlayer p, Member<NetBehaviourController<Net>> m) {
+	protected void updateMemberFromPlayer(VsocPlayer p, Member<NetBehaviourController<VectorFunction>> m) {
 		m.increaseMatchCount();
 		m.increaseKickCount(p.getKickCount());
 		m.increaseKickOutCount(p.getKickOutCount());
@@ -27,37 +26,37 @@ abstract public class AbstractNeuroevolutionCamp extends AbstractCamp<Member<Net
 		m.increaseOwnGoalsCount(p.getOwnGoalCount());
 	}
 
-	private void addNetsToMembers(List<Member<NetBehaviourController<Net>>> mems, List<Net> nextPop) {
-		Iterator<Member<NetBehaviourController<Net>>> iter = mems.iterator();
+	private void addNetsToMembers(List<Member<NetBehaviourController<VectorFunction>>> mems, List<VectorFunction> nextPop) {
+		Iterator<Member<NetBehaviourController<VectorFunction>>> iter = mems.iterator();
 		int index = 0;
 		while (iter.hasNext()) {
-			Member<NetBehaviourController<Net>> mem = iter.next();
+			Member<NetBehaviourController<VectorFunction>> mem = iter.next();
 			mem.reset();
-			Net net = nextPop.get(index);
+			VectorFunction net = nextPop.get(index);
 			mem.getController().setNet(net);
 			index++;
 		}
 	}
 	
-	private List<Net> sortedNetsFromMembers(List<Member<NetBehaviourController<Net>>> mems, Comparator<Member<?>> comp) {
+	private List<VectorFunction> sortedNetsFromMembers(List<Member<NetBehaviourController<VectorFunction>>> mems, Comparator<Member<?>> comp) {
 		Collections.sort(mems, comp);
-		List<Net> pop = new ArrayList<>();
-		Iterator<Member<NetBehaviourController<Net>>> iter = mems.iterator();
+		List<VectorFunction> pop = new ArrayList<>();
+		Iterator<Member<NetBehaviourController<VectorFunction>>> iter = mems.iterator();
 		while (iter.hasNext()) {
-			Member<NetBehaviourController<Net>> mem = iter.next();
-			Net net = mem.getController().getNet();
+			Member<NetBehaviourController<VectorFunction>> mem = iter.next();
+			VectorFunction net = mem.getController().getNet();
 			pop.add(net);
 		}
 		return pop;
 	}
 	
-	protected double diversity(List<Member<NetBehaviourController<Net>>> mems, Crosser<Net> crosser) {
+	protected double diversity(List<Member<NetBehaviourController<VectorFunction>>> mems, Crosser<VectorFunction> crosser) {
 		int count = 0;
 		double distSum = 0.0;
-		Iterator<Member<NetBehaviourController<Net>>> i = mems.iterator();
+		Iterator<Member<NetBehaviourController<VectorFunction>>> i = mems.iterator();
 		while (i.hasNext()) {
-			Member<NetBehaviourController<Net>> m1 = i.next();
-			Member<NetBehaviourController<Net>> m2 = mems.get(ran.nextInt(mems.size()));
+			Member<NetBehaviourController<VectorFunction>> m1 = i.next();
+			Member<NetBehaviourController<VectorFunction>> m2 = mems.get(ran.nextInt(mems.size()));
 			distSum += crosser.distance(m1.getController().getNet(), m2.getController().getNet());
 			count++;
 		}

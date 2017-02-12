@@ -5,10 +5,9 @@ import java.util.*;
 import org.apache.log4j.Logger;
 
 import vsoc.behaviour.*;
-import vsoc.camps.Member;
+import vsoc.camps.*;
 import vsoc.camps.neuroevolution.*;
 import vsoc.genetic.*;
-import vsoc.nn.Net;
 import vsoc.server.VsocPlayer;
 import vsoc.util.*;
 
@@ -23,7 +22,7 @@ public class GGCamp extends AbstractNeuroevolutionCamp {
 
     private static final long serialVersionUID = 0L;
 
-    private List<Member<NetBehaviourController<Net>>> members;
+    private List<Member<NetBehaviourController<VectorFunction>>> members;
 
     private double mutationRate = 0.02;
 
@@ -35,9 +34,9 @@ public class GGCamp extends AbstractNeuroevolutionCamp {
 
     private int goalFactor = 100;
 
-    private SelectionPolicy<Net> selPoli;
+    private SelectionPolicy<VectorFunction> selPoli;
 
-    private Crosser<Net> crosser;
+    private Crosser<VectorFunction> crosser;
     
 	private int zeroKickPenalty = -100;
 
@@ -85,7 +84,7 @@ public class GGCamp extends AbstractNeuroevolutionCamp {
         return getMembers().size();
     }
 
-    protected String preCreateNextGenerationInfo(Crosser<Net> crosser) {
+    protected String preCreateNextGenerationInfo(Crosser<VectorFunction> crosser) {
         StringBuilder sb = new StringBuilder();
         sb.append("diversity=");
         sb.append(VsocUtil.current().format(diversity(getMembers(), crosser)));
@@ -100,11 +99,11 @@ public class GGCamp extends AbstractNeuroevolutionCamp {
         return sb.toString();
     }
 
-    public SelectionPolicy<Net> getSelPoli() {
+    public SelectionPolicy<VectorFunction> getSelPoli() {
         return this.selPoli;
     }
 
-    public void setSelPoli(SelectionPolicy<Net> selPoli) {
+    public void setSelPoli(SelectionPolicy<VectorFunction> selPoli) {
         this.selPoli = selPoli;
     }
 
@@ -126,17 +125,17 @@ public class GGCamp extends AbstractNeuroevolutionCamp {
 
     }
 
-    public List<Member<NetBehaviourController<Net>>> getMembers() {
+    public List<Member<NetBehaviourController<VectorFunction>>> getMembers() {
         if (this.members == null) {
-            List<Member<NetBehaviourController<Net>>> mems = new ArrayList<>();
-            List<Net> nets = this.selPoli.createNewGeneration(this.crosser);
-            Iterator<Net> iter = nets.iterator();
+            List<Member<NetBehaviourController<VectorFunction>>> mems = new ArrayList<>();
+            List<VectorFunction> nets = this.selPoli.createNewGeneration(this.crosser);
+            Iterator<VectorFunction> iter = nets.iterator();
             while (iter.hasNext()) {
-                Net net = iter.next();
-                NetBehaviourController<Net> ncs = new NetBehaviourController<>(
+                VectorFunction net = iter.next();
+                NetBehaviourController<VectorFunction> ncs = new NetBehaviourController<>(
                         createBehaviour(net));
                 ncs.setNet(net);
-                Member<NetBehaviourController<Net>> mem = new Member<>();
+                Member<NetBehaviourController<VectorFunction>> mem = new Member<>();
                 mem.setController(ncs);
                 mem.reset();
                 mems.add(mem);
@@ -146,12 +145,12 @@ public class GGCamp extends AbstractNeuroevolutionCamp {
         return this.members;
     }
 
-    public void setMembers(List<Member<NetBehaviourController<Net>>> members) {
+    public void setMembers(List<Member<NetBehaviourController<VectorFunction>>> members) {
         this.members = members;
     }
 
-    protected Behaviour createBehaviour(Net net) {
-        NetBehaviour<Net> nBehav = new NetBehaviour<Net>(net);
+    protected Behaviour createBehaviour(VectorFunction net) {
+        NetBehaviour<VectorFunction> nBehav = new NetBehaviour<VectorFunction>(net);
         return new DefaultBehaviour(nBehav);
     }
 
@@ -161,14 +160,14 @@ public class GGCamp extends AbstractNeuroevolutionCamp {
         Iterator<VsocPlayer> players = getServer().getPlayers().iterator();
         while (players.hasNext()) {
             int index = sel.next();
-            Member<NetBehaviourController<Net>> m = getMember(index);
+            Member<NetBehaviourController<VectorFunction>> m = getMember(index);
             VsocPlayer p = (VsocPlayer) players.next();
             p.setController(m.getController());
             setRandomPosition(p);
         }
     }
 
-    protected void createNextGeneration(Crosser<Net> crosser) {
+    protected void createNextGeneration() {
         double diversity = diversity(getMembers(), crosser);
         double kicks = kicks(getMembers());
         double kickOuts = kickOuts(getMembers());
@@ -214,11 +213,11 @@ public class GGCamp extends AbstractNeuroevolutionCamp {
 		return 3;
 	}
 
-	protected Crosser<Net> getCrosser() {
+	protected Crosser<VectorFunction> getCrosser() {
 		return this.crosser;
 	}
 
-    public void setCrosser(Crosser<Net> crosser) {
+    public void setCrosser(Crosser<VectorFunction> crosser) {
 		this.crosser = crosser;
 	}
 

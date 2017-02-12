@@ -10,7 +10,6 @@ import vsoc.util.IntVector;
  * The netconnector allowes to define the structure of feed forward neuronal nets and
  * parameters for synapses and neurons.
  */
-
 public abstract class AbstractFFNetConnector implements Serializable {
 
     private static final long serialVersionUID = 0L;

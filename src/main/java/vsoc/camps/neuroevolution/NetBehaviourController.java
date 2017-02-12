@@ -4,14 +4,14 @@ import java.io.Serializable;
 
 import vsoc.behaviour.Behaviour;
 import vsoc.behaviour.BehaviourController;
-import vsoc.nn.Net;
+import vsoc.camps.VectorFunction;
 import vsoc.nn.feedforward.AbstractFFNetConnector;
 import vsoc.nn.feedforward.DefaultFFConnector;
 
 /**
  * Atan control system that controls the robots by means of a neural network.
  */
-public class NetBehaviourController<N extends Net> extends BehaviourController implements
+public class NetBehaviourController<N extends VectorFunction> extends BehaviourController implements
         Serializable {
 
     private static final long serialVersionUID = 0L;

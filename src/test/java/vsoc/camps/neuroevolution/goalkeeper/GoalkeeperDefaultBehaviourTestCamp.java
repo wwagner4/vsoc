@@ -6,11 +6,8 @@ import atan.model.Controller;
 import vsoc.behaviour.*;
 import vsoc.camps.*;
 import vsoc.camps.neuroevolution.*;
-import vsoc.camps.neuroevolution.goalkeeper.GoalkeeperDefaultBehaviour;
-import vsoc.genetic.Crosser;
-import vsoc.nn.Net;
 import vsoc.server.VsocPlayer;
-import vsoc.server.gui.*;
+import vsoc.server.gui.FieldFrame;
 
 public class GoalkeeperDefaultBehaviourTestCamp extends AbstractNeuroevolutionCamp {
 
@@ -54,7 +51,7 @@ public class GoalkeeperDefaultBehaviourTestCamp extends AbstractNeuroevolutionCa
         return false;
     }
 
-    protected List<Member<NetBehaviourController<Net>>> getMembers() {
+    protected List<Member<NetBehaviourController<VectorFunction>>> getMembers() {
     	throw new IllegalStateException("Not yet implemented");
     }
 
@@ -69,12 +66,8 @@ public class GoalkeeperDefaultBehaviourTestCamp extends AbstractNeuroevolutionCa
 	}
 
 	@Override
-	protected void createNextGeneration(Crosser<Net> crosser) {
+	protected void createNextGeneration() {
     	throw new IllegalStateException("Not yet implemented");
 	}
 
-	@Override
-	protected Crosser<Net> getCrosser() {
-		throw new IllegalStateException("Should not be called");
-	}
 }
