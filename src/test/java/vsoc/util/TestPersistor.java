@@ -1,7 +1,5 @@
 package vsoc.util;
 
-import vsoc.*;
-
 /**
  * Testcases for Persistance
  */

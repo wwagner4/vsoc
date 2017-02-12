@@ -4,7 +4,6 @@ import java.util.Random;
 
 import junit.framework.TestSuite;
 import junit.textui.TestRunner;
-import vsoc.*;
 import vsoc.nn.base.TestNetConnector;
 import vsoc.util.*;
 

@@ -1,8 +1,7 @@
 package vsoc.util;
 
 import junit.framework.*;
-import junit.textui.*;
-import vsoc.util.*;
+import junit.textui.TestRunner;
 
 public class RandomIndexSelectorTest extends TestCase {
 
