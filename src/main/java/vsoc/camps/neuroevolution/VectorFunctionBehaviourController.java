@@ -31,7 +31,7 @@ public class VectorFunctionBehaviourController<V extends VectorFunction> extends
 	private VectorFunctionRetinaBehaviour<V> createBehaviour(Behaviour behav) {
         if (behav == null) {
             throw new IllegalStateException(
-                    "The Behaviour of a NeuroControlSystem must contain exactly one net NetBehaviour.");
+                    "The Behaviour of the ControlSystem must contain exactly one VectorFunction.");
         } else if (behav instanceof VectorFunctionRetinaBehaviour) {
             return (VectorFunctionRetinaBehaviour<V>) behav;
         } else {

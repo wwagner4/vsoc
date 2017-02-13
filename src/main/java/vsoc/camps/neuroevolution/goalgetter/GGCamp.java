@@ -128,13 +128,13 @@ public class GGCamp extends AbstractNeuroevolutionCamp {
     public List<Member<VectorFunctionBehaviourController<VectorFunction>>> getMembers() {
         if (this.members == null) {
             List<Member<VectorFunctionBehaviourController<VectorFunction>>> mems = new ArrayList<>();
-            List<VectorFunction> nets = this.selPoli.createNewGeneration(this.crosser);
-            Iterator<VectorFunction> iter = nets.iterator();
+            List<VectorFunction> vfs = this.selPoli.createNewGeneration(this.crosser);
+            Iterator<VectorFunction> iter = vfs.iterator();
             while (iter.hasNext()) {
-                VectorFunction net = iter.next();
+                VectorFunction vf = iter.next();
                 VectorFunctionBehaviourController<VectorFunction> ncs = new VectorFunctionBehaviourController<>(
-                        createBehaviour(net));
-                ncs.setVectorFunction(net);
+                        createBehaviour(vf));
+                ncs.setVectorFunction(vf);
                 Member<VectorFunctionBehaviourController<VectorFunction>> mem = new Member<>();
                 mem.setController(ncs);
                 mem.reset();
@@ -149,9 +149,9 @@ public class GGCamp extends AbstractNeuroevolutionCamp {
         this.members = members;
     }
 
-    protected Behaviour createBehaviour(VectorFunction net) {
-        VectorFunctionRetinaBehaviour<VectorFunction> nBehav = new VectorFunctionRetinaBehaviour<VectorFunction>(net);
-        return new GGBeforeKickoffBehaviour(nBehav);
+    protected Behaviour createBehaviour(VectorFunction vf) {
+        VectorFunctionRetinaBehaviour<VectorFunction> behav = new VectorFunctionRetinaBehaviour<VectorFunction>(vf);
+        return new GGBeforeKickoffBehaviour(behav);
     }
 
     protected void initPlayersForMatch() {

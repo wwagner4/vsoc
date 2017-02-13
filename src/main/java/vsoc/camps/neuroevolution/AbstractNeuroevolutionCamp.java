@@ -32,8 +32,8 @@ abstract public class AbstractNeuroevolutionCamp extends AbstractCamp<Member<Vec
 		while (iter.hasNext()) {
 			Member<VectorFunctionBehaviourController<VectorFunction>> mem = iter.next();
 			mem.reset();
-			VectorFunction net = nextPop.get(index);
-			mem.getController().setVectorFunction(net);
+			VectorFunction vf = nextPop.get(index);
+			mem.getController().setVectorFunction(vf);
 			index++;
 		}
 	}
@@ -44,8 +44,8 @@ abstract public class AbstractNeuroevolutionCamp extends AbstractCamp<Member<Vec
 		Iterator<Member<VectorFunctionBehaviourController<VectorFunction>>> iter = mems.iterator();
 		while (iter.hasNext()) {
 			Member<VectorFunctionBehaviourController<VectorFunction>> mem = iter.next();
-			VectorFunction net = mem.getController().getVectorFunction();
-			pop.add(net);
+			VectorFunction vf = mem.getController().getVectorFunction();
+			pop.add(vf);
 		}
 		return pop;
 	}

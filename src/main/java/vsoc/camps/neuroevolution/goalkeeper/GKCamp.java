@@ -178,12 +178,12 @@ public class GKCamp extends AbstractNeuroevolutionCamp {
 
 	private List<Member<VectorFunctionBehaviourController<VectorFunction>>> createGoalkeepers() {
 		List<Member<VectorFunctionBehaviourController<VectorFunction>>> mems = new ArrayList<>();
-		List<VectorFunction> nets = this.gkSelPoli.createNewGeneration(this.crosser);
-		Iterator<VectorFunction> iter = nets.iterator();
+		List<VectorFunction> vfs = this.gkSelPoli.createNewGeneration(this.crosser);
+		Iterator<VectorFunction> iter = vfs.iterator();
 		while (iter.hasNext()) {
-			VectorFunction net = iter.next();
-			VectorFunctionBehaviourController<VectorFunction> ncs = new VectorFunctionBehaviourController<>(createGkBehaviour(net));
-			ncs.setVectorFunction(net);
+			VectorFunction vf = iter.next();
+			VectorFunctionBehaviourController<VectorFunction> ncs = new VectorFunctionBehaviourController<>(createGkBehaviour(vf));
+			ncs.setVectorFunction(vf);
 			Member<VectorFunctionBehaviourController<VectorFunction>> mem = new Member<>();
 			mem.setController(ncs);
 			mem.reset();
@@ -192,8 +192,8 @@ public class GKCamp extends AbstractNeuroevolutionCamp {
 		return mems;
 	}
 
-	private Behaviour createGkBehaviour(VectorFunction net) {
-		VectorFunctionRetinaBehaviour<VectorFunction> b1 = new VectorFunctionRetinaBehaviour<>(net);
+	private Behaviour createGkBehaviour(VectorFunction vf) {
+		VectorFunctionRetinaBehaviour<VectorFunction> b1 = new VectorFunctionRetinaBehaviour<>(vf);
 		GKDefaultBehaviour b2 = new GKDefaultBehaviour(b1);
 		GKDefaultBehaviour b3 = new GKDefaultBehaviour(b2);
 		return new GKBeforeKickoffBehaviour(b3);
