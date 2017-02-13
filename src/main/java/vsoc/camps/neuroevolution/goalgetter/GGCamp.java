@@ -22,7 +22,7 @@ public class GGCamp extends AbstractNeuroevolutionCamp {
 
     private static final long serialVersionUID = 0L;
 
-    private List<Member<NetBehaviourController<VectorFunction>>> members;
+    private List<Member<VectorFunctionBehaviourController<VectorFunction>>> members;
 
     private double mutationRate = 0.02;
 
@@ -125,17 +125,17 @@ public class GGCamp extends AbstractNeuroevolutionCamp {
 
     }
 
-    public List<Member<NetBehaviourController<VectorFunction>>> getMembers() {
+    public List<Member<VectorFunctionBehaviourController<VectorFunction>>> getMembers() {
         if (this.members == null) {
-            List<Member<NetBehaviourController<VectorFunction>>> mems = new ArrayList<>();
+            List<Member<VectorFunctionBehaviourController<VectorFunction>>> mems = new ArrayList<>();
             List<VectorFunction> nets = this.selPoli.createNewGeneration(this.crosser);
             Iterator<VectorFunction> iter = nets.iterator();
             while (iter.hasNext()) {
                 VectorFunction net = iter.next();
-                NetBehaviourController<VectorFunction> ncs = new NetBehaviourController<>(
+                VectorFunctionBehaviourController<VectorFunction> ncs = new VectorFunctionBehaviourController<>(
                         createBehaviour(net));
-                ncs.setNet(net);
-                Member<NetBehaviourController<VectorFunction>> mem = new Member<>();
+                ncs.setVectorFunction(net);
+                Member<VectorFunctionBehaviourController<VectorFunction>> mem = new Member<>();
                 mem.setController(ncs);
                 mem.reset();
                 mems.add(mem);
@@ -145,12 +145,12 @@ public class GGCamp extends AbstractNeuroevolutionCamp {
         return this.members;
     }
 
-    public void setMembers(List<Member<NetBehaviourController<VectorFunction>>> members) {
+    public void setMembers(List<Member<VectorFunctionBehaviourController<VectorFunction>>> members) {
         this.members = members;
     }
 
     protected Behaviour createBehaviour(VectorFunction net) {
-        NetBehaviour<VectorFunction> nBehav = new NetBehaviour<VectorFunction>(net);
+        VectorFunctionRetinaBehaviour<VectorFunction> nBehav = new VectorFunctionRetinaBehaviour<VectorFunction>(net);
         return new GGBeforeKickoffBehaviour(nBehav);
     }
 
@@ -160,7 +160,7 @@ public class GGCamp extends AbstractNeuroevolutionCamp {
         Iterator<VsocPlayer> players = getServer().getPlayers().iterator();
         while (players.hasNext()) {
             int index = sel.next();
-            Member<NetBehaviourController<VectorFunction>> m = getMember(index);
+            Member<VectorFunctionBehaviourController<VectorFunction>> m = getMember(index);
             VsocPlayer p = (VsocPlayer) players.next();
             p.setController(m.getController());
             setRandomPosition(p);

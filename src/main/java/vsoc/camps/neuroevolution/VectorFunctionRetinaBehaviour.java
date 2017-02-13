@@ -9,13 +9,13 @@ import vsoc.behaviour.*;
 import vsoc.camps.VectorFunction;
 import vsoc.util.Retina;
 
-public class NetBehaviour<N extends VectorFunction> implements Behaviour {
+public class VectorFunctionRetinaBehaviour<V extends VectorFunction> implements Behaviour {
 
 	private static final long serialVersionUID = 1L;
 
-	private static Logger log = Logger.getLogger(NetBehaviour.class);
+	private static Logger log = Logger.getLogger(VectorFunctionRetinaBehaviour.class);
 
-	private N net = null;
+	private V vectorFunction = null;
 
 	private Retina retinaFlagLeft = new Retina();
 
@@ -35,9 +35,9 @@ public class NetBehaviour<N extends VectorFunction> implements Behaviour {
 
 	private double[] out;
 
-	public NetBehaviour(N net) {
+	public VectorFunctionRetinaBehaviour(V vectorFunction) {
 		super();
-		this.net = net;
+		this.vectorFunction = vectorFunction;
 	}
 
 	public boolean shouldBeApplied(Sensors sens) {
@@ -50,7 +50,7 @@ public class NetBehaviour<N extends VectorFunction> implements Behaviour {
 		}
 		initRetinas(sens);
 		double[] in = inputLayer();
-		this.out = this.net.apply(in);
+		this.out = this.vectorFunction.apply(in);
 		addCommandsFromOutputLayer(sens, player);
 	}
 
@@ -328,11 +328,11 @@ public class NetBehaviour<N extends VectorFunction> implements Behaviour {
 		return in;
 	}
 
-	public N getNet() {
-		return this.net;
+	public V getVectorFunction() {
+		return this.vectorFunction;
 	}
 
-	public void setNet(N net) {
-		this.net = net;
+	public void setVectorFunction(V vectorFunction) {
+		this.vectorFunction = vectorFunction;
 	}
 }

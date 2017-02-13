@@ -11,40 +11,40 @@ import vsoc.nn.feedforward.DefaultFFConnector;
 /**
  * Atan control system that controls the robots by means of a neural network.
  */
-public class NetBehaviourController<N extends VectorFunction> extends BehaviourController implements
+public class VectorFunctionBehaviourController<V extends VectorFunction> extends BehaviourController implements
         Serializable {
 
     private static final long serialVersionUID = 0L;
 
-    private NetBehaviour<N> netBehaviour = null;
+    private VectorFunctionRetinaBehaviour<V> behaviour = null;
 
-    public NetBehaviourController() {
+    public VectorFunctionBehaviourController() {
         super();
     }
     
-    public NetBehaviourController(Behaviour behaviour) {
+    public VectorFunctionBehaviourController(Behaviour behaviour) {
         super(behaviour);
-        this.netBehaviour = getNetBehaviour(behaviour);
+        this.behaviour = createBehaviour(behaviour);
     }
 
     @SuppressWarnings("unchecked")
-	private NetBehaviour<N> getNetBehaviour(Behaviour behav) {
+	private VectorFunctionRetinaBehaviour<V> createBehaviour(Behaviour behav) {
         if (behav == null) {
             throw new IllegalStateException(
                     "The Behaviour of a NeuroControlSystem must contain exactly one net NetBehaviour.");
-        } else if (behav instanceof NetBehaviour) {
-            return (NetBehaviour<N>) behav;
+        } else if (behav instanceof VectorFunctionRetinaBehaviour) {
+            return (VectorFunctionRetinaBehaviour<V>) behav;
         } else {
-            return getNetBehaviour(behav.getChild());
+            return createBehaviour(behav.getChild());
         }
     }
 
-    public N getNet() {
-        return this.netBehaviour.getNet();
+    public V getVectorFunction() {
+        return this.behaviour.getVectorFunction();
     }
 
-    public void setNet(N net) {
-        this.netBehaviour.setNet(net);
+    public void setVectorFunction(V vectorFunction) {
+        this.behaviour.setVectorFunction(vectorFunction);
     }
 
     public AbstractFFNetConnector createNetConnector() {

@@ -23,9 +23,9 @@ public class GKCamp extends AbstractNeuroevolutionCamp {
 
 	private static Logger log = Logger.getLogger(GKCamp.class);
 
-	private List<Member<NetBehaviourController<VectorFunction>>> goalgetters = null;
+	private List<Member<VectorFunctionBehaviourController<VectorFunction>>> goalgetters = null;
 
-	private List<Member<NetBehaviourController<VectorFunction>>> goalkeepers = null;
+	private List<Member<VectorFunctionBehaviourController<VectorFunction>>> goalkeepers = null;
 
 	private SelectionPolicy<VectorFunction> gkSelPoli;
 
@@ -103,7 +103,7 @@ public class GKCamp extends AbstractNeuroevolutionCamp {
 		Iterator<VsocPlayer> iter = getServer().getPlayersWest().iterator();
 		while (iter.hasNext()) {
 			int index = sel.next();
-			Member<NetBehaviourController<VectorFunction>> m = getGoalgetters().get(index);
+			Member<VectorFunctionBehaviourController<VectorFunction>> m = getGoalgetters().get(index);
 			VsocPlayer p = (VsocPlayer) iter.next();
 			p.setController(m.getController());
 			setRandomPosition(p);
@@ -115,7 +115,7 @@ public class GKCamp extends AbstractNeuroevolutionCamp {
 		Iterator<VsocPlayer> iter = getServer().getPlayersEast().iterator();
 		while (iter.hasNext()) {
 			int index = sel.next();
-			Member<NetBehaviourController<VectorFunction>> m = getGoalkeepers().get(index);
+			Member<VectorFunctionBehaviourController<VectorFunction>> m = getGoalkeepers().get(index);
 			VsocPlayer p = (VsocPlayer) iter.next();
 			p.setController(m.getController());
 			p.move(-50, 0);
@@ -131,7 +131,7 @@ public class GKCamp extends AbstractNeuroevolutionCamp {
 		basicCreateNextGeneration(getGoalkeepers(), crosser, gkComp, this.gkMutationRate, this.gkSelPoli);
 	}
 
-	public List<Member<NetBehaviourController<VectorFunction>>> getGoalgetters() {
+	public List<Member<VectorFunctionBehaviourController<VectorFunction>>> getGoalgetters() {
 		if (this.goalgetters == null) {
 			log.info("[getGoalgetter ] not yet initialized -> loading from " + this.ggCampResourceName + ".");
 			try {
@@ -143,7 +143,7 @@ public class GKCamp extends AbstractNeuroevolutionCamp {
 		return this.goalgetters;
 	}
 
-	private List<Member<NetBehaviourController<VectorFunction>>> loadGoalgetters(String resName) throws IOException {
+	private List<Member<VectorFunctionBehaviourController<VectorFunction>>> loadGoalgetters(String resName) throws IOException {
 		URL res = getClass().getClassLoader().getResource(resName);
 		if (res == null) {
 			throw new IOException("Could not find resource '" + resName + "' in classpath."
@@ -154,7 +154,7 @@ public class GKCamp extends AbstractNeuroevolutionCamp {
 			log.info("found resource " + res + " to load GKCamp");
 		}
 		GGCamp camp = (GGCamp) Serializer.current().deserialize(res.openStream());
-		List<Member<NetBehaviourController<VectorFunction>>> members = camp.getMembers();
+		List<Member<VectorFunctionBehaviourController<VectorFunction>>> members = camp.getMembers();
 		if (this.ggSelPoli.getPopulationSize() != members.size()) {
 			String a = resName;
 			int x = members.size();
@@ -165,26 +165,26 @@ public class GKCamp extends AbstractNeuroevolutionCamp {
 		return members;
 	}
 
-	public void setGoalgetters(List<Member<NetBehaviourController<VectorFunction>>> goalgetter) {
+	public void setGoalgetters(List<Member<VectorFunctionBehaviourController<VectorFunction>>> goalgetter) {
 		this.goalgetters = goalgetter;
 	}
 
-	public List<Member<NetBehaviourController<VectorFunction>>> getGoalkeepers() {
+	public List<Member<VectorFunctionBehaviourController<VectorFunction>>> getGoalkeepers() {
 		if (this.goalkeepers == null) {
 			this.goalkeepers = createGoalkeepers();
 		}
 		return this.goalkeepers;
 	}
 
-	private List<Member<NetBehaviourController<VectorFunction>>> createGoalkeepers() {
-		List<Member<NetBehaviourController<VectorFunction>>> mems = new ArrayList<>();
+	private List<Member<VectorFunctionBehaviourController<VectorFunction>>> createGoalkeepers() {
+		List<Member<VectorFunctionBehaviourController<VectorFunction>>> mems = new ArrayList<>();
 		List<VectorFunction> nets = this.gkSelPoli.createNewGeneration(this.crosser);
 		Iterator<VectorFunction> iter = nets.iterator();
 		while (iter.hasNext()) {
 			VectorFunction net = iter.next();
-			NetBehaviourController<VectorFunction> ncs = new NetBehaviourController<>(createGkBehaviour(net));
-			ncs.setNet(net);
-			Member<NetBehaviourController<VectorFunction>> mem = new Member<>();
+			VectorFunctionBehaviourController<VectorFunction> ncs = new VectorFunctionBehaviourController<>(createGkBehaviour(net));
+			ncs.setVectorFunction(net);
+			Member<VectorFunctionBehaviourController<VectorFunction>> mem = new Member<>();
 			mem.setController(ncs);
 			mem.reset();
 			mems.add(mem);
@@ -193,13 +193,13 @@ public class GKCamp extends AbstractNeuroevolutionCamp {
 	}
 
 	private Behaviour createGkBehaviour(VectorFunction net) {
-		NetBehaviour<VectorFunction> b1 = new NetBehaviour<>(net);
+		VectorFunctionRetinaBehaviour<VectorFunction> b1 = new VectorFunctionRetinaBehaviour<>(net);
 		GKDefaultBehaviour b2 = new GKDefaultBehaviour(b1);
 		GKDefaultBehaviour b3 = new GKDefaultBehaviour(b2);
 		return new GKBeforeKickoffBehaviour(b3);
 	}
 
-	public void setGoalkeepers(List<Member<NetBehaviourController<VectorFunction>>> goalkeeper) {
+	public void setGoalkeepers(List<Member<VectorFunctionBehaviourController<VectorFunction>>> goalkeeper) {
 		this.goalkeepers = goalkeeper;
 	}
 
@@ -228,8 +228,8 @@ public class GKCamp extends AbstractNeuroevolutionCamp {
 		this.gkSelPoli = gkSelPoli;
 	}
 
-	protected List<Member<NetBehaviourController<VectorFunction>>> getMembers() {
-		ArrayList<Member<NetBehaviourController<VectorFunction>>> re = new ArrayList<>();
+	protected List<Member<VectorFunctionBehaviourController<VectorFunction>>> getMembers() {
+		ArrayList<Member<VectorFunctionBehaviourController<VectorFunction>>> re = new ArrayList<>();
 		re.addAll(getGoalgetters());
 		re.addAll(getGoalkeepers());
 		return re;
