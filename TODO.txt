@@ -1,2 +1,0 @@
-* Extract Retina from general packages and replace it by some abstract method or interface (Sensor to Vector Mapper(ing))
-* Put some kind of VectorFunction Behaviour and controller to general function.

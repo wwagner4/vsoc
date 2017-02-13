@@ -86,21 +86,6 @@ public class GGCamp extends AbstractNeuroevolutionCamp {
         return getMembers().size();
     }
 
-    protected String preCreateNextGenerationInfo(Crosser<VectorFunction> crosser) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("diversity=");
-        sb.append(VsocUtil.current().format(diversity(getMembers(), crosser)));
-        sb.append(" kickCount=");
-        sb.append(VsocUtil.current().format(kicks(getMembers())));
-        sb.append(" kickOutCount=");
-        sb.append(VsocUtil.current().format(kickOuts(getMembers())));
-        sb.append(" goalCount=");
-        sb.append(VsocUtil.current().format(goals(getMembers())));
-        sb.append(" ownGoalCount=");
-        sb.append(VsocUtil.current().format(ownGoals(getMembers())));
-        return sb.toString();
-    }
-
     public SelectionPolicy<VectorFunction> getSelPoli() {
         return this.selPoli;
     }
@@ -147,11 +132,7 @@ public class GGCamp extends AbstractNeuroevolutionCamp {
         return this.members;
     }
 
-    public void setMembers(List<Member<VectorFunctionBehaviourController<VectorFunction>>> members) {
-        this.members = members;
-    }
-
-    protected Behaviour createBehaviour(VectorFunction vf) {
+    private Behaviour createBehaviour(VectorFunction vf) {
         VectorFunctionBehaviour<VectorFunction> behav = new VectorFunctionBehaviour<VectorFunction>(vf, this.sensorsToVector);
         return new GGBeforeKickoffBehaviour(behav);
     }

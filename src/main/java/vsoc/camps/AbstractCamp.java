@@ -31,6 +31,18 @@ public abstract class AbstractCamp<M extends Member<?>, N extends VectorFunction
 
 	private int matchesPerGeneration = 150;
 
+	protected abstract void initPlayersForMatch();
+
+	protected abstract int eastPlayerCount();
+
+	protected abstract int westPlayerCount();
+
+	abstract protected void createNextGeneration();
+
+	protected abstract List<M> getMembers();
+	
+	protected abstract void updateMemberFromPlayer(VsocPlayer player, M member);
+
 	public void run() {
 		while (true) {
 			takeOneStep();
@@ -52,8 +64,6 @@ public abstract class AbstractCamp<M extends Member<?>, N extends VectorFunction
 		}
 	}
 
-	abstract protected void createNextGeneration();
-
 	public boolean isFinished() {
 		return getGenerationsCount() >= this.maxGenerations;
 	}
@@ -67,18 +77,12 @@ public abstract class AbstractCamp<M extends Member<?>, N extends VectorFunction
 		}
 	}
 
-	protected abstract void initPlayersForMatch();
-
 	public Server getServer() {
 		if (this.server == null) {
 			this.server = createServer();
 		}
 		return this.server;
 	}
-
-	protected abstract int eastPlayerCount();
-
-	protected abstract int westPlayerCount();
 
 	private Server createServer() {
 		DefaultServerFactory fac = new DefaultServerFactory();
@@ -137,8 +141,6 @@ public abstract class AbstractCamp<M extends Member<?>, N extends VectorFunction
 		this.generationsCount = generationsCount;
 	}
 
-	protected abstract List<M> getMembers();
-	
     public M getMember(int index) {
         return getMembers().get(index);
     }
@@ -192,8 +194,6 @@ public abstract class AbstractCamp<M extends Member<?>, N extends VectorFunction
 			}
 		}
 	}
-
-	protected abstract void updateMemberFromPlayer(VsocPlayer player, M member);
 
 	protected void addProperties(Properties re) {
 		re.setProperty("steps per match", VsocUtil.current().format(this.stepsPerMatch));
