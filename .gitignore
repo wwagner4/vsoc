@@ -6,3 +6,7 @@
 /tmp/
 /results/
 /.DS_Store
+/target/
+/.classpath
+/.project
+/.settings/
