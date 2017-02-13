@@ -1,4 +1,4 @@
-package vsoc.camps.neuroevolution;
+package vsoc.camps;
 
 import vsoc.behaviour.Sensors;
 

@@ -125,12 +125,12 @@ public class GKCamp extends AbstractNeuroevolutionCamp {
 	}
 
 	protected void createNextGeneration() {
-		Comparator<Member<?>> comp = new GGMembersComparator(this.ggGoalFactor, this.ggOwnGoalFactor, this.ggKickFactor,
+		Comparator<Member<?>> comp = new MembersComparator(this.ggGoalFactor, this.ggOwnGoalFactor, this.ggKickFactor,
 				this.ggKickOutFactor, this.ggZeroKickPenalty);
-		basicCreateNextGeneration(getGoalgetters(), crosser, comp, this.ggMutationRate, this.ggSelPoli);
+		createNextGeneration(getGoalgetters(), crosser, comp, this.ggMutationRate, this.ggSelPoli);
 
 		Comparator<Member<?>> gkComp = new GKMembersComparator();
-		basicCreateNextGeneration(getGoalkeepers(), crosser, gkComp, this.gkMutationRate, this.gkSelPoli);
+		createNextGeneration(getGoalkeepers(), crosser, gkComp, this.gkMutationRate, this.gkSelPoli);
 	}
 
 	public List<Member<VectorFunctionBehaviourController<VectorFunction>>> getGoalgetters() {

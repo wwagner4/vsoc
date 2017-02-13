@@ -1,4 +1,4 @@
-package vsoc.camps.neuroevolution;
+package vsoc.camps;
 
 import java.io.Serializable;
 import java.util.Iterator;

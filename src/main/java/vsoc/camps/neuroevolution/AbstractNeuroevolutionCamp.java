@@ -10,7 +10,7 @@ abstract public class AbstractNeuroevolutionCamp extends AbstractCamp<Member<Vec
 	
 	private static final long serialVersionUID = 1L;
 
-	protected void basicCreateNextGeneration(List<Member<VectorFunctionBehaviourController<VectorFunction>>> mems, Crosser<VectorFunction> crosser, Comparator<Member<?>> comp, double mutRate,
+	protected void createNextGeneration(List<Member<VectorFunctionBehaviourController<VectorFunction>>> mems, Crosser<VectorFunction> crosser, Comparator<Member<?>> comp, double mutRate,
 			SelectionPolicy<VectorFunction> selPoli) {
 		List<VectorFunction> pop = sortedNetsFromMembers(mems, comp);
 		List<VectorFunction> childNets = selPoli.createNextGeneration(pop, crosser, mutRate);

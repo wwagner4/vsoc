@@ -1,10 +1,9 @@
-package vsoc.camps.neuroevolution;
+package vsoc.camps;
 
 import org.apache.log4j.Logger;
 
 import atan.model.Player;
 import vsoc.behaviour.*;
-import vsoc.camps.VectorFunction;
 
 public class VectorFunctionBehaviour<V extends VectorFunction> implements Behaviour {
 

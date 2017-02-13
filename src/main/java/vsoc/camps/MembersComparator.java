@@ -1,15 +1,14 @@
-package vsoc.camps.neuroevolution.goalgetter;
+package vsoc.camps;
 
 import java.util.Comparator;
 
 import org.apache.log4j.Logger;
 
-import vsoc.camps.Member;
 import vsoc.util.VsocUtil;
 
-public class GGMembersComparator implements Comparator<Member<?>> {
+public class MembersComparator implements Comparator<Member<?>> {
 
-    private static Logger log = Logger.getLogger(GGMembersComparator.class);
+    private static Logger log = Logger.getLogger(MembersComparator.class);
 
     private int kickFactor;
 
@@ -23,7 +22,7 @@ public class GGMembersComparator implements Comparator<Member<?>> {
 
 	private double epsilon = 0.000001;
 
-    public GGMembersComparator(int goalsFactor, int ownGoalsFactor,
+    public MembersComparator(int goalsFactor, int ownGoalsFactor,
             int kickFactor, int kickOutFactor, int zeroKickPenalty) {
         super();
         this.kickFactor = kickFactor;

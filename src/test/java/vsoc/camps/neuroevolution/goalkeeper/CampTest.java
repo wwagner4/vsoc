@@ -12,7 +12,6 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import junit.framework.TestCase;
 import vsoc.camps.*;
-import vsoc.camps.neuroevolution.VectorFunctionBehaviourController;
 import vsoc.camps.neuroevolution.goalgetter.*;
 import vsoc.genetic.*;
 import vsoc.nn.base.*;
@@ -87,7 +86,7 @@ public class CampTest extends TestCase {
 		mems.add(createTestMember(20));
 		mems.add(createTestMember(40));
 		mems.add(createTestMember(5));
-		GGMembersComparator comp = new GGMembersComparator(camp.getGoalFactor(), camp.getOwnGoalFactor(),
+		MembersComparator comp = new MembersComparator(camp.getGoalFactor(), camp.getOwnGoalFactor(),
 				camp.getKickFactor(), camp.getKickOutFactor(), -100);
 		Collections.sort(mems, comp);
 		{

@@ -176,9 +176,9 @@ public class GGCamp extends AbstractNeuroevolutionCamp {
         double goals = goals(getMembers());
         double ownGoals = ownGoals(getMembers());
         createNextGenerationInfo(diversity, kicks, kickOuts, goals, ownGoals);
-        Comparator<Member<?>> comp = new GGMembersComparator(this.goalFactor,
+        Comparator<Member<?>> comp = new MembersComparator(this.goalFactor,
                 this.ownGoalFactor, this.kickFactor, this.kickOutFactor, this.zeroKickPenalty );
-        basicCreateNextGeneration(getMembers(), crosser, comp, this.mutationRate,
+        createNextGeneration(getMembers(), crosser, comp, this.mutationRate,
                 this.selPoli);
     }
 
