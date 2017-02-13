@@ -38,6 +38,8 @@ public class GGCamp extends AbstractNeuroevolutionCamp {
 
     private Crosser<VectorFunction> crosser;
     
+    private SensorsToVector sensorsToVector = new RetinaSensorsToVector();
+    
 	private int zeroKickPenalty = -100;
 
     public int getKickFactor() {
@@ -150,7 +152,7 @@ public class GGCamp extends AbstractNeuroevolutionCamp {
     }
 
     protected Behaviour createBehaviour(VectorFunction vf) {
-        VectorFunctionRetinaBehaviour<VectorFunction> behav = new VectorFunctionRetinaBehaviour<VectorFunction>(vf);
+        VectorFunctionBehaviour<VectorFunction> behav = new VectorFunctionBehaviour<VectorFunction>(vf, this.sensorsToVector);
         return new GGBeforeKickoffBehaviour(behav);
     }
 

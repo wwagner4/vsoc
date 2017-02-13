@@ -30,6 +30,8 @@ public class GKCamp extends AbstractNeuroevolutionCamp {
 	private SelectionPolicy<VectorFunction> gkSelPoli;
 
 	private Crosser<VectorFunction> crosser;
+	
+	private SensorsToVector sensorToVector = new RetinaSensorsToVector();
 
 	private double gkMutationRate = 0.01;
 
@@ -193,7 +195,7 @@ public class GKCamp extends AbstractNeuroevolutionCamp {
 	}
 
 	private Behaviour createGkBehaviour(VectorFunction vf) {
-		VectorFunctionRetinaBehaviour<VectorFunction> b1 = new VectorFunctionRetinaBehaviour<>(vf);
+		VectorFunctionBehaviour<VectorFunction> b1 = new VectorFunctionBehaviour<>(vf, this.sensorToVector);
 		GKDefaultBehaviour b2 = new GKDefaultBehaviour(b1);
 		GKDefaultBehaviour b3 = new GKDefaultBehaviour(b2);
 		return new GKBeforeKickoffBehaviour(b3);
