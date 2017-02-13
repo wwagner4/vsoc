@@ -28,7 +28,7 @@ public class GKCamp extends AbstractNeuroevolutionCamp {
 	private List<Member<NetBehaviourController<VectorFunction>>> goalkeepers = null;
 
 	private SelectionPolicy<VectorFunction> gkSelPoli;
-	
+
 	private Crosser<VectorFunction> crosser;
 
 	private double gkMutationRate = 0.01;
@@ -124,7 +124,7 @@ public class GKCamp extends AbstractNeuroevolutionCamp {
 
 	protected void createNextGeneration() {
 		Comparator<Member<?>> comp = new GGMembersComparator(this.ggGoalFactor, this.ggOwnGoalFactor, this.ggKickFactor,
-		    this.ggKickOutFactor, this.ggZeroKickPenalty);
+				this.ggKickOutFactor, this.ggZeroKickPenalty);
 		basicCreateNextGeneration(getGoalgetters(), crosser, comp, this.ggMutationRate, this.ggSelPoli);
 
 		Comparator<Member<?>> gkComp = new GKMembersComparator();
@@ -148,7 +148,7 @@ public class GKCamp extends AbstractNeuroevolutionCamp {
 		if (res == null) {
 			throw new IOException("Could not find resource '" + resName + "' in classpath."
 					+ "\n - Run vsoc.camps.neuroevolution.goalkeeper.GoalgetterGenerator "
-					+ "\n - Copy the resultiong .ser file into the classpath ('src/main/resources')." 
+					+ "\n - Copy the resultiong .ser file into the classpath ('src/main/resources')."
 					+ "\n - Rename the .ser file to '" + resName + "'.");
 		} else {
 			log.info("found resource " + res + " to load GKCamp");
@@ -159,8 +159,8 @@ public class GKCamp extends AbstractNeuroevolutionCamp {
 			String a = resName;
 			int x = members.size();
 			int y = this.ggSelPoli.getPopulationSize();
-			throw new IllegalStateException("The number of members from the serialized gg camp '" + a + "' is "
-			    + x + ". It must be the same as the populaton size of the gg selection policy which is " + y + ".");
+			throw new IllegalStateException("The number of members from the serialized gg camp '" + a + "' is " + x
+					+ ". It must be the same as the populaton size of the gg selection policy which is " + y + ".");
 		}
 		return members;
 	}
@@ -194,8 +194,9 @@ public class GKCamp extends AbstractNeuroevolutionCamp {
 
 	private Behaviour createGkBehaviour(VectorFunction net) {
 		NetBehaviour<VectorFunction> b1 = new NetBehaviour<>(net);
-		GoalkeeperDefaultBehaviour b2 = new GoalkeeperDefaultBehaviour(b1);
-		return new DefaultBehaviour(b2);
+		GKDefaultBehaviour b2 = new GKDefaultBehaviour(b1);
+		GKDefaultBehaviour b3 = new GKDefaultBehaviour(b2);
+		return new GKBeforeKickoffBehaviour(b3);
 	}
 
 	public void setGoalkeepers(List<Member<NetBehaviourController<VectorFunction>>> goalkeeper) {

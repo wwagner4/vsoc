@@ -23,7 +23,7 @@ public class GoalgetterGenerator {
 		while (!camp.isFinished()) {
 			camp.takeOneStep();
 		}
-		String dirName = "tmp";
+		String dirName = "src/main/resources";
 		File outDir = new File(dirName);
 		if (!outDir.exists()) {
 			outDir.mkdirs();
@@ -31,8 +31,7 @@ public class GoalgetterGenerator {
 		}
 		File file = new File(outDir, "ggcamp.ser");
 		Serializer.current().serialize(camp, file);
-		System.out.println("Created goalgetters in " + file + ". Press any key to finish ....");
-		System.in.read();
+		System.out.println("Created goalgetters in " + file);
     }
 
 }

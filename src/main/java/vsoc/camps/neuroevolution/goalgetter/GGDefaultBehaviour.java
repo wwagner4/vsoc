@@ -1,4 +1,4 @@
-package vsoc.camps.neuroevolution.goalkeeper;
+package vsoc.camps.neuroevolution.goalgetter;
 
 import java.util.Random;
 
@@ -6,10 +6,10 @@ import atan.model.Player;
 import vsoc.behaviour.*;
 
 /**
- * Turns the player a random angle if the sensors do not see the flags around
- * the goal.
+ * Turns the player a random angle if the sensors see nothing. Prevents players
+ * to run away from the field.
  */
-public class GoalkeeperDefaultBehaviour implements Behaviour {
+public class GGDefaultBehaviour implements Behaviour {
 
 		private static final long serialVersionUID = 1L;
     
@@ -17,20 +17,13 @@ public class GoalkeeperDefaultBehaviour implements Behaviour {
 
     private static Random random = new Random();
 
-    public GoalkeeperDefaultBehaviour(Behaviour child) {
+    public GGDefaultBehaviour(Behaviour child) {
         super();
         this.child = child;
     }
 
     public boolean shouldBeApplied(Sensors sens) {
-        return !canSeeOwnGoalEnvironment(sens);
-    }
-
-    private boolean canSeeOwnGoalEnvironment(Sensors sens) {
-        if (sens.sawFlagPenaltyOwn() || sens.sawFlagGoalOwn()) {
-            return true;
-        } 
-        return false;
+        return !sens.sawAnything() || sens.isBeforeKickOff();
     }
 
     public void apply(Sensors sens, Player player) {

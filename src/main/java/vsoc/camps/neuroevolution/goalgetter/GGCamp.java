@@ -151,7 +151,7 @@ public class GGCamp extends AbstractNeuroevolutionCamp {
 
     protected Behaviour createBehaviour(VectorFunction net) {
         NetBehaviour<VectorFunction> nBehav = new NetBehaviour<VectorFunction>(net);
-        return new DefaultBehaviour(nBehav);
+        return new GGBeforeKickoffBehaviour(nBehav);
     }
 
     protected void initPlayersForMatch() {
