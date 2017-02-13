@@ -1,6 +1,7 @@
 <project name="postcheckout" default="action">
 	<target name="action">
     <mkdir dir="log" />
-    <mkdir dir="tmp" />
+    <mkdir dir="scheduler" />
+    <mkdir dir="results" />
 	</target>
 </project>
