@@ -1,0 +1,2 @@
+* Add a logging interface instead of log4j or remove logging at all from atan and vsoc-core
+* check if commons lang is really needed.
