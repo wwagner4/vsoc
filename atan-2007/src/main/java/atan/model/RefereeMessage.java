@@ -1,36 +1,34 @@
 package atan.model;
 
-import org.apache.commons.lang.enums.Enum;
+public enum RefereeMessage {
 
-public class RefereeMessage extends Enum {
+	FOUL_OWN("foulOwn"),
 
-	public static final RefereeMessage FOUL_OWN = new RefereeMessage("foulOwn");
+	FOUL_OTHER("foulOther"),
 
-	public static final RefereeMessage FOUL_OTHER = new RefereeMessage(
-			"foulOther");
+	HALF_TIME("halfTime"),
 
-	public static final RefereeMessage HALF_TIME = new RefereeMessage(
-			"halfTime");
+	TIME_UP("timeUp"),
 
-	public static final RefereeMessage TIME_UP = new RefereeMessage("timeUp");
+	TIME_UP_WITHOUT_A_TEAM("timeUpWithoutATeam"),
 
-	public static final RefereeMessage TIME_UP_WITHOUT_A_TEAM = new RefereeMessage(
-			"timeUpWithoutATeam");
+	TIME_EXTENDED("timeExtended"),
 
-	public static final RefereeMessage TIME_EXTENDED = new RefereeMessage(
-			"timeExtended");
+	DROP_BALL("dropBall"),
 
-	public static final RefereeMessage DROP_BALL = new RefereeMessage(
-			"dropBall");
+	OFFSIDE_OWN("offsideOwn"),
 
-	public static final RefereeMessage OFFSIDE_OWN = new RefereeMessage(
-			"offsideOwn");
+	OFFSIDE_OTHER("offsideOther");
 
-	public static final RefereeMessage OFFSIDE_OTHER = new RefereeMessage(
-			"offsideOther");
+	private String name;
 
-	public RefereeMessage(String name) {
-		super(name);
+	private RefereeMessage(String name) {
+		this.name = name;
+	}
+
+	@Override
+	public String toString() {
+		return "RefereeMessage[" + name + "]";
 	}
 
 }

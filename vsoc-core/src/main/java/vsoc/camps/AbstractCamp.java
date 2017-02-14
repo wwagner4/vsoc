@@ -5,8 +5,6 @@ package vsoc.camps;
  */
 import java.util.*;
 
-import org.apache.log4j.Logger;
-
 import atan.model.*;
 import vsoc.server.*;
 import vsoc.util.*;
@@ -14,8 +12,6 @@ import vsoc.util.*;
 public abstract class AbstractCamp<M extends Member<?>, N extends VectorFunction> implements Camp<M> {
 
 	private static final long serialVersionUID = 0L;
-
-	private static Logger log = Logger.getLogger(AbstractCamp.class);
 
 	protected final Random ran = new Random();
 	
@@ -50,10 +46,6 @@ public abstract class AbstractCamp<M extends Member<?>, N extends VectorFunction
 	}
 	
 	public void takeOneStep() {
-		if (log.isDebugEnabled()) {
-			log.debug("Started running a new match. matchCount:" + this.matchCount + " generationCount:"
-					+ this.generationsCount);
-		}
 		runMatch();
 		this.matchCount++;
 		updateMembersAfterMatch();

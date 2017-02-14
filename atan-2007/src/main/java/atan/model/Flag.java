@@ -1,32 +1,54 @@
 package atan.model;
 
-import org.apache.commons.lang.enums.Enum;
+public enum Flag {
 
-public class Flag extends Enum {
+	FLAG_CENTER("center"),
 
-	  public static final Flag FLAG_CENTER = new Flag("center");
-	  public static final Flag FLAG_LEFT = new Flag("left");
-	  public static final Flag FLAG_RIGHT = new Flag("right");
-	  public static final Flag FLAG_OWN_50 = new Flag("own50");
-	  public static final Flag FLAG_OWN_40 = new Flag("own40");
-	  public static final Flag FLAG_OWN_30 = new Flag("own30");
-	  public static final Flag FLAG_OWN_20 = new Flag("own20");
-	  public static final Flag FLAG_OWN_10 = new Flag("own10");
-	  public static final Flag FLAG_OTHER_10 = new Flag("other10");
-	  public static final Flag FLAG_OTHER_20 = new Flag("other20");
-	  public static final Flag FLAG_OTHER_30 = new Flag("other30");
-	  public static final Flag FLAG_OTHER_40 = new Flag("other40");
-	  public static final Flag FLAG_OTHER_50 = new Flag("other50");
-	  public static final Flag FLAG_LEFT_10 = new Flag("left10");
-	  public static final Flag FLAG_LEFT_20 = new Flag("left20");
-	  public static final Flag FLAG_LEFT_30 = new Flag("left30");
-	  public static final Flag FLAG_RIGHT_10 = new Flag("right10");
-	  public static final Flag FLAG_RIGHT_20 = new Flag("right20");
-	  public static final Flag FLAG_RIGHT_30 = new Flag("right30");
+	FLAG_LEFT("left"),
 
-	
-	public Flag(String name) {
-		super(name);
+	FLAG_RIGHT("right"),
+
+	FLAG_OWN_50("own50"),
+
+	FLAG_OWN_40("own40"),
+
+	FLAG_OWN_30("own30"),
+
+	FLAG_OWN_20("own20"),
+
+	FLAG_OWN_10("own10"),
+
+	FLAG_OTHER_10("other10"),
+
+	FLAG_OTHER_20("other20"),
+
+	FLAG_OTHER_30("other30"),
+
+	FLAG_OTHER_40("other40"),
+
+	FLAG_OTHER_50("other50"),
+
+	FLAG_LEFT_10("left10"),
+
+	FLAG_LEFT_20("left20"),
+
+	FLAG_LEFT_30("left30"),
+
+	FLAG_RIGHT_10("right10"),
+
+	FLAG_RIGHT_20("right20"),
+
+	FLAG_RIGHT_30("right30");
+
+	private String name;
+
+	private Flag(String name) {
+		this.name = name;
+	}
+
+	@Override
+	public String toString() {
+		return "Flag[" + name + "]";
 	}
 
 }

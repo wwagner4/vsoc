@@ -5,9 +5,6 @@ import java.net.URL;
 
 import javax.swing.*;
 
-import org.apache.log4j.Logger;
-
-
 /**
  * Contains a FieldPanel .
  */
@@ -16,8 +13,6 @@ public class FieldFrame extends JFrame implements WindowListener {
 	private static final long serialVersionUID = 1L;
 	
     private FieldContentPanel fieldContentPanel;
-
-    static Logger log = Logger.getLogger(FieldFrame.class);
 
     public FieldFrame() {
         initGuiComponents();

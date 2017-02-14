@@ -1,17 +1,22 @@
 package atan.model;
 
-import org.apache.commons.lang.enums.Enum;
+public enum ViewAngle {
 
-public class ViewAngle extends Enum {
+	NARROW("narrow"),
 
-	public static final ViewAngle NARROW = new ViewAngle("narrow");
+	NORMAL("normal"),
 
-	public static final ViewAngle NORMAL = new ViewAngle("normal");
+	WIDE("wide");
 
-	public static final ViewAngle WIDE = new ViewAngle("wide");
+	private String name;
 
-	public ViewAngle(String name) {
-		super(name);
+	private ViewAngle(String name) {
+		this.name = name;
+	}
+
+	@Override
+	public String toString() {
+		return "ViewAngle[" + name + "]";
 	}
 
 }

@@ -1,17 +1,26 @@
 package atan.model;
 
-import org.apache.commons.lang.enums.Enum;
+public enum Line {
 
-public class Line extends Enum {
+	LINE_CENTER("center"),
 
-	  public static final Line LINE_CENTER = new Line("center");
-	  public static final Line LINE_OWN = new Line("own");
-	  public static final Line LINE_OTHER = new Line("other");
-	  public static final Line LINE_LEFT = new Line("left");
-	  public static final Line LINE_RIGHT = new Line("right");
+	LINE_OWN("own"),
 
-	public Line(String name) {
-		super(name);
+	LINE_OTHER("other"),
+
+	LINE_LEFT("left"),
+
+	LINE_RIGHT("right");
+
+	private String name;
+
+	private Line(String name) {
+		this.name = name;
+	}
+
+	@Override
+	public String toString() {
+		return "Line[" + name + "]";
 	}
 
 }

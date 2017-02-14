@@ -4,13 +4,13 @@ import java.util.*;
 
 public class CommandFactory {
 
-	private List fifo = new Vector();
+	private List<String> fifo = new ArrayList<>();
 
 	public CommandFactory() {
 	}
 
 	public void addInitCommand(String teamName, boolean isGoaly) {
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
 		if (isGoaly) {
 			buf.append("(init ");
 			buf.append(teamName);
@@ -24,7 +24,7 @@ public class CommandFactory {
 	}
 
 	public void addReconnectCommand(String teamName, int num) {
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
 		buf.append("(reconnect ");
 		buf.append(teamName);
 		buf.append(" ");
@@ -34,7 +34,7 @@ public class CommandFactory {
 	}
 
 	public void addCatchCommand(int direction) {
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
 		buf.append("(catch ");
 		buf.append(direction);
 		buf.append(")");
@@ -42,7 +42,7 @@ public class CommandFactory {
 	}
 
 	public void addChangeViewCommand(ViewQuality quality, ViewAngle angle) {
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
 		buf.append("(change_view ");
 		if (angle == ViewAngle.NARROW) {
 			if (quality == ViewQuality.HIGH) {
@@ -69,7 +69,7 @@ public class CommandFactory {
 	}
 
 	public void addDashCommand(int power) {
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
 		buf.append("(dash ");
 		buf.append(power);
 		buf.append(")");
@@ -77,7 +77,7 @@ public class CommandFactory {
 	}
 
 	public void addKickCommand(int power, int direction) {
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
 		buf.append("(kick ");
 		buf.append(power);
 		buf.append(" ");
@@ -87,7 +87,7 @@ public class CommandFactory {
 	}
 
 	public void addMoveCommand(int x, int y) {
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
 		buf.append("(move ");
 		buf.append(x);
 		buf.append(" ");
@@ -97,7 +97,7 @@ public class CommandFactory {
 	}
 
 	public void addTurnCommand(int angle) {
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
 		buf.append("(turn ");
 		buf.append(angle);
 		buf.append(")");
@@ -105,7 +105,7 @@ public class CommandFactory {
 	}
 
 	public void addTurnNeckCommand(int angle) {
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
 		buf.append("(turn_neck ");
 		buf.append(angle);
 		buf.append(")");
@@ -113,7 +113,7 @@ public class CommandFactory {
 	}
 
 	public void addSayCommand(String message) {
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
 		buf.append("(say ");
 		buf.append(message);
 		buf.append(")");
@@ -121,13 +121,13 @@ public class CommandFactory {
 	}
 
 	public void addSenseBodyCommand() {
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
 		buf.append("(sense_body)");
 		fifo.add(fifo.size(), buf.toString());
 	}
 
 	public void addByeCommand() {
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
 		buf.append("(bye)");
 		fifo.add(fifo.size(), buf.toString());
 	}

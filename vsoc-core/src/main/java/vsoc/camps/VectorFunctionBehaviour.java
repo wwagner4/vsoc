@@ -1,15 +1,11 @@
 package vsoc.camps;
 
-import org.apache.log4j.Logger;
-
 import atan.model.Player;
 import vsoc.behaviour.*;
 
 public class VectorFunctionBehaviour<V extends VectorFunction> implements Behaviour {
 
 	private static final long serialVersionUID = 1L;
-
-	private static Logger log = Logger.getLogger(VectorFunctionBehaviour.class);
 
 	private V vectorFunction = null;
 	
@@ -26,36 +22,9 @@ public class VectorFunctionBehaviour<V extends VectorFunction> implements Behavi
 	}
 
 	public void apply(Sensors sens, Player player) {
-		if (log.isDebugEnabled()) {
-			debugSensors(sens);
-		}
 		double[] in = this.sensorsToVector.apply(sens);
 		double[] out = this.vectorFunction.apply(in);
 		addCommandsFromOutputLayer(out, sens, player);
-	}
-
-	private void debugSensors(Sensors sens) {
-		log.debug("Sensors: --- BEGIN ---");
-		log.debug("sens.ball:" + sens.getBall());
-		log.debug("sens.bodyState:" + sens.getBodyState());
-		log.debug("sens.flagsCenter:" + sens.getFlagsCenter());
-		log.debug("sens.flagsCornerOther:" + sens.getFlagsCornerOther());
-		log.debug("sens.flagsCornerOwn:" + sens.getFlagsCornerOwn());
-		log.debug("sens.flagsGoalOther:" + sens.getFlagsGoalOther());
-		log.debug("sens.flagsGoalOwn:" + sens.getFlagsGoalOwn());
-		log.debug("sens.flagsLeft:" + sens.getFlagsLeft());
-		log.debug("sens.flagsOther:" + sens.getFlagsOther());
-		log.debug("sens.flagsOwn:" + sens.getFlagsOwn());
-		log.debug("sens.flagsPenaltyOther:" + sens.getFlagsPenaltyOther());
-		log.debug("sens.flagsPenaltyOwn:" + sens.getFlagsPenaltyOwn());
-		log.debug("sens.flagsRight:" + sens.getFlagsRight());
-		log.debug("sens.lines:" + sens.getLines());
-		log.debug("sens.messages:" + sens.getMessages());
-		log.debug("sens.playersOther:" + sens.getPlayersOther());
-		log.debug("sens.playersOwn:" + sens.getPlayersOwn());
-		log.debug("sens.playMode:" + sens.getPlayMode());
-		log.debug("sens.refereeMessage:" + sens.getRefereeMessage());
-		log.debug("Sensors: --- END ---");
 	}
 
 	public Behaviour getChild() {

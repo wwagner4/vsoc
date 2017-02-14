@@ -2,13 +2,7 @@ package vsoc.camps;
 
 import java.util.Comparator;
 
-import org.apache.log4j.Logger;
-
-import vsoc.util.VsocUtil;
-
 public class MembersComparator implements Comparator<Member<?>> {
-
-    private static Logger log = Logger.getLogger(MembersComparator.class);
 
     private int kickFactor;
 
@@ -37,7 +31,6 @@ public class MembersComparator implements Comparator<Member<?>> {
     }
 
     public Double fitness(Member<?> m) {
-        VsocUtil u = VsocUtil.current();
         double k = m.kickPerMatch();
         double og = m.ownGoalsPerMatch();
         double g = m.goalsPerMatch();
@@ -51,13 +44,6 @@ public class MembersComparator implements Comparator<Member<?>> {
             zkp = this.zeroKickPenalty;
         }
         double fit = kf * k + gf * g + ogf * og + kof * ko + zkp;
-        if (log.isDebugEnabled()) {
-            log.debug("[fitness] fit=" + u.format(fit) + "\n\tvalues<k="
-                    + u.format(k) + " g=" + u.format(og) + " og=" + u.format(g)
-                    + " ko=" + u.format(ko) + " zkp=" + zkp
-                    + ">\n\tfactores<k=" + kf + " g=" + gf + " og=" + ogf
-                    + " ko=" + kof + ">");
-        }
         return fit;
     }
 

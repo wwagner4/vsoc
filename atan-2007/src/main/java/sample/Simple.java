@@ -2,16 +2,7 @@ package sample;
 
 import java.util.Random;
 
-import org.apache.log4j.Logger;
-
-import atan.model.Controller;
-import atan.model.Flag;
-import atan.model.Line;
-import atan.model.PlayMode;
-import atan.model.Player;
-import atan.model.RefereeMessage;
-import atan.model.ViewAngle;
-import atan.model.ViewQuality;
+import atan.model.*;
 
 /**
  * A simple testcontroller. It implements the following simple behaviour. If the
@@ -24,8 +15,6 @@ import atan.model.ViewQuality;
  */
 
 public class Simple implements Controller {
-
-	private static Logger log = Logger.getLogger(Simple.class);
 
 	private Random random = null;
 
@@ -46,8 +35,6 @@ public class Simple implements Controller {
 	private double directionBall;
 
 	private Player player;
-
-	private int logcount = 0;
 
 	public Simple() {
 		random = new Random(System.currentTimeMillis() + count);
@@ -95,32 +82,20 @@ public class Simple implements Controller {
 		turnTowardBall();
 		if (distanceBall < 0.7)
 			getPlayer().kick(50, randomKickDirectionValue());
-		if (log.isDebugEnabled()) {
-			log.debug("b(" + directionBall + "," + distanceBall + ")");
-		}
 	}
 
 	private void canSeeAnythingAction() {
 		getPlayer().dash(this.randomDashValueSlow());
 		getPlayer().turn(20);
-		if (log.isDebugEnabled()) {
-			log.debug("a");
-		}
 	}
 
 	private void canSeeNothingAction() {
 		getPlayer().turn(180);
-		if (log.isDebugEnabled()) {
-			log.debug("n");
-		}
 	}
 
 	private void canSeeOwnGoalAction() {
 		getPlayer().dash(this.randomDashValueFast());
 		turnTowardOwnGoal();
-		if (log.isDebugEnabled()) {
-			log.debug("g(" + directionOwnGoal + "," + distanceOwnGoal + ")");
-		}
 	}
 
 	/**

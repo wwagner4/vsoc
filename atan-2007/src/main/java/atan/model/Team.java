@@ -1,14 +1,11 @@
 package atan.model;
 
-import org.apache.log4j.Logger;
-
 public abstract class Team {
 
     private SServerPlayer[] players = new SServerPlayer[11];
     private String teamName;
     private int port = 6000;
     private String hostname = "localhost";
-    private static Logger log = Logger.getLogger(Team.class);
 
     public Team(String teamName) {
         this(teamName, 6000, "localhost");
@@ -19,10 +16,6 @@ public abstract class Team {
         this.port = port;
         this.hostname = hostname;
         createNewPlayers();
-        int n = players.length;
-        log.info("Created new team. " + teamName + " with " + n + " players. Connecting to " + hostname + ":" + port
-                + ".");
-
     }
 
     public String getTeamName() {

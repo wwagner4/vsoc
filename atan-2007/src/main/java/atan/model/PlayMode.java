@@ -1,42 +1,46 @@
 package atan.model;
 
-import org.apache.commons.lang.enums.Enum;
+public enum PlayMode {
 
-public class PlayMode extends Enum {
+	BEFORE_KICK_OFF("beforeKickOff"),
 
-	public static final PlayMode BEFORE_KICK_OFF = new PlayMode("beforeKickOff");
+	TIME_OVER("timeOver"),
 
-	public static final PlayMode TIME_OVER = new PlayMode("timeOver");
+	PLAY_ON("playOn"),
 
-	public static final PlayMode PLAY_ON = new PlayMode("playOn");
+	KICK_OFF_OWN("kickOffOwn"),
 
-	public static final PlayMode KICK_OFF_OWN = new PlayMode("kickOffOwn");
+	KICK_OFF_OTHER("kickOffOther"),
 
-	public static final PlayMode KICK_OFF_OTHER = new PlayMode("kickOffOther");
+	KICK_IN_OWN("kickInOwn"),
 
-	public static final PlayMode KICK_IN_OWN = new PlayMode("kickInOwn");
+	KICK_IN_OTHER("kickInOther"),
 
-	public static final PlayMode KICK_IN_OTHER = new PlayMode("kickInOther");
+	FREE_KICK_OWN("freeKickOwn"),
 
-	public static final PlayMode FREE_KICK_OWN = new PlayMode("freeKickOwn");
+	FREE_KICK_OTHER("freeKickOther"),
 
-	public static final PlayMode FREE_KICK_OTHER = new PlayMode("freeKickOther");
+	CORNER_KICK_OWN("cornerKickOwn"),
 
-	public static final PlayMode CORNER_KICK_OWN = new PlayMode("cornerKickOwn");
+	CORNER_KICK_OTHER("cornerKickOther"),
 
-	public static final PlayMode CORNER_KICK_OTHER = new PlayMode(
-			"cornerKickOther");
+	GOAL_KICK_OWN("goalKickOwn"),
 
-	public static final PlayMode GOAL_KICK_OWN = new PlayMode("goalKickOwn");
+	GOAL_KICK_OTHER("goalKickOther"),
 
-	public static final PlayMode GOAL_KICK_OTHER = new PlayMode("goalKickOther");
+	GOAL_OWN("goalOwn"),
 
-	public static final PlayMode GOAL_OWN = new PlayMode("goalOwn");
+	GOAL_OTHER("goalOther");
 
-	public static final PlayMode GOAL_OTHER = new PlayMode("goalOther");
+	private String name;
 
-	public PlayMode(String name) {
-		super(name);
+	private PlayMode(String name) {
+		this.name = name;
+	}
+
+	@Override
+	public String toString() {
+		return "PlayMode[" + name + "]";
 	}
 
 }

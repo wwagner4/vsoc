@@ -1,15 +1,20 @@
 package atan.model;
 
-import org.apache.commons.lang.enums.Enum;
+public enum ViewQuality {
 
-public class ViewQuality extends Enum {
+	HIGH("high"),
 
-	public static final ViewQuality HIGH = new ViewQuality("high");
+	LOW("low");
 
-	public static final ViewQuality LOW = new ViewQuality("low");
+	private String name;
 
-	public ViewQuality(String name) {
-		super(name);
+	private ViewQuality(String name) {
+		this.name = name;
+	}
+
+	@Override
+	public String toString() {
+		return "ViewQuality[" + name + "]";
 	}
 
 }
