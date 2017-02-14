@@ -1,8 +1,6 @@
 package vsoc.server;
 
-import org.springframework.beans.factory.FactoryBean;
-
-public class DefaultServerFactory implements FactoryBean<Server> {
+public class DefaultServerFactory {
 
     private ServerUtil util = ServerUtil.current();
 
