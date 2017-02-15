@@ -1,0 +1,2 @@
+* Make Member an empty class. Different implementations of camps will need different parameters. There will be a GGMember and a GKMember and others. Different Comparators will als be needed
+* Check the classes in abstract class. what is realy necessary. Eventually slimmer interface
