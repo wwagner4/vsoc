@@ -1,5 +1,7 @@
 package vsoc.behaviour;
 
+import java.util.Optional;
+
 import atan.model.Player;
 
 /**
@@ -21,8 +23,8 @@ public class GoAheadBehaviour implements Behaviour {
         player.dash(50);
     }
 
-    public Behaviour getChild() {
-        return null;
+    public Optional<Behaviour> getChild() {
+        return Optional.empty();
     }
 
 }

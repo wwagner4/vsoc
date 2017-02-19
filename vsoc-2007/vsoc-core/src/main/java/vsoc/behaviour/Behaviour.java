@@ -1,6 +1,7 @@
 package vsoc.behaviour;
 
 import java.io.Serializable;
+import java.util.Optional;
 
 import atan.model.Player;
 
@@ -32,6 +33,6 @@ public interface Behaviour extends Serializable {
      * 
      * @return The child behavior.
      */
-    Behaviour getChild();
+    Optional<Behaviour> getChild();
 
 }

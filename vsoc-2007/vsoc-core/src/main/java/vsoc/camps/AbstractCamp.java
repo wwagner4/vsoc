@@ -43,7 +43,7 @@ public abstract class AbstractCamp<M extends Member<?>, N extends VectorFunction
 			takeOneStep();
 		}
 	}
-	
+
 	public void takeOneStep() {
 		runMatch();
 		this.matchCount++;
@@ -76,10 +76,7 @@ public abstract class AbstractCamp<M extends Member<?>, N extends VectorFunction
 	}
 
 	private Server createServer() {
-		DefaultServerFactory fac = new DefaultServerFactory();
-		fac.setEastPlayerCount(eastPlayerCount());
-		fac.setWestPlayerCount(westPlayerCount());
-		return fac.createServer();
+		return ServerUtil.current().createServer(eastPlayerCount(), westPlayerCount());
 	}
 
 	public int getStepsPerMatch() {
@@ -129,6 +126,5 @@ public abstract class AbstractCamp<M extends Member<?>, N extends VectorFunction
 	public Controller getController(int index) {
 		return getMembers().get(index).getController();
 	}
-
 
 }

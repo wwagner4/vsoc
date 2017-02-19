@@ -121,7 +121,7 @@ public class GGCamp extends AbstractNeuroevolutionCamp<GGMember, VectorFunction>
 
 	protected Behaviour createBehaviour(VectorFunction vf) {
 		VectorFunctionBehaviour<VectorFunction> behav = new VectorFunctionBehaviour<VectorFunction>(vf,
-		    new RetinaSensorsToVector());
+		    new RetinaSensorsToVector(), new GGVectorToPlayer());
 		return new GGBeforeKickoffBehaviour(behav);
 	}
 

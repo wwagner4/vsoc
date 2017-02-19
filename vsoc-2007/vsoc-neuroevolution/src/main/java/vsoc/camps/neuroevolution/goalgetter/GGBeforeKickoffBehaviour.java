@@ -1,5 +1,7 @@
 package vsoc.camps.neuroevolution.goalgetter;
 
+import java.util.Optional;
+
 import atan.model.Player;
 import vsoc.behaviour.*;
 
@@ -10,11 +12,11 @@ public class GGBeforeKickoffBehaviour implements Behaviour {
 
 	private static final long serialVersionUID = 1L;
 
-	private Behaviour child;
+	private Optional<Behaviour> child;
 
 	public GGBeforeKickoffBehaviour(Behaviour child) {
 		super();
-		this.child = child;
+		this.child = Optional.of(child);
 	}
 
 	public boolean shouldBeApplied(Sensors sens) {
@@ -65,7 +67,7 @@ public class GGBeforeKickoffBehaviour implements Behaviour {
 		}
 	}
 
-	public Behaviour getChild() {
+	public Optional<Behaviour> getChild() {
 		return this.child;
 	}
 

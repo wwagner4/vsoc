@@ -1,6 +1,6 @@
 package vsoc.camps.neuroevolution.goalgetter;
 
-import java.util.Random;
+import java.util.*;
 
 import atan.model.Player;
 import vsoc.behaviour.*;
@@ -13,13 +13,13 @@ public class GGDefaultBehaviour implements Behaviour {
 
 		private static final long serialVersionUID = 1L;
     
-		private Behaviour child;
+		private Optional<Behaviour> child;
 
     private static Random random = new Random();
 
     public GGDefaultBehaviour(Behaviour child) {
         super();
-        this.child = child;
+        this.child = Optional.of(child);
     }
 
     public boolean shouldBeApplied(Sensors sens) {
@@ -30,7 +30,7 @@ public class GGDefaultBehaviour implements Behaviour {
         this.randomTurn(player);
     }
 
-    public Behaviour getChild() {
+    public Optional<Behaviour> getChild() {
         return this.child;
     }
 
