@@ -1,7 +1,4 @@
-package vsoc.camps;
-
-import vsoc.behaviour.Sensors;
-
+package vsoc.behaviour;
 
 public interface SensorsToVector {
 	

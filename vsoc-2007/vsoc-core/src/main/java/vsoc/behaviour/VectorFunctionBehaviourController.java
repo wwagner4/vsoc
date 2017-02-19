@@ -1,8 +1,6 @@
-package vsoc.camps;
+package vsoc.behaviour;
 
 import java.io.Serializable;
-
-import vsoc.behaviour.*;
 
 /**
  * Atan control system that controls the robots by means of a neural network.

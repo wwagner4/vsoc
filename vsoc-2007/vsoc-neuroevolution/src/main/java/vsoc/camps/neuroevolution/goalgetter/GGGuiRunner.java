@@ -21,22 +21,22 @@ public class GGGuiRunner {
 
 	public static void main(String[] args) {
 		try {
-			Camp<?> camp = loadCamp();
+			GGCamp camp = loadCamp();
 			Serializer.current().startScheduledSerialization(PREFIX, 600, camp);
 			VsocUtil u = VsocUtil.current();
 			String campProperties = u.propsToString(camp.getProperties());
 			log.info("\n" + campProperties);
-			FieldFrame.open(camp, "GG camp");
+			FieldFrame.open(camp, "Goal Getter Camp");
 		} catch (Exception e) {
 			log.error("Could not run 'GGGuiRunner'. " + e.getMessage(), e);
 		}
 	}
 
-	private static Camp<?> loadCamp() {
-		Camp<?> camp = (Camp<?>) Serializer.current().deserializeFromScheduled(PREFIX);
+	private static GGCamp loadCamp() {
+		GGCamp camp = (GGCamp) Serializer.current().deserializeFromScheduled(PREFIX);
 		if (camp == null) {
 			try (ConfigurableApplicationContext ctx = new ClassPathXmlApplicationContext("ggcamp.xml")) {
-				camp = (Camp<?>) ctx.getBean("camp1");
+				camp = ctx.getBean("camp1", GGCamp.class);
 			}
 		}
 		return camp;

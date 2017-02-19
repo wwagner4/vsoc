@@ -1,7 +1,6 @@
-package vsoc.camps;
+package vsoc.behaviour;
 
 import atan.model.Player;
-import vsoc.behaviour.*;
 
 public class VectorFunctionBehaviour<V extends VectorFunction> implements Behaviour {
 

@@ -3,7 +3,7 @@ package vsoc.nn.feedforward;
 import java.io.*;
 import java.util.*;
 
-import vsoc.camps.VectorFunction;
+import vsoc.behaviour.VectorFunction;
 import vsoc.nn.base.*;
 
 /**

@@ -12,28 +12,26 @@ import vsoc.util.Serializer;
 
 public class AtanCampTeam extends Team {
 
-    private Camp<?> camp = null;
+	private Camp<?> camp = null;
 
-    public AtanCampTeam(String teamName, int port, String hostname) {
-        super(teamName, port, hostname);
-    }
-    
-    public Controller getNewController(int num) {
-        try {
-            if (this.camp == null) {
-                File file = new File(getTeamName() + ".object");
+	public AtanCampTeam(String teamName, int port, String hostname) {
+		super(teamName, port, hostname);
+	}
+
+	public Controller getNewController(int num) {
+		try {
+			if (this.camp == null) {
+				File file = new File(getTeamName() + ".object");
 				this.camp = (Camp<?>) Serializer.current().deserialize(file);
-            }
-            Member<?> member = this.camp.getMember(num);
-            return member.getController();
-        } catch (IOException ex) {
-            throw new IllegalStateException(ex.getMessage(), ex);
-        }
-    }
+			}
+			return camp.getController(num);
+		} catch (IOException ex) {
+			throw new IllegalStateException(ex.getMessage(), ex);
+		}
+	}
 
-    public static void main(String[] args) {
-        AtanCampTeam team = new AtanCampTeam(args[0], 6000, "localhost");
-        team.connectAll();
-    }
+	public static void main(String[] args) {
+		AtanCampTeam team = new AtanCampTeam(args[0], 6000, "localhost");
+		team.connectAll();
+	}
 }
-

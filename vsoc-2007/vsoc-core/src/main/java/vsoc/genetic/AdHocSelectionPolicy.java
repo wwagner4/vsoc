@@ -9,6 +9,8 @@ public class AdHocSelectionPolicy<T> implements SelectionPolicy<T> {
 		private static final long serialVersionUID = 1L;
     
 		private int populationSize = 21;
+		
+		private Random ran = new Random();
     
     public AdHocSelectionPolicy() {
         super();
@@ -58,7 +60,7 @@ public class AdHocSelectionPolicy<T> implements SelectionPolicy<T> {
 	public List<T> createNewGeneration(Crosser<T> crosser) {
         List<T> pop = new ArrayList<>();
         for (int i = 0; i < this.populationSize; i++) {
-            T mm = crosser.create(12341L);
+            T mm = crosser.create(ran.nextLong());
             pop.add(mm);
         }
         return pop;

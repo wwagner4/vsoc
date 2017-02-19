@@ -37,7 +37,7 @@ public class Serializer {
 		try {
 			File sDir = getSchedulerDir();
 			if (!sDir.exists()) {
-				throw new FileNotFoundException("The scheduler directory " + sDir.getAbsolutePath() + " does not exist.");
+				return null;
 			}
 			String[] list = sDir.list();
 			SortedSet<String> names = new TreeSet<>();

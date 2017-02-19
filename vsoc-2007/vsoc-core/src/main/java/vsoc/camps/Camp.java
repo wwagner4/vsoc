@@ -1,27 +1,19 @@
 package vsoc.camps;
 
 import java.io.Serializable;
-import java.util.Properties;
 
+import atan.model.Controller;
 import vsoc.server.Server;
 import vsoc.server.gui.*;
 
-public interface Camp<M extends Member<?>> extends Serializable, SimulationContainer {
+public interface Camp<M extends Member<?>> extends Serializable, SimulationContainer, Runnable {
 
-    Server getServer();
+	Server getServer();
 
-    void setMaxGenerations(int i);
+	Controller getController(int num);
 
-    boolean isFinished();
-
-    void takeOneStep();
-    
-	Properties getProperties();
-
-	M getMember(int num);
-    
-    default Simulation getSimulation() {
-    	return getServer();
-    }
+	default Simulation getSimulation() {
+		return getServer();
+	}
 
 }

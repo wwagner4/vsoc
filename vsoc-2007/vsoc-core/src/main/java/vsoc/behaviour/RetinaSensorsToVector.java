@@ -1,9 +1,8 @@
-package vsoc.camps;
+package vsoc.behaviour;
 
 import java.io.Serializable;
 import java.util.Iterator;
 
-import vsoc.behaviour.*;
 import vsoc.util.Retina;
 
 public class RetinaSensorsToVector implements SensorsToVector, Serializable {

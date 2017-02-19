@@ -6,6 +6,7 @@ package vsoc.camps;
 import java.util.*;
 
 import atan.model.*;
+import vsoc.behaviour.VectorFunction;
 import vsoc.server.*;
 import vsoc.util.*;
 
@@ -13,15 +14,13 @@ public abstract class AbstractCamp<M extends Member<?>, N extends VectorFunction
 
 	private static final long serialVersionUID = 0L;
 
-	protected final Random ran = new Random();
-	
 	private transient Server server = null;
-	
+
 	private int matchCount = 0;
 
 	private int generationsCount = 0;
 
-	protected int maxGenerations;
+	private int maxGenerations = 100;
 
 	private int stepsPerMatch = 600;
 
@@ -36,8 +35,8 @@ public abstract class AbstractCamp<M extends Member<?>, N extends VectorFunction
 	abstract protected void createNextGeneration();
 
 	protected abstract List<M> getMembers();
-	
-	protected abstract void updateMemberFromPlayer(VsocPlayer player, M member);
+
+	abstract protected void updateMembersAfterMatch();
 
 	public void run() {
 		while (true) {
@@ -95,12 +94,6 @@ public abstract class AbstractCamp<M extends Member<?>, N extends VectorFunction
 		return this.generationsCount;
 	}
 
-	public Properties getProperties() {
-		Properties re = new Properties();
-		addProperties(re);
-		return re;
-	}
-
 	public int getMatchesPerGeneration() {
 		return this.matchesPerGeneration;
 	}
@@ -133,145 +126,9 @@ public abstract class AbstractCamp<M extends Member<?>, N extends VectorFunction
 		this.generationsCount = generationsCount;
 	}
 
-    public M getMember(int index) {
-        return getMembers().get(index);
-    }
-
-	protected void setRandomPosition(Player p) {
-		p.move(ran.nextInt(100) - 50, ran.nextInt(60) - 30);
-		p.turn(ran.nextInt(360) - 180);
+	public Controller getController(int index) {
+		return getMembers().get(index).getController();
 	}
 
-	private void updateMembersAfterMatch() {
-		int eastGoals = 0;
-		ArrayList<M> eastMembers = new ArrayList<>();
-		int westGoals = 0;
-		ArrayList<M> westMembers = new ArrayList<>();
-		{
-			Iterator<VsocPlayer> it = getServer().getPlayersEast().iterator();
-			while (it.hasNext()) {
-				VsocPlayer p = it.next();
-				eastGoals += p.getOtherGoalCount();
-				M m = getMemberByControlSystem(getMembers(), p.getController());
-				if (m != null) {
-					eastMembers.add(m);
-					updateMemberFromPlayer(p, m);
-				}
-			}
-		}
-		{
-			Iterator<VsocPlayer> it = getServer().getPlayersWest().iterator();
-			while (it.hasNext()) {
-				VsocPlayer p = it.next();
-				westGoals += p.getOtherGoalCount();
-				M m = getMemberByControlSystem(getMembers(), p.getController());
-				if (m != null) {
-					westMembers.add(m);
-					updateMemberFromPlayer(p, m);
-				}
-			}
-		}
-		{
-			Iterator<M> iter = eastMembers.iterator();
-			while (iter.hasNext()) {
-				M mem = iter.next();
-				mem.increaseReceivedGoalsCount(westGoals);
-			}
-		}
-		{
-			Iterator<M> iter = westMembers.iterator();
-			while (iter.hasNext()) {
-				M mem = iter.next();
-				mem.increaseReceivedGoalsCount(eastGoals);
-			}
-		}
-	}
-
-	protected void addProperties(Properties re) {
-		re.setProperty("steps per match", VsocUtil.current().format(this.stepsPerMatch));
-		re.setProperty("max generations", "" + this.maxGenerations);
-		re.setProperty("matches per generation", VsocUtil.current().format(this.matchesPerGeneration));
-	}
-
-	protected RandomIndexSelector createSelector(int membersCount, int playersCount) {
-		RandomIndexSelector sel;
-		try {
-			sel = new RandomIndexSelector(0, membersCount - 1, playersCount);
-		} catch (IllegalStateException e) {
-			throw new IllegalStateException(
-					"Members count (=" + membersCount + ") too small for players count (=" + playersCount + ").", e);
-		}
-		return sel;
-	}
-
-	protected M getMemberByControlSystem(List<M> mems, Controller c) {
-		Iterator<M> i = mems.iterator();
-		while (i.hasNext()) {
-			M m = i.next();
-			if (m.getController() == c)
-				return m;
-		}
-		return null;
-	}
-
-	protected double kicks(List<M> mems) {
-		double kicks = 0.0;
-		int count = 0;
-		Iterator<M> iter = mems.iterator();
-		while (iter.hasNext()) {
-			M mem = iter.next();
-			kicks += mem.kickPerMatch();
-			count++;
-		}
-		return kicks / count;
-	}
-
-	protected double kickOuts(List<M> mems) {
-		double kicks = 0.0;
-		int count = 0;
-		Iterator<M> iter = mems.iterator();
-		while (iter.hasNext()) {
-			M mem = iter.next();
-			kicks += mem.kickOutPerMatch();
-			count++;
-		}
-		return kicks / count;
-	}
-
-	protected double goalsReceived(List<M> mems) {
-		double re = 0.0;
-		int count = 0;
-		Iterator<M> iter = mems.iterator();
-		while (iter.hasNext()) {
-			M mem = iter.next();
-			re += mem.receivedGoalsPerMatch();
-			count++;
-		}
-		return re / count;
-	}
-
-	protected double goals(List<M> mems) {
-		double goals = 0.0;
-		int count = 0;
-		Iterator<M> iter = mems.iterator();
-		while (iter.hasNext()) {
-			M mem = iter.next();
-			goals += mem.goalsPerMatch();
-			count++;
-		}
-		return goals / count;
-	}
-
-	protected double ownGoals(List<M> mems) {
-		double goals = 0.0;
-		int count = 0;
-		Iterator<M> iter = mems.iterator();
-		while (iter.hasNext()) {
-			M mem = iter.next();
-			goals += mem.ownGoalsPerMatch();
-			count++;
-		}
-		return goals / count;
-	}
 
 }
