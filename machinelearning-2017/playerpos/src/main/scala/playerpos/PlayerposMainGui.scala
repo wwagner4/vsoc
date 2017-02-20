@@ -14,6 +14,7 @@ import javax.swing.JComponent
 import javax.swing.JPanel
 import java.util.concurrent.Executors
 import scala.concurrent.Future
+import java.awt.BorderLayout
 
 object PlayerposMainGui extends SimpleSwingApplication {
 
@@ -48,13 +49,13 @@ object PlayerposMainGui extends SimpleSwingApplication {
       val serverPanel = new Component {
         val fc = new FieldCanvas
         fc.setSim(srv)
-        val jc = new JPanel()
-        jc.add(fc)
+        val jc = new JPanel(new BorderLayout)
+        jc.add(fc, BorderLayout.CENTER)
         initP = jc
       }
 
       var cnt = 0
-      
+
       val buttons = new FlowPanel {
         val button1 = new Button {
           text = "TakeStep"
@@ -63,7 +64,7 @@ object PlayerposMainGui extends SimpleSwingApplication {
               Future {
                 println("take step " + cnt)
                 srv.takeStep()
-                  cnt += 1
+                cnt += 1
               }
           }
         }
@@ -71,12 +72,13 @@ object PlayerposMainGui extends SimpleSwingApplication {
           text = "Take 10 Steps"
           reactions += {
             case ButtonClicked(_) =>
-              (1 to 10) foreach { _ =>
-                Future {
+              Future {
+                (1 to 10) foreach { _ =>
                   println("take step " + cnt)
                   srv.takeStep()
                   cnt += 1
                 }
+                serverPanel.repaint()
               }
           }
         }
