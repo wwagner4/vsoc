@@ -17,8 +17,8 @@ public class ServerUtil {
 		return current;
 	}
 
-	public Server createServer(int eastPlayerCount, int westPlayerCount) {
-		Server srv = new Server();
+	public CtrlServer createServer(int eastPlayerCount, int westPlayerCount) {
+		CtrlServer srv = new CtrlServer();
 		addGoalWest(srv, -Server.WIDTH / 2, 0);
 		addGoalEast(srv, Server.WIDTH / 2, 0);
 		addFlags(srv);

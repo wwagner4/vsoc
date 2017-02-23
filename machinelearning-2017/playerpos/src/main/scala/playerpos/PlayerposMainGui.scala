@@ -22,15 +22,20 @@ import javax.swing._
 import java.awt.event.ActionListener
 import java.awt.event.ActionEvent
 import java.awt.FlowLayout
+import vsoc.server.gui.FieldPanel
 
 object PlayerposMainGui extends App {
+  
+  val f = new FieldFrame()
+  f.setSize(500, 500)
+  f.setVisible(true)
 
 }
 
 class FieldFrame extends JFrame with WindowListener {
+  getContentPane.add(new FieldContentPanel())
+  
   addWindowListener(this)
-  
-  
   
   def windowActivated(evt: WindowEvent): Unit = ()
   def windowClosed(evt: WindowEvent): Unit = ()
@@ -45,7 +50,7 @@ class FieldFrame extends JFrame with WindowListener {
 class FieldContentPanel extends JPanel with ActionListener {
   
   setLayout(new BorderLayout())
-  val fieldCanvas = new FieldCanvas()
+  val fieldCanvas = new FieldPanel()
 
   val ctrlPanel = new JPanel()
   ctrlPanel.setLayout(new FlowLayout())
@@ -58,7 +63,9 @@ class FieldContentPanel extends JPanel with ActionListener {
   add(fieldCanvas, BorderLayout.CENTER)
   add(ctrlPanel, BorderLayout.SOUTH)
   
-  def actionPerformed(evt: ActionEvent): Unit = ???
+  def actionPerformed(evt: ActionEvent): Unit = {
+    println("action")
+  }
   
   
   

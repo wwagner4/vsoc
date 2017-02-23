@@ -14,7 +14,7 @@ public abstract class AbstractCamp<M extends Member<?>, N extends VectorFunction
 
 	private static final long serialVersionUID = 0L;
 
-	private transient Server server = null;
+	private transient CtrlServer server = null;
 
 	private int matchCount = 0;
 
@@ -68,14 +68,14 @@ public abstract class AbstractCamp<M extends Member<?>, N extends VectorFunction
 		}
 	}
 
-	public Server getServer() {
+	public CtrlServer getServer() {
 		if (this.server == null) {
 			this.server = createServer();
 		}
 		return this.server;
 	}
 
-	private Server createServer() {
+	private CtrlServer createServer() {
 		return ServerUtil.current().createServer(eastPlayerCount(), westPlayerCount());
 	}
 

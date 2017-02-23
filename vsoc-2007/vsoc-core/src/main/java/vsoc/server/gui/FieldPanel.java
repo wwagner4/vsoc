@@ -3,18 +3,20 @@ package vsoc.server.gui;
 import java.awt.*;
 import java.awt.event.*;
 
+import javax.swing.JPanel;
+
 /**
  * A component that can display a Simulation
  */
 
-public class FieldCanvas extends Canvas implements SimulationChangeListener, ComponentListener {
+public class FieldPanel extends JPanel implements SimulationChangeListener, ComponentListener {
 
 	private static final long serialVersionUID = 1L;
 	
 	private TransformPainter transformPainter;
 
 
-	public FieldCanvas() {
+	public FieldPanel() {
 		super();
 		this.transformPainter = new TransformPainter(this);
 		addComponentListener(this);

@@ -39,7 +39,7 @@ public class FieldFrame extends JFrame implements WindowListener {
         ff.setVisible(true);
     }
 
-    public void setSim(Simulation srv) {
+    public void setSim(CtrlSimulation srv) {
         this.fieldContentPanel.setSim(srv);
     }
 

@@ -3,6 +3,7 @@ package vsoc.server.gui;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Optional;
 
 import javax.swing.*;
 import javax.swing.event.*;
@@ -11,14 +12,17 @@ public class FieldContentPanel extends JPanel implements ActionListener, ChangeL
 
 	private static final long serialVersionUID = 1L;
 
-	FieldCanvas fieldCanvas = new FieldCanvas();
+	FieldPanel fieldCanvas = new FieldPanel();
 
 	JPanel ctrlPanel = new JPanel();
 
 	JToggleButton speedUpButton = new JToggleButton("speed up (no animation)");
 
 	JLabel speedLabel = new JLabel("speed");
+
 	JSlider speedSlider = new JSlider();
+
+	Optional<CtrlSimulation> sim = Optional.empty();
 
 	public FieldContentPanel() {
 		try {
@@ -29,8 +33,9 @@ public class FieldContentPanel extends JPanel implements ActionListener, ChangeL
 		}
 	}
 
-	public void setSim(Simulation s) {
+	public void setSim(CtrlSimulation s) {
 		this.fieldCanvas.setSim(s);
+		sim = Optional.of(s);
 		ctrlSpeed();
 	}
 
@@ -44,11 +49,11 @@ public class FieldContentPanel extends JPanel implements ActionListener, ChangeL
 		this.setBorder(BorderFactory.createEmptyBorder(15, 5, 5, 5));
 		this.add(this.fieldCanvas, BorderLayout.CENTER);
 		this.add(this.ctrlPanel, BorderLayout.SOUTH);
-		
+
 		this.ctrlPanel.add(this.speedLabel);
 		this.ctrlPanel.add(this.speedSlider);
 		this.ctrlPanel.add(this.speedUpButton);
-		
+
 	}
 
 	@Override
@@ -62,7 +67,7 @@ public class FieldContentPanel extends JPanel implements ActionListener, ChangeL
 	public void stateChanged(ChangeEvent e) {
 		if (e.getSource() == this.speedSlider) {
 			if (!this.speedUpButton.isSelected()) {
-				this.fieldCanvas.setDelay(adjust(this.speedSlider.getValue()));
+				sim.ifPresent(s -> s.setDelay(adjust(this.speedSlider.getValue())));
 			}
 		}
 	}
@@ -73,11 +78,15 @@ public class FieldContentPanel extends JPanel implements ActionListener, ChangeL
 
 	private void ctrlSpeed() {
 		if (this.speedUpButton.isSelected()) {
-			this.fieldCanvas.setDelay(0);
-			this.fieldCanvas.setSteps(Integer.MAX_VALUE);
+			sim.ifPresent(s -> {
+				s.setDelay(0);
+				s.setInformListeners(false);
+			});
 		} else {
-			this.fieldCanvas.setDelay(adjust(this.speedSlider.getValue()));
-			this.fieldCanvas.setSteps(1);
+			sim.ifPresent(s -> {
+				s.setDelay(adjust(this.speedSlider.getValue()));
+				s.setInformListeners(true);
+			});
 		}
 	}
 
