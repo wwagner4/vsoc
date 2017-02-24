@@ -28,6 +28,7 @@ import vsoc.server.Server
 import scala.collection.JavaConversions._
 import atan.model.Controller
 import scala.util.Random
+import vsoc.server.VsocPlayer
 
 object PlayerposMainGui extends App {
 
@@ -42,7 +43,7 @@ class FieldFrame extends JFrame with WindowListener {
   val rand = new Random
   
   def createServer: Server = {
-    val s = ServerUtil.current().createServer(10, 10)
+    val s = ServerUtil.current().createServer(1, 0)
     for (p <- s.getPlayers) {
       p.setController(createController)
     }
@@ -59,7 +60,10 @@ class FieldFrame extends JFrame with WindowListener {
   def createController: Controller = {
     val behav = new Behaviour() {
       def apply(sens: Sensors, player: Player): Unit = {
-        println("" + sens)
+        val vp = player.asInstanceOf[VsocPlayer]
+        val pos = vp.getPosition
+        val dir = vp.getDirection
+        println("" + pos + dir + sens.getFlagsCenter + sens.getFlagsLeft + sens.getFlagsRight)
         player.move(ran(-60, 60), ran(-50, 50))
         player.turn(ran(0, 360))
       }
