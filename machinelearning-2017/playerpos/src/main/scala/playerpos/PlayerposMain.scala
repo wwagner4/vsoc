@@ -8,6 +8,8 @@ import com.sun.security.sasl.ServerFactoryImpl
 import vsoc.server.Server
 import vsoc.behaviour.BehaviourController
 import vsoc.server.ServerUtil
+import scala.collection.JavaConversions._
+
 
 object Main extends App {
 
@@ -27,14 +29,11 @@ object Main extends App {
   
   val ctrl = new BehaviourController(behav)
   
-  val srv = ServerUtil.current().createServer(1, 0)
-  srv.getPlayersEast.get(0).setController(ctrl)
+  val srv = ServerUtil.current().createServer(10, 10)
+  srv.getPlayers.foreach { p => p.setController(Playerpos.createController) }
   
-  
-  srv.takeStep()
-  srv.takeStep()
-  srv.takeStep()
-  
-  println("finished")
+  for (i <- (1 to 1000)) {
+    srv.takeStep()
+  }
 }
 

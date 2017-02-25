@@ -24,7 +24,33 @@ import java.util.Optional
 
 import scala.util.Random
 import scala.collection.JavaConversions._
-
+import vsoc.behaviour.SensorsToVector
+import atan.model.Flag
+import java.util.Arrays
+import common.FlagDirectionSensToVector
+import common.SensToVec
+import vsoc.server.gui.FieldPanel
+import vsoc.behaviour.BehaviourController
+import vsoc.server.VsocPlayer
+import vsoc.behaviour.Behaviour
+import vsoc.behaviour.Sensors
+import vsoc.server.ServerUtil
+import vsoc.server.Server
+import vsoc.server.gui.FieldPanel
+import vsoc.behaviour.BehaviourController
+import vsoc.server.VsocPlayer
+import vsoc.behaviour.Behaviour
+import vsoc.behaviour.Sensors
+import vsoc.server.ServerUtil
+import vsoc.server.Server
+import vsoc.server.gui.FieldPanel
+import vsoc.behaviour.BehaviourController
+import vsoc.server.VsocPlayer
+import vsoc.behaviour.Behaviour
+import vsoc.behaviour.Sensors
+import vsoc.server.ServerUtil
+import vsoc.util.Vec2D
+import common.Formatter
 
 object PlayerposMainGui extends App {
 
@@ -36,41 +62,12 @@ object PlayerposMainGui extends App {
 
 class FieldFrame extends JFrame with WindowListener {
 
-  val rand = new Random
-
   def createServer: Server = {
     val s = ServerUtil.current().createServer(1, 0)
     for (p <- s.getPlayers) {
-      p.setController(createController)
+      p.setController(Playerpos.createController)
     }
     s
-  }
-
-  def ran(from: Int, to: Int): Int = {
-    require(from < to)
-    val w = to - from
-    from + rand.nextInt(w)
-  }
-
-  def createController: Controller = {
-    val behav = new Behaviour() {
-
-      var cnt = 0
-
-      def apply(sens: Sensors, player: Player): Unit = {
-        if (cnt % 20 == 0) player.move(ran(-20, 20), ran(-20, 20))
-        cnt += 1
-        val vp = player.asInstanceOf[VsocPlayer]
-        val pos = vp.getPosition
-        val dir = vp.getDirection
-        println("" + pos + dir + sens.getFlagsCenter + sens.getFlagsLeft + sens.getFlagsRight)
-        player.dash(ran(50, 300))
-        player.turn(ran(-30, 30))
-      }
-      def getChild(): Optional[Behaviour] = Optional.empty()
-      def shouldBeApplied(sens: Sensors): Boolean = true
-    }
-    new BehaviourController(behav)
   }
 
   getContentPane.add(new FieldContentPanel(createServer))
@@ -88,7 +85,7 @@ class FieldFrame extends JFrame with WindowListener {
 }
 
 class FieldContentPanel(sim: Server) extends JPanel with ActionListener {
-  
+
   val field = new FieldPanel()
   field.setSim(sim)
 
