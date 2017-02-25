@@ -27,7 +27,10 @@ object Playerpos {
 
         val in = stv.apply(sens)
 
-        if (cnt % 30 == 0) player.move(ran(-20, 20), ran(-20, 20))
+        if (cnt % 30 == 0) {
+          player.move(ran(-20, 20), ran(-20, 20))
+          player.turn(ran(0, 6))
+        }
         cnt += 1
 
         in.foreach { a =>
