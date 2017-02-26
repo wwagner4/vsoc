@@ -11,3 +11,4 @@
 **/target
 **/nb-*.xml
 /data/
+**/.idea/
