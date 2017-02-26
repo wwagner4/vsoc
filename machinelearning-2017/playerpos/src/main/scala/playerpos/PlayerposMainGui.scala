@@ -23,7 +23,7 @@ import javax.swing.JPanel
 import java.util.Optional
 
 import scala.util.Random
-import scala.collection.JavaConversions._
+import scala.collection.JavaConverters._
 import vsoc.behaviour.SensorsToVector
 import atan.model.Flag
 import java.util.Arrays
@@ -64,7 +64,7 @@ class FieldFrame extends JFrame with WindowListener {
 
   def createServer: Server = {
     val s = ServerUtil.current().createServer(1, 0)
-    for (p <- s.getPlayers) {
+    for (p <- s.getPlayers.asScala) {
       p.setController(Playerpos.createController)
     }
     s

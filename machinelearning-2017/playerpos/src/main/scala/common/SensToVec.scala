@@ -3,7 +3,7 @@ package common
 import vsoc.behaviour.Sensors
 import vsoc.behaviour.SensorsToVector
 import atan.model.Flag
-import scala.collection.JavaConversions._
+import scala.collection.JavaConverters._
 import vsoc.behaviour.DistDirVision
 
 /**
@@ -47,7 +47,7 @@ class FlagDirectionSensToVector extends SensToVec {
       relevant = true
       dd.getDirection + offset
     }
-    sens.getFlagsRight.foreach { flag =>
+    sens.getFlagsRight.asScala.foreach { flag =>
       flag match {
         case (Flag.FLAG_OWN_50, dirdist) => re(37) = handle(dirdist)
         case (Flag.FLAG_OWN_40, dirdist) => re(38) = handle(dirdist)
@@ -62,7 +62,7 @@ class FlagDirectionSensToVector extends SensToVec {
         case _ => // Nothing to do
       }
     }
-    sens.getFlagsOther.foreach { flag =>
+    sens.getFlagsOther.asScala.foreach { flag =>
       flag match {
         case (Flag.FLAG_RIGHT_30, dirdist) => re(5) = handle(dirdist)
         case (Flag.FLAG_RIGHT_20, dirdist) => re(6) = handle(dirdist)
@@ -73,14 +73,14 @@ class FlagDirectionSensToVector extends SensToVec {
         case _ => // Nothing to do
       }
     }
-    sens.getFlagsGoalOther.foreach { flag =>
+    sens.getFlagsGoalOther.asScala.foreach { flag =>
       flag match {
         case (Flag.FLAG_RIGHT, dirdist) => re(8) = handle(dirdist)
         case (Flag.FLAG_LEFT, dirdist) => re(12) = handle(dirdist)
         case _ => // Nothing to do
       }
     }
-    sens.getFlagsPenaltyOther.foreach { flag =>
+    sens.getFlagsPenaltyOther.asScala.foreach { flag =>
       flag match {
         case (Flag.FLAG_RIGHT, dirdist) => re(9) = handle(dirdist)
         case (Flag.FLAG_CENTER, dirdist) => re(10) = handle(dirdist)
@@ -88,7 +88,7 @@ class FlagDirectionSensToVector extends SensToVec {
         case _ => // Nothing to do
       }
     }
-    sens.getFlagsLeft.foreach { flag =>
+    sens.getFlagsLeft.asScala.foreach { flag =>
       flag match {
         case (Flag.FLAG_OWN_50, dirdist) => re(25) = handle(dirdist)
         case (Flag.FLAG_OWN_40, dirdist) => re(24) = handle(dirdist)
@@ -102,7 +102,7 @@ class FlagDirectionSensToVector extends SensToVec {
         case (Flag.FLAG_OTHER_50, dirdist) => re(16) = handle(dirdist)
         case _ => // Nothing to do
       }
-      sens.getFlagsOwn.foreach { flag =>
+      sens.getFlagsOwn.asScala.foreach { flag =>
         flag match {
           case (Flag.FLAG_RIGHT_30, dirdist) => re(36) = handle(dirdist)
           case (Flag.FLAG_RIGHT_20, dirdist) => re(35) = handle(dirdist)
@@ -113,14 +113,14 @@ class FlagDirectionSensToVector extends SensToVec {
           case _ => // Nothing to do
         }
       }
-      sens.getFlagsGoalOwn.foreach { flag =>
+      sens.getFlagsGoalOwn.asScala.foreach { flag =>
         flag match {
           case (Flag.FLAG_RIGHT, dirdist) => re(33) = handle(dirdist)
           case (Flag.FLAG_LEFT, dirdist) => re(29) = handle(dirdist)
           case _ => // Nothing to do
         }
       }
-      sens.getFlagsPenaltyOwn.foreach { flag =>
+      sens.getFlagsPenaltyOwn.asScala.foreach { flag =>
         flag match {
           case (Flag.FLAG_RIGHT, dirdist) => re(32) = handle(dirdist)
           case (Flag.FLAG_CENTER, dirdist) => re(31) = handle(dirdist)
