@@ -10,14 +10,11 @@ import breeze.io._
   */
 object PlayerposLinReg {
 
-  val (x, y) = readDataFile("vsoc/data/pos01.txt")
-
-
   def readDataFile(path: String): (Matrix[Double], Matrix[Double]) = {
     val homeDir = new File(System.getProperty("user.home"))
     val file = new File(homeDir, path)
-    val all = csvread (file, separator = ' ')
-    (all, all)
+    val all = csvread (file, separator = ',')
+    (all(::,3 to 44), all(::,0 to 2))
   }
 
 
