@@ -5,7 +5,7 @@ import vsoc.util.Vec2D
 object Formatter {
 
   private val sepa = ','
-  private val sepaStr =  "" + ','
+  private val sepaStr =  "" + sepa
 
   def format(a: Array[Double]): String = {
     a.toList.map { d => f"$d%10.2f" }.mkString(sepaStr)
