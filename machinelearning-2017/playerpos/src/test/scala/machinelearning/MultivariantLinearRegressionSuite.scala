@@ -96,7 +96,7 @@ class MultivariantLinearRegressionSuite extends FunSuite {
       80 -> DenseMatrix(1.91, 0.83),
       90 -> DenseMatrix(1.92, 0.83))
     val gd = gradientDescent(0.1)(linearFunc)(ts01) _
-    val initialThet = DenseMatrix(0.0, 0.0)
+    val initialThet = initialTheta(ts01)
     val steps = Stream.iterate(initialThet)(thet => gd(thet))
     steps.take(100)
       .zipWithIndex
@@ -122,7 +122,7 @@ class MultivariantLinearRegressionSuite extends FunSuite {
       450 -> DenseMatrix(2.10, 0.84, -0.27, -0.03))
 
     val gd = gradientDescent(0.05)(linearFunc)(ts02) _
-    val initialThet = DenseMatrix(0.0, 0.0, 0.0, 0.0)
+    val initialThet = initialTheta(ts02)
     val steps = Stream.iterate(initialThet)(thet => gd(thet))
     steps.take(500)
       .zipWithIndex

@@ -31,8 +31,8 @@ object GradientDescent {
 
   /**
     * @param alpha step width
-    * @param hypo hypothesis function
-    * @param ts training set
+    * @param hypo  hypothesis function
+    * @param ts    training set
     * @param theta set of parameters
     * @return the next set of parameters
     */
@@ -44,6 +44,9 @@ object GradientDescent {
     theta - alpha * ((1/m) * (hf(ts.X) - ts.y).t * ts.X).t
   }
 
+  def initialTheta(ts: TrainingSet): DenseMatrix[Double] = {
+    DenseMatrix.zeros(ts.X.cols, ts.y.cols)
+  }
 }
 
 object HypothesisFunction {
@@ -61,8 +64,6 @@ object HypothesisFunction {
 
     }
   }
-
-
 
 
 }
