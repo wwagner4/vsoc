@@ -43,7 +43,7 @@ object Playerpos {
         player.dash(ran(50, 300))
         player.turn(ran(-30, 30))
       }
-      def getChild(): Optional[Behaviour] = Optional.empty()
+      def getChild: Optional[Behaviour] = Optional.empty()
       def shouldBeApplied(sens: Sensors): Boolean = true
     }
     new BehaviourController(behav)
