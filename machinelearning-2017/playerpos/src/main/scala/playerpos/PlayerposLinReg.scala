@@ -10,11 +10,13 @@ import breeze.io._
   */
 object PlayerposLinReg extends App {
 
+  import DenseMatrix._
+
   val (x, y) = PlayerposLinReg.readDataFile(common.Util.dataFile("pos04.txt"))
+  val x1 = DenseMatrix.horzcat(zeros[Double](x.rows, 1), x)
 
 
-
-  println(s"x\n$x")
+  println(s"x1\n$x1")
   println(s"y\n$y")
 
 
