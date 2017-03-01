@@ -2,6 +2,9 @@ package common
 
 import vsoc.util.Vec2D
 
+/**
+  * Formats various data structures to comma separated lines
+  */
 object Formatter {
 
   private val sepa = ','

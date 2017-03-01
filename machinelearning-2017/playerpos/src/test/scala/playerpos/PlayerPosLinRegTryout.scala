@@ -5,7 +5,7 @@ package playerpos
   */
 object PlayerPosLinRegTryout extends App {
 
-  val (x, y) = PlayerposLinReg.readDataFile("prj/vsoc/data/pos03.txt")
+  val (x, y) = PlayerposLinReg.readDataFile(common.Util.dataFile("pos04.txt"))
 
   println(s"x\n$x")
   println(s"y\n$y")

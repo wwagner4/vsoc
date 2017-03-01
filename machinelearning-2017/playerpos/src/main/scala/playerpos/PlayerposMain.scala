@@ -6,11 +6,20 @@ import vsoc.server.ServerUtil
 
 object PlayerposMain extends App {
 
-  val srv = ServerUtil.current().createServer(10, 10)
-  srv.getPlayers.asScala.foreach { p => p.setController(Playerpos.createController) }
+  import common.Util._
 
-  for (_ <- 1 to 1000) {
-    srv.takeStep()
-  }
+  val file = dataFile("pos04.txt")
+  writeToFile(file, pw => {
+    val srv = ServerUtil.current().createServer(10, 10)
+    srv.getPlayers.asScala.foreach { p =>
+      val ctrl = Playerpos.createController(Some(pw))
+      p.setController(ctrl)
+    }
+    for (_ <- 1 to 1000) {
+      srv.takeStep()
+    }
+  })
+
+  println(s"wrote to $file")
 }
 
