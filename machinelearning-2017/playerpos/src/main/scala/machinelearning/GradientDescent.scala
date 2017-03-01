@@ -53,7 +53,6 @@ object HypothesisFunction {
     */
   def linearFunc: GradientDescent.HypType = {
     case (theta: DenseMatrix[Double]) => (X: DenseMatrix[Double]) => {
-      require(theta.cols == 1)
       require(theta.rows > 0)
       require(X.rows > 0)
       require(X.cols == theta.rows)
