@@ -65,7 +65,7 @@ class FieldFrame extends JFrame with WindowListener {
   def createServer: Server = {
     val s = ServerUtil.current().createServer(1, 0)
     for (p <- s.getPlayers.asScala) {
-      p.setController(Playerpos.createController)
+      p.setController(Playerpos.createController(None))
     }
     s
   }

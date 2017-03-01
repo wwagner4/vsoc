@@ -1,5 +1,7 @@
 package playerpos
 
+import java.io.PrintWriter
+
 import common.SensToVec
 import atan.model.Player
 import vsoc.behaviour.BehaviourController
@@ -8,15 +10,17 @@ import atan.model.Controller
 import vsoc.behaviour.Behaviour
 import vsoc.behaviour.Sensors
 import java.util.Optional
+
 import vsoc.server.VsocPlayer
 import common.Formatter
+
 import scala.util.Random
 
 object Playerpos {
 
   val rand = new Random
 
-  def createController: Controller = {
+  def createController(printWriter: Option[PrintWriter]): Controller = {
     val behav = new Behaviour() {
 
       val stv: SensToVec = new FlagDirectionSensToVector()
@@ -37,7 +41,10 @@ object Playerpos {
           val vp = player.asInstanceOf[VsocPlayer]
           val pos = vp.getPosition
           val dir = vp.getDirection
-          println(Formatter.format(pos, dir, a))
+          val line = Formatter.format(pos, dir, a)
+
+          if (printWriter.isDefined) printWriter.get.println(line)
+          else println(line)
         }
 
         player.dash(ran(50, 300))
