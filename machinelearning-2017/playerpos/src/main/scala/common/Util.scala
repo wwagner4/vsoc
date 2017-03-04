@@ -2,6 +2,8 @@ package common
 
 import java.io.{File, PrintWriter}
 
+import breeze.linalg.{DenseMatrix, sum}
+
 /**
   * Util functions
   */
@@ -24,6 +26,11 @@ object Util {
 
   def dataFile(fileName: String): File ={
     new File(dataDir, fileName)
+  }
+
+  def meanDiff(m1: DenseMatrix[Double], m2: DenseMatrix[Double]): Double = {
+    val diff = (m1 - m2) ^:^ 2.0
+    sum(diff) / diff.size
   }
 
 }
