@@ -61,16 +61,19 @@ case class VizCreatorGnuplot(outDir: File) extends VizCreator {
     }.mkString("\n")
 
     def series(dataRows: List[DataRow]) = dataRows.zipWithIndex.map {
-      case (dr, i) => s"""$$Mydata$i using 1:2 title 'a dat' with lines"""
+      case (dr, i) => s"""$$Mydata$i using 1:2 title ' ${dr.name}' with lines"""
     }.mkString(", \\\n")
 
 
     val script =
       s"""
-         |set terminal pngcairo  transparent enhanced font "arial,10" fontscale 1.0 size 600, 400
-         |set output 'a.png'
+         |set terminal pngcairo enhanced size 600, 400
+         |set output '${dia.id}.png'
          |set key inside left top vertical Right noreverse enhanced autotitle box lt black linewidth 1.000 dashtype solid
          |set minussign
+         |set title "${dia.title}"
+         |set xlabel "${dia.xLabel}"
+         |set ylabel "${dia.yLabel}"
          |${data(dia.dataRows)}
          |plot \\
          |${series(dia.dataRows)}
