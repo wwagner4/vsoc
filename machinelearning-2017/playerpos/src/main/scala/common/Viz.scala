@@ -42,31 +42,43 @@ case class VizCreatorGnuplot(outDir: File) extends VizCreator {
 
 
   def createDiagram(dia: Diagram): Unit = {
+
+    val data =
+      s"""
+        |$$Mydata << EOD
+        |11 22
+        |44 55
+        |77 80
+        |EOD
+        |$$Mydata1 << EOD
+        |11 33
+        |44 66
+        |50 99
+        |51 91
+        |53 92
+        |57 93
+        |60 94
+        |77 91
+        |EOD
+        |""".stripMargin.trim
+
+    val series =
+      s"""
+        |$$Mydata using 1:2 title 'a dat' with lines, \\
+        |$$Mydata1 using 1:2 title 'b  dat' with impulses
+        |""".stripMargin.trim
+
     val script =
-      """
-set terminal pngcairo  transparent enhanced font "arial,10" fontscale 1.0 size 600, 400
-set output 'a.png'
-set key inside left top vertical Right noreverse enhanced autotitle box lt black linewidth 1.000 dashtype solid
-set minussign
-$Mydata << EOD
-11 22
-44 55
-77 80
-EOD
-$Mydata1 << EOD
-11 33
-44 66
-50 99
-51 91
-53 92
-57 93
-60 94
-77 91
-EOD
-plot \
-$Mydata using 1:2 title 'a dat' with lines, \
-$Mydata1 using 1:2 title 'b  dat' with impulses
-      """
+      s"""
+        |set terminal pngcairo  transparent enhanced font "arial,10" fontscale 1.0 size 600, 400
+        |set output 'a.png'
+        |set key inside left top vertical Right noreverse enhanced autotitle box lt black linewidth 1.000 dashtype solid
+        |set minussign
+        |$data
+        |plot \\
+        |$series
+        |""".stripMargin
+
     val id = dia.id
     val filename = s"diagram_$id.gnuplot"
     val f = new File(outDir, filename)
