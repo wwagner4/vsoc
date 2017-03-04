@@ -2,7 +2,7 @@ package common
 
 import java.io.File
 
-import common.Viz.Diagram
+import common.Viz._
 
 /**
   * Created by wwagner4 on 04/03/2017.
@@ -43,39 +43,26 @@ case class VizCreatorGnuplot(outDir: File) extends VizCreator {
 
   def createDiagram(dia: Diagram): Unit = {
 
-    val values1 = List(
-      "11 22",
-      "44 55",
-      "77 80"
-    ).mkString("\n")
+    def values(values: List[XY]) = values.map {
+      xy: XY =>
+        val x = formatNumber(xy.x)
+        val y = formatNumber(xy.y)
+        s"$x $y"
+    }.mkString("\n")
 
-    val values2 = List(
-      "11 33",
-      "44 66",
-      "50 19",
-      "51 91",
-      "53 12",
-      "57 93",
-      "60 94",
-      "77 10"
-    ).mkString("\n")
+    def formatNumber(n: Number): String = "" + n
 
-    val data = List(
-      s"""
-         |$$Mydata0 << EOD
-         |$values1
-         |EOD
-         |""".stripMargin.trim,
-      s"""
-         |$$Mydata1 << EOD
-         |$values2
-         |EOD
-         |""".stripMargin.trim).mkString("\n")
+    def data(dataRows: List[DataRow]) = dataRows.zipWithIndex.map {
+      case (dr, i) => s"""
+                         |$$Mydata$i << EOD
+                         |${values(dr.data)}
+                         |EOD
+                         |""".stripMargin.trim
+    }.mkString("\n")
 
-    val series = List(
-      s"""$$Mydata0 using 1:2 title 'a dat' with lines""",
-      s"""$$Mydata1 using 1:2 title 'b  dat' with impulses"""
-    ).mkString(", \\\n")
+    def series(dataRows: List[DataRow]) = dataRows.zipWithIndex.map {
+      case (dr, i) => s"""$$Mydata$i using 1:2 title 'a dat' with lines"""
+    }.mkString(", \\\n")
 
 
     val script =
@@ -84,9 +71,9 @@ case class VizCreatorGnuplot(outDir: File) extends VizCreator {
          |set output 'a.png'
          |set key inside left top vertical Right noreverse enhanced autotitle box lt black linewidth 1.000 dashtype solid
          |set minussign
-         |$data
+         |${data(dia.dataRows)}
          |plot \\
-         |$series
+         |${series(dia.dataRows)}
          |""".stripMargin
 
     val id = dia.id
