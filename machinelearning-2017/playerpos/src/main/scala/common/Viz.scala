@@ -58,15 +58,15 @@ case class VizCreatorGnuplot(outDir: File) extends VizCreator {
         |53 92
         |57 93
         |60 94
-        |77 91
+        |77 10
         |EOD
         |""".stripMargin.trim
 
-    val series =
-      s"""
-        |$$Mydata using 1:2 title 'a dat' with lines, \\
-        |$$Mydata1 using 1:2 title 'b  dat' with impulses
-        |""".stripMargin.trim
+    val series = List(
+      s"""$$Mydata using 1:2 title 'a dat' with lines""",
+      s"""$$Mydata1 using 1:2 title 'b  dat' with impulses"""
+    ).mkString(", \\\n")
+
 
     val script =
       s"""
