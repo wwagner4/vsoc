@@ -24,8 +24,15 @@ object Viz {
                       title: String,
                       xLabel: Option[String] = None,
                       yLabel: Option[String] = None,
+                      xRange: Option[Range] = None,
+                      yRange: Option[Range] = None,
                       dataRows: Seq[DataRow] = Seq.empty
                     )
+
+  case class Range(
+                    from: Option[Number],
+                    to: Option[Number]
+                  )
 
   def createDiagram(dia: Diagram)(implicit creator: VizCreator): Unit = {
     creator.createDiagram(dia)
@@ -51,6 +58,12 @@ case class VizCreatorGnuplot(outDir: File) extends VizCreator {
     }.mkString("\n")
 
     def formatNumber(n: Number): String = "" + n
+    def formatRange(r: Range): String = {
+      val from = formatRangeValue(r.from)
+      val to = formatRangeValue(r.to)
+      s"[$from:$to]"
+    }
+    def formatRangeValue(v: Option[Number]): String = if (v.isDefined) formatNumber(v.get) else "*"
 
     def data(dataRows: Seq[DataRow]) = dataRows.zipWithIndex.map {
       case (dr, i) => s"""
@@ -67,6 +80,8 @@ case class VizCreatorGnuplot(outDir: File) extends VizCreator {
 
     def xLabel: String  = if (dia.xLabel.isDefined) s"""set xlabel "${dia.xLabel.get}"""" else ""
     def yLabel: String  = if (dia.yLabel.isDefined) s"""set ylabel "${dia.yLabel.get}"""" else ""
+    def xRange: String  = if (dia.xRange.isDefined) s"""set xrange ${formatRange(dia.xRange.get)}""" else ""
+    def yRange: String  = if (dia.yRange.isDefined) s"""set yrange ${formatRange(dia.yRange.get)}""" else ""
 
     val script =
       s"""
@@ -77,8 +92,8 @@ case class VizCreatorGnuplot(outDir: File) extends VizCreator {
          |set title "${dia.title}"
          |$xLabel
          |$yLabel
-         |set xrange [0:*]
-         |set yrange [-2:10]
+         |$xRange
+         |$yRange
          |${data(dia.dataRows)}
          |plot \\
          |${series(dia.dataRows)}
