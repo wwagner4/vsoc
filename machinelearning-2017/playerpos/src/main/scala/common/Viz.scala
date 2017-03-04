@@ -5,7 +5,7 @@ import java.io.File
 import common.Viz._
 
 /**
-  * Created by wwagner4 on 04/03/2017.
+  * Interface for data visualisation
   */
 object Viz {
 
@@ -44,12 +44,19 @@ object Viz {
   }
 }
 
+/**
+  * Interface for actual data visualisation
+  */
 trait VizCreator {
 
   def createDiagram(dia: Diagram): Unit
 
 }
 
+/**
+  * An implementation for data visualisation using gnuplot
+  * @param outDir Directory in which gnuplot scripts are created
+  */
 case class VizCreatorGnuplot(outDir: File) extends VizCreator {
 
 
@@ -113,7 +120,7 @@ case class VizCreatorGnuplot(outDir: File) extends VizCreator {
     val filename = s"diagram_$id.gnuplot"
     val f = new File(outDir, filename)
     Util.writeToFile(f, pw => pw.print(script))
-    println(s"wrote diagram $id to $f")
+    println(s"wrote diagram '$id' to $f")
   }
 
 

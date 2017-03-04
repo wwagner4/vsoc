@@ -25,11 +25,16 @@ object PlayerposLinReg extends App {
     (43814, "pos_50000.txt")
   )
 
-  ThetaDiffOnDataSetSize.run()
+  ThetaDiffOnDataSetSize.plot()
 
+  /**
+    * Plots the mean squared difference of parametersets  
+    * on the number of optimisation steps
+    * for different sized datasets
+    */
   object ThetaDiffOnDataSetSize {
 
-    def run(): Unit = {
+    def plot(): Unit = {
       val drs = dataFiles.map {
         case (sizeDataset, fileName) =>
           val file = Util.dataFile(fileName)
