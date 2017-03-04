@@ -9,6 +9,10 @@ import common.Viz._
   */
 object Viz {
 
+  sealed trait LegendPlacement
+  case object LegendPlacement_LEFT extends LegendPlacement
+  case object LegendPlacement_RIGHT extends LegendPlacement
+
   case class XY(
                  x: Number,
                  y: Number
@@ -26,6 +30,7 @@ object Viz {
                       yLabel: Option[String] = None,
                       xRange: Option[Range] = None,
                       yRange: Option[Range] = None,
+                      legendPlacement: LegendPlacement = LegendPlacement_LEFT,
                       dataRows: Seq[DataRow] = Seq.empty
                     )
 
@@ -83,11 +88,16 @@ case class VizCreatorGnuplot(outDir: File) extends VizCreator {
     def xRange: String  = if (dia.xRange.isDefined) s"""set xrange ${formatRange(dia.xRange.get)}""" else ""
     def yRange: String  = if (dia.yRange.isDefined) s"""set yrange ${formatRange(dia.yRange.get)}""" else ""
 
+    val lp = dia.legendPlacement match {
+      case LegendPlacement_LEFT => "left"
+      case LegendPlacement_RIGHT => "right"
+    }
+
     val script =
       s"""
-         |set terminal pngcairo enhanced size 600, 400
+         |set terminal pngcairo enhanced size 800, 400
          |set output '${dia.id}.png'
-         |set key inside left top vertical Right noreverse enhanced autotitle box lt black linewidth 1.000 dashtype solid
+         |set key inside $lp top vertical Right noreverse enhanced autotitle box lt black linewidth 1.000 dashtype solid
          |set minussign
          |set title "${dia.title}"
          |$xLabel
