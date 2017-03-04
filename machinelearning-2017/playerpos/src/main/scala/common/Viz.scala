@@ -16,7 +16,7 @@ object Viz {
 
   case class DataRow(
                       name: String,
-                      data: List[XY] = List.empty
+                      data: Seq[XY] = Seq.empty
                     )
 
   case class Diagram(
@@ -24,7 +24,7 @@ object Viz {
                       title: String,
                       xLabel: String,
                       yLabel: String,
-                      dataRows: List[DataRow] = List.empty
+                      dataRows: Seq[DataRow] = Seq.empty
                     )
 
   def createDiagram(dia: Diagram)(implicit creator: VizCreator): Unit = {
@@ -43,7 +43,7 @@ case class VizCreatorGnuplot(outDir: File) extends VizCreator {
 
   def createDiagram(dia: Diagram): Unit = {
 
-    def values(values: List[XY]) = values.map {
+    def values(values: Seq[XY]) = values.map {
       xy: XY =>
         val x = formatNumber(xy.x)
         val y = formatNumber(xy.y)
@@ -52,7 +52,7 @@ case class VizCreatorGnuplot(outDir: File) extends VizCreator {
 
     def formatNumber(n: Number): String = "" + n
 
-    def data(dataRows: List[DataRow]) = dataRows.zipWithIndex.map {
+    def data(dataRows: Seq[DataRow]) = dataRows.zipWithIndex.map {
       case (dr, i) => s"""
                          |$$Mydata$i << EOD
                          |${values(dr.data)}
@@ -60,7 +60,7 @@ case class VizCreatorGnuplot(outDir: File) extends VizCreator {
                          |""".stripMargin.trim
     }.mkString("\n")
 
-    def series(dataRows: List[DataRow]) = dataRows.zipWithIndex.map {
+    def series(dataRows: Seq[DataRow]) = dataRows.zipWithIndex.map {
       case (dr, i) => s"""$$Mydata$i using 1:2 title ' ${dr.name}' with lines"""
     }.mkString(", \\\n")
 
