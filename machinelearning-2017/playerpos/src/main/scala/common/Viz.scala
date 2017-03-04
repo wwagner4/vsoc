@@ -53,7 +53,17 @@ case class VizCreatorGnuplot(outDir: File) extends VizCreator {
         |44 55 66
         |77 88 99
         |EOD
-        |plot $Mydata using 1:3 title 'a dat' with lines, $Mydata using 1:2 title 'b  dat' with impulses
+        |$Mydata1 << EOD
+        |11 22 33
+        |44 55 66
+        |50 88 99
+        |51 81 91
+        |53 82 92
+        |57 83 93
+        |60 84 94
+        |77 82 91
+        |EOD
+        |plot $Mydata using 1:3 title 'a dat' with lines, $Mydata1 using 1:2 title 'b  dat' with impulses
       """.stripMargin
     val id = dia.id
     val filename = s"diagram_$id.gnuplot"
