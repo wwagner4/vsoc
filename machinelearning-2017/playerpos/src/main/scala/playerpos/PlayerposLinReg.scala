@@ -3,7 +3,8 @@ package playerpos
 import java.io._
 
 import breeze.linalg._
-import common.Util
+import common.{Util, VizCreatorGnuplot}
+import common.Viz._
 import machinelearning.GradientDescent._
 import machinelearning.HypothesisFunction._
 import machinelearning.TrainingSet
@@ -15,6 +16,8 @@ object PlayerposLinReg extends App {
 
   import DenseMatrix._
 
+  implicit val creator = VizCreatorGnuplot(Util.scriptsDir)
+
   val dataFiles = List(
     (967, "pos_1000.txt"),
     (4384, "pos_5000.txt"),
@@ -22,26 +25,58 @@ object PlayerposLinReg extends App {
     (43814, "pos_50000.txt")
   )
 
-  val (x, y) = PlayerposLinReg.readDataFile(common.Util.dataFile("pos04.txt"))
-  // Add linear offset 1.0
-  val x1 = DenseMatrix.horzcat(fill(x.rows, 1)(1.0), x)
+  ThetaDiffOnDataSetSize.run()
 
-  val ts = TrainingSet(x1, y.toDenseMatrix)
-  val thetIni = initialTheta(ts)
-  val histIni = ThetHist(thetIni, None)
-  val gd = gradientDescent(0.000001)(linearFunc)(ts) _
-  val steps = Stream.iterate(histIni) { hist =>
-    val thet = gd(hist.actual)
-    ThetHist(thet, Some(hist.actual))
-  }
-  steps.take(100)
-    .zipWithIndex
-    .foreach { case (hist, i) =>
-      hist.previous.foreach { p =>
-        val meanDiff = Util.meanDiff(hist.actual, p) * 1e10
-        println(f"$i%10d $meanDiff%10.4f")
+  object ThetaDiffOnDataSetSize {
+
+    def run(): Unit = {
+      val drs = dataFiles.map {
+        case (sizeDataset, fileName) =>
+          val file = Util.dataFile(fileName)
+          dataRow(sizeDataset, file)
       }
+      val dia = Diagram(
+        "thetaconv",
+        "theta convergence / dataset size",
+        yLabel = Some("mean squared diff x 10^9"),
+        xLabel = Some("number of iterations"),
+        yRange = Some(Range(Some(0), Some(10))),
+        legendPlacement = LegendPlacement_RIGHT,
+        dataRows = drs
+      )
+      createDiagram(dia)
     }
+
+    private def dataRow(sizeDataset: Int, file: File): DataRow = {
+      val values = steps(file, 0.0000001)
+        .take(50)
+        .zipWithIndex
+        .flatMap { case (hist, i) =>
+          hist.previous.map { p =>
+            val meanDiff = Util.meanDiff(hist.actual, p) * 1e9
+            XY(i, meanDiff)
+          }
+        }
+      println("Creating data for " + sizeDataset)
+      DataRow(
+        "" + sizeDataset,
+        values
+      )
+    }
+  }
+
+  def steps(file: File, alpha: Double): Stream[ThetHist] = {
+    val (x, y) = readDataFile(file)
+    val x1 = DenseMatrix.horzcat(fill(x.rows, 1)(1.0), x)
+    val ts = TrainingSet(x1, y.toDenseMatrix)
+    val thetIni = initialTheta(ts)
+    val histIni = ThetHist(thetIni, None)
+    val gd = gradientDescent(alpha)(linearFunc)(ts) _
+    Stream.iterate(histIni) { hist =>
+      val thet = gd(hist.actual)
+      ThetHist(thet, Some(hist.actual))
+    }
+  }
 
 
   def readDataFile(file: File): (Matrix[Double], Matrix[Double]) = {
