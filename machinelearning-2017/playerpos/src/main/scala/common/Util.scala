@@ -33,4 +33,6 @@ object Util {
     sum(diff) / diff.size
   }
 
+  def lines(f: File): Int = io.Source.fromFile(f).getLines.size
+
 }

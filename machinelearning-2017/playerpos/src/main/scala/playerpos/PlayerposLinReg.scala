@@ -15,6 +15,13 @@ object PlayerposLinReg extends App {
 
   import DenseMatrix._
 
+  val dataFiles = List(
+    (967, "pos_1000.txt"),
+    (4384, "pos_5000.txt"),
+    (8899, "pos_10000.txt"),
+    (43814, "pos_50000.txt")
+  )
+
   val (x, y) = PlayerposLinReg.readDataFile(common.Util.dataFile("pos04.txt"))
   // Add linear offset 1.0
   val x1 = DenseMatrix.horzcat(fill(x.rows, 1)(1.0), x)
@@ -30,7 +37,7 @@ object PlayerposLinReg extends App {
   steps.take(100)
     .zipWithIndex
     .foreach { case (hist, i) =>
-      hist.previous.foreach{p =>
+      hist.previous.foreach { p =>
         val meanDiff = Util.meanDiff(hist.actual, p) * 1e10
         println(f"$i%10d $meanDiff%10.4f")
       }
