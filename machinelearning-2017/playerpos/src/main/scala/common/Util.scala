@@ -24,6 +24,10 @@ object Util {
     dir("prj/vsoc/data")
   }
 
+  def scriptsDir: File = {
+    dir("prj/vsoc/scripts")
+  }
+
   def dataFile(fileName: String): File ={
     new File(dataDir, fileName)
   }
