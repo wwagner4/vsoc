@@ -48,10 +48,12 @@ case class VizCreatorGnuplot(outDir: File) extends VizCreator {
         |set output 'a.png'
         |set key inside left top vertical Right noreverse enhanced autotitle box lt black linewidth 1.000 dashtype solid
         |set minussign
-        |set samples 50, 50
-        |set title "Simple Plots"
-        |set title  font ",20" norotate
-        |plot [-10:10] sin(x),atan(x),cos(atan(x))
+        |$Mydata << EOD
+        |11 22 33
+        |44 55 66
+        |77 88 99
+        |EOD
+        |plot $Mydata using 1:3 title 'a dat' with lines, $Mydata using 1:2 title 'b  dat' with impulses
       """.stripMargin
     val id = dia.id
     val filename = s"diagram_$id.gnuplot"
