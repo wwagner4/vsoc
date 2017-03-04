@@ -22,8 +22,8 @@ object Viz {
   case class Diagram(
                       id: String,
                       title: String,
-                      xLabel: String,
-                      yLabel: String,
+                      xLabel: Option[String] = None,
+                      yLabel: Option[String] = None,
                       dataRows: Seq[DataRow] = Seq.empty
                     )
 
@@ -65,6 +65,9 @@ case class VizCreatorGnuplot(outDir: File) extends VizCreator {
     }.mkString(", \\\n")
 
 
+    def xLabel: String  = if (dia.xLabel.isDefined) s"""set xlabel "${dia.xLabel.get}"""" else ""
+    def yLabel: String  = if (dia.yLabel.isDefined) s"""set ylabel "${dia.yLabel.get}"""" else ""
+
     val script =
       s"""
          |set terminal pngcairo enhanced size 600, 400
@@ -72,8 +75,10 @@ case class VizCreatorGnuplot(outDir: File) extends VizCreator {
          |set key inside left top vertical Right noreverse enhanced autotitle box lt black linewidth 1.000 dashtype solid
          |set minussign
          |set title "${dia.title}"
-         |set xlabel "${dia.xLabel}"
-         |set ylabel "${dia.yLabel}"
+         |$xLabel
+         |$yLabel
+         |set xrange [0:*]
+         |set yrange [-2:10]
          |${data(dia.dataRows)}
          |plot \\
          |${series(dia.dataRows)}
