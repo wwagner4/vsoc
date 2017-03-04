@@ -5,8 +5,6 @@ import java.io._
 import breeze.linalg._
 import common.{Util, VizCreatorGnuplot}
 import common.Viz._
-import machinelearning.GradientDescent._
-import machinelearning.HypothesisFunction._
 import machinelearning.TrainingSet
 
 /**
@@ -28,7 +26,7 @@ object PlayerposLinReg extends App {
   ThetaDiffOnDataSetSize.plot()
 
   /**
-    * Plots the mean squared difference of parametersets  
+    * Plots the mean squared difference of parametersets
     * on the number of optimisation steps
     * for different sized datasets
     */
@@ -42,11 +40,12 @@ object PlayerposLinReg extends App {
       }
       val dia = Diagram(
         "thetaconv",
-        "theta convergence / dataset size",
+        "theta convergence",
         yLabel = Some("mean squared diff x 10^9"),
         xLabel = Some("number of iterations"),
-        yRange = Some(Range(Some(0), Some(10))),
+        yRange = Some(Range(Some(0), Some(2))),
         legendPlacement = LegendPlacement_RIGHT,
+        legendTitle = Some("dataset size"),
         dataRows = drs
       )
       createDiagram(dia)
@@ -71,6 +70,9 @@ object PlayerposLinReg extends App {
   }
 
   def steps(file: File, alpha: Double): Stream[ThetHist] = {
+    import machinelearning.GradientDescent._
+    import machinelearning.HypothesisFunction._
+
     val (x, y) = readDataFile(file)
     val x1 = DenseMatrix.horzcat(fill(x.rows, 1)(1.0), x)
     val ts = TrainingSet(x1, y.toDenseMatrix)
