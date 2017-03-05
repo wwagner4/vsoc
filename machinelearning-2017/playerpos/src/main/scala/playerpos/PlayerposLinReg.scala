@@ -1,9 +1,8 @@
 package playerpos
 
 import breeze.linalg._
-import machinelearning.TrainingSet
-import common.{Util, VizCreatorGnuplot, Viz}
-
+import machinelearning.{HypothesisFunction, TrainingSet}
+import common.{Util, Viz, VizCreatorGnuplot}
 import DenseMatrix._
 
 /**
@@ -28,7 +27,20 @@ object PlayerposLinReg {
       val (testSetSize, testSetFileName) = datasets(0)
       val theta = calculateTheta(trainFileName)
 
-      println(theta)
+      val (tx, ty) = readDataSet(testSetFileName)
+
+      (0 to 100) foreach { row =>
+        val x1 = tx(row, 0 until tx.cols)
+        val x2 = DenseMatrix(x1.inner)
+
+        val y1 = ty(row, 0 until ty.cols)
+
+        val ya = HypothesisFunction.linearFunc(theta)(x2)
+        val v1 = y1(0)
+        val v2 = ya(0, 0)
+        val diff = v1 - v2
+        println(f"$v1%10.3f $v2%10.3f  $diff%10.3f ")
+      }
     }
 
     private def calculateTheta(fileName: String): DenseMatrix[Double] = {
@@ -137,7 +149,7 @@ object PlayerposLinReg {
 
   case class ThetHist(actual: DenseMatrix[Double], previous: Option[DenseMatrix[Double]])
 
-  def stepsThetaHist(x1: DenseMatrix[Double], y:Matrix[Double], alpha: Double): Stream[ThetHist] = {
+  def stepsThetaHist(x1: DenseMatrix[Double], y: Matrix[Double], alpha: Double): Stream[ThetHist] = {
     import machinelearning.GradientDescent._
     import machinelearning.HypothesisFunction._
 
@@ -151,7 +163,7 @@ object PlayerposLinReg {
     }
   }
 
-  def stepsTheta(x1: DenseMatrix[Double], y:Matrix[Double], alpha: Double): Stream[DenseMatrix[Double]] = {
+  def stepsTheta(x1: DenseMatrix[Double], y: Matrix[Double], alpha: Double): Stream[DenseMatrix[Double]] = {
     import machinelearning.GradientDescent._
     import machinelearning.HypothesisFunction._
 
