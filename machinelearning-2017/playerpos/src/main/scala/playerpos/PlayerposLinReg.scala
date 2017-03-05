@@ -15,21 +15,27 @@ object PlayerposLinReg {
   // define the vic creator
   implicit val creator = VizCreatorGnuplot(Util.scriptsDir)
 
-  val dataFiles = List(
+  val datasets = List(
     (967, "pos_1000.txt"),
     (4384, "pos_5000.txt"),
     (8899, "pos_10000.txt"),
     (43814, "pos_50000.txt")
   )
 
+  /**
+    * Plots the mean squared difference of theta
+    * on optimisation steps
+    * for different alphas
+    * using a single dataset
+    */
   object ThetaDiffOnAlpha {
 
     def plot(): Unit = {
       // choose one dataset
-      val (sizeDataset, fileName) = dataFiles(3)
+      val (sizeDataset, fileName) = datasets(3)
 
       // exponents for alpha.
-      val alphas = List(1.25e-6, 1.2e-6, 1.15e-6, 1.1e-6, 1.05e-6, 1.0e-6, 1.0e-7, 1.0e-8)
+      val alphas = List(1.25e-6, 1.2e-6, 1.15e-6, 1.1e-6, 1.05e-6, 1.0e-6, 1.0e-7)
 
       val file = Util.dataFile(fileName)
       val (x, y) = readDataFile(file)
@@ -78,7 +84,7 @@ object PlayerposLinReg {
   object ThetaDiffOnDataSetSize {
 
     def plot(): Unit = {
-      val drs = dataFiles.map {
+      val drs = datasets.map {
         case (sizeDataset, fileName) =>
           val file = Util.dataFile(fileName)
           dataRow(sizeDataset, file)
