@@ -22,23 +22,34 @@ object PlayerposLinReg {
 
   object LearningCurve {
 
+    val yValues = List(
+      (0, "pos x"),
+      (1, "pos y"),
+      (2, "direction")
+    )
+
     def plot(): Unit = {
       val (_, trainFileName) = datasets(3)
-      val (testSetSize, testSetFileName) = datasets(0)
+      val (testSize, testSetFileName) = datasets(0)
       val theta = calculateTheta(trainFileName, 50)
 
       val (testX, testY) = readDataSet(testSetFileName)
 
-      val yIndex = 0
-      (0 to 100) foreach { row =>
-        val xRow = Util.sliceRow(testX, row)
-        val yRow = testY(row, 0 until testY.cols)
-        val yCalc = HypothesisFunction.linearFunc(theta)(xRow)
-        val v1 = yRow(yIndex)
-        val v2 = yCalc(0, yIndex)
-        val diff = v1 - v2
-        println(f"$v1%10.3f $v2%10.3f  $diff%10.3f ")
+
+      val drs = yValues map {
+        case (yIndex, name) =>
+          val xy = (0 until testSize) map { row =>
+            val xRow = Util.sliceRow(testX, row)
+            val yRow = testY(row, 0 until testY.cols)
+            val yCalc = HypothesisFunction.linearFunc(theta)(xRow)
+            val v1 = yRow(yIndex)
+            val v2 = yCalc(0, yIndex)
+            Viz.XY(v1, v2)
+          }
+          Viz.DataRow(name, style = Viz.Style_POINTS, data = xy)
       }
+      val dia = Viz.Diagram("learnqual", "learning quality for linear hypothesis", xLabel = Some("real value"), yLabel = Some("learned value"),  dataRows = drs)
+      Viz.createDiagram(dia)
     }
 
     private def calculateTheta(fileName: String, stepsCnt: Int): DenseMatrix[Double] = {
@@ -95,7 +106,7 @@ object PlayerposLinReg {
       println(s"Creating data for alpha $alpha")
       Viz.DataRow(
         "" + alpha,
-        values
+        data = values
       )
     }
   }
@@ -139,7 +150,7 @@ object PlayerposLinReg {
       println("Creating data for " + sizeDataset)
       Viz.DataRow(
         "" + sizeDataset,
-        values
+        data = values
       )
     }
   }

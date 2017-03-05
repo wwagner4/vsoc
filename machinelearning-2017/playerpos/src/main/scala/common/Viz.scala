@@ -13,6 +13,10 @@ object Viz {
   case object LegendPlacement_LEFT extends LegendPlacement
   case object LegendPlacement_RIGHT extends LegendPlacement
 
+  sealed trait Style
+  case object Style_LINES extends Style
+  case object Style_POINTS extends Style
+
   case class XY(
                  x: Number,
                  y: Number
@@ -20,6 +24,7 @@ object Viz {
 
   case class DataRow(
                       name: String,
+                      style: Style = Style_LINES,
                       data: Seq[XY] = Seq.empty
                     )
 
@@ -86,8 +91,16 @@ case class VizCreatorGnuplot(outDir: File) extends VizCreator {
                          |""".stripMargin.trim
     }.mkString("\n")
 
+
+    def mapStyle(style: Viz.Style): String = style match {
+      case Viz.Style_POINTS => "points"
+      case Viz.Style_LINES => "lines"
+    }
+
     def series(dataRows: Seq[DataRow]) = dataRows.zipWithIndex.map {
-      case (dr, i) => s"""$$Mydata$i using 1:2 title ' ${dr.name}' with lines"""
+      case (dr, i) =>
+        val style = mapStyle(dr.style)
+        s"""$$Mydata$i using 1:2 title ' ${dr.name}' with $style"""
     }.mkString(", \\\n")
 
 
