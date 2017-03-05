@@ -39,4 +39,11 @@ object Util {
 
   def lines(f: File): Int = io.Source.fromFile(f).getLines.size
 
+  def sliceRow(m: DenseMatrix[Double], row: Int): DenseMatrix[Double] = {
+    val x1 = m(row, 0 until m.cols)
+    DenseMatrix(x1.inner)
+  }
+
+
+
 }

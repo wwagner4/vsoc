@@ -25,27 +25,24 @@ object PlayerposLinReg {
     def plot(): Unit = {
       val (_, trainFileName) = datasets(3)
       val (testSetSize, testSetFileName) = datasets(0)
-      val theta = calculateTheta(trainFileName)
+      val theta = calculateTheta(trainFileName, 50)
 
-      val (tx, ty) = readDataSet(testSetFileName)
+      val (testX, testY) = readDataSet(testSetFileName)
 
+      val yIndex = 0
       (0 to 100) foreach { row =>
-        val x1 = tx(row, 0 until tx.cols)
-        val x2 = DenseMatrix(x1.inner)
-
-        val y1 = ty(row, 0 until ty.cols)
-
-        val ya = HypothesisFunction.linearFunc(theta)(x2)
-        val v1 = y1(0)
-        val v2 = ya(0, 0)
+        val xRow = Util.sliceRow(testX, row)
+        val yRow = testY(row, 0 until testY.cols)
+        val yCalc = HypothesisFunction.linearFunc(theta)(xRow)
+        val v1 = yRow(yIndex)
+        val v2 = yCalc(0, yIndex)
         val diff = v1 - v2
         println(f"$v1%10.3f $v2%10.3f  $diff%10.3f ")
       }
     }
 
-    private def calculateTheta(fileName: String): DenseMatrix[Double] = {
+    private def calculateTheta(fileName: String, stepsCnt: Int): DenseMatrix[Double] = {
       val (x1, y) = readDataSet(fileName)
-      val stepsCnt = 50
       stepsTheta(x1, y, 1.25e-6).take(stepsCnt)(stepsCnt - 1)
     }
 
