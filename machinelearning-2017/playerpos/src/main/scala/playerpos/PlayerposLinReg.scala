@@ -10,7 +10,7 @@ import machinelearning.TrainingSet
 /**
   * Predict player position by using linear regression
   */
-object PlayerposLinReg extends App {
+object PlayerposLinReg {
 
   import DenseMatrix._
 
@@ -22,8 +22,6 @@ object PlayerposLinReg extends App {
     (8899, "pos_10000.txt"),
     (43814, "pos_50000.txt")
   )
-
-  ThetaDiffOnDataSetSize.plot()
 
   /**
     * Plots the mean squared difference of parametersets
