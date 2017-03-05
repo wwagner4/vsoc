@@ -22,6 +22,39 @@ object PlayerposLinReg {
     (43814, "pos_50000.txt")
   )
 
+  object TestsetError {
+
+
+
+    def run(): Unit = {
+      val trainingSet = datasets(3)
+      val testset = datasets(0)
+      val theta = calculateTheta(trainingSet)
+      println(theta)
+    }
+
+
+
+    private def calculateTheta(trainingSet: (Int, String)): DenseMatrix[Double] = {
+      val (_, fileName) = trainingSet
+      val file = Util.dataFile(fileName)
+      val (x, y) = readDataFile(file)
+      val x1 = DenseMatrix.horzcat(fill(x.rows, 1)(1.0), x)
+      steps(x1, y, 1.25e-6).take(50)(49)
+    }
+
+    private def steps(x1: DenseMatrix[Double], y:Matrix[Double], alpha: Double): Stream[DenseMatrix[Double]] = {
+      import machinelearning.GradientDescent._
+      import machinelearning.HypothesisFunction._
+
+      val ts = TrainingSet(x1, y.toDenseMatrix)
+      val thetIni = initialTheta(ts)
+      val gd = gradientDescent(alpha)(linearFunc)(ts) _
+      Stream.iterate(thetIni) { thet => gd(thet) }
+    }
+
+  }
+
   /**
     * Plots the mean squared difference of theta
     * on optimisation steps
