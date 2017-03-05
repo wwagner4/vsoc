@@ -1,10 +1,8 @@
 package playerpos
 
-import java.io._
 import breeze.linalg._
-import machinelearning.TrainingSet
-import common.{Util, VizCreatorGnuplot, Viz}
-
+import machinelearning.{HypothesisFunction, TrainingSet}
+import common.{Util, Viz, VizCreatorGnuplot}
 import DenseMatrix._
 
 /**
@@ -22,35 +20,41 @@ object PlayerposLinReg {
     (43814, "pos_50000.txt")
   )
 
-  object TestsetError {
+  object LearningCurve {
+
+    val yValues = List(
+      (0, "pos x"),
+      (1, "pos y"),
+      (2, "direction")
+    )
+
+    def plot(): Unit = {
+      val (_, trainFileName) = datasets(3)
+      val (testSize, testSetFileName) = datasets(0)
+      val theta = calculateTheta(trainFileName, 50)
+
+      val (testX, testY) = readDataSet(testSetFileName)
 
 
-
-    def run(): Unit = {
-      val trainingSet = datasets(3)
-      val testset = datasets(0)
-      val theta = calculateTheta(trainingSet)
-      println(theta)
+      val drs = yValues map {
+        case (yIndex, name) =>
+          val xy = (0 until testSize) map { row =>
+            val xRow = Util.sliceRow(testX, row)
+            val yRow = testY(row, 0 until testY.cols)
+            val yCalc = HypothesisFunction.linearFunc(theta)(xRow)
+            val v1 = yRow(yIndex)
+            val v2 = yCalc(0, yIndex)
+            Viz.XY(v1, v2)
+          }
+          Viz.DataRow(name, style = Viz.Style_POINTS, data = xy)
+      }
+      val dia = Viz.Diagram("learnqual", "learning quality for linear hypothesis", xLabel = Some("real value"), yLabel = Some("learned value"),  dataRows = drs)
+      Viz.createDiagram(dia)
     }
 
-
-
-    private def calculateTheta(trainingSet: (Int, String)): DenseMatrix[Double] = {
-      val (_, fileName) = trainingSet
-      val file = Util.dataFile(fileName)
-      val (x, y) = readDataFile(file)
-      val x1 = DenseMatrix.horzcat(fill(x.rows, 1)(1.0), x)
-      steps(x1, y, 1.25e-6).take(50)(49)
-    }
-
-    private def steps(x1: DenseMatrix[Double], y:Matrix[Double], alpha: Double): Stream[DenseMatrix[Double]] = {
-      import machinelearning.GradientDescent._
-      import machinelearning.HypothesisFunction._
-
-      val ts = TrainingSet(x1, y.toDenseMatrix)
-      val thetIni = initialTheta(ts)
-      val gd = gradientDescent(alpha)(linearFunc)(ts) _
-      Stream.iterate(thetIni) { thet => gd(thet) }
+    private def calculateTheta(fileName: String, stepsCnt: Int): DenseMatrix[Double] = {
+      val (x1, y) = readDataSet(fileName)
+      stepsTheta(x1, y, 1.25e-6).take(stepsCnt)(stepsCnt - 1)
     }
 
   }
@@ -70,9 +74,7 @@ object PlayerposLinReg {
       // exponents for alpha.
       val alphas = List(1.25e-6, 1.2e-6, 1.15e-6, 1.1e-6, 1.05e-6, 1.0e-6, 1.0e-7)
 
-      val file = Util.dataFile(fileName)
-      val (x, y) = readDataFile(file)
-      val x1 = DenseMatrix.horzcat(fill(x.rows, 1)(1.0), x)
+      val (x1, y) = readDataSet(fileName)
 
       val drs = alphas.map {
         alpha =>
@@ -92,7 +94,7 @@ object PlayerposLinReg {
     }
 
     private def dataRow(x1: DenseMatrix[Double], y: Matrix[Double], alpha: Double): Viz.DataRow = {
-      val values = steps(x1, y, alpha)
+      val values = stepsThetaHist(x1, y, alpha)
         .take(50)
         .zipWithIndex
         .flatMap { case (hist, i) =>
@@ -104,7 +106,7 @@ object PlayerposLinReg {
       println(s"Creating data for alpha $alpha")
       Viz.DataRow(
         "" + alpha,
-        values
+        data = values
       )
     }
   }
@@ -119,8 +121,7 @@ object PlayerposLinReg {
     def plot(): Unit = {
       val drs = datasets.map {
         case (sizeDataset, fileName) =>
-          val file = Util.dataFile(fileName)
-          dataRow(sizeDataset, file)
+          dataRow(sizeDataset, fileName)
       }
       val dia = Viz.Diagram(
         "thetaconv",
@@ -135,10 +136,9 @@ object PlayerposLinReg {
       Viz.createDiagram(dia)
     }
 
-    private def dataRow(sizeDataset: Int, file: File): Viz.DataRow = {
-      val (x, y) = readDataFile(file)
-      val x1 = DenseMatrix.horzcat(fill(x.rows, 1)(1.0), x)
-      val values = steps(x1, y, 0.0000001)
+    private def dataRow(sizeDataset: Int, fileName: String): Viz.DataRow = {
+      val (x1, y) = readDataSet(fileName)
+      val values = stepsThetaHist(x1, y, 0.0000001)
         .take(50)
         .zipWithIndex
         .flatMap { case (hist, i) =>
@@ -150,12 +150,14 @@ object PlayerposLinReg {
       println("Creating data for " + sizeDataset)
       Viz.DataRow(
         "" + sizeDataset,
-        values
+        data = values
       )
     }
   }
 
-  def steps(x1: DenseMatrix[Double], y:Matrix[Double], alpha: Double): Stream[ThetHist] = {
+  case class ThetHist(actual: DenseMatrix[Double], previous: Option[DenseMatrix[Double]])
+
+  def stepsThetaHist(x1: DenseMatrix[Double], y: Matrix[Double], alpha: Double): Stream[ThetHist] = {
     import machinelearning.GradientDescent._
     import machinelearning.HypothesisFunction._
 
@@ -169,12 +171,22 @@ object PlayerposLinReg {
     }
   }
 
+  def stepsTheta(x1: DenseMatrix[Double], y: Matrix[Double], alpha: Double): Stream[DenseMatrix[Double]] = {
+    import machinelearning.GradientDescent._
+    import machinelearning.HypothesisFunction._
 
-  def readDataFile(file: File): (Matrix[Double], Matrix[Double]) = {
-    val all = csvread(file, separator = ',')
-    (all(::, 3 to 44), all(::, 0 to 2))
+    val ts = TrainingSet(x1, y.toDenseMatrix)
+    val thetIni = initialTheta(ts)
+    val gd = gradientDescent(alpha)(linearFunc)(ts) _
+    Stream.iterate(thetIni) { thet => gd(thet) }
   }
 
-  case class ThetHist(actual: DenseMatrix[Double], previous: Option[DenseMatrix[Double]])
-
+  def readDataSet(fileName: String): (DenseMatrix[Double], DenseMatrix[Double]) = {
+    val file = Util.dataFile(fileName)
+    val all = csvread(file, separator = ',')
+    val x = all(::, 3 to 44)
+    val y = all(::, 0 to 2)
+    val x1 = DenseMatrix.horzcat(fill(x.rows, 1)(1.0), x)
+    (x1, y.toDenseMatrix)
+  }
 }
