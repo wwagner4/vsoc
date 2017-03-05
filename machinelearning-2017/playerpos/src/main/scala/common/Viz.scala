@@ -5,7 +5,7 @@ import java.io.File
 import common.Viz._
 
 /**
-  * Created by wwagner4 on 04/03/2017.
+  * Interface for data visualisation
   */
 object Viz {
 
@@ -31,6 +31,7 @@ object Viz {
                       xRange: Option[Range] = None,
                       yRange: Option[Range] = None,
                       legendPlacement: LegendPlacement = LegendPlacement_LEFT,
+                      legendTitle: Option[String] = None,
                       dataRows: Seq[DataRow] = Seq.empty
                     )
 
@@ -44,12 +45,19 @@ object Viz {
   }
 }
 
+/**
+  * Interface for actual data visualisation
+  */
 trait VizCreator {
 
   def createDiagram(dia: Diagram): Unit
 
 }
 
+/**
+  * An implementation for data visualisation using gnuplot
+  * @param outDir Directory in which gnuplot scripts are created
+  */
 case class VizCreatorGnuplot(outDir: File) extends VizCreator {
 
 
@@ -87,6 +95,7 @@ case class VizCreatorGnuplot(outDir: File) extends VizCreator {
     def yLabel: String  = if (dia.yLabel.isDefined) s"""set ylabel "${dia.yLabel.get}"""" else ""
     def xRange: String  = if (dia.xRange.isDefined) s"""set xrange ${formatRange(dia.xRange.get)}""" else ""
     def yRange: String  = if (dia.yRange.isDefined) s"""set yrange ${formatRange(dia.yRange.get)}""" else ""
+    def legendTitle: String  = if (dia.legendTitle.isDefined) s"""title "${dia.legendTitle.get}""" else ""
 
     val lp = dia.legendPlacement match {
       case LegendPlacement_LEFT => "left"
@@ -95,9 +104,9 @@ case class VizCreatorGnuplot(outDir: File) extends VizCreator {
 
     val script =
       s"""
-         |set terminal pngcairo enhanced size 800, 400
-         |set output '${dia.id}.png'
-         |set key inside $lp top vertical Right noreverse enhanced autotitle box lt black linewidth 1.000 dashtype solid
+         |set terminal pngcairo enhanced size 800, 600
+         |set output 'img_${dia.id}.png'
+         |set key inside $lp top vertical Right noreverse enhanced autotitle box lt black linewidth 1.000 dashtype solid $legendTitle
          |set minussign
          |set title "${dia.title}"
          |$xLabel
@@ -113,7 +122,7 @@ case class VizCreatorGnuplot(outDir: File) extends VizCreator {
     val filename = s"diagram_$id.gnuplot"
     val f = new File(outDir, filename)
     Util.writeToFile(f, pw => pw.print(script))
-    println(s"wrote diagram $id to $f")
+    println(s"wrote diagram '$id' to $f")
   }
 
 

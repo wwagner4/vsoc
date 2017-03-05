@@ -1,73 +1,131 @@
 package playerpos
 
 import java.io._
-
 import breeze.linalg._
-import common.{Util, VizCreatorGnuplot}
-import common.Viz._
-import machinelearning.GradientDescent._
-import machinelearning.HypothesisFunction._
 import machinelearning.TrainingSet
+import common.{Util, VizCreatorGnuplot, Viz}
+
+import DenseMatrix._
 
 /**
   * Predict player position by using linear regression
   */
-object PlayerposLinReg extends App {
+object PlayerposLinReg {
 
-  import DenseMatrix._
-
+  // define the vic creator
   implicit val creator = VizCreatorGnuplot(Util.scriptsDir)
 
-  val dataFiles = List(
+  val datasets = List(
     (967, "pos_1000.txt"),
     (4384, "pos_5000.txt"),
     (8899, "pos_10000.txt"),
     (43814, "pos_50000.txt")
   )
 
-  ThetaDiffOnDataSetSize.run()
+  /**
+    * Plots the mean squared difference of theta
+    * on optimisation steps
+    * for different alphas
+    * using a single dataset
+    */
+  object ThetaDiffOnAlpha {
 
-  object ThetaDiffOnDataSetSize {
+    def plot(): Unit = {
+      // choose one dataset
+      val (sizeDataset, fileName) = datasets(3)
 
-    def run(): Unit = {
-      val drs = dataFiles.map {
-        case (sizeDataset, fileName) =>
-          val file = Util.dataFile(fileName)
-          dataRow(sizeDataset, file)
+      // exponents for alpha.
+      val alphas = List(1.25e-6, 1.2e-6, 1.15e-6, 1.1e-6, 1.05e-6, 1.0e-6, 1.0e-7)
+
+      val file = Util.dataFile(fileName)
+      val (x, y) = readDataFile(file)
+      val x1 = DenseMatrix.horzcat(fill(x.rows, 1)(1.0), x)
+
+      val drs = alphas.map {
+        alpha =>
+          dataRow(x1, y, alpha)
       }
-      val dia = Diagram(
-        "thetaconv",
-        "theta convergence / dataset size",
+      val dia = Viz.Diagram(
+        "thetaconvalpha",
+        s"theta convergence on alpha. dataset size $sizeDataset",
         yLabel = Some("mean squared diff x 10^9"),
         xLabel = Some("number of iterations"),
-        yRange = Some(Range(Some(0), Some(10))),
-        legendPlacement = LegendPlacement_RIGHT,
+        yRange = Some(Viz.Range(Some(0), Some(200))),
+        legendPlacement = Viz.LegendPlacement_RIGHT,
+        legendTitle = Some("alpha"),
         dataRows = drs
       )
-      createDiagram(dia)
+      Viz.createDiagram(dia)
     }
 
-    private def dataRow(sizeDataset: Int, file: File): DataRow = {
-      val values = steps(file, 0.0000001)
+    private def dataRow(x1: DenseMatrix[Double], y: Matrix[Double], alpha: Double): Viz.DataRow = {
+      val values = steps(x1, y, alpha)
         .take(50)
         .zipWithIndex
         .flatMap { case (hist, i) =>
           hist.previous.map { p =>
             val meanDiff = Util.meanDiff(hist.actual, p) * 1e9
-            XY(i, meanDiff)
+            Viz.XY(i, meanDiff)
+          }
+        }
+      println(s"Creating data for alpha $alpha")
+      Viz.DataRow(
+        "" + alpha,
+        values
+      )
+    }
+  }
+
+  /**
+    * Plots the mean squared difference of parametersets
+    * on the number of optimisation steps
+    * for different sized datasets
+    */
+  object ThetaDiffOnDataSetSize {
+
+    def plot(): Unit = {
+      val drs = datasets.map {
+        case (sizeDataset, fileName) =>
+          val file = Util.dataFile(fileName)
+          dataRow(sizeDataset, file)
+      }
+      val dia = Viz.Diagram(
+        "thetaconv",
+        "theta convergence",
+        yLabel = Some("mean squared diff x 10^9"),
+        xLabel = Some("number of iterations"),
+        yRange = Some(Viz.Range(Some(0), Some(10))),
+        legendPlacement = Viz.LegendPlacement_RIGHT,
+        legendTitle = Some("dataset size"),
+        dataRows = drs
+      )
+      Viz.createDiagram(dia)
+    }
+
+    private def dataRow(sizeDataset: Int, file: File): Viz.DataRow = {
+      val (x, y) = readDataFile(file)
+      val x1 = DenseMatrix.horzcat(fill(x.rows, 1)(1.0), x)
+      val values = steps(x1, y, 0.0000001)
+        .take(50)
+        .zipWithIndex
+        .flatMap { case (hist, i) =>
+          hist.previous.map { p =>
+            val meanDiff = Util.meanDiff(hist.actual, p) * 1e9
+            Viz.XY(i, meanDiff)
           }
         }
       println("Creating data for " + sizeDataset)
-      DataRow(
+      Viz.DataRow(
         "" + sizeDataset,
         values
       )
     }
   }
 
-  def steps(file: File, alpha: Double): Stream[ThetHist] = {
-    val (x, y) = readDataFile(file)
-    val x1 = DenseMatrix.horzcat(fill(x.rows, 1)(1.0), x)
+  def steps(x1: DenseMatrix[Double], y:Matrix[Double], alpha: Double): Stream[ThetHist] = {
+    import machinelearning.GradientDescent._
+    import machinelearning.HypothesisFunction._
+
     val ts = TrainingSet(x1, y.toDenseMatrix)
     val thetIni = initialTheta(ts)
     val histIni = ThetHist(thetIni, None)
