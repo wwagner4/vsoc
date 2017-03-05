@@ -105,7 +105,7 @@ case class VizCreatorGnuplot(outDir: File) extends VizCreator {
     val script =
       s"""
          |set terminal pngcairo enhanced size 800, 600
-         |set output '${dia.id}.png'
+         |set output 'img_${dia.id}.png'
          |set key inside $lp top vertical Right noreverse enhanced autotitle box lt black linewidth 1.000 dashtype solid $legendTitle
          |set minussign
          |set title "${dia.title}"
