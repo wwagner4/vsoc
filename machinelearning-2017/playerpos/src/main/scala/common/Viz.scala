@@ -63,7 +63,7 @@ trait VizCreator {
   * An implementation for data visualisation using gnuplot
   * @param outDir Directory in which gnuplot scripts are created
   */
-case class VizCreatorGnuplot(outDir: File) extends VizCreator {
+case class VizCreatorGnuplot(outDir: File, execute: Boolean = true) extends VizCreator {
 
 
   def createDiagram(dia: Diagram): Unit = {
@@ -136,6 +136,21 @@ case class VizCreatorGnuplot(outDir: File) extends VizCreator {
     val f = new File(outDir, filename)
     Util.writeToFile(f, pw => pw.print(script))
     println(s"wrote diagram '$id' to $f")
+
+    if (execute) {
+      exec(f, outDir)
+    }
+
+    def exec(script: File, workdir: File): Unit = {
+      import scala.sys.process._
+      val cmd = s"gnuplot ${script.getName}"
+      val result = Process(cmd, cwd=workdir).!
+      if (result != 0) {
+        println(s"executed -> '$cmd' -> ERROR '$result'")
+      } else {
+        println(s"executed -> '$cmd'")
+      }
+    }
   }
 
 
