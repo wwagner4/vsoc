@@ -20,46 +20,56 @@ object GradientDescentPolinomial {
   }
 
   def polyRandomized(x: Double, deviation: Double)(theta: DenseVector[Double]): Double = {
-    val r = random.nextDouble() * 2.0 * deviation - deviation
-    return poly(x)(theta) + r
+    val ran = random.nextDouble() * 2.0 * deviation - deviation
+    poly(x)(theta) + ran
   }
 
 
+  def createData(): Unit = {
 
+    val max = 100.0
+    val min = -100.0
+    val sizes = List(10, 50, 100, 1000)
 
-  def plotPoly(): Unit = {
-    val xs = -100.0 to(100.0, 1)
+    sizes.foreach {size =>
+      val steps = (max - min).toDouble / size
 
-    val theta = DenseVector(4400.0, -2000.0, -3, 0.7)
+      val id = s"poly_$size"
 
-    val ys = xs.map { x => (x, GradientDescentPolinomial.polyRandomized(x, 60000)(theta)) }
+      val file = Util.dataFile(s"$id.txt")
+      Util.writeToFile(file, { pw =>
+        val xs = min to(max, steps)
 
-    val data = ys.map {
-      case (x, y) => Viz.XY(x, y)
+        val theta = DenseVector(4400.0, -2000.0, -3, 0.7)
+
+        val ys = xs.map { x => (x, GradientDescentPolinomial.polyRandomized(x, 60000)(theta)) }
+
+        val data = ys.map {
+          case (x, y) =>
+            pw.println(Formatter.format(x, y))
+            Viz.XY(x, y)
+        }
+
+        val thetaStr = Formatter.format(theta.toArray)
+        val dr = Viz.DataRow(thetaStr, style = Viz.Style_POINTS, data = data)
+        val drs = List(dr)
+        val dia = Viz.Diagram(id, s"Polynom datasize=$size", dataRows = drs)
+        Viz.createDiagram(dia)
+      })
+
+      println(s"wrote data to $file")
     }
 
-    val thetaStr = Formatter.format(theta.toArray)
-
-    val dr = Viz.DataRow(thetaStr, style = Viz.Style_POINTS, data = data)
-
-    val drs = List(dr)
-
-    val dia = Viz.Diagram("poly", "Polynomial Function vectorized", dataRows = drs)
-
-    Viz.createDiagram(dia)
-
   }
+}
 
+object MainPoliCreateData extends App {
+
+  GradientDescentPolinomial.createData()
 
 }
 
-object MainPoli extends App {
-
-  GradientDescentPolinomial.plotPoly()
-
-}
-
-object MainTryout extends App {
+object MainPolyTryout extends App {
 
   val x = 2.3
   val t = DenseVector(1.2, -2.6, 4.1)
@@ -71,3 +81,4 @@ object MainTryout extends App {
   println(y)
 
 }
+

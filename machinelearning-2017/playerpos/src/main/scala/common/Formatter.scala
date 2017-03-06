@@ -18,4 +18,8 @@ object Formatter {
     f"${pos.getX}%10.2f$sepaStr${pos.getY}%10.2f$sepaStr$dir%10.2f$sepaStr${format(a)}"
   }
 
+  def format(x: Double, y: Double): String = {
+    f"$x%10.2f$sepaStr$y%10.2f"
+  }
+
 }
