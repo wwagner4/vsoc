@@ -119,7 +119,7 @@ case class VizCreatorGnuplot(outDir: File, execute: Boolean = true) extends VizC
       s"""
          |${data(dia.dataRows)}
          |set terminal pngcairo enhanced size 800, 600
-         |set output 'img_${dia.id}.png'
+         |set output '${dia.id}.png'
          |set key inside $lp top vertical Right noreverse enhanced autotitle box lt black linewidth 1.000 dashtype solid $legendTitle
          |set minussign
          |set title "${dia.title}"
@@ -132,7 +132,7 @@ case class VizCreatorGnuplot(outDir: File, execute: Boolean = true) extends VizC
          |""".stripMargin
 
     val id = dia.id
-    val filename = s"diagram_$id.gnuplot"
+    val filename = s"$id.gp"
     val f = new File(outDir, filename)
     Util.writeToFile(f, pw => pw.print(script))
     println(s"wrote diagram '$id' to $f")
