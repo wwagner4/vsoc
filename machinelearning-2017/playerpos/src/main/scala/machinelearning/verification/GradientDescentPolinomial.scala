@@ -30,36 +30,28 @@ object GradientDescentPolinomial {
     val max = 100.0
     val min = -100.0
     val sizes = List(10, 50, 100, 1000)
+    val theta = DenseVector(4400.0, -2000.0, -3, 0.7)
+    val stdDev = 60000
 
     sizes.foreach {size =>
-      val steps = (max - min).toDouble / size
-
+      val steps = (max - min) / size
       val id = s"poly_$size"
-
       val file = Util.dataFile(s"$id.txt")
+      val xs = min to(max, steps)
+      val ys = xs.map { x => (x, GradientDescentPolinomial.polyRandomized(x, stdDev)(theta)) }
       Util.writeToFile(file, { pw =>
-        val xs = min to(max, steps)
-
-        val theta = DenseVector(4400.0, -2000.0, -3, 0.7)
-
-        val ys = xs.map { x => (x, GradientDescentPolinomial.polyRandomized(x, 60000)(theta)) }
-
         val data = ys.map {
           case (x, y) =>
             pw.println(Formatter.format(x, y))
             Viz.XY(x, y)
         }
-
         val thetaStr = Formatter.format(theta.toArray)
         val dr = Viz.DataRow(thetaStr, style = Viz.Style_POINTS, data = data)
-        val drs = List(dr)
-        val dia = Viz.Diagram(id, s"Polynom datasize=$size", dataRows = drs)
+        val dia = Viz.Diagram(id, s"Polynom datasize=$size", dataRows = List(dr))
         Viz.createDiagram(dia)
       })
-
       println(s"wrote data to $file")
     }
-
   }
 }
 
