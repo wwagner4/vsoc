@@ -117,6 +117,7 @@ case class VizCreatorGnuplot(outDir: File, execute: Boolean = true) extends VizC
 
     val script =
       s"""
+         |${data(dia.dataRows)}
          |set terminal pngcairo enhanced size 800, 600
          |set output 'img_${dia.id}.png'
          |set key inside $lp top vertical Right noreverse enhanced autotitle box lt black linewidth 1.000 dashtype solid $legendTitle
@@ -126,7 +127,6 @@ case class VizCreatorGnuplot(outDir: File, execute: Boolean = true) extends VizC
          |$yLabel
          |$xRange
          |$yRange
-         |${data(dia.dataRows)}
          |plot \\
          |${series(dia.dataRows)}
          |""".stripMargin
