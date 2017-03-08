@@ -1,7 +1,9 @@
 package machinelearning.verification
 
-import breeze.linalg.DenseVector
+import breeze.linalg.DenseMatrix.fill
+import breeze.linalg.{DenseMatrix, DenseVector, Matrix, csvread}
 import common.{Formatter, Util, Viz, VizCreatorGnuplot}
+import machinelearning.TrainingSet
 
 /**
   * Polynomial function that should be easily learned
@@ -24,6 +26,42 @@ object GradientDescentPolinomial {
     poly(x)(theta) + ran
   }
 
+  def regerssion(): Unit = {
+
+    def readDataSet(fileName: String): (DenseMatrix[Double], DenseMatrix[Double]) = {
+      val file = Util.dataFile(fileName)
+      val all = csvread(file, separator = ',')
+      val x = all(::, 0 to 0)
+      val y = all(::, 1 to 1)
+      (x, y.toDenseMatrix)
+    }
+
+    def stepsTheta(x1: DenseMatrix[Double], y: Matrix[Double], alpha: Double): Stream[DenseMatrix[Double]] = {
+      import machinelearning.GradientDescent._
+      import machinelearning.HypothesisFunction._
+
+      val ts = TrainingSet(x1, y.toDenseMatrix)
+      val thetIni = initialTheta(ts)
+      val gd = gradientDescent(alpha)(linearFunc)(ts) _
+      Stream.iterate(thetIni) { thet => gd(thet) }
+    }
+
+
+
+    val datasets = List(
+      (10, "poly_10.txt"),
+      (50, "poly_50.txt"),
+      (100, "poly_100.txt"),
+      (1000, "poly_1000.txt")
+    )
+
+    val (_, fileName) = datasets(0)
+    val (x, y) = readDataSet(fileName)
+
+    println(x)
+    println(y)
+
+  }
 
   def createData(): Unit = {
 
@@ -33,7 +71,7 @@ object GradientDescentPolinomial {
     val theta = DenseVector(4400.0, -2000.0, -3, 0.7)
     val stdDev = 60000
 
-    sizes.foreach {size =>
+    sizes.foreach { size =>
       val steps = (max - min) / size
       val id = s"poly_$size"
       val file = Util.dataFile(s"$id.txt")
@@ -53,6 +91,13 @@ object GradientDescentPolinomial {
       println(s"wrote data to $file")
     }
   }
+
+}
+
+object MainPoliRegerssion extends App {
+
+  GradientDescentPolinomial.regerssion()
+
 }
 
 object MainPoliCreateData extends App {
@@ -63,14 +108,18 @@ object MainPoliCreateData extends App {
 
 object MainPolyTryout extends App {
 
-  val x = 2.3
-  val t = DenseVector(1.2, -2.6, 4.1)
+  def polyExtend(grade: Int)(x: Double): DenseVector[Double] = {
+    val v = DenseVector.range(0, grade)
+    v.map(a => math.pow(x, a.toDouble))
+  }
 
-  val v = DenseVector.range(0, t.length)
-  val y = v.map(a => math.pow(x, a.toDouble)).t * t
+  val x = 2
+  val t = DenseVector(1.2, 2.6, -4.1, -0.3)
 
+  val x1 = polyExtend(t.length)(x)
+  val y = x1.t * t
 
+  println(x1)
   println(y)
-
 }
 
