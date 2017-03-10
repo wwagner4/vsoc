@@ -47,7 +47,6 @@ object GradientDescentPolinomial {
     }
 
 
-
     val datasets = List(
       (10, "poly_10.txt"),
       (50, "poly_50.txt"),
@@ -108,18 +107,28 @@ object MainPoliCreateData extends App {
 
 object MainPolyTryout extends App {
 
+  import breeze.linalg._
+  import breeze.numerics._
+
   def polyExtend(grade: Int)(x: Double): DenseVector[Double] = {
     val v = DenseVector.range(0, grade)
     v.map(a => math.pow(x, a.toDouble))
   }
 
-  val x = 2
-  val t = DenseVector(1.2, 2.6, -4.1, -0.3)
+  val x = DenseMatrix(1.0, 2.0, 3.0, 1.5)
 
-  val x1 = polyExtend(t.length)(x)
-  val y = x1.t * t
+  val grade = 5
+  val x1Array = x.toArray.toList.flatMap(v => List.fill(grade + 1)(v)).toArray
+  val x1 = DenseMatrix.create(grade + 1, x.rows, x1Array).t
 
-  println(x1)
-  println(y)
+  val len = x.rows * (grade + 1)
+  val expArray = (0 until len).map(_ % (grade + 1)).map(_.toDouble).toArray
+  val exp = DenseMatrix.create(grade + 1, x.rows, expArray).t
+
+  x1 :^= exp
+
+  println("------------x-\n" + x)
+  println("------------exp-\n" + exp)
+  println("------------x1-\n" + x1)
 }
 
