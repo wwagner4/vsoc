@@ -118,12 +118,13 @@ object MainPolyTryout extends App {
   val x = DenseMatrix(1.0, 2.0, 3.0, 1.5)
 
   val grade = 5
-  val x1Array = x.toArray.toList.flatMap(v => List.fill(grade + 1)(v)).toArray
-  val x1 = DenseMatrix.create(grade + 1, x.rows, x1Array).t
+  val g1 = grade + 1
+  val x1Array = x.toArray.toList.flatMap(v => List.fill(g1)(v)).toArray
+  val x1 = DenseMatrix.create(g1, x.rows, x1Array).t
 
-  val len = x.rows * (grade + 1)
-  val expArray = (0 until len).map(_ % (grade + 1)).map(_.toDouble).toArray
-  val exp = DenseMatrix.create(grade + 1, x.rows, expArray).t
+  val len = x.rows * (g1)
+  val expArray = (0 until len).map(_ % (g1)).map(_.toDouble).toArray
+  val exp = DenseMatrix.create(g1, x.rows, expArray).t
 
   x1 :^= exp
 
