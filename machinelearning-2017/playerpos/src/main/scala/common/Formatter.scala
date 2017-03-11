@@ -8,10 +8,19 @@ import vsoc.util.Vec2D
 object Formatter {
 
   private val sepa = ','
-  private val sepaStr =  "" + sepa
+  private val sepaStr = "" + sepa
 
   def format(a: Array[Double]): String = {
-    a.toList.map { d => f"$d%10.2f" }.mkString(sepaStr)
+    a.map { d => f"$d%10.2f" }.mkString(sepaStr)
+  }
+
+  def formatLimitated(a: Array[Double]): String = {
+    a.map { d =>
+      if (d < 1.0E-7) "         0"
+      else if (d > 1.0e7) "       >E7"
+      else f"$d%10.2f"
+    }.mkString(sepaStr)
+
   }
 
   def format(pos: Vec2D, dir: Double, a: Array[Double]): String = {
