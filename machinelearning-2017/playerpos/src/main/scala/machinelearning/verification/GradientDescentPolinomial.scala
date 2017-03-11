@@ -91,6 +91,21 @@ object GradientDescentPolinomial {
     }
   }
 
+
+  def polyExpand(x: DenseMatrix[Double], grade: Int): DenseMatrix[Double] = {
+    val g1 = grade + 1
+    val cols = g1 * x.cols
+    val rows = x.rows
+    val xArray = x.t.toArray.flatMap(v => Seq.fill(g1)(v))
+    val x1 = DenseMatrix.create(cols, rows, xArray).t
+
+    val len = rows * cols
+    val expArray = (0 until len).map(_ % (g1)).map(_.toDouble).toArray
+    val exp = DenseMatrix.create(cols, rows, expArray).t
+
+    x1 :^= exp
+  }
+
 }
 
 object MainPoliRegerssion extends App {
@@ -112,18 +127,7 @@ object MainPolyTryout extends App {
 
   val x = DenseMatrix((1.0, 2.0, 3.0), (2.2, 2.3, 2.4)).t
   val grade = 3
-
-  val g1 = grade + 1
-  val cols = g1 * x.cols
-  val rows = x.rows
-  val xArray = x.t.toArray.flatMap(v => Seq.fill(g1)(v))
-  val x1 = DenseMatrix.create(cols, rows, xArray).t
-
-  val len = rows * cols
-  val expArray = (0 until len).map(_ % (g1)).map(_.toDouble).toArray
-  val exp = DenseMatrix.create(cols, rows, expArray).t
-
-  x1 :^= exp
+  val x1 = GradientDescentPolinomial.polyExpand(x, grade)
 
   println(s"grade=$grade")
   println("------------x-\n" + x)
