@@ -111,24 +111,22 @@ object MainPolyTryout extends App {
   import breeze.numerics._
 
   val x = DenseMatrix((1.0, 2.0, 3.0), (2.2, 2.3, 2.4)).t
-  println("------------x-\n" + x)
+  val grade = 3
 
-  val grade = 2
-  val g1 = (grade + 1) * x.cols
-  val xl = x.t.toArray.toList
-  val xl1 = xl.flatMap(v => List.fill(grade + 1)(v))
-  val x1 = DenseMatrix.create(g1, x.rows, xl1.toArray).t
-  println("------------xl-\n" + xl)
-  println("------------xl1-\n" + xl1)
-  println("------------x1-\n" + x1)
+  val g1 = grade + 1
+  val cols = g1 * x.cols
+  val rows = x.rows
+  val xArray = x.t.toArray.flatMap(v => Seq.fill(g1)(v))
+  val x1 = DenseMatrix.create(cols, rows, xArray).t
 
-  val len = x.rows * g1
-  val expArray = (0 until len).map(_ % (grade + 1)).map(_.toDouble).toArray
-  val exp = DenseMatrix.create(g1, x.rows, expArray).t
+  val len = rows * cols
+  val expArray = (0 until len).map(_ % (g1)).map(_.toDouble).toArray
+  val exp = DenseMatrix.create(cols, rows, expArray).t
 
   x1 :^= exp
 
-  println("------------exp-\n" + exp)
+  println(s"grade=$grade")
+  println("------------x-\n" + x)
   println("------------x1-\n" + x1)
 }
 
