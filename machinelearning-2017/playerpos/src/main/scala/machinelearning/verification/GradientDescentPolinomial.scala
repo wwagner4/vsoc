@@ -2,7 +2,7 @@ package machinelearning.verification
 
 import breeze.linalg.DenseMatrix.fill
 import breeze.linalg.{DenseMatrix, DenseVector, Matrix, csvread}
-import common.{Formatter, Util, Viz, VizCreatorGnuplot}
+import common._
 import machinelearning.TrainingSet
 
 
@@ -13,31 +13,43 @@ import machinelearning.TrainingSet
   */
 object GradientDescentPolinomial {
 
+  val max = 100.0
+  val min = -100.0
+  val sizes = List(10, 50, 100, 1000)
+  val thetaOrig = DenseVector(4400.0, -2000.0, -3, 0.7)
+  val stdDev = 60000
+
   case class Params(
+                     id: String,
                      datasetIndex: Int,
                      grade: Int,
                      alpha: Double,
                      steps: Int,
-                     description: String
+                     description: String,
+                     stepsOfInterest: List[Int]
                    )
 
-  val paramList = List(
-    Params(0, 2, 0.00000001, 400, "theta_1 still increasing"),
-    Params(1, 2, 0.00000001, 400, "theta_1 still increasing"),
-    Params(2, 2, 0.00000001, 400, "theta_1 still increasing"),
-    Params(3, 2, 0.00000001, 400, "theta_1 still increasing"),
+  // Grade 2
+  val paramList01 = List(
+    Params("A1", 0, 2, 0.00000001, 400, "theta_1 still increasing", List(5, 200, 400)),
+    Params("A2", 1, 2, 0.00000001, 400, "theta_1 still increasing", List(5, 200, 400)),
+    Params("A3", 2, 2, 0.00000001, 400, "theta_1 still increasing", List(5, 200, 400)),
+    Params("A4", 3, 2, 0.00000001, 400, "theta_1 still increasing", List(5, 200, 400)),
 
-    Params(0, 3, 0.000000000001, 200, "theta_3 converging to 0.44"),
-    Params(1, 3, 0.000000000001, 200, "theta_3 converging to 0.43"),
-    Params(2, 3, 0.000000000001, 200, "theta_3 converging to 0.43"),
-    Params(3, 3, 0.000000000001, 200, "theta_3 converging to 0.42"),
+    Params("C1", 2, 2, 0.0000001, 4000, "instable alpha too great", List(5, 1000, 2000, 3000, 4000)),
+    Params("C2", 2, 2, 0.00000005, 4000, "theta_1 increasing to 1126. theta_0 0.32", List(5, 1000, 2000, 3000, 4000)),
+    Params("C3", 2, 2, 0.00000001, 4000, "theta_1 increasing to 291. theta_0 0.06", List(5, 1000, 2000, 3000, 4000)),
+    Params("C4", 2, 2, 0.000000001, 4000, "theta_1 increasing to 30.94", List(5, 1000, 2000, 3000, 4000)),
+    Params("C5", 2, 2, 0.0000000001, 4000, "theta_1 increasing to 3.11", List(5, 1000, 2000, 3000, 4000)),
+    Params("C6", 2, 2, 0.00000000001, 4000, "theta_1 increasing to 0.31", List(5, 1000, 2000, 3000, 4000))
+  )
 
-    Params(2, 2, 0.0000001, 4000, "instable alpha too great"),
-    Params(2, 2, 0.00000005, 4000, "theta_1 increasing to 1126. theta_0 0.32"),
-    Params(2, 2, 0.00000001, 4000, "theta_1 increasing to 291. theta_0 0.06"),
-    Params(2, 2, 0.000000001, 4000, "theta_1 increasing to 30.94"),
-    Params(2, 2, 0.0000000001, 4000, "theta_1 increasing to 3.11"),
-    Params(2, 2, 0.00000000001, 4000, "theta_1 increasing to 0.31")
+  // Grade 3
+  val paramList02 = List(
+    Params("B1", 0, 3, 0.000000000001, 40, "theta_3 converging to 0.44", List(5, 10, 20, 40)),
+    Params("B2", 1, 3, 0.00000000001, 40, "theta_3 converging to 0.43", List(5, 10, 20, 40)),
+    Params("B3", 2, 3, 0.00000000001, 40, "theta_3 converging to 0.43", List(5, 10, 20, 40)),
+    Params("B4", 3, 3, 0.00000000001, 40, "theta_3 converging to 0.42", List(5, 10, 20, 40))
   )
 
   val datasets = List(
@@ -50,6 +62,11 @@ object GradientDescentPolinomial {
   val random = new java.util.Random()
 
   implicit val creator = VizCreatorGnuplot(Util.scriptsDir)
+
+  def poly(x: Double)(theta: DenseVector[Double]): Double = {
+    val exp = DenseVector.range(0, theta.length)
+    exp.map(e => math.pow(x, e.toDouble)).t * theta
+  }
 
   def readDataSet(fileName: String): (DenseMatrix[Double], DenseMatrix[Double]) = {
     val file = Util.dataFile(fileName)
@@ -81,41 +98,77 @@ object GradientDescentPolinomial {
       println(tl.mkString("\n"))
     }
 
-    printThetas(paramList(0))
+    printThetas(Params("B4", 3, 3, 0.00000000001, 40, "theta_3 converging to 0.42", List(5, 10, 20, 40)))
+
+  }
+
+  def regerssionPlotData(): Unit = {
+
+    def plot(params: Params): Unit = {
+      val (_, fileName) = datasets(params.datasetIndex)
+      val (x, y) = readDataSet(fileName)
+      val x1 = polyExpand(x, params.grade)
+      val dataRows = steps(x1, y, params.alpha)
+        .take(params.steps)
+        .toList
+        .zipWithIndex
+        .filter { case (_, i) => params.stepsOfInterest.contains(i + 1) }
+        .map { case (theta, i) => createDataRow(i, theta) }
+      val originalData = createOriginalDataRow(params)
+      val dia = Viz.Diagram(
+        id = s"result_poly_${params.id}",
+        title = params.description,
+        dataRows = originalData :: dataRows
+      )
+      Viz.createDiagram(dia)
+    }
+
+    def createOriginalDataRow(params: Params): Viz.DataRow = {
+      val (dataCount, fileName) = datasets(params.datasetIndex)
+      val (x, y) = readDataSet(fileName)
+      val data = x.toArray
+        .zip(y.toArray)
+        .map { case (x, y) => Viz.XY(x, y) }
+      val paramStr = common.Formatter.formatLimitated(thetaOrig.toArray)
+      Viz.DataRow(
+        s"original data $dataCount $paramStr",
+        Viz.Style_POINTS,
+        data
+      )
+    }
+
+    def createDataRow(step: Int, theta: DenseMatrix[Double]): Viz.DataRow = {
+      val data = (-100.0 to(100.0, 5))
+        .map { x => Viz.XY(x, poly(x)(theta.toDenseVector)) }
+      val paramStr = common.Formatter.formatLimitated(theta.toArray)
+      Viz.DataRow(f"step: ${step + 1}%3d $paramStr", data = data)
+    }
+
+    paramList02.foreach(plot(_))
 
   }
 
   def createData(): Unit = {
-
-    def poly(x: Double)(theta: DenseVector[Double]): Double = {
-      val exp = DenseVector.range(0, theta.length)
-      exp.map(e => math.pow(x, e.toDouble)).t * theta
-    }
 
     def polyRandomized(x: Double, deviation: Double)(theta: DenseVector[Double]): Double = {
       val ran = random.nextDouble() * 2.0 * deviation - deviation
       poly(x)(theta) + ran
     }
 
-    val max = 100.0
-    val min = -100.0
-    val sizes = List(10, 50, 100, 1000)
-    val theta = DenseVector(4400.0, -2000.0, -3, 0.7)
-    val stdDev = 60000
 
     sizes.foreach { size =>
       val steps = (max - min) / size
       val id = s"poly_$size"
       val file = Util.dataFile(s"$id.txt")
       val xs = min to(max, steps)
-      val ys = xs.map { x => (x, polyRandomized(x, stdDev)(theta)) }
+      val ys = xs.map { x => (x, polyRandomized(x, stdDev)(thetaOrig)) }
       Util.writeToFile(file, { pw =>
         val data = ys.map {
           case (x, y) =>
             pw.println(Formatter.format(x, y))
             Viz.XY(x, y)
         }
-        val thetaStr = Formatter.format(theta.toArray)
+        val thetaStr = Formatter.format(thetaOrig.toArray)
         val dr = Viz.DataRow(thetaStr, style = Viz.Style_POINTS, data = data)
         val dia = Viz.Diagram(id, s"Polynom datasize=$size", dataRows = List(dr))
         Viz.createDiagram(dia)
@@ -144,6 +197,12 @@ object GradientDescentPolinomial {
 object MainPoliRegerssionPrintData extends App {
 
   GradientDescentPolinomial.regerssionPrintTheta()
+
+}
+
+object MainPoliRegerssionPlotData extends App {
+
+  GradientDescentPolinomial.regerssionPlotData()
 
 }
 
