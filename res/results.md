@@ -19,8 +19,8 @@ The resulting values get a random offset. This offset is equally distributed in 
 
 Using polynomial regression leads to the following results
 
-* Only polynomials of grade 1, 2 and three converge. 
-* Polynomials 
+* Only polynomials of grade 1, 2 and 3 converge. 
+* Polynomials with grade greater than 3 do not converge no matter how small you choose alpha 
 * Alpha must be a very small value. 1.0E-10
 * Findig appropriate alpha values is a pain in the ass
 
