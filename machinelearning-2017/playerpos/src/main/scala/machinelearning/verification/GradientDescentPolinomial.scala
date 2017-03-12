@@ -4,6 +4,7 @@ import breeze.linalg.DenseMatrix.fill
 import breeze.linalg.{DenseMatrix, DenseVector, Matrix, csvread}
 import common._
 import machinelearning.TrainingSet
+import machinelearning.verification.GradientDescentPolinomial.Params
 
 
 /**
@@ -46,10 +47,18 @@ object GradientDescentPolinomial {
 
   // Grade 3
   val paramList02 = List(
-    Params("B1", 0, 3, 0.000000000001, 40, "theta_3 converging to 0.44", List(5, 10, 20, 40)),
-    Params("B2", 1, 3, 0.00000000001, 40, "theta_3 converging to 0.43", List(5, 10, 20, 40)),
-    Params("B3", 2, 3, 0.00000000001, 40, "theta_3 converging to 0.43", List(5, 10, 20, 40)),
-    Params("B4", 3, 3, 0.00000000001, 40, "theta_3 converging to 0.42", List(5, 10, 20, 40))
+    Params("B1", 0, 3, 0.000000000001, 400, "", List(5, 10, 20, 400)),
+    Params("B2", 1, 3, 0.00000000001, 400, "", List(5, 10, 20, 400)),
+    Params("B3", 2, 3, 0.00000000001, 400, "", List(5, 10, 20, 400)),
+    Params("B4", 3, 3, 0.00000000001, 400, "", List(5, 10, 20, 400))
+  )
+
+
+  // Grade 2
+  val paramList03 = List(
+    Params("D1", 0, 1, 0.0001, 40, "", List(2, 5, 10, 40)),
+    Params("D2", 1, 1, 0.0001, 40, "", List(2, 5, 10, 40)),
+    Params("D3", 2, 1, 0.0001, 40, "", List(2, 5, 10, 40))
   )
 
   val datasets = List(
@@ -98,7 +107,7 @@ object GradientDescentPolinomial {
       println(tl.mkString("\n"))
     }
 
-    printThetas(Params("B4", 3, 3, 0.00000000001, 40, "theta_3 converging to 0.42", List(5, 10, 20, 40)))
+    printThetas(Params("D4", 2, 1, 0.0001, 40, "tryout grade 4", List(2, 5, 10, 40)))
 
   }
 
@@ -117,7 +126,7 @@ object GradientDescentPolinomial {
       val originalData = createOriginalDataRow(params)
       val dia = Viz.Diagram(
         id = s"result_poly_${params.id}",
-        title = params.description,
+        title = f"grade ${params.grade} ${params.description}",
         dataRows = originalData :: dataRows
       )
       Viz.createDiagram(dia)
@@ -144,7 +153,7 @@ object GradientDescentPolinomial {
       Viz.DataRow(f"step: ${step + 1}%3d $paramStr", data = data)
     }
 
-    paramList02.foreach(plot(_))
+    paramList03 ::: paramList02 foreach(plot(_))
 
   }
 
@@ -218,7 +227,7 @@ object MainPolyTryout extends App {
   import breeze.numerics._
 
   val x = DenseMatrix((1.0, 2.0, 3.0), (2.2, 2.3, 2.4)).t
-  val grade = 3
+  val grade = 1
   val x1 = GradientDescentPolinomial.polyExpand(x, grade)
 
   println(s"grade=$grade")
