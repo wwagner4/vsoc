@@ -45,21 +45,28 @@ object GradientDescentPolinomial {
     Params("C6", 2, 2, 0.00000000001, 4000, "theta_1 increasing to 0.31", List(5, 1000, 2000, 3000, 4000))
   )
 
-  // Grade 3
-  val paramList02 = List(
-    Params("B1", 0, 3, 0.000000000001, 400, "", List(5, 10, 20, 400)),
-    Params("B2", 1, 3, 0.00000000001, 400, "", List(5, 10, 20, 400)),
-    Params("B3", 2, 3, 0.00000000001, 400, "", List(5, 10, 20, 400)),
-    Params("B4", 3, 3, 0.00000000001, 400, "", List(5, 10, 20, 400))
-  )
 
+  // Grade 1
+  val paramList03 = List(
+    Params("G10", 0, 1, 0.0001, 40, "", List(2, 5, 10, 40)),
+    Params("G11", 1, 1, 0.0001, 40, "", List(2, 5, 10, 40)),
+    Params("G12", 2, 1, 0.0001, 40, "", List(2, 5, 10, 40))
+  )
 
   // Grade 2
-  val paramList03 = List(
-    Params("D1", 0, 1, 0.0001, 40, "", List(2, 5, 10, 40)),
-    Params("D2", 1, 1, 0.0001, 40, "", List(2, 5, 10, 40)),
-    Params("D3", 2, 1, 0.0001, 40, "", List(2, 5, 10, 40))
+  val paramList04 = List(
+    Params("G20", 0, 2, 0.000000001, 5000, "", List(5, 30, 100, 5000)),
+    Params("G21", 1, 2, 0.000000001, 5000, "", List(5, 30, 100, 5000)),
+    Params("G22", 2, 2, 0.000000001, 5000, "", List(5, 30, 100, 5000))
   )
+
+  // Grade 3
+  val paramList02 = List(
+    Params("G30", 0, 3, 0.000000000001, 400, "", List(5, 8, 20, 400)),
+    Params("G31", 1, 3, 0.00000000001, 400, "", List(5, 8, 20, 400)),
+    Params("G32", 2, 3, 0.00000000001, 400, "", List(5, 8, 20, 400))
+  )
+
 
   val datasets = List(
     (10, "poly_10.txt"),
@@ -114,7 +121,7 @@ object GradientDescentPolinomial {
   def regerssionPlotData(): Unit = {
 
     def plot(params: Params): Unit = {
-      val (_, fileName) = datasets(params.datasetIndex)
+      val (dataCount, fileName) = datasets(params.datasetIndex)
       val (x, y) = readDataSet(fileName)
       val x1 = polyExpand(x, params.grade)
       val dataRows = steps(x1, y, params.alpha)
@@ -126,7 +133,7 @@ object GradientDescentPolinomial {
       val originalData = createOriginalDataRow(params)
       val dia = Viz.Diagram(
         id = s"result_poly_${params.id}",
-        title = f"grade ${params.grade} ${params.description}",
+        title = f"polinomial regression grade ${params.grade} #data: ${dataCount} ${params.description}",
         dataRows = originalData :: dataRows
       )
       Viz.createDiagram(dia)
@@ -138,9 +145,9 @@ object GradientDescentPolinomial {
       val data = x.toArray
         .zip(y.toArray)
         .map { case (x, y) => Viz.XY(x, y) }
-      val paramStr = common.Formatter.formatLimitated(thetaOrig.toArray)
+      val paramStr = common.Formatter.formatLimitatedDense(thetaOrig.toArray)
       Viz.DataRow(
-        s"original data $dataCount $paramStr",
+        s"original params:[$paramStr]",
         Viz.Style_POINTS,
         data
       )
@@ -149,11 +156,12 @@ object GradientDescentPolinomial {
     def createDataRow(step: Int, theta: DenseMatrix[Double]): Viz.DataRow = {
       val data = (-100.0 to(100.0, 5))
         .map { x => Viz.XY(x, poly(x)(theta.toDenseVector)) }
-      val paramStr = common.Formatter.formatLimitated(theta.toArray)
-      Viz.DataRow(f"step: ${step + 1}%3d $paramStr", data = data)
+      val paramStr = common.Formatter.formatLimitatedDense(theta.toArray)
+      Viz.DataRow(f"step: ${step + 1}%3d params:[$paramStr]", data = data)
     }
 
-    paramList03 ::: paramList02 foreach(plot(_))
+    paramList03 ::: paramList02 ::: paramList04 foreach(plot(_))
+
 
   }
 

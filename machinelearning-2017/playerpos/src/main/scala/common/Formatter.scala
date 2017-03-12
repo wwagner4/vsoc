@@ -16,9 +16,20 @@ object Formatter {
 
   def formatLimitated(a: Array[Double]): String = {
     a.map { d =>
-      if (d < 1.0E-7) "         0"
-      else if (d > 1.0e7) "       >E7"
+      if (d < 1.0E-7 && d > -1.0E-7) "         0"
+      else if (d > 1.0e7)            "        E7"
+      else if (d < -1.0e7)           "       -E7"
       else f"$d%10.2f"
+    }.mkString(sepaStr)
+
+  }
+
+  def formatLimitatedDense(a: Array[Double]): String = {
+    a.map { d =>
+      if (d < 1.0E-7 && d > -1.0E-7) "    0"
+      else if (d > 1.0e7) "   E7"
+      else if (d < -1.0e7) "  -E7"
+      else f"$d%5.2f"
     }.mkString(sepaStr)
 
   }
