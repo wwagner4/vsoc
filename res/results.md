@@ -8,6 +8,8 @@ Linear regression did not lead to any result. Only when selcting very small alph
 the paramethers (theta) converged. But using these parameters to predict 
 the position of the playes did not work at all. 
 
+The resulting values should be arranged around the x = y diagonale.
+
 # Linear regression on the polynomial dataset
 
 The polinomial dataset is created by a polynomial function of the third grade
