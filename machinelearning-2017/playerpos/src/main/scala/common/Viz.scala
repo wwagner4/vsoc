@@ -63,7 +63,7 @@ trait VizCreator {
   * An implementation for data visualisation using gnuplot
   * @param outDir Directory in which gnuplot scripts are created
   */
-case class VizCreatorGnuplot(outDir: File) extends VizCreator {
+case class VizCreatorGnuplot(outDir: File, execute: Boolean = true) extends VizCreator {
 
 
   def createDiagram(dia: Diagram): Unit = {
@@ -117,8 +117,9 @@ case class VizCreatorGnuplot(outDir: File) extends VizCreator {
 
     val script =
       s"""
+         |${data(dia.dataRows)}
          |set terminal pngcairo enhanced size 800, 600
-         |set output 'img_${dia.id}.png'
+         |set output '${dia.id}.png'
          |set key inside $lp top vertical Right noreverse enhanced autotitle box lt black linewidth 1.000 dashtype solid $legendTitle
          |set minussign
          |set title "${dia.title}"
@@ -126,16 +127,30 @@ case class VizCreatorGnuplot(outDir: File) extends VizCreator {
          |$yLabel
          |$xRange
          |$yRange
-         |${data(dia.dataRows)}
          |plot \\
          |${series(dia.dataRows)}
          |""".stripMargin
 
     val id = dia.id
-    val filename = s"diagram_$id.gnuplot"
+    val filename = s"$id.gp"
     val f = new File(outDir, filename)
     Util.writeToFile(f, pw => pw.print(script))
     println(s"wrote diagram '$id' to $f")
+
+    if (execute) {
+      exec(f, outDir)
+    }
+
+    def exec(script: File, workdir: File): Unit = {
+      import scala.sys.process._
+      val cmd = s"gnuplot ${script.getName}"
+      val result = Process(cmd, cwd=workdir).!
+      if (result != 0) {
+        println(s"executed -> '$cmd' -> ERROR '$result'")
+      } else {
+        println(s"executed -> '$cmd'")
+      }
+    }
   }
 
 
