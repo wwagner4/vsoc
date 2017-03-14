@@ -84,14 +84,6 @@ object GradientDescentPolinomial {
     exp.map(e => math.pow(x, e.toDouble)).t * theta
   }
 
-  def readDataSet(fileName: String): (DenseMatrix[Double], DenseMatrix[Double]) = {
-    val file = Util.dataFile(fileName)
-    val all = csvread(file, separator = ',')
-    val x = all(::, 0 to 0)
-    val y = all(::, 1 to 1)
-    (x, y.toDenseMatrix)
-  }
-
   def steps(x: DenseMatrix[Double], y: Matrix[Double], alpha: Double): Stream[DenseMatrix[Double]] = {
     import machinelearning.GradientDescent._
     import machinelearning.HypothesisFunction._
@@ -106,8 +98,8 @@ object GradientDescentPolinomial {
 
     def printThetas(params: Params): Unit = {
       val (_, fileName) = datasets(params.datasetIndex)
-      val (x, y) = readDataSet(fileName)
-      val x1 = polyExpand(x, params.grade)
+      val (x, y) = VerificationUtil.readDataSet(fileName)
+      val x1 = VerificationUtil.polyExpand(x, params.grade)
       val thetaList = steps(x1, y, params.alpha).take(params.steps).toList
 
       val tl = thetaList.map(_.toArray).map(a => common.Formatter.formatLimitated(a))
@@ -122,8 +114,8 @@ object GradientDescentPolinomial {
 
     def plot(params: Params): Unit = {
       val (dataCount, fileName) = datasets(params.datasetIndex)
-      val (x, y) = readDataSet(fileName)
-      val x1 = polyExpand(x, params.grade)
+      val (x, y) = VerificationUtil.readDataSet(fileName)
+      val x1 = VerificationUtil.polyExpand(x, params.grade)
       val dataRows = steps(x1, y, params.alpha)
         .take(params.steps)
         .toList
@@ -141,7 +133,7 @@ object GradientDescentPolinomial {
 
     def createOriginalDataRow(params: Params): Viz.DataRow = {
       val (dataCount, fileName) = datasets(params.datasetIndex)
-      val (x, y) = readDataSet(fileName)
+      val (x, y) = VerificationUtil.readDataSet(fileName)
       val data = x.toArray
         .zip(y.toArray)
         .map { case (x, y) => Viz.XY(x, y) }
@@ -195,20 +187,6 @@ object GradientDescentPolinomial {
   }
 
 
-  def polyExpand(x: DenseMatrix[Double], grade: Int): DenseMatrix[Double] = {
-    val g1 = grade + 1
-    val cols = g1 * x.cols
-    val rows = x.rows
-    val xArray = x.t.toArray.flatMap(v => Seq.fill(g1)(v))
-    val x1 = DenseMatrix.create(cols, rows, xArray).t
-
-    val len = rows * cols
-    val expArray = (0 until len).map(_ % (g1)).map(_.toDouble).toArray
-    val exp = DenseMatrix.create(cols, rows, expArray).t
-
-    x1 :^= exp
-  }
-
 }
 
 object MainPoliRegerssionPrintData extends App {
@@ -236,7 +214,7 @@ object MainPolyTryout extends App {
 
   val x = DenseMatrix((1.0, 2.0, 3.0), (2.2, 2.3, 2.4)).t
   val grade = 1
-  val x1 = GradientDescentPolinomial.polyExpand(x, grade)
+  val x1 = VerificationUtil.polyExpand(x, grade)
 
   println(s"grade=$grade")
   println("------------x-\n" + x)
