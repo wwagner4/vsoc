@@ -1,6 +1,6 @@
 package machinelearning
 
-import breeze.linalg.{DenseMatrix, sum}
+import breeze.linalg._
 
 /**
   * Container for one row of the training set

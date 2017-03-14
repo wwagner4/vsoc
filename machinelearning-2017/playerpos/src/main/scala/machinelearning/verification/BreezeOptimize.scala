@@ -1,8 +1,7 @@
 package machinelearning.verification
 
-import breeze.optimize._
 import breeze.linalg._
-import common.Util
+import breeze.optimize.DiffFunction
 
 /**
   * Tryout for the breeze optimize algorithms
@@ -32,13 +31,17 @@ object MainBreezeOptimize extends App {
     def calculate(theta: DenseMatrix[Double]) = {
       val m = x1.rows
       val c = sum((x1 * theta - y) ^:^ 2.0) / (2 * m)
-      val d = DenseMatrix(1d, 2d, 3d, 2d).t
+      val d = (((x1 * theta) - y).t * x1).t
       (c, d)
     }
   }
 
 
-  val (c, d) = f.calculate(DenseMatrix(5d, 0d, 0d, -3d))
+  val t = DenseMatrix(5d, 0d, 0d, -3d)
+
+  println("----t-")
+  println(t)
+  val (c, d) = f.calculate(t)
   println("----c-")
   println(c)
   println("----d-")
