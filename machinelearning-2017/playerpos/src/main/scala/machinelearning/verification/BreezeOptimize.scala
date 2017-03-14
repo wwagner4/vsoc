@@ -22,22 +22,25 @@ object MainBreezeOptimize extends App {
 
   val grade = 3
 
-  val (_, fname) = datasets(2)
+  val (_, fname) = datasets(0)
   val (x, y) = VerificationUtil.readDataSet(fname)
   val x1 = VerificationUtil.polyExpand(x, grade)
+  val y1 = y.t.toDenseVector
 
-  val f = new DiffFunction[DenseMatrix[Double]] {
+  val f = new DiffFunction[DenseVector[Double]] {
 
-    def calculate(theta: DenseMatrix[Double]) = {
+    def calculate(theta: DenseVector[Double]):(Double, DenseVector[Double]) = {
       val m = x1.rows
-      val c = sum((x1 * theta - y) ^:^ 2.0) / (2 * m)
-      val d = (((x1 * theta) - y).t * x1).t
+      val c1 = x1 * theta
+      val c = sum((c1 - y1) ^:^ 2.0) / (2 * m)
+      val d1 = c1 -y1
+      val d = (x1.t * d1).toDenseVector
       (c, d)
     }
   }
 
 
-  val t = DenseMatrix(5d, 0d, 0d, -3d)
+  val t = DenseVector(5d, 0d, 0d, -3d)
 
   println("----t-")
   println(t)
