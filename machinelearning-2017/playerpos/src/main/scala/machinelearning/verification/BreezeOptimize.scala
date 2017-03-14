@@ -1,7 +1,7 @@
 package machinelearning.verification
 
 import breeze.linalg._
-import breeze.optimize.DiffFunction
+import breeze.optimize.{DiffFunction, LBFGS}
 
 /**
   * Tryout for the breeze optimize algorithms
@@ -29,12 +29,12 @@ object MainBreezeOptimize extends App {
 
   val f = new DiffFunction[DenseVector[Double]] {
 
-    def calculate(theta: DenseVector[Double]):(Double, DenseVector[Double]) = {
+    def calculate(theta: DenseVector[Double]): (Double, DenseVector[Double]) = {
       val m = x1.rows
-      val c1 = x1 * theta
-      val c = sum((c1 - y1) ^:^ 2.0) / (2 * m)
-      val d1 = c1 -y1
-      val d = (x1.t * d1).toDenseVector
+      val h = x1 * theta
+      val c = sum((h - y1) ^:^ 2.0) / (2 * m)
+
+      val d = x1.t * (h - y1)
       (c, d)
     }
   }
@@ -44,10 +44,12 @@ object MainBreezeOptimize extends App {
 
   println("----t-")
   println(t)
-  val (c, d) = f.calculate(t)
-  println("----c-")
-  println(c)
-  println("----d-")
-  println(d)
+
+  val lbfgs = new LBFGS[DenseVector[Double]](maxIter = 100, m = 3)
+
+  val t1 = lbfgs.minimize(f, t)
+
+  println("----t1-")
+  println(t1)
 
 }
