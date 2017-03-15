@@ -8,7 +8,8 @@ lazy val root = (project in file("."))
     libraryDependencies += "net.entelijan" % "vsoc-core" % "0.0.1-SNAPSHOT",
     libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.1" % "test",
   	libraryDependencies += "org.scalanlp" %% "breeze" % breezeVersion,
-  	libraryDependencies += "org.scalanlp" %% "breeze-natives" % breezeVersion
+  	libraryDependencies += "org.scalanlp" %% "breeze-natives" % breezeVersion,
+    libraryDependencies += "org.slf4j" % "slf4j-simple" % "1.7.24"
   )
   
 // scalacOptions += "-deprecation",

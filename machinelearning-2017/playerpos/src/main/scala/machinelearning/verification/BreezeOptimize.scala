@@ -20,7 +20,7 @@ object MainBreezeOptimize extends App {
     (1000, "poly_1000.txt")
   )
 
-  val grade = 3
+  val grade = 2
 
   val (_, fname) = datasets(0)
   val (x, y) = VerificationUtil.readDataSet(fname)
@@ -40,16 +40,15 @@ object MainBreezeOptimize extends App {
   }
 
 
-  val t = DenseVector(5d, 0d, 0d, -3d)
+  val t = DenseVector.zeros[Double](grade + 1)
 
-  println("----t-")
-  println(t)
+  val maxIters = List(1, 2, 5, 10, 20, 100, 500)
 
-  val lbfgs = new LBFGS[DenseVector[Double]](maxIter = 100, m = 3)
+  maxIters.foreach { mi =>
+    val lbfgs = new LBFGS[DenseVector[Double]](maxIter = mi, m = 7)
+    val t1 = lbfgs.minimize(f, t)
+    println(mi + " - " + t1)
+  }
 
-  val t1 = lbfgs.minimize(f, t)
-
-  println("----t1-")
-  println(t1)
 
 }
