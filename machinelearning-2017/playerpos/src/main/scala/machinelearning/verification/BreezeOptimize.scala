@@ -20,17 +20,18 @@ object MainBreezeOptimize extends App {
     (1000, "poly_1000.txt")
   )
 
-  val grade = 2
+  val grade = 3
 
   val (_, fname) = datasets(0)
   val (x, y) = VerificationUtil.readDataSet(fname)
   val x1 = VerificationUtil.polyExpand(x, grade)
-  val y1 = y.t.toDenseVector
 
   val f = new DiffFunction[DenseVector[Double]] {
 
+    val y1 = y.t.toDenseVector
+    val m = x1.rows
+
     def calculate(theta: DenseVector[Double]): (Double, DenseVector[Double]) = {
-      val m = x1.rows
       val h = x1 * theta
       val c = sum((h - y1) ^:^ 2.0) / (2 * m)
 
