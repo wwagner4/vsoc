@@ -1,21 +1,10 @@
-import java.util.Properties
-
-val appProperties = settingKey[Properties]("The application properties")
-
-appProperties := {
-  val prop = new Properties()
-  IO.load(prop, new File("application.properties"))
-  prop
-}
-
-
 val breezeVersion = "0.13"
 
 lazy val root = (project in file("."))
   .settings(
     name := "playerpos",
     scalaVersion := "2.12.1",
-    resolvers += "Local Maven Repository" at appProperties.value.getProperty("m2repo"),
+    resolvers += "Local Maven Repository" at "file:///C:/ta30/nutzb/_m2_repo/",
     libraryDependencies += "net.entelijan" % "vsoc-core" % "0.0.1-SNAPSHOT",
     libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.1" % "test",
   	libraryDependencies += "org.scalanlp" %% "breeze" % breezeVersion,
