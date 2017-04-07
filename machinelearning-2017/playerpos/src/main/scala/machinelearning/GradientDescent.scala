@@ -41,7 +41,7 @@ object GradientDescent {
     val m = ts.y.rows.toDouble
     val hf = hypo(theta)(_)
 
-    theta - alpha * ((1/m) * (hf(ts.X) - ts.y).t * ts.X).t
+    theta - alpha * ((1/m) *:* (hf(ts.X) - ts.y).t * ts.X).t
   }
 
   def initialTheta(ts: TrainingSet): DenseMatrix[Double] = {
