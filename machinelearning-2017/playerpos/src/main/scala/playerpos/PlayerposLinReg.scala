@@ -10,7 +10,7 @@ import DenseMatrix._
   */
 object PlayerposLinReg {
 
-  // define the vic creator
+  // define the viz creator
   implicit val creator = VizCreatorGnuplot(Util.scriptsDir)
 
   val datasets = List(

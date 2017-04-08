@@ -1,6 +1,7 @@
 package playerpos
 
 import java.io.PrintWriter
+import scala.collection.JavaConverters._
 
 import common.SensToVec
 import atan.model.Player
@@ -11,14 +12,40 @@ import vsoc.behaviour.Behaviour
 import vsoc.behaviour.Sensors
 import java.util.Optional
 
-import vsoc.server.VsocPlayer
+import vsoc.server.{ServerUtil, VsocPlayer}
 import common.Formatter
 
 import scala.util.Random
 
-object Playerpos {
+object PlayerposCreateData {
 
   val rand = new Random
+
+  def createDataFiles(): Unit = {
+    import common.Util._
+
+    val sizes = List(1000, 5000, 10000, 50000)
+
+    sizes.foreach{size =>
+      val filename = s"pos_$size.txt"
+      val file = dataFile(filename)
+      writeToFile(file, pw => {
+        val srv = ServerUtil.current().createServer(10, 10)
+        srv.getPlayers.asScala.foreach { p =>
+          val ctrl = PlayerposCreateData.createController(Some(pw))
+          p.setController(ctrl)
+        }
+        val to = size / 20
+        for (_ <- 1 to to) {
+          srv.takeStep()
+        }
+      })
+      val lcnt = lines(file)
+      println(s"wrote $lcnt to $file")
+      println(s"""($lcnt, "$filename"),""")
+    }
+  }
+
 
   def createController(printWriter: Option[PrintWriter]): Controller = {
     val behav = new Behaviour() {

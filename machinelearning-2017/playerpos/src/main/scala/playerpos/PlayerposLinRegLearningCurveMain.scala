@@ -2,6 +2,6 @@ package playerpos
 
 import playerpos.PlayerposLinReg.LearningCurve
 
-object MainLearningCurve extends App {
+object PlayerposLinRegLearningCurveMain extends App {
   LearningCurve.plot()
 }
