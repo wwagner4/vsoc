@@ -4,7 +4,7 @@ import breeze.linalg.DenseMatrix.fill
 import breeze.linalg.{DenseMatrix, DenseVector, Matrix, csvread}
 import common._
 import machinelearning.TrainingSet
-import machinelearning.verification.GradientDescentPolinomial.Params
+import machinelearning.verification.VeriGradientDescentPolinomial.Params
 
 
 /**
@@ -12,7 +12,7 @@ import machinelearning.verification.GradientDescentPolinomial.Params
   * with linear gradient descent.
   * Purpose: Test of learning algorithms
   */
-object GradientDescentPolinomial {
+object VeriGradientDescentPolinomial {
 
   val max = 100.0
   val min = -100.0
@@ -94,12 +94,12 @@ object GradientDescentPolinomial {
     Stream.iterate(thetIni) { thet => gd(thet) }
   }
 
-  def regerssionPrintTheta(): Unit = {
+  def printTheta(): Unit = {
 
     def printThetas(params: Params): Unit = {
       val (_, fileName) = datasets(params.datasetIndex)
-      val (x, y) = VerificationUtil.readDataSet(fileName)
-      val x1 = VerificationUtil.polyExpand(x, params.grade)
+      val (x, y) = VeriUtil.readDataSet(fileName)
+      val x1 = VeriUtil.polyExpand(x, params.grade)
       val thetaList = steps(x1, y, params.alpha).take(params.steps).toList
 
       val tl = thetaList.map(_.toArray).map(a => common.Formatter.formatLimitated(a))
@@ -110,12 +110,12 @@ object GradientDescentPolinomial {
 
   }
 
-  def regerssionPlotData(): Unit = {
+  def plotData(): Unit = {
 
     def plot(params: Params): Unit = {
       val (dataCount, fileName) = datasets(params.datasetIndex)
-      val (x, y) = VerificationUtil.readDataSet(fileName)
-      val x1 = VerificationUtil.polyExpand(x, params.grade)
+      val (x, y) = VeriUtil.readDataSet(fileName)
+      val x1 = VeriUtil.polyExpand(x, params.grade)
       val dataRows = steps(x1, y, params.alpha)
         .take(params.steps)
         .toList
@@ -133,7 +133,7 @@ object GradientDescentPolinomial {
 
     def createOriginalDataRow(params: Params): Viz.DataRow = {
       val (dataCount, fileName) = datasets(params.datasetIndex)
-      val (x, y) = VerificationUtil.readDataSet(fileName)
+      val (x, y) = VeriUtil.readDataSet(fileName)
       val data = x.toArray
         .zip(y.toArray)
         .map { case (x, y) => Viz.XY(x, y) }
@@ -186,38 +186,29 @@ object GradientDescentPolinomial {
     }
   }
 
-
 }
 
-object MainPoliRegerssionPrintData extends App {
-
-  GradientDescentPolinomial.regerssionPrintTheta()
-
+object VeriGradientDescentPolinomialPrintDataMain extends App {
+  VeriGradientDescentPolinomial.printTheta()
 }
 
-object MainPoliRegerssionPlotData extends App {
-
-  GradientDescentPolinomial.regerssionPlotData()
-
+object VeriGradientDescentPolinomialPlotDataMain extends App {
+  VeriGradientDescentPolinomial.plotData()
 }
 
-object MainPoliCreateData extends App {
-
-  GradientDescentPolinomial.createData()
-
+object VeriGradientDescentPolinomialCreateDataMain extends App {
+  VeriGradientDescentPolinomial.createData()
 }
 
-object MainPolyTryout extends App {
-
-  import breeze.linalg._
-  import breeze.numerics._
+object VeriGradientDescentPolinomialTryoutMain extends App {
 
   val x = DenseMatrix((1.0, 2.0, 3.0), (2.2, 2.3, 2.4)).t
   val grade = 1
-  val x1 = VerificationUtil.polyExpand(x, grade)
+  val x1 = VeriUtil.polyExpand(x, grade)
 
   println(s"grade=$grade")
   println("------------x-\n" + x)
   println("------------x1-\n" + x1)
 }
+
 

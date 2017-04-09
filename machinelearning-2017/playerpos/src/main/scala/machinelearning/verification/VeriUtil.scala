@@ -6,7 +6,7 @@ import common.Util
 /**
   * Created by wwagner4 on 13/03/2017.
   */
-object VerificationUtil {
+object VeriUtil {
 
   def readDataSet(fileName: String): (DenseMatrix[Double], DenseMatrix[Double]) = {
     val file = Util.dataFile(fileName)

@@ -6,7 +6,7 @@ import breeze.optimize._
 /**
   * Tryout for the breeze optimize algorithms
   */
-object BreezeOptimize {
+object VeriBreezeOptimize {
 
   val datasets = List(
     (10, "poly_10.txt"),
@@ -42,15 +42,15 @@ class LinRegDiffFunction(x: DenseMatrix[Double], y: DenseMatrix[Double]) extends
 }
 
 
-object MainBreezeOptimize extends App {
+object VeriBreezeOptimizeMain extends App {
 
-  import BreezeOptimize._
+  import VeriBreezeOptimize._
 
   val grade = 3
 
   val (_, fname) = datasets(0)
-  val (x, y) = VerificationUtil.readDataSet(fname)
-  val x1 = VerificationUtil.polyExpand(x, grade)
+  val (x, y) = VeriUtil.readDataSet(fname)
+  val x1 = VeriUtil.polyExpand(x, grade)
 
   val f = new LinRegDiffFunction(x1, y)
   val fa = new ApproximateGradientFunction[Int, DenseVector[Double]](cost(x1, y)_)
@@ -68,15 +68,15 @@ object MainBreezeOptimize extends App {
 }
 
 
-object MainDiffFunction extends App {
+object DiffFunctionCompareMain extends App {
 
-  import BreezeOptimize._
+  import VeriBreezeOptimize._
 
   val grade = 3
 
   val (_, fname) = datasets(0)
-  val (x, y) = VerificationUtil.readDataSet(fname)
-  val x1 = VerificationUtil.polyExpand(x, grade)
+  val (x, y) = VeriUtil.readDataSet(fname)
+  val x1 = VeriUtil.polyExpand(x, grade)
 
   val f = new LinRegDiffFunction(x1, y)
   val fa = new ApproximateGradientFunction[Int, DenseVector[Double]](cost(x1, y)_)
