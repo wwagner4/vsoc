@@ -44,29 +44,29 @@ object VeriBreezeOptimizeMain extends App {
 
   import VeriBreezeOptimize._
 
-  val grades = List(1, 2, 3)
+  val grades = List(2, 3, 4)
   val datasetIndexes = List(0, 1, 2, 3)
   val maxIters = List(2, 5, 6, 7, 8, 9, 10, 20, 50, 60, 70, 80, 90, 100, 150)
 
-  val thetas = for (grade <- grades; datasetIndex <- datasetIndexes; maxIter <- maxIters) yield {
+  val results = for (grade <- grades; datasetIndex <- datasetIndexes; maxIter <- maxIters) yield {
     val (datasetSize, fname) = datasets(datasetIndex)
     val (x, y) = VeriUtil.readDataSet(fname)
     val x1 = VeriUtil.polyExpand(x, grade)
 
-    val f = new LinRegDiffFunction(x1, y)
-    val fa = new ApproximateGradientFunction[Int, DenseVector[Double]](cost(x1, y)(_))
+    val f: DiffFunction[DenseVector[Double]] = new LinRegDiffFunction(x1, y)
+    val fa: DiffFunction[DenseVector[Double]] = new ApproximateGradientFunction[Int, DenseVector[Double]](cost(x1, y)(_))
 
     val thetaInitial = DenseVector.zeros[Double](grade + 1)
 
     val lbfgs = new LBFGS[DenseVector[Double]](maxIter = maxIter, m = 3)
-    (datasetSize, grade, maxIter, lbfgs.minimize(f, thetaInitial), lbfgs.minimize(fa, thetaInitial))
+    (grade, datasetSize, maxIter, lbfgs.minimize(f, thetaInitial), lbfgs.minimize(fa, thetaInitial))
 
   }
 
-  thetas.foreach { case (s, g, mi, t, ta) =>
+  results.zipWithIndex.foreach { case ((grade, size, mi, t, ta), id) =>
     val tStr = common.Formatter.format(t.toArray)
     val taStr = common.Formatter.format(ta.toArray)
-    println(f"$s%10d $g%10d $mi%10d | $tStr | $taStr")
+    println(f"$id%10d $grade%10d $size%10d $mi%10d | $tStr | $taStr")
   }
 }
 
