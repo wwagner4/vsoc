@@ -100,7 +100,7 @@ case class VizCreatorGnuplot(outDir: File, execute: Boolean = true) extends VizC
     def series(dataRows: Seq[DataRow]) = dataRows.zipWithIndex.map {
       case (dr, i) =>
         val style = mapStyle(dr.style)
-        s"""$$Mydata$i using 1:2 title ' ${dr.name}' with $style"""
+        s"""$$Mydata$i using 1:2 title '${dr.name}' with $style"""
     }.mkString(", \\\n")
 
 
