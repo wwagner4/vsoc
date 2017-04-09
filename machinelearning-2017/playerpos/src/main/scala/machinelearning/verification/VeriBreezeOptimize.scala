@@ -53,22 +53,26 @@ object VeriBreezeOptimizeMain extends App {
   val x1 = VeriUtil.polyExpand(x, grade)
 
   val f = new LinRegDiffFunction(x1, y)
-  val fa = new ApproximateGradientFunction[Int, DenseVector[Double]](cost(x1, y)_)
+  val fa = new ApproximateGradientFunction[Int, DenseVector[Double]](cost(x1, y) _)
 
 
   val t = DenseVector.zeros[Double](grade + 1)
 
-  val maxIters = List(1, 2, 5, 10, 20, 100, 500)
+  val maxIters = List(2, 5, 6, 7, 8, 9, 10, 20, 50, 60, 70, 80, 90, 100, 150)
 
-  maxIters.foreach { mi =>
+  val thetas = maxIters.map { mi =>
     val lbfgs = new LBFGS[DenseVector[Double]](maxIter = mi, m = 3)
-    val t1 = lbfgs.minimize(fa, t)
-    println(mi + " - " + t1)
+    (mi, lbfgs.minimize(f, t), lbfgs.minimize(fa, t))
   }
+
+  thetas.foreach { case (mi, t, ta) =>
+    val tStr = common.Formatter.format(t.toArray)
+    val taStr = common.Formatter.format(ta.toArray)
+    println(f"$mi%10d | $tStr | $taStr") }
 }
 
 
-object DiffFunctionCompareMain extends App {
+object CompareToApproximationMain extends App {
 
   import VeriBreezeOptimize._
 
@@ -79,7 +83,7 @@ object DiffFunctionCompareMain extends App {
   val x1 = VeriUtil.polyExpand(x, grade)
 
   val f = new LinRegDiffFunction(x1, y)
-  val fa = new ApproximateGradientFunction[Int, DenseVector[Double]](cost(x1, y)_)
+  val fa = new ApproximateGradientFunction[Int, DenseVector[Double]](cost(x1, y) _)
 
   val th = DenseVector(0.001, 0.1, -0.02, 0.01)
 
