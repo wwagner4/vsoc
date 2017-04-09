@@ -2,6 +2,7 @@ package machinelearning.verification
 
 import breeze.linalg._
 import breeze.optimize._
+import common.{Util, VizCreatorGnuplot}
 
 /**
   * Tryout for the breeze optimize algorithms
@@ -40,7 +41,7 @@ class LinRegDiffFunction(x: DenseMatrix[Double], y: DenseMatrix[Double]) extends
 }
 
 
-object VeriBreezeOptimizeMain extends App {
+object VeriBreezeOptimizeStdoutMain extends App {
 
   import VeriBreezeOptimize._
 
@@ -58,7 +59,7 @@ object VeriBreezeOptimizeMain extends App {
 
     val thetaInitial = DenseVector.zeros[Double](grade + 1)
 
-    val lbfgs = new LBFGS[DenseVector[Double]](maxIter = maxIter, m = 3)
+    val lbfgs = new LBFGS[DenseVector[Double]](maxIter = maxIter, m = 5)
     (grade, datasetSize, maxIter, lbfgs.minimize(f, thetaInitial), lbfgs.minimize(fa, thetaInitial))
 
   }
@@ -70,6 +71,41 @@ object VeriBreezeOptimizeMain extends App {
   }
 }
 
+object VeriBreezeOptimizePlotMain extends App {
+
+  import VeriBreezeOptimize._
+  implicit val creator = VizCreatorGnuplot(Util.scriptsDir)
+
+  val grade = 3
+  val datasetIndex = 2
+
+  val (datasetSize, fname) = datasets(datasetIndex)
+  val (x, y) = VeriUtil.readDataSet(fname)
+  val x1 = VeriUtil.polyExpand(x, grade)
+
+
+  val maxIters = List(2, 5, 6, 7, 8, 9, 10, 20, 50, 60, 70, 80, 90, 100, 150)
+
+  val diffFunctionType = "E"
+  val diffFunc = diffFunctionType match {
+    case "E" => new LinRegDiffFunction(x1, y)
+    case "A" => new ApproximateGradientFunction[Int, DenseVector[Double]](cost(x1, y)(_))
+  }
+
+  val results = for (maxIter <- maxIters) yield {
+
+    val thetaInitial = DenseVector.zeros[Double](grade + 1)
+
+    val lbfgs = new LBFGS[DenseVector[Double]](maxIter = maxIter, m = 5)
+    (grade, datasetSize, diffFunctionType, maxIter, lbfgs.minimize(diffFunc, thetaInitial))
+
+  }
+
+  results.foreach { case (grade, size, ty, mi, t) =>
+    val tStr = common.Formatter.format(t.toArray)
+    println(f"$grade%10d $size%10d $ty%10s $mi%10d | $tStr")
+  }
+}
 
 object CompareToApproximationMain extends App {
 
