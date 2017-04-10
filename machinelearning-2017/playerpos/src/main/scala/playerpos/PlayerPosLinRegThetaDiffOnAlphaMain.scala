@@ -2,7 +2,7 @@ package playerpos
 
 import playerpos.PlayerposLinReg.ThetaDiffOnAlpha
 
-object MainThetaDiffOnAlpha extends App {
+object PlayerPosLinRegThetaDiffOnAlphaMain extends App {
 
   ThetaDiffOnAlpha.plot()
 
