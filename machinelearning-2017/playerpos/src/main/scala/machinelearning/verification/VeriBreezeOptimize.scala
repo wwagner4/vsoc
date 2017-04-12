@@ -2,6 +2,7 @@ package machinelearning.verification
 
 import breeze.linalg._
 import breeze.optimize._
+import common.Viz.MultiDiagram
 import common.{Util, Viz, VizCreatorGnuplot}
 
 /**
@@ -121,9 +122,15 @@ object VeriBreezeOptimizePlotMain extends App {
     )
   }
 
-  dias.foreach { dia =>
-    Viz.createDiagram(dia)
-  }
+  val mdia = MultiDiagram(
+    id = "VeriBreezeOpt",
+    rows = 2,
+    columns = 1,
+    imgWidth = 1200,
+    diagrams = dias
+  )
+
+    Viz.createDiagram(mdia)
 
 }
 
