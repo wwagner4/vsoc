@@ -3,7 +3,7 @@ package machinelearning.verification
 import breeze.linalg._
 import breeze.optimize._
 import common.Viz.MultiDiagram
-import common.{Util, Viz, VizCreatorGnuplot}
+import common._
 
 /**
   * Tryout for the breeze optimize algorithms
@@ -94,7 +94,11 @@ object VeriBreezeOptimizePlotMain extends App {
   def dataRow(maxIter: Int, theta: DenseVector[Double]): Viz.DataRow = {
     val data = (-100.0 to(100.0, 5))
       .map { x => Viz.XY(x, VeriGradientDescentPolinomial.poly(x)(theta.toDenseVector)) }
-    Viz.DataRow(f"iter:$maxIter%3d", data = data)
+      
+    Viz.DataRow(
+      f"iter:$maxIter",
+      style = Viz.Style_POINTS(1),
+      data = data)
   }
 
   val plotGroups = List(
@@ -164,6 +168,7 @@ object VeriBreezeOptimizePlotMain extends App {
       }
 
       val dataRows: Seq[Viz.DataRow] = results.map { case (mi, theta) => dataRow(mi, theta) }
+      
       Viz.Diagram(
         id = s"veriopt_${param.id}",
         title = s"Verify Breeze Optimize funcType:${param.diffFunctionType} datasetSize:$datasetSize",

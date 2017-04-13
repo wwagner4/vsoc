@@ -18,9 +18,11 @@ object Viz {
   sealed trait Style
 
   case object Style_LINES extends Style
-
   case object Style_POINTS extends Style
-
+  case class Style_POINTS(size: Int) extends Style
+  case object Style_DOTS extends Style
+  case object Style_LINEPOINTS extends Style
+  
   case class XY(
                  x: Number,
                  y: Number
@@ -199,7 +201,10 @@ case class VizCreatorGnuplot(outDir: File, execute: Boolean = true) extends VizC
 
     def mapStyle(style: Viz.Style): String = style match {
       case Viz.Style_POINTS => "points"
+      case Viz.Style_POINTS(size) => s"points ps $size"
       case Viz.Style_LINES => "lines"
+      case Viz.Style_DOTS => "dots"
+      case Viz.Style_LINEPOINTS => "linepoints"
     }
 
     def series(dataRows: Seq[DataRow]) = dataRows.zipWithIndex.map {
