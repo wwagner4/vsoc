@@ -91,16 +91,6 @@ object VeriBreezeOptimizePlotMain extends App {
                         plots: List[PlotParam]
                       )
 
-  def dataRow(maxIter: Int, theta: DenseVector[Double]): Viz.DataRow = {
-    val data = (-100.0 to(100.0, 5))
-      .map { x => Viz.XY(x, VeriGradientDescentPolinomial.poly(x)(theta.toDenseVector)) }
-      
-    Viz.DataRow(
-      f"iter:$maxIter",
-      style = Viz.Style_POINTS(1),
-      data = data)
-  }
-
   val plotGroups = List(
     PlotGroup(
       grade = 2,
@@ -151,6 +141,17 @@ object VeriBreezeOptimizePlotMain extends App {
   plotGroups.foreach { pg =>
 
     val dias = pg.plots.map { param =>
+
+      def dataRow(label: String, theta: DenseVector[Double], style: Viz.Style): Viz.DataRow = {
+        val data = (-100.0 to(100.0, 5))
+          .map { x => Viz.XY(x, VeriGradientDescentPolinomial.poly(x)(theta.toDenseVector)) }
+
+        Viz.DataRow(
+          name = label,
+          style = style,
+          data = data)
+      }
+
       val (datasetSize, fname) = datasets(param.datasetIndex)
       val (x, y) = VeriUtil.readDataSet(fname)
       val x1 = VeriUtil.polyExpand(x, param.grade)
@@ -167,13 +168,15 @@ object VeriBreezeOptimizePlotMain extends App {
         (maxIter, theta)
       }
 
-      val dataRows: Seq[Viz.DataRow] = results.map { case (mi, theta) => dataRow(mi, theta) }
-      
+      val dataRows: Seq[Viz.DataRow] = results.map { case (mi, theta) => dataRow(f"iter $mi", theta, Viz.Style_LINES(0.5)) }
+
+      val origRow: Viz.DataRow = dataRow("orig", VeriGradientDescentPolinomial.thetaOrig, Viz.Style_LINES(3))
+
       Viz.Diagram(
         id = s"veriopt_${param.id}",
         title = s"Verify Breeze Optimize funcType:${param.diffFunctionType} datasetSize:$datasetSize",
         yRange = Some(Viz.Range(Some(-200000), Some(200000))),
-        dataRows = dataRows
+        dataRows = origRow +: dataRows
       )
     }
 
