@@ -10,6 +10,19 @@ import common._
   */
 object VeriBreezeOptimize {
 
+  case class PlotParam(
+                        id: String,
+                        grade: Int,
+                        datasetIndex: Int,
+                        diffFunctionType: String,
+                        maxIters: List[Int]
+                      )
+
+  case class PlotGroup(
+                        grade: Int,
+                        plots: List[PlotParam]
+                      )
+
   val datasets = List(
     (10, "poly_10.txt"),
     (50, "poly_50.txt"),
@@ -24,6 +37,62 @@ object VeriBreezeOptimize {
     sum((h - y1) ^:^ 2.0) / (2 * m)
   }
 
+  def plotParam(id: String, grade: Int, dataSetIndex: Int, difFunctionType: String): PlotParam = {
+    PlotParam(id = id, grade = grade, datasetIndex = dataSetIndex, diffFunctionType = difFunctionType, maxIters = List(5, 7, 9, 12, 20, 50))
+  }
+
+  def dia(param: PlotParam): Viz.Diagram = {
+    def dataRow(label: String, theta: DenseVector[Double], style: Viz.Style): Viz.DataRow = {
+      val data = (-100.0 to(100.0, 5))
+        .map { x => Viz.XY(x, VeriGradientDescentPolinomial.poly(x)(theta.toDenseVector)) }
+
+      Viz.DataRow(
+        name = label,
+        style = style,
+        data = data
+      )
+    }
+
+    val (datasetSize, fname) = datasets(param.datasetIndex)
+    val (x, y) = VeriUtil.readDataSet(fname)
+    val x1 = VeriUtil.polyExpand(x, param.grade)
+
+    val diffFunc = param.diffFunctionType match {
+      case "E" => new LinRegDiffFunction(x1, y)
+      case "A" => new ApproximateGradientFunction[Int, DenseVector[Double]](cost(x1, y)(_))
+    }
+
+    val results = for (maxIter <- param.maxIters) yield {
+      val thetaInitial = DenseVector.zeros[Double](param.grade + 1)
+      val lbfgs = new LBFGS[DenseVector[Double]](maxIter = maxIter, m = 5)
+      val theta = lbfgs.minimize(diffFunc, thetaInitial)
+      (maxIter, theta)
+    }
+
+    val dataRows: Seq[Viz.DataRow] = results.map { case (mi, theta) => dataRow(f"iter $mi", theta, Viz.Style_LINES(0.5)) }
+
+    val origRow: Viz.DataRow = dataRow("original", VeriGradientDescentPolinomial.thetaOrig, Viz.Style_POINTS)
+
+    val origData: Viz.DataRow = {
+      require(x.rows == y.rows)
+      val data = (0 until x.rows).map { i =>
+        Viz.XY(x(i, 0), y(i, 0))
+      }
+      Viz.DataRow(
+        name = "data",
+        style = Style_POINTS(0.2),
+        data = data
+      )
+    }
+
+    Viz.Diagram(
+      id = s"veriopt_${param.id}",
+      title = s"Verify Breeze Optimize funcType:${param.diffFunctionType} datasetSize:$datasetSize",
+      yRange = Some(Viz.Range(Some(-200000), Some(200000))),
+      dataRows = origRow +: origData +: dataRows
+    )
+
+  }
 
 }
 
@@ -78,19 +147,6 @@ object VeriBreezeOptimizePlotMain extends App {
 
   implicit val creator = VizCreatorGnuplot(Util.scriptsDir)
 
-  case class PlotParam(
-                        id: String,
-                        grade: Int,
-                        datasetIndex: Int,
-                        diffFunctionType: String,
-                        maxIters: List[Int]
-                      )
-
-  case class PlotGroup(
-                        grade: Int,
-                        plots: List[PlotParam]
-                      )
-
   val plotGroups = List(
     PlotGroup(
       grade = 2,
@@ -130,68 +186,35 @@ object VeriBreezeOptimizePlotMain extends App {
         plotParam("07", 4, 0, "A"),
         plotParam("08", 4, 0, "E")
       )
+    ),
+    PlotGroup(
+      grade = 5,
+      List(
+        plotParam("01", 5, 3, "A"),
+        plotParam("02", 5, 3, "E"),
+        plotParam("03", 5, 2, "A"),
+        plotParam("04", 5, 2, "E"),
+        plotParam("05", 5, 1, "A"),
+        plotParam("06", 5, 1, "E"),
+        plotParam("07", 5, 0, "A"),
+        plotParam("08", 5, 0, "E")
+      )
+    ),
+    PlotGroup(
+      grade = 6,
+      List(
+        plotParam("01", 6, 3, "A"),
+        plotParam("02", 6, 3, "E"),
+        plotParam("03", 6, 2, "A"),
+        plotParam("04", 6, 2, "E"),
+        plotParam("05", 6, 1, "A"),
+        plotParam("06", 6, 1, "E"),
+        plotParam("07", 6, 0, "A"),
+        plotParam("08", 6, 0, "E")
+      )
     )
   )
 
-
-  def plotParam(id: String, grade: Int, dataSetIndex: Int, difFunctionType: String): PlotParam = {
-    PlotParam(id = id, grade = grade, datasetIndex = dataSetIndex, diffFunctionType = difFunctionType, maxIters = List(5, 7, 9, 12, 20, 50))
-  }
-
-  def dia(param: PlotParam): Viz.Diagram = {
-    def dataRow(label: String, theta: DenseVector[Double], style: Viz.Style): Viz.DataRow = {
-      val data = (-100.0 to(100.0, 5))
-        .map { x => Viz.XY(x, VeriGradientDescentPolinomial.poly(x)(theta.toDenseVector)) }
-
-      Viz.DataRow(
-        name = label,
-        style = style,
-        data = data
-      )
-    }
-
-    val (datasetSize, fname) = datasets(param.datasetIndex)
-    val (x, y) = VeriUtil.readDataSet(fname)
-    val x1 = VeriUtil.polyExpand(x, param.grade)
-
-    val diffFunc = param.diffFunctionType match {
-      case "E" => new LinRegDiffFunction(x1, y)
-      case "A" => new ApproximateGradientFunction[Int, DenseVector[Double]](cost(x1, y)(_))
-    }
-
-    val results = for (maxIter <- param.maxIters) yield {
-      val thetaInitial = DenseVector.zeros[Double](param.grade + 1)
-      val lbfgs = new LBFGS[DenseVector[Double]](maxIter = maxIter, m = 5)
-      val theta = lbfgs.minimize(diffFunc, thetaInitial)
-      (maxIter, theta)
-    }
-
-    val dataRows: Seq[Viz.DataRow] = results.map { case (mi, theta) => dataRow(f"iter $mi", theta, Viz.Style_LINES(0.5)) }
-
-    val origRow: Viz.DataRow = dataRow("original", VeriGradientDescentPolinomial.thetaOrig, Viz.Style_POINTS)
-
-    val origData: Viz.DataRow = {
-      require(x.rows == y.rows)
-      val data = (0 until x.rows).map { i =>
-        val vx = x(i, 0)
-        val vy = y(i, 0)
-        Viz.XY(vx, vy)
-      }
-      Viz.DataRow(
-        name = "data",
-        style = Style_POINTS(0.2),
-        data = data
-      )
-    }
-
-    Viz.Diagram(
-      id = s"veriopt_${param.id}",
-      title = s"Verify Breeze Optimize funcType:${param.diffFunctionType} datasetSize:$datasetSize",
-      yRange = Some(Viz.Range(Some(-200000), Some(200000))),
-      dataRows = origRow +: origData +: dataRows
-    )
-
-  }
 
   plotGroups.foreach { pg =>
 

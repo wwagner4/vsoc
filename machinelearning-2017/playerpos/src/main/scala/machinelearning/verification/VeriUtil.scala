@@ -24,7 +24,7 @@ object VeriUtil {
     val x1 = DenseMatrix.create(cols, rows, xArray).t
 
     val len = rows * cols
-    val expArray = (0 until len).map(_ % (g1)).map(_.toDouble).toArray
+    val expArray = (0 until len).map(_ % g1).map(_.toDouble).toArray
     val exp = DenseMatrix.create(cols, rows, expArray).t
 
     x1 :^= exp
