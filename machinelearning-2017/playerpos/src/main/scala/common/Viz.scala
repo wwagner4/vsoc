@@ -52,8 +52,8 @@ object Viz {
 
   case class MultiDiagram(
                            id: String,
-                           columns: Int,
                            rows: Int,
+                           columns: Int,
                            title: Option[String] = None,
                            imgWidth: Int = 800,
                            imgHeight: Int = 600,
@@ -140,11 +140,11 @@ case class VizCreatorGnuplot(outDir: File, execute: Boolean = true) extends VizC
   }
 
   def createMultiDiagramInit(mdia: MultiDiagram): String = {
-    val titleString = mdia.title.getOrElse("")
+    val titleString = if(mdia.title.isDefined) s"title '${mdia.title.get}'" else ""
     s"""
-       |set terminal pngcairo enhanced size ${mdia.imgWidth}, ${mdia.imgHeight} $titleString
+       |set terminal pngcairo enhanced size ${mdia.imgWidth}, ${mdia.imgHeight}
        |set output '${mdia.id}.png'
-       |set multiplot layout ${mdia.columns}, ${mdia.rows}
+       |set multiplot layout ${mdia.rows}, ${mdia.columns} $titleString
        |""".stripMargin
   }
 

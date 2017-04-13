@@ -86,52 +86,105 @@ object VeriBreezeOptimizePlotMain extends App {
                         maxIters: List[Int]
                       )
 
+  case class PlotGroup(
+                        grade: Int,
+                        plots: List[PlotParam]
+                      )
+
   def dataRow(maxIter: Int, theta: DenseVector[Double]): Viz.DataRow = {
     val data = (-100.0 to(100.0, 5))
       .map { x => Viz.XY(x, VeriGradientDescentPolinomial.poly(x)(theta.toDenseVector)) }
     Viz.DataRow(f"iter:$maxIter%3d", data = data)
   }
 
-  val params = List(
-    PlotParam(id = "A", grade = 3, datasetIndex = 2, diffFunctionType = "E", maxIters = List(2, 5, 6, 7, 8, 9, 10, 20, 50, 60, 70, 80, 100)),
-    PlotParam(id = "B", grade = 3, datasetIndex = 2, diffFunctionType = "A", maxIters = List(2, 5, 6, 7, 8, 9, 10, 20, 50, 60, 70, 80, 100))
+  val plotGroups = List(
+    PlotGroup(
+      grade = 2,
+      List(
+        plotParam("01", 2, 0, "A"),
+        plotParam("02", 2, 0, "E"),
+        plotParam("03", 2, 1, "A"),
+        plotParam("04", 2, 1, "E"),
+        plotParam("05", 2, 2, "A"),
+        plotParam("06", 2, 2, "E"),
+        plotParam("07", 2, 3, "A"),
+        plotParam("08", 2, 3, "E")
+      )
+    ),
+    PlotGroup(
+      grade = 3,
+      List(
+        plotParam("01", 3, 0, "A"),
+        plotParam("02", 3, 0, "E"),
+        plotParam("03", 3, 1, "A"),
+        plotParam("04", 3, 1, "E"),
+        plotParam("05", 3, 2, "A"),
+        plotParam("06", 3, 2, "E"),
+        plotParam("07", 3, 3, "A"),
+        plotParam("08", 3, 3, "E")
+      )
+    ),
+    PlotGroup(
+      grade = 4,
+      List(
+        plotParam("01", 4, 0, "A"),
+        plotParam("02", 4, 0, "E"),
+        plotParam("03", 4, 1, "A"),
+        plotParam("04", 4, 1, "E"),
+        plotParam("05", 4, 2, "A"),
+        plotParam("06", 4, 2, "E"),
+        plotParam("07", 4, 3, "A"),
+        plotParam("08", 4, 3, "E")
+      )
+    )
   )
 
-  val dias = params.map { param =>
-    val (datasetSize, fname) = datasets(param.datasetIndex)
-    val (x, y) = VeriUtil.readDataSet(fname)
-    val x1 = VeriUtil.polyExpand(x, param.grade)
 
-    val diffFunc = param.diffFunctionType match {
-      case "E" => new LinRegDiffFunction(x1, y)
-      case "A" => new ApproximateGradientFunction[Int, DenseVector[Double]](cost(x1, y)(_))
-    }
-
-    val results = for (maxIter <- param.maxIters) yield {
-      val thetaInitial = DenseVector.zeros[Double](param.grade + 1)
-      val lbfgs = new LBFGS[DenseVector[Double]](maxIter = maxIter, m = 5)
-      val theta = lbfgs.minimize(diffFunc, thetaInitial)
-      (maxIter, theta)
-    }
-
-    val dataRows: Seq[Viz.DataRow] = results.map { case (mi, theta) => dataRow(mi, theta) }
-    Viz.Diagram(
-      id = s"veriopt_${param.id}",
-      title = s"Verify Breeze Optimize funcType:${param.diffFunctionType} grade:${param.grade} datasetSize:$datasetSize",
-      dataRows = dataRows
-    )
+  def plotParam(id: String, grade: Int, dataSetIndex: Int, difFunctionType: String): PlotParam = {
+    PlotParam(id = id, grade = grade, datasetIndex = dataSetIndex, diffFunctionType = difFunctionType, maxIters = List(5, 6, 7, 8, 9, 10, 20, 50))
   }
 
-  val mdia = MultiDiagram(
-    id = "VeriBreezeOpt",
-    rows = 2,
-    columns = 1,
-    imgWidth = 1200,
-    diagrams = dias
-  )
+  plotGroups.foreach { pg =>
+
+    val dias = pg.plots.map { param =>
+      val (datasetSize, fname) = datasets(param.datasetIndex)
+      val (x, y) = VeriUtil.readDataSet(fname)
+      val x1 = VeriUtil.polyExpand(x, param.grade)
+
+      val diffFunc = param.diffFunctionType match {
+        case "E" => new LinRegDiffFunction(x1, y)
+        case "A" => new ApproximateGradientFunction[Int, DenseVector[Double]](cost(x1, y)(_))
+      }
+
+      val results = for (maxIter <- param.maxIters) yield {
+        val thetaInitial = DenseVector.zeros[Double](param.grade + 1)
+        val lbfgs = new LBFGS[DenseVector[Double]](maxIter = maxIter, m = 5)
+        val theta = lbfgs.minimize(diffFunc, thetaInitial)
+        (maxIter, theta)
+      }
+
+      val dataRows: Seq[Viz.DataRow] = results.map { case (mi, theta) => dataRow(mi, theta) }
+      Viz.Diagram(
+        id = s"veriopt_${param.id}",
+        title = s"Verify Breeze Optimize funcType:${param.diffFunctionType} datasetSize:$datasetSize",
+        yRange = Some(Viz.Range(Some(-200000), Some(200000))),
+        dataRows = dataRows
+      )
+    }
+
+    val mdia = MultiDiagram(
+      id = s"VeriBreezeOpt_${pg.grade}",
+      title = Some(s"Grade ${pg.grade}"),
+      rows = 4,
+      columns = 2,
+      imgWidth = 1200,
+      imgHeight = 2000,
+      diagrams = dias
+    )
 
     Viz.createDiagram(mdia)
 
+  }
 }
 
 object CompareToApproximationMain extends App {
