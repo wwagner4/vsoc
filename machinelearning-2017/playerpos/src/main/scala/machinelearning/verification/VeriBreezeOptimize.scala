@@ -23,11 +23,13 @@ object VeriBreezeOptimize {
                         plots: List[PlotParam]
                       )
 
+  val rs:String = VeriGradientDescentPolinomial.randStrat.id
+
   val datasets = List(
-    (10, "poly_10.txt"),
-    (50, "poly_50.txt"),
-    (100, "poly_100.txt"),
-    (1000, "poly_1000.txt")
+    (10, s"poly_${rs}_10.txt"),
+    (50, s"poly_${rs}_50.txt"),
+    (100, s"poly_${rs}_100.txt"),
+    (1000, s"poly_${rs}_1000.txt")
   )
 
   def cost(x: DenseMatrix[Double], y: DenseMatrix[Double])(theta: DenseVector[Double]): Double = {

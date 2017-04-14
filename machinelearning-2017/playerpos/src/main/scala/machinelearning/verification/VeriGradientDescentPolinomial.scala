@@ -30,6 +30,12 @@ object VeriGradientDescentPolinomial {
                      stepsOfInterest: List[Int]
                    )
 
+  trait RandStrat {def id: String}
+  case object RandStrat_A extends RandStrat {val id = "RSA"}
+  case object RandStrat_B extends RandStrat {val id = "RSB"}
+
+  val randStrat: RandStrat = RandStrat_B
+
   // Grade 2
   val paramList01 = List(
     Params("A1", 0, 2, 0.00000001, 400, "theta_1 still increasing", List(5, 200, 400)),
@@ -124,7 +130,7 @@ object VeriGradientDescentPolinomial {
         .map { case (theta, i) => createDataRow(i, theta) }
       val originalData = createOriginalDataRow(params)
       val dia = Viz.Diagram(
-        id = s"result_poly_${params.id}",
+        id = s"result_poly_${randStrat.id}_${params.id}",
         title = f"polinomial regression grade ${params.grade} #data: ${dataCount} ${params.description}",
         dataRows = originalData :: dataRows
       )
@@ -160,14 +166,39 @@ object VeriGradientDescentPolinomial {
   def createData(): Unit = {
 
     def polyRandomized(x: Double, deviation: Double)(theta: DenseVector[Double]): Double = {
-      val ran = random.nextDouble() * 2.0 * deviation - deviation
-      poly(x)(theta) + ran
+
+      def excludeSmall(v: Double, min: Double): Double = {
+        if (v < 0.0 && v > -min) -min
+        else if (v > 0.0 && v < min) min
+        else v
+      }
+
+      def excludeGreat(v: Double, max: Double): Double = {
+        if (v < 0.0 && v < -max) -max
+        else if (v > 0.0 && v > max) max
+        else v
+      }
+
+      randStrat match {
+        case RandStrat_A =>
+          val ran = random.nextDouble() * 2.0 * deviation - deviation
+          poly(x)(theta) + ran
+        case RandStrat_B =>
+          val y = poly(x)(theta)
+          val devRel = if (y > 1.0 || y < -1.0) {
+            excludeGreat(100000.0 * deviation / y, deviation)
+          } else {
+            deviation
+          }
+          val ran = random.nextDouble() * 2.0 * devRel - devRel
+          y + ran
+      }
     }
 
 
     sizes.foreach { size =>
       val steps = (max - min) / size
-      val id = s"poly_$size"
+      val id = s"poly_${randStrat.id}_$size"
       val file = Util.dataFile(s"$id.txt")
       val xs = min to(max, steps)
       val ys = xs.map { x => (x, polyRandomized(x, stdDev)(thetaOrig)) }
