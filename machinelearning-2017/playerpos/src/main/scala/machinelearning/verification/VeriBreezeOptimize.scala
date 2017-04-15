@@ -4,6 +4,8 @@ import breeze.linalg._
 import breeze.optimize._
 import common.Viz.{MultiDiagram, Style_POINTS}
 import common._
+import VeriGradientDescentPolinomial._
+
 
 /**
   * Tryout for the breeze optimize algorithms
@@ -22,15 +24,6 @@ object VeriBreezeOptimize {
                         grade: Int,
                         plots: List[PlotParam]
                       )
-
-  val rs:String = VeriGradientDescentPolinomial.randStrat.id
-
-  val datasets = List(
-    (10, s"poly_${rs}_10.txt"),
-    (50, s"poly_${rs}_50.txt"),
-    (100, s"poly_${rs}_100.txt"),
-    (1000, s"poly_${rs}_1000.txt")
-  )
 
   def cost(x: DenseMatrix[Double], y: DenseMatrix[Double])(theta: DenseVector[Double]): Double = {
     val y1 = y.t.toDenseVector
@@ -55,7 +48,7 @@ object VeriBreezeOptimize {
       )
     }
 
-    val (datasetSize, fname) = datasets(param.datasetIndex)
+    val (datasetSize, _, fname) = datasets(param.datasetIndex)
     val (x, y) = VeriUtil.readDataSet(fname)
     val x1 = VeriUtil.polyExpand(x, param.grade)
 
@@ -122,7 +115,7 @@ object VeriBreezeOptimizeStdoutMain extends App {
   val maxIters = List(2, 5, 6, 7, 8, 9, 10, 20, 50, 60, 70, 80, 90, 100, 150)
 
   val results = for (grade <- grades; datasetIndex <- datasetIndexes; maxIter <- maxIters) yield {
-    val (datasetSize, fname) = datasets(datasetIndex)
+    val (datasetSize, _, fname) = datasets(datasetIndex)
     val (x, y) = VeriUtil.readDataSet(fname)
     val x1 = VeriUtil.polyExpand(x, grade)
 
@@ -148,7 +141,7 @@ object VeriBreezeOptimizePlotMain extends App {
   import VeriBreezeOptimize._
 
   implicit val creator = VizCreatorGnuplot(Util.scriptsDir)
-
+  
   val plotGroups = List(
     PlotGroup(
       grade = 2,
@@ -217,7 +210,6 @@ object VeriBreezeOptimizePlotMain extends App {
     )
   )
 
-
   plotGroups.foreach { pg =>
 
     val dias = pg.plots.map { param => dia(param) }
@@ -262,7 +254,7 @@ object CompareToApproximationMain extends App {
 
   val grade = 3
 
-  val (_, fname) = datasets(0)
+  val (_, _, fname) = datasets(0)
   val (x, y) = VeriUtil.readDataSet(fname)
   val x1 = VeriUtil.polyExpand(x, grade)
 

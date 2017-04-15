@@ -34,7 +34,13 @@ object VeriGradientDescentPolinomial {
   case object RandStrat_A extends RandStrat {val id = "RSA"}
   case object RandStrat_B extends RandStrat {val id = "RSB"}
 
-  val randStrat: RandStrat = RandStrat_B
+  val randStrat: RandStrat = RandStrat_A
+  
+  def dataId(size: Int): String = s"poly_${randStrat.id}_$size"
+  
+  def dataFilename(id: String): String = s"$id.txt"
+  
+  val datasets = sizes.map {size => (size, dataId(size), dataFilename(dataId(size))) }
 
   // Grade 2
   val paramList01 = List(
@@ -74,13 +80,6 @@ object VeriGradientDescentPolinomial {
   )
 
 
-  val datasets = List(
-    (10, "poly_10.txt"),
-    (50, "poly_50.txt"),
-    (100, "poly_100.txt"),
-    (1000, "poly_1000.txt")
-  )
-
   val random = new java.util.Random()
 
   implicit val creator = VizCreatorGnuplot(Util.scriptsDir)
@@ -100,26 +99,10 @@ object VeriGradientDescentPolinomial {
     Stream.iterate(thetIni) { thet => gd(thet) }
   }
 
-  def printTheta(): Unit = {
-
-    def printThetas(params: Params): Unit = {
-      val (_, fileName) = datasets(params.datasetIndex)
-      val (x, y) = VeriUtil.readDataSet(fileName)
-      val x1 = VeriUtil.polyExpand(x, params.grade)
-      val thetaList = steps(x1, y, params.alpha).take(params.steps).toList
-
-      val tl = thetaList.map(_.toArray).map(a => common.Formatter.formatLimitated(a))
-      println(tl.mkString("\n"))
-    }
-
-    printThetas(Params("D4", 2, 1, 0.0001, 40, "tryout grade 4", List(2, 5, 10, 40)))
-
-  }
-
   def plotData(): Unit = {
 
     def plot(params: Params): Unit = {
-      val (dataCount, fileName) = datasets(params.datasetIndex)
+      val (dataCount, id, fileName) = datasets(params.datasetIndex)
       val (x, y) = VeriUtil.readDataSet(fileName)
       val x1 = VeriUtil.polyExpand(x, params.grade)
       val dataRows = steps(x1, y, params.alpha)
@@ -130,7 +113,7 @@ object VeriGradientDescentPolinomial {
         .map { case (theta, i) => createDataRow(i, theta) }
       val originalData = createOriginalDataRow(params)
       val dia = Viz.Diagram(
-        id = s"result_poly_${randStrat.id}_${params.id}",
+        id = s"lin_reg${params.grade}_$id",
         title = f"polinomial regression grade ${params.grade} #data: ${dataCount} ${params.description}",
         dataRows = originalData :: dataRows
       )
@@ -138,7 +121,7 @@ object VeriGradientDescentPolinomial {
     }
 
     def createOriginalDataRow(params: Params): Viz.DataRow = {
-      val (dataCount, fileName) = datasets(params.datasetIndex)
+      val (dataCount, _, fileName) = datasets(params.datasetIndex)
       val (x, y) = VeriUtil.readDataSet(fileName)
       val data = x.toArray
         .zip(y.toArray)
@@ -159,8 +142,6 @@ object VeriGradientDescentPolinomial {
     }
 
     paramList03 ::: paramList02 ::: paramList04 foreach(plot(_))
-
-
   }
 
   def createData(): Unit = {
@@ -196,10 +177,9 @@ object VeriGradientDescentPolinomial {
     }
 
 
-    sizes.foreach { size =>
+    datasets.foreach { case (size, id, filename) =>
       val steps = (max - min) / size
-      val id = s"poly_${randStrat.id}_$size"
-      val file = Util.dataFile(s"$id.txt")
+      val file = Util.dataFile(filename)
       val xs = min to(max, steps)
       val ys = xs.map { x => (x, polyRandomized(x, stdDev)(thetaOrig)) }
       Util.writeToFile(file, { pw =>
@@ -208,19 +188,15 @@ object VeriGradientDescentPolinomial {
             pw.println(Formatter.format(x, y))
             Viz.XY(x, y)
         }
+        println(s"created data and wrote it to $file")
         val thetaStr = Formatter.format(thetaOrig.toArray)
         val dr = Viz.DataRow(thetaStr, style = Viz.Style_POINTS, data = data)
-        val dia = Viz.Diagram(id, s"Polynom datasize=$size", dataRows = List(dr))
+        val dia = Viz.Diagram(s"created_data_$id", s"Polynom datasize=$size", dataRows = List(dr))
         Viz.createDiagram(dia)
       })
-      println(s"wrote data to $file")
     }
   }
 
-}
-
-object VeriGradientDescentPolinomialPrintDataMain extends App {
-  VeriGradientDescentPolinomial.printTheta()
 }
 
 object VeriGradientDescentPolinomialPlotDataMain extends App {
@@ -230,16 +206,4 @@ object VeriGradientDescentPolinomialPlotDataMain extends App {
 object VeriGradientDescentPolinomialCreateDataMain extends App {
   VeriGradientDescentPolinomial.createData()
 }
-
-object VeriGradientDescentPolinomialTryoutMain extends App {
-
-  val x = DenseMatrix((1.0, 2.0, 3.0), (2.2, 2.3, 2.4)).t
-  val grade = 1
-  val x1 = VeriUtil.polyExpand(x, grade)
-
-  println(s"grade=$grade")
-  println("------------x-\n" + x)
-  println("------------x1-\n" + x1)
-}
-
 
