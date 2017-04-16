@@ -31,8 +31,6 @@ object BreezeTryout extends App {
     println(m1)
     println(m2)
     println(m3)
-
-
   }
 
 }

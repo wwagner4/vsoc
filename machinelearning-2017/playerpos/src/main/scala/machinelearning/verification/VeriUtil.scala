@@ -1,6 +1,6 @@
 package machinelearning.verification
 
-import breeze.linalg.{DenseMatrix, csvread}
+import breeze.linalg._
 import common.Util
 
 /**
@@ -30,6 +30,10 @@ object VeriUtil {
     x1 :^= exp
   }
 
+  def poly(x: Double)(theta: DenseVector[Double]): Double = {
+    val exp = DenseVector.range(0, theta.length)
+    exp.map(e => math.pow(x, e.toDouble)).t * theta
+  }
 
 
 }

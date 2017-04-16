@@ -4,7 +4,6 @@ import breeze.linalg._
 import breeze.optimize._
 import common.Viz.{MultiDiagram, Style_POINTS}
 import common._
-import VeriGradientDescentPolinomial._
 
 
 /**
@@ -39,7 +38,7 @@ object VeriBreezeOptimize {
   def dia(param: PlotParam): Viz.Diagram = {
     def dataRow(label: String, theta: DenseVector[Double], style: Viz.Style): Viz.DataRow = {
       val data = (-100.0 to(100.0, 5))
-        .map { x => Viz.XY(x, VeriGradientDescentPolinomial.poly(x)(theta.toDenseVector)) }
+        .map { x => Viz.XY(x, VeriUtil.poly(x)(theta.toDenseVector)) }
 
       Viz.DataRow(
         name = label,
@@ -48,7 +47,7 @@ object VeriBreezeOptimize {
       )
     }
 
-    val (datasetSize, _, fname) = datasets(param.datasetIndex)
+    val (datasetSize, _, fname) = VeriCreateData.datasets(param.datasetIndex)
     val (x, y) = VeriUtil.readDataSet(fname)
     val x1 = VeriUtil.polyExpand(x, param.grade)
 
@@ -66,7 +65,7 @@ object VeriBreezeOptimize {
 
     val dataRows: Seq[Viz.DataRow] = results.map { case (mi, theta) => dataRow(f"iter $mi", theta, Viz.Style_LINES(0.5)) }
 
-    val origRow: Viz.DataRow = dataRow("original", VeriGradientDescentPolinomial.thetaOrig, Viz.Style_POINTS)
+    val origRow: Viz.DataRow = dataRow("original", VeriCreateData.thetaOrig, Viz.Style_POINTS)
 
     val origData: Viz.DataRow = {
       require(x.rows == y.rows)
@@ -112,10 +111,10 @@ object VeriBreezeOptimizeStdoutMain extends App {
 
   val grades = List(2, 3, 4)
   val datasetIndexes = List(0, 1, 2, 3)
-  val maxIters = List(2, 5, 6, 7, 8, 9, 10, 20, 50, 60, 70, 80, 90, 100, 150)
+  val maxIters = List(10, 20, 30, 32, 33, 34, 35, 37, 40, 50, 60, 70, 80, 90, 100, 150)
 
   val results = for (grade <- grades; datasetIndex <- datasetIndexes; maxIter <- maxIters) yield {
-    val (datasetSize, _, fname) = datasets(datasetIndex)
+    val (datasetSize, _, fname) = VeriCreateData.datasets(datasetIndex)
     val (x, y) = VeriUtil.readDataSet(fname)
     val x1 = VeriUtil.polyExpand(x, grade)
 
@@ -254,7 +253,7 @@ object CompareToApproximationMain extends App {
 
   val grade = 3
 
-  val (_, _, fname) = datasets(0)
+  val (_, _, fname) = VeriCreateData.datasets(0)
   val (x, y) = VeriUtil.readDataSet(fname)
   val x1 = VeriUtil.polyExpand(x, grade)
 
