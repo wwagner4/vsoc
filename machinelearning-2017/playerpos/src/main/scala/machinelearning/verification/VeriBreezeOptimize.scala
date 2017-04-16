@@ -4,6 +4,7 @@ import breeze.linalg._
 import breeze.optimize._
 import common.Viz.{MultiDiagram, Style_POINTS}
 import common._
+import machinelearning.verification.VeriCreateData.DataSet
 
 
 /**
@@ -11,16 +12,31 @@ import common._
   */
 object VeriBreezeOptimize {
 
+  trait DiffFunctionType {
+    def id: String
+    def name: String
+  }
+
+  case object DiffFunctionType_EXPL extends DiffFunctionType {
+    def id = "E"
+    def name = "explicit"
+  }
+
+  case object DiffFunctionType_APPROX extends DiffFunctionType {
+    def id = "A"
+    def name = "approximate"
+  }
+
   case class PlotParam(
-                        id: String,
+                        ds: DataSet,
+                        diffFunctionType: DiffFunctionType,
                         grade: Int,
-                        datasetIndex: Int,
-                        diffFunctionType: String,
                         maxIters: List[Int]
                       )
 
   case class PlotGroup(
-                        grade: Int,
+                        id: String,
+                        title: String,
                         plots: List[PlotParam]
                       )
 
@@ -31,14 +47,27 @@ object VeriBreezeOptimize {
     sum((h - y1) ^:^ 2.0) / (2 * m)
   }
 
-  def plotParam(id: String, grade: Int, dataSetIndex: Int, difFunctionType: String): PlotParam = {
-    PlotParam(id = id, grade = grade, datasetIndex = dataSetIndex, diffFunctionType = difFunctionType, maxIters = List(5, 7, 9, 12, 20, 50))
+  def multiDiagram(pg: PlotGroup): MultiDiagram = {
+    val diaCnt = pg.plots.size
+    val cols = 4
+    val rows = math.ceil(diaCnt.toDouble / cols).toInt
+    MultiDiagram(
+      id = pg.id,
+      rows = rows,
+      columns = cols,
+      imgWidth = cols * 700,
+      imgHeight = rows * 500,
+      title = Some(pg.title),
+      diagrams = pg.plots.map(p => dia(p))
+    )
   }
 
   def dia(param: PlotParam): Viz.Diagram = {
+
     def dataRow(label: String, theta: DenseVector[Double], style: Viz.Style): Viz.DataRow = {
-      val data = (-100.0 to(100.0, 5))
-        .map { x => Viz.XY(x, VeriUtil.poly(x)(theta.toDenseVector)) }
+      val data = (-100.0 to(100.0, 5)).map { x =>
+        val y = VeriUtil.poly(x)(theta.toDenseVector)
+        Viz.XY(x, y) }
 
       Viz.DataRow(
         name = label,
@@ -47,13 +76,12 @@ object VeriBreezeOptimize {
       )
     }
 
-    val (datasetSize, _, fname) = VeriCreateData.datasets(param.datasetIndex)
-    val (x, y) = VeriUtil.readDataSet(fname)
+    val (x, y) = VeriUtil.readDataSet(param.ds.filename)
     val x1 = VeriUtil.polyExpand(x, param.grade)
 
     val diffFunc = param.diffFunctionType match {
-      case "E" => new LinRegDiffFunction(x1, y)
-      case "A" => new ApproximateGradientFunction[Int, DenseVector[Double]](cost(x1, y)(_))
+      case DiffFunctionType_APPROX => new LinRegDiffFunction(x1, y)
+      case DiffFunctionType_EXPL => new ApproximateGradientFunction[Int, DenseVector[Double]](cost(x1, y)(_))
     }
 
     val results = for (maxIter <- param.maxIters) yield {
@@ -80,9 +108,9 @@ object VeriBreezeOptimize {
     }
 
     Viz.Diagram(
-      id = s"veriopt_${param.id}",
-      title = s"Verify Breeze Optimize funcType:${param.diffFunctionType} datasetSize:$datasetSize",
-      yRange = Some(Viz.Range(Some(-200000), Some(200000))),
+      id = s"${param.ds.id}_${param.diffFunctionType.id}",
+      title = s"randStrat:${param.ds.randStrat.name} funcType:${param.diffFunctionType.name} size:${param.ds.size}",
+      yRange = Some(Viz.Range(Some(-100000), Some(100000))),
       dataRows = origRow +: origData +: dataRows
     )
 
@@ -110,12 +138,11 @@ object VeriBreezeOptimizeStdoutMain extends App {
   import VeriBreezeOptimize._
 
   val grades = List(2, 3, 4)
-  val datasetIndexes = List(0, 1, 2, 3)
+  val datasets = VeriCreateData.datasets
   val maxIters = List(10, 20, 30, 32, 33, 34, 35, 37, 40, 50, 60, 70, 80, 90, 100, 150)
 
-  val results = for (grade <- grades; datasetIndex <- datasetIndexes; maxIter <- maxIters) yield {
-    val (datasetSize, _, fname) = VeriCreateData.datasets(datasetIndex)
-    val (x, y) = VeriUtil.readDataSet(fname)
+  val results = for (grade <- grades; ds <- datasets; maxIter <- maxIters) yield {
+    val (x, y) = VeriUtil.readDataSet(ds.filename)
     val x1 = VeriUtil.polyExpand(x, grade)
 
     val f: DiffFunction[DenseVector[Double]] = new LinRegDiffFunction(x1, y)
@@ -124,7 +151,7 @@ object VeriBreezeOptimizeStdoutMain extends App {
     val thetaInitial = DenseVector.zeros[Double](grade + 1)
 
     val lbfgs = new LBFGS[DenseVector[Double]](maxIter = maxIter, m = 5)
-    (grade, datasetSize, maxIter, lbfgs.minimize(f, thetaInitial), lbfgs.minimize(fa, thetaInitial))
+    (grade, ds.size, maxIter, lbfgs.minimize(f, thetaInitial), lbfgs.minimize(fa, thetaInitial))
 
   }
 
@@ -140,111 +167,25 @@ object VeriBreezeOptimizePlotMain extends App {
   import VeriBreezeOptimize._
 
   implicit val creator = VizCreatorGnuplot(Util.scriptsDir)
-  
-  val plotGroups = List(
-    PlotGroup(
-      grade = 2,
-      List(
-        plotParam("01", 2, 3, "A"),
-        plotParam("02", 2, 3, "E"),
-        plotParam("03", 2, 2, "A"),
-        plotParam("04", 2, 2, "E"),
-        plotParam("05", 2, 1, "A"),
-        plotParam("06", 2, 1, "E"),
-        plotParam("07", 2, 0, "A"),
-        plotParam("08", 2, 0, "E")
-      )
-    ),
-    PlotGroup(
-      grade = 3,
-      List(
-        plotParam("01", 3, 3, "A"),
-        plotParam("02", 3, 3, "E"),
-        plotParam("03", 3, 2, "A"),
-        plotParam("04", 3, 2, "E"),
-        plotParam("05", 3, 1, "A"),
-        plotParam("06", 3, 1, "E"),
-        plotParam("07", 3, 0, "A"),
-        plotParam("08", 3, 0, "E")
-      )
-    ),
-    PlotGroup(
-      grade = 4,
-      List(
-        plotParam("01", 4, 3, "A"),
-        plotParam("02", 4, 3, "E"),
-        plotParam("03", 4, 2, "A"),
-        plotParam("04", 4, 2, "E"),
-        plotParam("05", 4, 1, "A"),
-        plotParam("06", 4, 1, "E"),
-        plotParam("07", 4, 0, "A"),
-        plotParam("08", 4, 0, "E")
-      )
-    ),
-    PlotGroup(
-      grade = 5,
-      List(
-        plotParam("01", 5, 3, "A"),
-        plotParam("02", 5, 3, "E"),
-        plotParam("03", 5, 2, "A"),
-        plotParam("04", 5, 2, "E"),
-        plotParam("05", 5, 1, "A"),
-        plotParam("06", 5, 1, "E"),
-        plotParam("07", 5, 0, "A"),
-        plotParam("08", 5, 0, "E")
-      )
-    ),
-    PlotGroup(
-      grade = 6,
-      List(
-        plotParam("01", 6, 3, "A"),
-        plotParam("02", 6, 3, "E"),
-        plotParam("03", 6, 2, "A"),
-        plotParam("04", 6, 2, "E"),
-        plotParam("05", 6, 1, "A"),
-        plotParam("06", 6, 1, "E"),
-        plotParam("07", 6, 0, "A"),
-        plotParam("08", 6, 0, "E")
-      )
+
+  val grades = List(2, 3, 4, 5, 6, 7)
+  val iterations = List(5, 10, 30, 50, 100, 500)
+  val diffFunctionTypes = List(DiffFunctionType_EXPL, DiffFunctionType_APPROX)
+  val datasets = VeriCreateData.datasets.reverse
+
+  val plotGroups = grades.foreach { grade =>
+    val plotParams = for (ds <- datasets; diffFunctionType <- diffFunctionTypes) yield {
+      PlotParam(ds, diffFunctionType, grade, iterations)
+    }
+
+    val pg = PlotGroup(
+      id = s"grades_$grade",
+      title = s"grade $grade",
+      plots = plotParams
     )
-  )
-
-  plotGroups.foreach { pg =>
-
-    val dias = pg.plots.map { param => dia(param) }
-
-    val mdia = MultiDiagram(
-      id = s"VeriBreezeOpt_${pg.grade}",
-      title = Some(s"Grade ${pg.grade}"),
-      rows = 4,
-      columns = 2,
-      imgWidth = 1200,
-      imgHeight = 2000,
-      diagrams = dias
-    )
+    val mdia = multiDiagram(pg)
     Viz.createDiagram(mdia)
   }
-
-  /*
-  val spez1 =
-    PlotParam(id = "spez1",
-      grade = 3, datasetIndex = 1,
-      diffFunctionType = "E",
-      maxIters = List(1, 2, 3, 5, 500, 1000, 2000)
-    )
-  val diaSpez1 = dia(spez1)
-  Viz.createDiagram(diaSpez1)
-
-  val spez2 =
-    PlotParam(id = "spez2",
-      grade = 3, datasetIndex = 2,
-      diffFunctionType = "E",
-      maxIters = List(1, 2, 3, 5, 500, 1000, 2000)
-    )
-  val diaSpez2 = dia(spez2)
-  Viz.createDiagram(diaSpez2)
-  */
-
 }
 
 object CompareToApproximationMain extends App {
@@ -253,8 +194,8 @@ object CompareToApproximationMain extends App {
 
   val grade = 3
 
-  val (_, _, fname) = VeriCreateData.datasets(0)
-  val (x, y) = VeriUtil.readDataSet(fname)
+  val ds = VeriCreateData.datasets(0)
+  val (x, y) = VeriUtil.readDataSet(ds.filename)
   val x1 = VeriUtil.polyExpand(x, grade)
 
   val f = new LinRegDiffFunction(x1, y)

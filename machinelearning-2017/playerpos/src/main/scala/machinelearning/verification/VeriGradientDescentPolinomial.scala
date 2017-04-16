@@ -39,8 +39,8 @@ object VeriGradientDescentPolinomial {
   }
 
   def plot(params: Params): Unit = {
-    val (dataCount, id, fileName) = datasets(params.datasetIndex)
-    val (x, y) = VeriUtil.readDataSet(fileName)
+    val ds = datasets(params.datasetIndex)
+    val (x, y) = VeriUtil.readDataSet(ds.filename)
     val x1 = VeriUtil.polyExpand(x, params.grade)
     val dataRows = steps(x1, y, params.alpha)
       .take(params.steps)
@@ -50,16 +50,16 @@ object VeriGradientDescentPolinomial {
       .map { case (theta, i) => createDataRow(i, theta) }
     val originalData = createOriginalDataRow(params)
     val dia = Viz.Diagram(
-      id = s"lin_reg${params.grade}_$id",
-      title = f"polinomial regression grade ${params.grade} #data: ${dataCount} ${params.description}",
+      id = s"lin_reg${params.grade}_${ds.id}",
+      title = f"polinomial regression grade ${params.grade} #data: ${ds.size} ${params.description}",
       dataRows = originalData :: dataRows
     )
     Viz.createDiagram(dia)
   }
 
   def createOriginalDataRow(params: Params): Viz.DataRow = {
-    val (dataCount, _, fileName) = datasets(params.datasetIndex)
-    val (x, y) = VeriUtil.readDataSet(fileName)
+    val ds = datasets(params.datasetIndex)
+    val (x, y) = VeriUtil.readDataSet(ds.filename)
     val data = x.toArray
       .zip(y.toArray)
       .map { case (x, y) => Viz.XY(x, y) }
