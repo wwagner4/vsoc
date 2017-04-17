@@ -12,7 +12,7 @@ import machinelearning.verification.VeriCreateData.DataSet
   */
 object VeriBreezeOptimize {
 
-  val m = 7
+  val m = 5
 
   trait DiffFunctionType {
     def id: String
@@ -90,9 +90,9 @@ object VeriBreezeOptimize {
       (maxIter, theta)
     }
 
-    val dataRows: Seq[Viz.DataRow] = results.map { case (mi, theta) => dataRow(f"iter $mi", theta, Viz.Style_LINES(1.0)) }
+    val dataRows: Seq[Viz.DataRow] = results.map { case (mi, theta) => dataRow(f"iter $mi", theta, Viz.Style_LINES(4.0)) }
 
-    val origRow: Viz.DataRow = dataRow("original", VeriCreateData.thetaOrig, Viz.Style_LINES(2.0))
+    val origRow: Viz.DataRow = dataRow("original", VeriCreateData.thetaOrig, Viz.Style_LINES(0.3))
 
     val origData: Viz.DataRow = {
       require(x.rows == y.rows)
@@ -101,7 +101,7 @@ object VeriBreezeOptimize {
       }
       Viz.DataRow(
         name = "data",
-        style = Style_POINTS(1.0),
+        style = Style_POINTS(0.5),
         data = data
       )
     }
@@ -109,7 +109,7 @@ object VeriBreezeOptimize {
     Viz.Diagram(
       id = s"${param.ds.id}_${param.diffFunctionType.id}",
       title = s"randStrat:${param.ds.randStrat.name} funcType:${param.diffFunctionType.name} size:${param.ds.size}",
-      yRange = Some(Viz.Range(Some(-2), Some(14))),
+      //yRange = Some(Viz.Range(Some(-2), Some(14))),
       dataRows = origRow +: origData +: dataRows
     )
 
@@ -167,7 +167,7 @@ object VeriBreezeOptimizePlotMain extends App {
 
   implicit val creator = VizCreatorGnuplot(Util.scriptsDir)
 
-  val grades = List(3, 4, 5)
+  val grades = List(2, 3, 4, 5)
   val iterations = List(50, 200, 1000)
   val diffFunctionTypes = List(DiffFunctionType_EXPL, DiffFunctionType_APPROX)
   val datasets = VeriCreateData.datasets.reverse

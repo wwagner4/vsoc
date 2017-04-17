@@ -147,7 +147,7 @@ case class VizCreatorGnuplot(outDir: File, execute: Boolean = true) extends VizC
     val titleString = if(mdia.title.isDefined) s"title '${mdia.title.get}'" else ""
     s"""
        |set terminal pngcairo enhanced size ${mdia.imgWidth}, ${mdia.imgHeight}
-       |set output '${mdia.id}.png'
+       |set output 'img/${mdia.id}.png'
        |set multiplot layout ${mdia.rows}, ${mdia.columns} $titleString
        |""".stripMargin
   }

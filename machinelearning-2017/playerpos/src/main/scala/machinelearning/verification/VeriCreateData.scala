@@ -15,7 +15,7 @@ object VeriCreateData {
 
   val sizes = List(10, 50, 100, 1000)
 
-  val thetaOrig = DenseVector(5, 4.0E-2, 15.0E-4, -6.0E-6)
+  val thetaOrig = DenseVector(15, 18.0E-2, 5.0E-4, -6.0E-6)
 
   val stdDev = 2.0
 
@@ -85,16 +85,22 @@ object VeriCreateData {
       })
     }
 
-    val dias = datasets.map { ds =>
+    val dias = datasets.reverse.map { ds =>
       val steps = (max - min) / ds.size
       val xs = min to(max, steps)
       val ys = xs.map { x => (x, polyRandomized(x, stdDev, ds.randStrat)(thetaOrig)) }
       val data = ys.map { case (x, y) => Viz.XY(x, y) }
+      val origData = (min to (max, 5.0)).map {x =>
+        val y = poly(x)(thetaOrig)
+        Viz.XY(x, y)
+      }
       val dr = Viz.DataRow("ran points", style = Viz.Style_POINTS, data = data)
+      val orig = Viz.DataRow("origs", style = Viz.Style_LINES(3.0), data = origData)
       Viz.Diagram(
         s"created_${ds.id}",
         s"size=${ds.size} rand:${ds.randStrat.name}",
-        dataRows = List(dr)
+        xRange = Some(Viz.Range(Some(-110), Some(110))),
+        dataRows = List(dr, orig)
       )
 
     }

@@ -25,6 +25,7 @@ object Util {
   }
 
   def scriptsDir: File = {
+    dir("prj/vsoc/scripts/img")
     dir("prj/vsoc/scripts")
   }
 
