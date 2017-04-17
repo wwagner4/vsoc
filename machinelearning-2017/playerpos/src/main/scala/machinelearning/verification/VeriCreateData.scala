@@ -7,13 +7,17 @@ import VeriUtil._
 
 object VeriCreateData {
 
+  val random = new java.util.Random()
+
   val max = 100.0
 
   val min: Double = -100.0
 
   val sizes = List(10, 50, 100, 1000)
 
-  val thetaOrig = DenseVector(4400.0, -2000.0, -3, 0.7)
+  val thetaOrig = DenseVector(5, 4.0E-2, 15.0E-4, -6.0E-6)
+
+  val stdDev = 2.0
 
   case class DataSet(
                       size: Int,
@@ -52,15 +56,7 @@ object VeriCreateData {
 
     implicit val creator = VizCreatorGnuplot(Util.scriptsDir)
 
-    val random = new java.util.Random()
-
     def polyRandomized(x: Double, deviation: Double, randStrat: RandStrat)(theta: DenseVector[Double]): Double = {
-
-      def excludeGreat(v: Double, max: Double): Double = {
-        if (v < 0.0 && v < -max) -max
-        else if (v > 0.0 && v > max) max
-        else v
-      }
 
       def fact(x: Double): Double = math.pow(math.E, -(x * x) / 3000 )
 
@@ -76,7 +72,6 @@ object VeriCreateData {
     }
 
     datasets.foreach { ds: DataSet =>
-      val stdDev = 60000
       val steps = (max - min) / ds.size
       val file = Util.dataFile(ds.filename)
       val xs = min to(max, steps)
@@ -91,7 +86,6 @@ object VeriCreateData {
     }
 
     val dias = datasets.map { ds =>
-      val stdDev = 60000
       val steps = (max - min) / ds.size
       val xs = min to(max, steps)
       val ys = xs.map { x => (x, polyRandomized(x, stdDev, ds.randStrat)(thetaOrig)) }

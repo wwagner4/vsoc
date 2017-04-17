@@ -207,7 +207,7 @@ case class VizCreatorGnuplot(outDir: File, execute: Boolean = true) extends VizC
       case Viz.Style_LINES => "lines"
       case Viz.Style_LINES(size) => s"lines lw $size"
       case Viz.Style_DOTS => "dots"
-      case Viz.Style_LINEPOINTS => "linepoints"
+      case Viz.Style_LINEPOINTS => "linespoints"
     }
 
     def series(dataRows: Seq[DataRow]) = dataRows.zipWithIndex.map {
