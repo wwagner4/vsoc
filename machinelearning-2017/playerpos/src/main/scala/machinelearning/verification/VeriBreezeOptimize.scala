@@ -48,15 +48,12 @@ object VeriBreezeOptimize {
   }
 
   def multiDiagram(pg: PlotGroup): MultiDiagram = {
-    val diaCnt = pg.plots.size
     val cols = 4
-    val rows = math.ceil(diaCnt.toDouble / cols).toInt
     MultiDiagram(
       id = pg.id,
-      rows = rows,
       columns = cols,
       imgWidth = cols * 700,
-      imgHeight = rows * 500,
+      imgHeight = 2000,
       title = Some(pg.title),
       diagrams = pg.plots.map(p => dia(p))
     )

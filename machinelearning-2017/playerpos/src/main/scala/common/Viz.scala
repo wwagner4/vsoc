@@ -55,13 +55,14 @@ object Viz {
 
   case class MultiDiagram(
                            id: String,
-                           rows: Int,
                            columns: Int,
                            title: Option[String] = None,
                            imgWidth: Int = 800,
                            imgHeight: Int = 600,
                            diagrams: Seq[Diagram]
-                         ) extends Dia
+                         ) extends Dia {
+    def rows: Int = math.ceil(diagrams.size.toDouble / columns).toInt
+  }
 
   case class Range(
                     from: Option[Number],
@@ -233,7 +234,7 @@ case class VizCreatorGnuplot(outDir: File, execute: Boolean = true) extends VizC
 
     script +
       s"""
-         |set key inside $lp top vertical Right noreverse enhanced autotitle box lt black linewidth 1.000 dashtype solid $legendTitle
+         |set key inside $lp top vertical Right noreverse enhanced autotitle $legendTitle
          |set minussign
          |set title "${dia.title}"
          |$xLabel
