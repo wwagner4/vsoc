@@ -98,7 +98,7 @@ object VeriCreateData {
       val orig = Viz.DataRow("origs", style = Viz.Style_LINES(3.0), data = origData)
       Viz.Diagram(
         s"created_${ds.id}",
-        s"size=${ds.size} rand:${ds.randStrat.name}",
+        s"size=${ds.size} rand:${ds.randStrat.name} id:${ds.id}",
         xRange = Some(Viz.Range(Some(-110), Some(110))),
         dataRows = List(dr, orig)
       )
@@ -106,7 +106,7 @@ object VeriCreateData {
     }
     val mdia = Viz.MultiDiagram(
       id = "generated",
-      title = Some("generated data"),
+      title = Some(s"generated data theta:$thetaOrig"),
       columns = 2,
       imgWidth = 1000,
       imgHeight = 1700,
