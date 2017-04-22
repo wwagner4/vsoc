@@ -15,7 +15,7 @@ object VeriCreateData {
 
   val sizes = List(10, 50, 100, 1000)
 
-  val thetaOrig = DenseVector(15, 18.0E-2, 5.0E-4, -6.0E-6)
+  val thetaOrig = DenseVector(15, 8.0E-2, 19.0E-4, -16.0E-6)
 
   val stdDev = 2.0
 

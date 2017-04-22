@@ -161,7 +161,7 @@ case class VizCreatorGnuplot(outDir: File, execute: Boolean = true) extends VizC
   def createDiagramInit(dia: Diagram): String = {
     s"""
        |set terminal pngcairo enhanced size ${dia.imgWidth}, ${dia.imgHeight}
-       |set output '${dia.id}.png'
+       |set output 'img/${dia.id}.png'
        |""".stripMargin
   }
 

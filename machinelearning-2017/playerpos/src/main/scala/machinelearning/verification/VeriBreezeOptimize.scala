@@ -42,12 +42,24 @@ object VeriBreezeOptimize {
                         plots: List[PlotParam]
                       )
 
-  def cost(x: DenseMatrix[Double], y: DenseMatrix[Double])(theta: DenseVector[Double]): Double = {
-    val y1 = y.t.toDenseVector
+  def cost(x: DenseMatrix[Double], y: DenseVector[Double])(theta: DenseVector[Double]): Double = {
     val m = x.rows
     val h = x * theta
-    sum((h - y1) ^:^ 2.0) / (2 * m)
+    sum((h - y) ^:^ 2.0) / (2 * m)
   }
+
+  class LinRegDiffFunction(x: DenseMatrix[Double], y: DenseVector[Double]) extends DiffFunction[DenseVector[Double]] {
+
+    private val m = x.rows
+
+    def calculate(theta: DenseVector[Double]): (Double, DenseVector[Double]) = {
+      val h = x * theta
+      val c = sum((h - y) ^:^ 2.0) / (2 * m)
+      val d = (x.t * (h - y)) *:* (1.0 / m)
+      (c, d)
+    }
+  }
+
 
   def multiDiagram(pg: PlotGroup): MultiDiagram = {
     val cols = 4
@@ -76,11 +88,12 @@ object VeriBreezeOptimize {
     }
 
     val (x, y) = VeriUtil.readDataSet(param.ds.filename)
+    val y1 = y.t.toDenseVector
     val x1 = VeriUtil.polyExpand(x, param.grade)
 
     val diffFunc = param.diffFunctionType match {
-      case DiffFunctionType_APPROX => new LinRegDiffFunction(x1, y)
-      case DiffFunctionType_EXPL => new ApproximateGradientFunction[Int, DenseVector[Double]](cost(x1, y)(_))
+      case DiffFunctionType_APPROX => new LinRegDiffFunction(x1, y1)
+      case DiffFunctionType_EXPL => new ApproximateGradientFunction[Int, DenseVector[Double]](cost(x1, y1)(_))
     }
 
     val results = for (maxIter <- param.maxIters) yield {
@@ -117,20 +130,6 @@ object VeriBreezeOptimize {
 
 }
 
-class LinRegDiffFunction(x: DenseMatrix[Double], y: DenseMatrix[Double]) extends DiffFunction[DenseVector[Double]] {
-
-  private val y1 = y.t.toDenseVector
-  private val m = x.rows
-
-  def calculate(theta: DenseVector[Double]): (Double, DenseVector[Double]) = {
-    val h = x * theta
-    val c = sum((h - y1) ^:^ 2.0) / (2 * m)
-    val d = (x.t * (h - y1)) *:* (1.0 / m)
-    (c, d)
-  }
-
-}
-
 
 object VeriBreezeOptimizeStdoutMain extends App {
 
@@ -142,10 +141,11 @@ object VeriBreezeOptimizeStdoutMain extends App {
 
   val results = for (grade <- grades; ds <- datasets; maxIter <- maxIters) yield {
     val (x, y) = VeriUtil.readDataSet(ds.filename)
+    val y1 = y.t.toDenseVector
     val x1 = VeriUtil.polyExpand(x, grade)
 
-    val f: DiffFunction[DenseVector[Double]] = new LinRegDiffFunction(x1, y)
-    val fa: DiffFunction[DenseVector[Double]] = new ApproximateGradientFunction[Int, DenseVector[Double]](cost(x1, y)(_))
+    val f: DiffFunction[DenseVector[Double]] = new LinRegDiffFunction(x1, y1)
+    val fa: DiffFunction[DenseVector[Double]] = new ApproximateGradientFunction[Int, DenseVector[Double]](cost(x1, y1)(_))
 
     val thetaInitial = DenseVector.zeros[Double](grade + 1)
 
@@ -189,25 +189,55 @@ object VeriBreezeOptimizePlotMain extends App {
 
 object CompareToApproximationMain extends App {
 
-  import VeriBreezeOptimize._
+  implicit val creator = VizCreatorGnuplot(Util.scriptsDir)
 
-  val grade = 3
+  val x = DenseMatrix((1.0, 2.0, 3.0), (3.0, 2.0, -1.0))
+  val y = DenseVector(2.2, 1.1)
 
-  val ds = VeriCreateData.datasets(0)
-  val (x, y) = VeriUtil.readDataSet(ds.filename)
-  val x1 = VeriUtil.polyExpand(x, grade)
+  val fe = new VeriBreezeOptimize.LinRegDiffFunction(x, y)
+  val fa = new ApproximateGradientFunction[Int, DenseVector[Double]](VeriBreezeOptimize.cost(x, y)(_))
 
-  val f = new LinRegDiffFunction(x1, y)
-  val fa = new ApproximateGradientFunction[Int, DenseVector[Double]](cost(x1, y)(_))
+  val ranges1 = List(
+    (20000, -10000.6745 to(10000.0, 2000.98729)),
+    (10000, -5000.987 to(5000.0, 1000.998797)),
+    (2000, -1000.345 to(1000.0, 200.238729)),
+    (200, -100.23 to(100.0, 20.3389)),
+    (20, -10.563 to(10.0, 2.1329)),
+    (2, -1.563 to(1.0, 0.087329))
+  )
 
-  val th = DenseVector(0.001, 0.1, -0.02, 0.01)
+  val ranges2 = List(
+    (100, -50.987 to(50.0, 5.998797)),
+    (50, -25.345 to(25.0, 5.238729)),
+    (20, -10.23 to(10.0, 2.3389)),
+    (10, -5.563 to(5.0, 0.5329)),
+    (2, -1.563 to(1.0, 0.087329))
+  )
 
-  val t11 = f.calculate(th)
-  val t12 = fa.calculate(th)
+  val ranges = ranges1
 
-  println(t11)
-  println(t12)
+  val maxs = ranges.map {case (rangeVal, range) =>
+    val diffs = for (a <- range; b <- range; c <- range) yield {
+      val theta = DenseVector(a, b, c)
+      val (_, de) = fe.calculate(theta)
+      val (_, da) = fa.calculate(theta)
+      math.abs(sum(da - de)) / rangeVal
+    }
+    (rangeVal, max(diffs))
+  }
+  println(maxs)
 
+  def xy(vals: Seq[(Int, Double)]): Seq[Viz.XY] = {
+    vals.map { case (rv, v) => Viz.XY(rv, v) }
+  }
+
+  val dia = Viz.Diagram(
+    s"diff_exp_approximate",
+    s"Difference explicite to approximate derivatives",
+    dataRows = List(Viz.DataRow("diff", data = xy(maxs)))
+  )
+
+  Viz.createDiagram(dia)
 
 }
 
