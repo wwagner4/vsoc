@@ -9,15 +9,17 @@ object VeriCreateData {
 
   val random = new java.util.Random()
 
-  val max = 100.0
+  val min: Double = -1.0
 
-  val min: Double = -100.0
+  val max: Double = 1.0
 
-  val sizes = List(10, 50, 100, 1000)
+  val steps: Double = (max - min) / 20
 
-  val thetaOrig = DenseVector(15, 8.0E-2, 19.0E-4, -16.0E-6)
+  val sizes = List(10, 50, 100)
 
-  val stdDev = 2.0
+  val thetaOrig = DenseVector(1.0, 3.0, -2.0, 4.0)
+
+  val stdDev = 1.0
 
   case class DataSet(
                       size: Int,
@@ -72,9 +74,9 @@ object VeriCreateData {
     }
 
     datasets.foreach { ds: DataSet =>
-      val steps = (max - min) / ds.size
+      val steps1 = (max - min) / ds.size
       val file = Util.dataFile(ds.filename)
-      val xs = min to(max, steps)
+      val xs = min to(max, steps1)
       val ys = xs.map { x => (x, polyRandomized(x, stdDev, ds.randStrat)(thetaOrig)) }
       Util.writeToFile(file, { pw =>
         ys.foreach {
@@ -86,11 +88,11 @@ object VeriCreateData {
     }
 
     val dias = datasets.reverse.map { ds =>
-      val steps = (max - min) / ds.size
-      val xs = min to(max, steps)
+      val steps1 = (max - min) / ds.size
+      val xs = min to(max, steps1)
       val ys = xs.map { x => (x, polyRandomized(x, stdDev, ds.randStrat)(thetaOrig)) }
       val data = ys.map { case (x, y) => Viz.XY(x, y) }
-      val origData = (min to (max, 5.0)).map {x =>
+      val origData = (min to (max, steps)).map {x =>
         val y = poly(x)(thetaOrig)
         Viz.XY(x, y)
       }
@@ -99,7 +101,6 @@ object VeriCreateData {
       Viz.Diagram(
         s"created_${ds.id}",
         s"size=${ds.size} rand:${ds.randStrat.name} id:${ds.id}",
-        xRange = Some(Viz.Range(Some(-110), Some(110))),
         dataRows = List(dr, orig)
       )
 

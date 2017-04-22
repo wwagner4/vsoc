@@ -16,16 +16,19 @@ object VeriBreezeOptimize {
 
   trait DiffFunctionType {
     def id: String
+
     def name: String
   }
 
   case object DiffFunctionType_EXPL extends DiffFunctionType {
     def id = "E"
+
     def name = "explicit"
   }
 
   case object DiffFunctionType_APPROX extends DiffFunctionType {
     def id = "A"
+
     def name = "approximate"
   }
 
@@ -76,9 +79,10 @@ object VeriBreezeOptimize {
   def dia(param: PlotParam): Viz.Diagram = {
 
     def dataRow(label: String, theta: DenseVector[Double], style: Viz.Style): Viz.DataRow = {
-      val data = (VeriCreateData.min to(VeriCreateData.max, 5)).map { x =>
+      val data = (VeriCreateData.min to(VeriCreateData.max, VeriCreateData.steps)).map { x =>
         val y = VeriUtil.poly(x)(theta.toDenseVector)
-        Viz.XY(x, y) }
+        Viz.XY(x, y)
+      }
 
       Viz.DataRow(
         name = label,
@@ -103,9 +107,9 @@ object VeriBreezeOptimize {
       (maxIter, theta)
     }
 
-    val dataRows: Seq[Viz.DataRow] = results.map { case (mi, theta) => dataRow(f"iter $mi", theta, Viz.Style_LINES(4.0)) }
+    val dataRows: Seq[Viz.DataRow] = results.map { case (mi, theta) => dataRow(f"iter $mi", theta, Viz.Style_LINES(1.0)) }
 
-    val origRow: Viz.DataRow = dataRow("original", VeriCreateData.thetaOrig, Viz.Style_LINES(0.3))
+    val origRow: Viz.DataRow = dataRow("original", VeriCreateData.thetaOrig, Viz.Style_LINESDASHED(1.5))
 
     val origData: Viz.DataRow = {
       require(x.rows == y.rows)
@@ -122,7 +126,6 @@ object VeriBreezeOptimize {
     Viz.Diagram(
       id = s"${param.ds.id}_${param.diffFunctionType.id}",
       title = s"randStrat:${param.ds.randStrat.name} funcType:${param.diffFunctionType.name} size:${param.ds.size}",
-      //yRange = Some(Viz.Range(Some(-2), Some(14))),
       dataRows = origRow +: origData +: dataRows
     )
 
@@ -135,9 +138,9 @@ object VeriBreezeOptimizeStdoutMain extends App {
 
   import VeriBreezeOptimize._
 
-  val grades = List(2, 3, 4)
+  val grades = List(1, 2, 3, 4, 5)
   val datasets = VeriCreateData.datasets
-  val maxIters = List(100, 500, 1000, 5000, 10000)
+  val maxIters = List(5, 100, 1000)
 
   val results = for (grade <- grades; ds <- datasets; maxIter <- maxIters) yield {
     val (x, y) = VeriUtil.readDataSet(ds.filename)
@@ -168,7 +171,7 @@ object VeriBreezeOptimizePlotMain extends App {
   implicit val creator = VizCreatorGnuplot(Util.scriptsDir)
 
   val grades = List(2, 3, 4, 5)
-  val iterations = List(50, 200, 1000)
+  val iterations = List(2, 5, 10, 20, 50, 100)
   val diffFunctionTypes = List(DiffFunctionType_EXPL, DiffFunctionType_APPROX)
   val datasets = VeriCreateData.datasets.reverse
 
@@ -216,7 +219,7 @@ object CompareToApproximationMain extends App {
 
   val ranges = ranges1
 
-  val maxs = ranges.map {case (rangeVal, range) =>
+  val maxs = ranges.map { case (rangeVal, range) =>
     val diffs = for (a <- range; b <- range; c <- range) yield {
       val theta = DenseVector(a, b, c)
       val (_, de) = fe.calculate(theta)

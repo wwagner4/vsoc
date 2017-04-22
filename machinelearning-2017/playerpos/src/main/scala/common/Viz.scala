@@ -19,10 +19,12 @@ object Viz {
 
   case object Style_LINES extends Style
   case class Style_LINES(size: Double) extends Style
+  case object Style_LINESDASHED extends Style
+  case class Style_LINESDASHED(size: Double) extends Style
   case object Style_POINTS extends Style
   case class Style_POINTS(size: Double) extends Style
   case object Style_DOTS extends Style
-  case object Style_LINEPOINTS extends Style
+  case object Style_LINESPOINTS extends Style
   
   case class XY(
                  x: Number,
@@ -146,7 +148,7 @@ case class VizCreatorGnuplot(outDir: File, execute: Boolean = true) extends VizC
   def createMultiDiagramInit(mdia: MultiDiagram): String = {
     val titleString = if(mdia.title.isDefined) s"title '${mdia.title.get}'" else ""
     s"""
-       |set terminal pngcairo enhanced size ${mdia.imgWidth}, ${mdia.imgHeight}
+       |set terminal pngcairo dashed enhanced size ${mdia.imgWidth}, ${mdia.imgHeight}
        |set output 'img/${mdia.id}.png'
        |set multiplot layout ${mdia.rows}, ${mdia.columns} $titleString
        |""".stripMargin
@@ -160,7 +162,7 @@ case class VizCreatorGnuplot(outDir: File, execute: Boolean = true) extends VizC
 
   def createDiagramInit(dia: Diagram): String = {
     s"""
-       |set terminal pngcairo enhanced size ${dia.imgWidth}, ${dia.imgHeight}
+       |set terminal pngcairo dashed enhanced size ${dia.imgWidth}, ${dia.imgHeight}
        |set output 'img/${dia.id}.png'
        |""".stripMargin
   }
@@ -206,8 +208,10 @@ case class VizCreatorGnuplot(outDir: File, execute: Boolean = true) extends VizC
       case Viz.Style_POINTS(size) => s"points ps $size"
       case Viz.Style_LINES => "lines"
       case Viz.Style_LINES(size) => s"lines lw $size"
+      case Viz.Style_LINESDASHED => "lines dashtype 2"
+      case Viz.Style_LINESDASHED(size) => s"lines lw $size dashtype 2"
       case Viz.Style_DOTS => "dots"
-      case Viz.Style_LINEPOINTS => "linespoints"
+      case Viz.Style_LINESPOINTS => "linespoints"
     }
 
     def series(dataRows: Seq[DataRow]) = dataRows.zipWithIndex.map {
