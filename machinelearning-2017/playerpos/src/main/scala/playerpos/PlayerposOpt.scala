@@ -1,12 +1,15 @@
 package playerpos
 
 import breeze.linalg.DenseMatrix.fill
-import breeze.linalg._
+import breeze.linalg.{DenseMatrix, DenseVector, _}
 import breeze.numerics.sin
-import breeze.optimize.ApproximateGradientFunction
+import breeze.optimize.{ApproximateGradientFunction, DiffFunction, LBFGS, Minimizer}
 import common.Util
 
 object PlayerposOpt {
+
+  type DM = DenseMatrix[Double]
+  type DV = DenseVector[Double]
 
   case class Dataset(
                       filename: String,
@@ -29,7 +32,7 @@ object PlayerposOpt {
   }
 
   def hypothesisSin(x: DenseMatrix[Double], theta: DenseVector[Double]): DenseVector[Double] = {
-    require(theta.length == 4)
+    require(theta.length == 4, "length of theta must be 4")
     val a = theta(0)
     val b = theta(1)
     val c = theta(2)
@@ -38,8 +41,13 @@ object PlayerposOpt {
     sin(x * vd + c) * b + a
   }
 
-  def diffFunctionApprox(x: DenseMatrix[Double], y: DenseVector[Double]) = {
-    val fcost = PlayerposOpt.cost(x, y)(PlayerposOpt.hypothesisSin _)(_)
+  def minimizerLbfgs(maxIter: Int): Minimizer[DenseVector[Double], DiffFunction[DenseVector[Double]]] = {
+    new LBFGS[DenseVector[Double]](maxIter, 5)
+  }
+
+  def diffFunctionApprox(x: DenseMatrix[Double], y: DenseVector[Double]): DiffFunction[DenseVector[Double]] = {
+    val hypo = PlayerposOpt.hypothesisSin _
+    val fcost = PlayerposOpt.cost(x, y)(hypo)(_)
     new ApproximateGradientFunction[Int, DenseVector[Double]](fcost)
   }
 
@@ -52,11 +60,33 @@ object PlayerposOpt {
     (x1, y.toDenseVector)
   }
 
-  def readDataSetX = readDataSet(0)(_)
+  def readDataSetX: String => (DenseMatrix[Double], DenseVector[Double]) = readDataSet(0)(_)
 
-  def readDataSetY = readDataSet(1)(_)
+  def readDataSetY: String => (DenseMatrix[Double], DenseVector[Double]) = readDataSet(1)(_)
 
-  def readDataSetDir = readDataSet(2)(_)
+  def readDataSetDir: String => (DenseMatrix[Double], DenseVector[Double]) = readDataSet(2)(_)
+
+}
+
+object TryoutLbfgs extends App {
+
+  import PlayerposOpt._
+
+  val ds = datasets(0)
+
+  val (x, y) = readDataSetDir(ds.filename)
+  val df = diffFunctionApprox(x, y)
+
+  val thetaInitial = DenseVector.zeros[Double](4)
+
+  val iterations = List(1, 2, 3, 4, 5, 7, 10, 20, 100)
+
+  iterations.foreach { iter =>
+    val minimizer = minimizerLbfgs(iter)
+    val thetaOpt = minimizer.minimize(df, thetaInitial)
+    val thetaStr = thetaOpt.data.mkString(", ")
+    println(f"$iter%10d $thetaStr")
+  }
 
 }
 
@@ -74,7 +104,7 @@ object TryoutApproxGradTryout extends App {
     DenseVector(1.0, 1.0, math.Pi / 2.0, 2.0),
     DenseVector(1.0, 1.0, math.Pi, 2.0),
     DenseVector(1.0, 1.0, 0.0, 2.0),
-    DenseVector(1.0, 1.0, - math.Pi / 2.0, 2.0),
+    DenseVector(1.0, 1.0, -math.Pi / 2.0, 2.0),
     DenseVector(1.0, 1.0, math.Pi, 2.0)
   )
 
@@ -104,11 +134,11 @@ object TryoutHypothesisSin extends App {
     DenseVector(1.0, 1.0, math.Pi / 2.0, 2.0),
     DenseVector(1.0, 1.0, math.Pi, 2.0),
     DenseVector(1.0, 1.0, 0.0, 2.0),
-    DenseVector(1.0, 1.0, - math.Pi / 2.0, 2.0),
+    DenseVector(1.0, 1.0, -math.Pi / 2.0, 2.0),
     DenseVector(1.0, 1.0, math.Pi, 2.0)
   )
 
-  thetas.foreach{theta =>
+  thetas.foreach { theta =>
     val hyp = PlayerposOpt.hypothesisSin(x, theta)
     println("----- hyp -")
     println(hyp)
