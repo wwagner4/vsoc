@@ -38,25 +38,28 @@ object PlayerposOpt {
     val c = theta(2)
     val d = theta(3)
     val vd = DenseVector.fill(x.cols)(d)
-    val nonlin = sin(x * vd + c)
-    nonlin * b + a
+    sin(x * vd + c) * b + a
   }
 
-  def hypothesisPoli(x: DM, theta: DV): DV = {
-    require(theta.length == 4, "length of theta must be 4")
-    val a = theta(0)
-    val b = theta(1)
-    val c = theta(2)
-    val d = theta(3)
-    val vu = DenseVector.fill(x.rows)(1.0)
-
-    //val va = sum(a + (x * vu) ^:^ 0.0)
-    //val vb = sum((x * vu) ^:^ 1.0)
-    //val vc = sum((x * vu) ^:^ 2.0)
-    //val vd = sum((x * vu) ^:^ 3.0)
-
-    //DenseVector(va, vb, vc, vd)
+  def hypothesisSinExt(x: DM, theta: DV): DV = {
+    val thetaLen = 4 * x.cols
+    require(theta.length == thetaLen, s"length of theta must be $thetaLen")
+    
+    val thetas = theta.data.grouped(4).map { d => DenseVector(d) }
+    
+    // val vd = DenseVector.fill(x.cols)(d)
+    // sin(x * vd + c) * b + a
     ???
+  }
+
+  def hypothesisPoli(grade: Int)(x: DM, theta: DV): DV = {
+    val thetaLen = x.cols * grade
+    require(theta.length == thetaLen, s"length of theta must be $thetaLen")
+    
+    val x1 = for(i <- 0 until x.cols; j <- 0 until grade) yield {
+      x(::, i) ^:^ j.toDouble
+    }  
+    DenseMatrix(x1 : _*).t * theta
   }
 
   def hypothesisSin1(x: DM, theta: DV): DV = {
@@ -86,8 +89,8 @@ object PlayerposOpt {
     diffFunctionApprox(hyp)(x, y)
   }
 
-  def diffFunctionApproxPoli(x: DM, y: DV): DiffFunction[DV] = {
-    val hyp = hypothesisPoli _
+  def diffFunctionApproxPoli(grade: Int)(x: DM, y: DV): DiffFunction[DV] = {
+    val hyp = hypothesisPoli(grade) _
     diffFunctionApprox(hyp)(x, y)
   }
 
@@ -112,10 +115,11 @@ object TryoutLbfgs extends App {
 
   import PlayerposOpt._
 
-  val ds = datasets(3)
+  val ds = datasets(1)
 
   val (x, y) = readDataSetDir(ds.filename)
-  val df = diffFunctionApproxPoli(x, y)
+  val dfp = diffFunctionApproxPoli(4)(x, y)
+  val dfs = diffFunctionApproxSin(x, y)
 
   val thetaInitial = DenseVector.zeros[Double](4)
 
@@ -123,7 +127,7 @@ object TryoutLbfgs extends App {
 
   iterations.foreach { iter =>
     val minimizer = minimizerLbfgs(iter)
-    val thetaOpt = minimizer.minimize(df, thetaInitial)
+    val thetaOpt = minimizer.minimize(dfs, thetaInitial)
     val thetaStr = thetaOpt.data.mkString(", ")
     println(f"$iter%10d $thetaStr")
   }
@@ -199,3 +203,18 @@ object TryoutCostSin extends App {
   println(cost)
 
 }
+
+object TryoutHypothesisPoli extends App {
+  val x = DenseMatrix((1.0, 2.0), (4.0, 3.0))
+  val theta = DenseVector(1.0, 1.0, 0.0, 2.0, 1.0, 1.0, 0.0, 2.0)
+  
+  val fh = PlayerposOpt.hypothesisPoli(4) _
+  
+  val h = fh(x, theta)
+  require(h.length == x.rows)
+
+  println("----- h poli -")
+  println(h)
+
+}
+
