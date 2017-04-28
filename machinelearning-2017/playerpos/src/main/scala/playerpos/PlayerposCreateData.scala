@@ -24,7 +24,7 @@ object PlayerposCreateData {
   def createDataFiles(): Unit = {
     import common.Util._
 
-    val sizes = List(1000, 5000, 10000, 50000)
+    val sizes = List(5, 1000, 5000, 10000, 50000)
 
     sizes.foreach{size =>
       val filename = s"pos_$size.txt"

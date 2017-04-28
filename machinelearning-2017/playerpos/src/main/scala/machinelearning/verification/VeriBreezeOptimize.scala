@@ -2,7 +2,6 @@ package machinelearning.verification
 
 import breeze.linalg._
 import breeze.optimize._
-import common.Viz.{MultiDiagram, Style_POINTS}
 import common._
 import machinelearning.verification.VeriCreateData.DataSet
 
@@ -64,9 +63,9 @@ object VeriBreezeOptimize {
   }
 
 
-  def multiDiagram(pg: PlotGroup): MultiDiagram = {
+  def multiDiagram(pg: PlotGroup): Viz.MultiDiagram = {
     val cols = 4
-    MultiDiagram(
+    Viz.MultiDiagram(
       id = pg.id,
       columns = cols,
       imgWidth = cols * 700,
@@ -118,7 +117,7 @@ object VeriBreezeOptimize {
       }
       Viz.DataRow(
         name = "data",
-        style = Style_POINTS(0.5),
+        style = Viz.Style_POINTS(0.5),
         data = data
       )
     }

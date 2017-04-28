@@ -5,6 +5,7 @@ import breeze.linalg._
 import breeze.numerics._
 import breeze.optimize._
 import common.Util
+import playerpos.PlayerposOpt.DV
 
 object PlayerposOpt {
 
@@ -18,6 +19,7 @@ object PlayerposOpt {
                     )
 
   val datasets = List(
+    Dataset("pos_5.txt", 5),
     Dataset("pos_1000.txt", 1000),
     Dataset("pos_5000.txt", 5000),
     Dataset("pos_10000.txt", 10000),
@@ -45,7 +47,7 @@ object PlayerposOpt {
     val paramCnt = 4
     val thetaLen = paramCnt * x.cols
     require(theta.length == thetaLen, s"length of theta must be $thetaLen")
-    
+
     val thetas = theta.data.grouped(paramCnt).toSeq
 
     val vecs = for (i <- 0 until x.cols) yield {
@@ -57,18 +59,18 @@ object PlayerposOpt {
       val d = theta(3)
       sin(vx * d + c) * b + a
     }
-    val x1 = DenseMatrix(vecs:_*).t
+    val x1 = DenseMatrix(vecs: _*).t
     sum(x1(*, ::))
   }
 
   def hypothesisPoli(grade: Int)(x: DM, theta: DV): DV = {
     val thetaLen = x.cols * grade
     require(theta.length == thetaLen, s"length of theta must be $thetaLen")
-    
-    val x1 = for(i <- 0 until x.cols; j <- 0 until grade) yield {
+
+    val x1 = for (i <- 0 until x.cols; j <- 0 until grade) yield {
       x(::, i) ^:^ j.toDouble
-    }  
-    DenseMatrix(x1 : _*).t * theta
+    }
+    DenseMatrix(x1: _*).t * theta
   }
 
   def hypothesisSin1(x: DM, theta: DV): DV = {
@@ -190,7 +192,7 @@ object TryoutCostSin extends App {
   val x = DenseMatrix((0.0, 0.0, 0.0, 0.0, 0.0), (3.0, 3.0, 4.0, 5.0, 6.0))
   val y = DenseVector(1.0, 0.07)
 
-  val theta = DenseVector(1.0, 1.0, 0.0, 2.0)
+  val theta = DenseVector(0.1)
 
   val h = PlayerposOpt.hypothesisSin _
   val cost = PlayerposOpt.cost(x, y)(h)(theta)
@@ -200,17 +202,34 @@ object TryoutCostSin extends App {
 
 }
 
-object TryoutHypothesisPoli extends App {
-  val x = DenseMatrix((1.0, 2.0), (4.0, 3.0))
-  val theta = DenseVector(1.0, 1.0, 0.0, 2.0, 1.0, 1.0, 0.0, 2.0)
-  
-  val fh = PlayerposOpt.hypothesisPoli(4) _
-  
+object TryoutHypothesis extends App {
+
+  val ran = new scala.util.Random()
+
+  val x = DenseMatrix(
+    (1.0, 0.0),
+    (0.0, 2.0)
+  )
+  println("----- x -")
+  println(x)
+
+  val theta = ranVector(8, 0.0, 2.0)
+
+  val fh = PlayerposOpt.hypothesisSinExt _
+
   val h = fh(x, theta)
   require(h.length == x.rows)
 
-  println("----- h poli -")
+  println("----- theta -")
+  println(theta)
+  println("----- h -")
   println(h)
+
+  def ranVector(size: Int, from: Double, to: Double): DV = {
+    def ranVal = ran.nextDouble() * (to - from) + from
+    val a = (1 to size).map {_ => ranVal}.toArray
+    DenseVector(a)
+  }
 
 }
 
