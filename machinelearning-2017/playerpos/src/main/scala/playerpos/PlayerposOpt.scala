@@ -19,7 +19,7 @@ object PlayerposOpt {
                     )
 
   val datasets = List(
-    Dataset("pos_5.txt", 5),
+    Dataset("pos_20.txt", 20),
     Dataset("pos_1000.txt", 1000),
     Dataset("pos_5000.txt", 5000),
     Dataset("pos_10000.txt", 10000),
@@ -57,9 +57,13 @@ object PlayerposOpt {
       val b = theta(1)
       val c = theta(2)
       val d = theta(3)
-      sin(vx * d + c) * b + a
+      val v1 =  vx * d
+      //println(s"H v1:$v1")
+      val re = sin(v1 + c) * b + a
+      re
     }
     val x1 = DenseMatrix(vecs: _*).t
+    //println(s"H x1:\n$x1")
     sum(x1(*, ::))
   }
 
@@ -86,6 +90,13 @@ object PlayerposOpt {
     new LBFGS[DV](maxIter, 5)
   }
 
+  def minimizerLbfgsb(size: Int, min: Double = -100.0, max: Double = 100.0)(maxIter: Int): Minimizer[DV, DiffFunction[DV]] = {
+    new LBFGSB(
+      DenseVector.fill(size)(-10.0),
+      DenseVector.fill(size)(10.0),
+      maxIter)
+  }
+
   def diffFunctionApprox(hyp: HYP)(x: DM, y: DV): DiffFunction[DV] = {
     val fcost = PlayerposOpt.cost(x, y)(hyp)(_)
     new ApproximateGradientFunction[Int, DV](fcost)
@@ -108,26 +119,41 @@ object PlayerposOpt {
 
 }
 
-object TryoutLbfgs extends App {
+object TryoutMinimizer extends App {
 
   import PlayerposOpt._
 
-  val ds = datasets(2)
-
-  val (x, y) = readDataSetDir(ds.filename)
-  val hyp = PlayerposOpt.hypothesisSinExt _
-  val diff = diffFunctionApprox(hyp)(x, y)
-
-  val thetaInitial = DenseVector.zeros[Double](172)
-
-  val iterations = List(1, 2, 3)
-
+  val iterations = List(1, 2, 10, 100)
+  
   iterations.foreach { iter =>
-    val minimizer = minimizerLbfgs(iter)
+    val ds = datasets(1)
+    //val (yName, (x, y)) = ("X", readDataSetX(ds.filename))
+    //val (yName, (x, y)) = ("Y", readDataSetY(ds.filename))
+    val (yName, (x, y)) = ("dir", readDataSetDir(ds.filename))
+
+    val (hypName, hyp) = ("SinExt", PlayerposOpt.hypothesisSinExt _)
+    //val (hypName, hyp) = ("Sin", PlayerposOpt.hypothesisSin _)
+    //val (hypName, hyp) = ("Poli", PlayerposOpt.hypothesisPoli(3) _)
+    
+    val diff = diffFunctionApprox(hyp)(x, y)
+    val thetaInitial = DenseVector.zeros[Double](172)
+    
+    //val (minimizerName, minimizer = ("LBFGS", minimizerLbfgs(iter))
+    val (minimizerName, minimizer) = ("LBFGSB", minimizerLbfgsb(thetaInitial.length)(iter))
+
     val thetaOpt = minimizer.minimize(diff, thetaInitial)
-    val thetaStr = thetaOpt.data.mkString(", ")
-    println(f"$iter%10d $thetaStr")
+
+    println(f"iterations:$iter%d - datasize:${x.rows} - y(content):$yName - hypothesis:$hypName - minimizer:$minimizerName")
+    println
+    thetaOpt.data.grouped(16).foreach{grp =>
+      println("           " + grp.map(format).mkString(","))
+    }
+    println
+    println
+
   }
+  
+  def format(v: Double): String = f"$v%10.4f"
 
 }
 
@@ -208,12 +234,12 @@ object TryoutHypothesis extends App {
 
   val x = DenseMatrix(
     (1.0, 0.0),
-    (0.0, 2.0)
+    (0.0, 1.0)
   )
   println("----- x -")
   println(x)
 
-  val theta = ranVector(8, 0.0, 2.0)
+  val theta = DenseVector(0.0, 1.0, 0.0, math.Pi/2.0, 0.0, 0.0, 0.0, 0.0)
 
   val fh = PlayerposOpt.hypothesisSinExt _
 
