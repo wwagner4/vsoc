@@ -13,7 +13,7 @@ val breezeVersion = "0.13"
 
 lazy val root = (project in file("."))
   .settings(
-    name := "playerpos",
+    name := "playerpos-breeze",
     scalaVersion := "2.12.1",
     resolvers += "Local Maven Repository" at appProperties.value.getProperty("m2repo"),
     libraryDependencies += "net.entelijan" % "vsoc-core" % "0.0.1-SNAPSHOT",
