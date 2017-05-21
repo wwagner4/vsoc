@@ -11,7 +11,7 @@ class UtilFunSuite extends FunSuite {
       (2.0, 3.0, 4.0, 5.0),
       (3.0, 4.0, 5.0, 6.0)
     )
-    val row = Util.sliceRow(m, 1)
+    val row = BreezeUtil.sliceRow(m, 1)
 
     assert(row.cols === 4)
     assert(row.rows === 1)

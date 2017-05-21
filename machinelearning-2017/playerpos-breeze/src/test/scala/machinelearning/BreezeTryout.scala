@@ -1,7 +1,7 @@
 package machinelearning
 
 import breeze.linalg._
-import common.Util
+import common._
 
 object BreezeTryout extends App {
 
@@ -17,7 +17,7 @@ object BreezeTryout extends App {
     println(diff)
     println(meanDiff)
 
-    println("a:" + Util.meanDiff(m1, m2))
+    println("a:" + BreezeUtil.meanDiff(m1, m2))
   }
 
   def concatMatrix(): Unit = {

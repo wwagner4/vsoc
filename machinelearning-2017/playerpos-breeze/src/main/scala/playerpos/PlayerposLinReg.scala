@@ -2,7 +2,7 @@ package playerpos
 
 import breeze.linalg._
 import machinelearning.{HypothesisFunction, TrainingSet}
-import common.{Util, Viz, VizCreatorGnuplot}
+import common._
 import DenseMatrix._
 
 /**
@@ -39,7 +39,7 @@ object PlayerposLinReg {
       val drs = yValues map {
         case (yIndex, name) =>
           val xy = (0 until testSize) map { row =>
-            val xRow = Util.sliceRow(testX, row)
+            val xRow = BreezeUtil.sliceRow(testX, row)
             val yRow = testY(row, 0 until testY.cols)
             val yCalc = HypothesisFunction.linearFunc(theta)(xRow)
             val v1 = yRow(yIndex)
@@ -99,7 +99,7 @@ object PlayerposLinReg {
         .zipWithIndex
         .flatMap { case (hist, i) =>
           hist.previous.map { p =>
-            val meanDiff = Util.meanDiff(hist.actual, p) * 1e9
+            val meanDiff = BreezeUtil.meanDiff(hist.actual, p) * 1e9
             Viz.XY(i, meanDiff)
           }
         }
@@ -143,7 +143,7 @@ object PlayerposLinReg {
         .zipWithIndex
         .flatMap { case (hist, i) =>
           hist.previous.map { p =>
-            val meanDiff = Util.meanDiff(hist.actual, p) * 1e9
+            val meanDiff = BreezeUtil.meanDiff(hist.actual, p) * 1e9
             Viz.XY(i, meanDiff)
           }
         }
