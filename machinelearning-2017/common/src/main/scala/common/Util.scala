@@ -7,10 +7,14 @@ import java.io.{File, PrintWriter}
   */
 object Util {
 
+  val workDirName = "vsoc"
+
   def writeToFile(file: File, op: (PrintWriter) => Unit): Unit = {
     val pw = new PrintWriter(file)
     try {op(pw)} finally {pw.close()}
   }
+
+  def lines(f: File): Int = io.Source.fromFile(f).getLines.size
 
   def dir(path: String): File = {
     val home = new File(System.getProperty("user.home"))
@@ -19,19 +23,17 @@ object Util {
     dir
   }
   def dataDir: File = {
-    dir("prj/vsoc/data")
+    dir(s"$workDirName/data")
   }
 
   def scriptsDir: File = {
-    dir("prj/vsoc/scripts/img")
-    dir("prj/vsoc/scripts")
+    dir(s"$workDirName/scripts/img")
+    dir(s"$workDirName/scripts")
   }
 
   def dataFile(fileName: String): File ={
     new File(dataDir, fileName)
   }
-
-  def lines(f: File): Int = io.Source.fromFile(f).getLines.size
 
 
 

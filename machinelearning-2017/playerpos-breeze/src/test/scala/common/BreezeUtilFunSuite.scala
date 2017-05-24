@@ -1,9 +1,9 @@
 package common
 
-import breeze.linalg.DenseMatrix
 import org.scalatest.FunSuite
+import breeze.linalg._
 
-class UtilFunSuite extends FunSuite {
+class BreezeUtilFunSuite extends FunSuite {
 
   test("slice row") {
     val m = DenseMatrix(

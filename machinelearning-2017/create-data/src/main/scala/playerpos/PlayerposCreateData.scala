@@ -9,9 +9,9 @@ import vsoc.server.{ServerUtil, VsocPlayer}
 
 import scala.collection.JavaConverters._
 import scala.util.Random
-
 import common.Util._
 import common._
+import vsoc.util.Vec2D
 
 object PlayerposCreateData {
 
@@ -19,7 +19,7 @@ object PlayerposCreateData {
 
   def createDataFiles(): Unit = {
 
-    val sizes = List(20, 1000, 5000, 10000, 50000)
+    val sizes = List(1000, 5000, 10000, 50000)
 
     sizes.foreach{size =>
       val filename = s"pos_$size.txt"
@@ -61,9 +61,9 @@ object PlayerposCreateData {
 
         in.foreach { a =>
           val vp = player.asInstanceOf[VsocPlayer]
-          val pos = vp.getPosition
-          val dir = vp.getDirection
-          val line = Formatter.format(pos, dir, a)
+          val pos: Vec2D = vp.getPosition
+          val dir: Double = vp.getDirection
+          val line = CreateDataFormatter.format(pos, dir, a)
 
           if (printWriter.isDefined) printWriter.get.println(line)
           else println(line)
