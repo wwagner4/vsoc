@@ -1,24 +1,28 @@
 lazy val breezeVersion = "0.13"
 lazy val _scalaVersion = "2.11.11"
 
+lazy val commonSettings = Seq(
+  organization := "net.entelijan.vsoc",
+  scalaVersion := _scalaVersion,
+  version := "0.0.1-SNAPSHOT",
+  resolvers += "Local Maven Repository" at "file://" + sbt.Path.userHome.absolutePath + "/.m2/repository",
+  libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.2" % "test")
+
 lazy val root = (project in file("."))
   .settings(
+    commonSettings,
     name := "root")
   .aggregate(common, create_data, playerpos_breeze)
 
 lazy val common = (project in file("common"))
   .settings(
-    name := "common",
-    organization := "net.entelijan.vsoc",
-    scalaVersion := _scalaVersion,
-    libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.1" % "test")
+    commonSettings,
+    name := "common")
 
 lazy val create_data = (project in file("create-data"))
   .settings(
+    commonSettings,
     name := "create-data",
-    organization := "net.entelijan.vsoc",
-    scalaVersion := _scalaVersion,
-    resolvers += "Local Maven Repository" at "file://" + sbt.Path.userHome.absolutePath + "/.m2/repository",
     libraryDependencies += "net.entelijan" % "vsoc-core" % "0.0.1-SNAPSHOT",
     libraryDependencies += "org.slf4j" % "slf4j-simple" % "1.7.24")
   .dependsOn(common)
@@ -26,15 +30,12 @@ lazy val create_data = (project in file("create-data"))
 
 lazy val playerpos_breeze = (project in file("playerpos-breeze"))
   .settings(
+    commonSettings,
     name := "playerpos-breeze",
-    organization := "net.entelijan.vsoc",
-    scalaVersion := _scalaVersion,
-    resolvers += "Local Maven Repository" at "file://" + sbt.Path.userHome.absolutePath + "/.m2/repository",
     libraryDependencies += "net.entelijan" % "vsoc-core" % "0.0.1-SNAPSHOT",
   	libraryDependencies += "org.scalanlp" %% "breeze" % breezeVersion,
   	libraryDependencies += "org.scalanlp" %% "breeze-natives" % breezeVersion,
-    libraryDependencies += "org.slf4j" % "slf4j-simple" % "1.7.24",
-    libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.1" % "test")
+    libraryDependencies += "org.slf4j" % "slf4j-simple" % "1.7.24")
   .dependsOn(common)
   
 // scalacOptions += "-deprecation",
