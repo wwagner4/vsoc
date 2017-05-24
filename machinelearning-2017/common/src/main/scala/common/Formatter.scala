@@ -5,10 +5,6 @@ package common
   */
 object Formatter {
 
-  def format(a: Array[Double])(implicit sepaStr: String): String = {
-    a.map { d => f"$d%10.2f" }.mkString(sepaStr)
-  }
-
   def formatLimitated(a: Array[Double])(implicit sepaStr: String): String = {
     a.map {
       formatLimitated

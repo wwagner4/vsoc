@@ -1,15 +1,15 @@
 package common
 
-import vsoc.util.Vec2D
+import vsoc.util._
 
 object CreateDataFormatter {
 
-  implicit val sepAStr = ","
+  implicit val sepaStr = ","
 
   import Formatter._
 
   def format(pos: Vec2D, dir: Double, features: Array[Double]): String = {
-    s"${formatDense(pos.getX)}$sepAStr${formatDense(pos.getY)}$sepAStr${formatDense(dir)}$sepAStr${formatDense(features)}"
+    s"${formatDense(pos.getX)}$sepaStr${formatDense(pos.getY)}$sepaStr${formatDense(dir)}$sepaStr${formatLimitatedDense(features)}"
   }
 
 }

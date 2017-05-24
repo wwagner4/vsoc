@@ -13,7 +13,9 @@ import machinelearning.verification.VeriGradientDescentPolinomial.Params
   * Purpose: Test of learning algorithms
   */
 object VeriGradientDescentPolinomial {
-  
+
+  implicit val sepa = ","
+
   import VeriCreateData._
   
   implicit val creator = VizCreatorGnuplot(Util.scriptsDir)
@@ -31,6 +33,7 @@ object VeriGradientDescentPolinomial {
   def steps(x: DenseMatrix[Double], y: Matrix[Double], alpha: Double): Stream[DenseMatrix[Double]] = {
     import machinelearning.GradientDescent._
     import machinelearning.HypothesisFunction._
+
 
     val ts = TrainingSet(x, y.toDenseMatrix)
     val thetIni = initialTheta(ts)

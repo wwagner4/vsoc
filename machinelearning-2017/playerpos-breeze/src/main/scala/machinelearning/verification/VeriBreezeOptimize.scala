@@ -137,6 +137,8 @@ object VeriBreezeOptimizeStdoutMain extends App {
 
   import VeriBreezeOptimize._
 
+  implicit val sepaStr = ","
+
   val grades = List(1, 2, 3, 4, 5)
   val datasets = VeriCreateData.datasets
   val maxIters = List(5, 100, 1000)
@@ -157,8 +159,8 @@ object VeriBreezeOptimizeStdoutMain extends App {
   }
 
   results.zipWithIndex.foreach { case ((grade, size, mi, t, ta), id) =>
-    val tStr = common.Formatter.format(t.toArray)
-    val taStr = common.Formatter.format(ta.toArray)
+    val tStr = common.Formatter.formatLimitatedDense(t.toArray)
+    val taStr = common.Formatter.formatLimitatedDense(ta.toArray)
     println(f"$id%10d $grade%10d $size%10d $mi%10d | $tStr | $taStr")
   }
 }
