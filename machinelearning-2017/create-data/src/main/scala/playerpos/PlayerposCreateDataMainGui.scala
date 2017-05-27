@@ -19,12 +19,15 @@ object PlayerposCreateDataMainGui extends App {
 
 class FieldFrame extends JFrame with WindowListener {
 
+  import PlayerposCreateData._
+  import Placement._
+
   def createServer: Server = {
-    val s = ServerUtil.current().createServer(1, 0)
-    for (p <- s.getPlayers.asScala) {
-      p.setController(PlayerposCreateData.createController(None, Placement.placeControllerRandomWalkFromCenter))
+    val server = ServerUtil.current().createServer(1, 0)
+    for (p <- server.getPlayers.asScala) {
+      p.setController(createController(None, placeControllerRandomPos))
     }
-    s
+    server
   }
 
   getContentPane.add(new FieldContentPanel(createServer))
