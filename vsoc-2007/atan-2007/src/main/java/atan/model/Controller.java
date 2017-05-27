@@ -7,60 +7,61 @@ package atan.model;
  * kind of objects are currently seen or what other commands where received from
  * the server. At last postInfo() is called. All objects are relative to the
  * current side of the controller.
+ *
  */
 
 public interface Controller {
 
-	public void preInfo();
+	void preInfo();
 
-	public void postInfo();
+	void postInfo();
 
-	public Player getPlayer();
+	Player getPlayer();
 
-	public void setPlayer(Player c);
+	void setPlayer(Player c);
 
-	public void infoSeeFlagRight(Flag flag, double distance, double direction);
+	void infoSeeFlagRight(Flag flag, double distance, double direction);
 
-	public void infoSeeFlagLeft(Flag flag, double distance, double direction);
+	void infoSeeFlagLeft(Flag flag, double distance, double direction);
 
-	public void infoSeeFlagOwn(Flag flag, double distance, double direction);
+	void infoSeeFlagOwn(Flag flag, double distance, double direction);
 
-	public void infoSeeFlagOther(Flag flag, double distance, double direction);
+	void infoSeeFlagOther(Flag flag, double distance, double direction);
 
-	public void infoSeeFlagCenter(Flag flag, double distance, double direction);
+	void infoSeeFlagCenter(Flag flag, double distance, double direction);
 
-	public void infoSeeFlagCornerOwn(Flag flag, double distance,
+	void infoSeeFlagCornerOwn(Flag flag, double distance,
 			double direction);
 
-	public void infoSeeFlagCornerOther(Flag flag, double distance,
+	void infoSeeFlagCornerOther(Flag flag, double distance,
 			double direction);
 
-	public void infoSeeFlagPenaltyOwn(Flag flag, double distance,
+	void infoSeeFlagPenaltyOwn(Flag flag, double distance,
 			double direction);
 
-	public void infoSeeFlagPenaltyOther(Flag flag, double distance,
+	void infoSeeFlagPenaltyOther(Flag flag, double distance,
 			double direction);
 
-	public void infoSeeFlagGoalOwn(Flag flag, double distance, double direction);
+	void infoSeeFlagGoalOwn(Flag flag, double distance, double direction);
 
-	public void infoSeeFlagGoalOther(Flag flag, double distance,
+	void infoSeeFlagGoalOther(Flag flag, double distance,
 			double direction);
 
-	public void infoSeeLine(Line line, double distance, double direction);
+	void infoSeeLine(Line line, double distance, double direction);
 
-	public void infoSeePlayerOther(int number, double distance, double direction);
+	void infoSeePlayerOther(int number, double distance, double direction);
 
-	public void infoSeePlayerOwn(int number, double distance, double direction);
+	void infoSeePlayerOwn(int number, double distance, double direction);
 
-	public void infoSeeBall(double distance, double direction);
+	void infoSeeBall(double distance, double direction);
 
-	public void infoHearReferee(RefereeMessage refereeMessage);
+	void infoHearReferee(RefereeMessage refereeMessage);
 
-	public void infoHearPlayMode(PlayMode playMode);
+	void infoHearPlayMode(PlayMode playMode);
 
-	public void infoHear(double direction, String message);
+	void infoHear(double direction, String message);
 
-	public void infoSenseBody(ViewQuality viewQuality, ViewAngle viewAngle, double stamina,
+	void infoSenseBody(ViewQuality viewQuality, ViewAngle viewAngle, double stamina,
 			double speed, double headAngle, int kickCount, int dashCount,
 			int turnCount, int sayCount, int turnNeckCount);
 }
