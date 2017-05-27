@@ -15,19 +15,15 @@ import vsoc.util.Vec2D
 
 object PlayerposCreateData {
 
-  val rand = new Random
+  def createDataFiles(name: String, sizes: Seq[Int], fPlacement: (Player, Int) => Unit): Unit = {
 
-  def createDataFiles(): Unit = {
-
-    val sizes = List(1000, 5000, 10000, 50000)
-
-    sizes.foreach{size =>
-      val filename = s"pos_$size.txt"
+    sizes.foreach { size =>
+      val filename = s"${name}_$size.txt"
       val file = dataFile(filename)
       writeToFile(file, pw => {
         val srv = ServerUtil.current().createServer(10, 10)
         srv.getPlayers.asScala.foreach { p =>
-          val ctrl = PlayerposCreateData.createController(Some(pw))
+          val ctrl = PlayerposCreateData.createController(Some(pw), fPlacement)
           p.setController(ctrl)
         }
         val to = size / 20
@@ -41,8 +37,7 @@ object PlayerposCreateData {
     }
   }
 
-
-  def createController(printWriter: Option[PrintWriter]): Controller = {
+  def createController(printWriter: Option[PrintWriter], fPlacePlayer: (Player, Int) => Unit): Controller = {
     val behav = new Behaviour() {
 
       val stv: SensToVec = new FlagDirectionSensToVector()
@@ -51,12 +46,8 @@ object PlayerposCreateData {
 
       def apply(sens: Sensors, player: Player): Unit = {
 
-        val in = stv.apply(sens)
-
-        if (cnt % 30 == 0) {
-          player.move(ran(-20, 20), ran(-20, 20))
-          player.turn(ran(0, 6))
-        }
+        val in = stv(sens)
+        fPlacePlayer(player, cnt)
         cnt += 1
 
         in.foreach { a =>
@@ -69,13 +60,29 @@ object PlayerposCreateData {
           else println(line)
         }
 
-        player.dash(ran(50, 300))
-        player.turn(ran(-30, 30))
       }
+
       def getChild: Optional[Behaviour] = Optional.empty()
+
       def shouldBeApplied(sens: Sensors): Boolean = true
     }
     new BehaviourController(behav)
+  }
+
+}
+
+object Placement {
+
+  val rand = new Random
+
+  def placeControllerRandomWalkFromCenter: (Player, Int) => Unit = {
+    case (player, cnt) =>
+      if (cnt % 30 == 0) {
+        player.move(ran(-20, 20), ran(-20, 20))
+        player.turn(ran(0, 6))
+      }
+      player.dash(ran(50, 300))
+      player.turn(ran(-30, 30))
   }
 
   def ran(from: Int, to: Int): Int = {
@@ -83,5 +90,6 @@ object PlayerposCreateData {
     val w = to - from
     from + rand.nextInt(w)
   }
+
 
 }
