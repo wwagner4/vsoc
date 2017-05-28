@@ -81,8 +81,8 @@ object VeriCreateData {
       Util.writeToFile(file, { pw =>
         ys.foreach {
           case (x, y) =>
-            val xStr = Formatter.format(x)
-            val yStr = Formatter.format(y)
+            val xStr = Formatter.formatWide(x)
+            val yStr = Formatter.formatWide(y)
             pw.println(s"$xStr $yStr")
         }
         println(s"created data and wrote it to $file")

@@ -1,10 +1,8 @@
 package machinelearning.verification
 
-import breeze.linalg.DenseMatrix.fill
-import breeze.linalg.{DenseMatrix, DenseVector, Matrix, csvread}
+import breeze.linalg._
 import common._
 import machinelearning.TrainingSet
-import machinelearning.verification.VeriGradientDescentPolinomial.Params
 
 
 /**
@@ -62,9 +60,9 @@ object VeriGradientDescentPolinomial {
 
   def createOriginalDataRow(params: Params): Viz.DataRow = {
     val ds = datasets(params.datasetIndex)
-    val (x, y) = VeriUtil.readDataSet(ds.filename)
-    val data = x.toArray
-      .zip(y.toArray)
+    val (mx, my) = VeriUtil.readDataSet(ds.filename)
+    val data = mx.toArray
+      .zip(my.toArray)
       .map { case (x, y) => Viz.XY(x, y) }
     val paramStr = common.Formatter.formatLimitatedDense(thetaOrig.toArray)
     Viz.DataRow(

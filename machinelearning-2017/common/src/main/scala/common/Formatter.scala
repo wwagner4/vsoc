@@ -5,24 +5,36 @@ package common
   */
 object Formatter {
 
-  def formatLimitated(a: Array[Double])(implicit sepaStr: String): String = {
+  def formatWide(a: Array[Double])(implicit sepaStr: String): String = {
     a.map {
-      formatLimitated
+      formatWide
+    }.mkString(sepaStr)
+  }
+
+  def formatDense(a: Array[Double])(implicit sepaStr: String): String = {
+    a.map {
+      formatDense
     }.mkString(sepaStr)
 
+  }
+
+  def formatLimitatedWide(a: Array[Double])(implicit sepaStr: String): String = {
+    a.map {
+      formatLimitatedWide
+    }.mkString(sepaStr)
   }
 
   def formatLimitatedDense(a: Array[Double])(implicit sepaStr: String): String = {
     a.map {
-      formatLimitated
+      formatLimitatedDense
     }.mkString(sepaStr)
   }
 
-  def formatLimitated(d: Double): String = {
+  def formatLimitatedWide(d: Double): String = {
     if (d < 1.0E-7 && d > -1.0E-7) "         0"
     else if (d > 1.0e7) "        E7"
     else if (d < -1.0e7) "       -E7"
-    else format(d)
+    else formatWide(d)
   }
 
   def formatLimitatedDense(d: Double): String = {
@@ -36,8 +48,16 @@ object Formatter {
     f"$d%5.2f"
   }
 
-  def format(d: Double): String = {
+  def formatWide(d: Double): String = {
     f"$d%10.2f"
+  }
+
+  def formatDense(l: Long): String = {
+    f"$l%5d"
+  }
+
+  def formatWide(l: Long): String = {
+    f"$l%10d"
   }
 
 

@@ -8,12 +8,12 @@ object ForTryoutMain extends App {
       r
     }
     println(r)
-	}
+  }
   {
     val r = for (
-      i <- 1 to 7 if (i % 3 == 0); 
-      j <- 1 to 4 if (j % 2 == 0)
-      ) yield (i, j) 
+      i <- 1 to 7 if i % 3 == 0;
+      j <- 1 to 4 if j % 2 == 0
+    ) yield (i, j)
     println(r)
-	}
+  }
 }

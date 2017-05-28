@@ -23,9 +23,9 @@ class FieldFrame extends JFrame with WindowListener {
   import Placement._
 
   def createServer: Server = {
-    val server = ServerUtil.current().createServer(1, 0)
+    val server = ServerUtil.current().createServer(0, 1)
     for (p <- server.getPlayers.asScala) {
-      p.setController(createController(None, placeControllerRandomPos))
+      p.setController(createController(None, placeControllerStraightFromCenter(30, 100)))
     }
     server
   }
