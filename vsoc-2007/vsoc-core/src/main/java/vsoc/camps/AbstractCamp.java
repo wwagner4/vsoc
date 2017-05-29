@@ -8,6 +8,7 @@ import java.util.*;
 import atan.model.*;
 import vsoc.behaviour.VectorFunction;
 import vsoc.server.*;
+import vsoc.server.initial.InitialPlacementLineup;
 import vsoc.util.*;
 
 public abstract class AbstractCamp<M extends Member<?>, N extends VectorFunction> implements Camp<M> {
@@ -76,7 +77,9 @@ public abstract class AbstractCamp<M extends Member<?>, N extends VectorFunction
 	}
 
 	private CtrlServer createServer() {
-		return ServerUtil.current().createServer(eastPlayerCount(), westPlayerCount());
+		InitialPlacementLineup east = new InitialPlacementLineup(eastPlayerCount());
+		InitialPlacementLineup west = new InitialPlacementLineup(westPlayerCount());
+		return ServerUtil.current().createServer(east, west);
 	}
 
 	public int getStepsPerMatch() {

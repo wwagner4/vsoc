@@ -17,16 +17,18 @@ public class ServerUtil {
 		return current;
 	}
 
-	public CtrlServer createServer(int eastPlayerCount, int westPlayerCount) {
+	public CtrlServer createServer(InitialPlacement placementEast, InitialPlacement placementWest) {
 		CtrlServer srv = new CtrlServer();
 		addGoalWest(srv, -Server.WIDTH / 2, 0);
 		addGoalEast(srv, Server.WIDTH / 2, 0);
 		addFlags(srv);
 		srv.addSimObject(new Ball(0, 0));
-		for (int i = 0; i < eastPlayerCount; i++) {
+		for (int i = 0; i < placementEast.numberOfPlayers(); i++) {
+			InitialPlacement.Values values = placementEast.placementValues(i, true);
 			addPlayerEast(srv, new VsocPlayerEast(20, i * 10 - 10, 180));
 		}
-		for (int i = 0; i < westPlayerCount; i++) {
+		for (int i = 0; i < placementWest.numberOfPlayers(); i++) {
+			InitialPlacement.Values values = placementWest.placementValues(i, false);
 			addPlayerWest(srv, new VsocPlayerWest(-20, i * 10 - 10, 0));
 		}
 		return srv;

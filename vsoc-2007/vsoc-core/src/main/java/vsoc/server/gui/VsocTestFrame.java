@@ -6,6 +6,8 @@ import java.util.concurrent.ExecutorService;
 import atan.model.*;
 import vsoc.behaviour.*;
 import vsoc.server.*;
+import vsoc.server.initial.InitialPlacementLineup;
+import vsoc.server.initial.InitialPlacementNone;
 
 public class VsocTestFrame extends javax.swing.JFrame {
 
@@ -22,7 +24,9 @@ public class VsocTestFrame extends javax.swing.JFrame {
 	 */
 	public VsocTestFrame() {
 		initComponents();
-		srv = Optional.of(ServerUtil.current().createServer(1, 0));
+		InitialPlacementLineup east = new InitialPlacementLineup(1);
+		InitialPlacementNone west = new InitialPlacementNone();
+		srv = Optional.of(ServerUtil.current().createServer(east, west));
 		srv.ifPresent(s -> {
 			s.getPlayers().stream().forEach((p) -> {
 			  p.setController(createController());

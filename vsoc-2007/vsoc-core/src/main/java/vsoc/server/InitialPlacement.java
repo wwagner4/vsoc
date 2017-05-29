@@ -1,4 +1,4 @@
-package vsoc.server.initial;
+package vsoc.server;
 
 /**
  * Defines how many players are placed for a team,
