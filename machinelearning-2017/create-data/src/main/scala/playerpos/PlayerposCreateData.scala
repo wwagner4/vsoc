@@ -11,6 +11,7 @@ import scala.collection.JavaConverters._
 import scala.util.Random
 import common.Util._
 import common._
+import vsoc.server.initial._
 import vsoc.util.Vec2D
 
 object PlayerposCreateData {
@@ -21,7 +22,9 @@ object PlayerposCreateData {
       val filename = s"${name}_$size.csv"
       val file = dataFile(filename)
       writeToFile(file, pw => {
-        val srv = ServerUtil.current().createServer(0, 1)
+        val east = new InitialPlacementNone
+        val west = new InitialPlacementAllInCenter(1)
+        val srv = ServerUtil.current().createServer(east, west)
         srv.getPlayers.asScala.foreach { p =>
           val ctrl = PlayerposCreateData.createController(Some(pw), fPlacement)
           p.setController(ctrl)

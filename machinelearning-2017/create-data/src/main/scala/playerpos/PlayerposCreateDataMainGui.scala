@@ -6,6 +6,7 @@ import javax.swing._
 
 import vsoc.server.{Server, ServerUtil}
 import vsoc.server.gui.FieldPanel
+import vsoc.server.initial.{InitialPlacementAllInCenter, InitialPlacementNone}
 
 import scala.collection.JavaConverters._
 
@@ -23,10 +24,12 @@ class FieldFrame extends JFrame with WindowListener {
   import Placement._
 
   def createServer: Server = {
-    val server = ServerUtil.current().createServer(0, 1)
+    val east = new InitialPlacementNone
+    val west = new InitialPlacementAllInCenter(1)
+    val server = ServerUtil.current().createServer(east, west)
     for (p <- server.getPlayers.asScala) {
-      p.setController(createController(None, placeControllerStraightFromCenter(30, 100)))
-//      p.setController(createController(None, placeControllerRandomPos))
+//      p.setController(createController(None, placeControllerStraightFromCenter(30, 100)))
+      p.setController(createController(None, placeControllerRandomPos))
     }
     server
   }

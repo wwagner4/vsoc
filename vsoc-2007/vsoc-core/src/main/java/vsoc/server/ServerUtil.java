@@ -25,11 +25,11 @@ public class ServerUtil {
 		srv.addSimObject(new Ball(0, 0));
 		for (int i = 0; i < placementEast.numberOfPlayers(); i++) {
 			InitialPlacement.Values values = placementEast.placementValues(i, true);
-			addPlayerEast(srv, new VsocPlayerEast(20, i * 10 - 10, 180));
+			addPlayerEast(srv, new VsocPlayerEast(values.getPosx(), values.getPosy(), values.getDirection()));
 		}
 		for (int i = 0; i < placementWest.numberOfPlayers(); i++) {
 			InitialPlacement.Values values = placementWest.placementValues(i, false);
-			addPlayerWest(srv, new VsocPlayerWest(-20, i * 10 - 10, 0));
+			addPlayerWest(srv, new VsocPlayerWest(values.getPosx(), values.getPosy(), values.getDirection()));
 		}
 		return srv;
 	}

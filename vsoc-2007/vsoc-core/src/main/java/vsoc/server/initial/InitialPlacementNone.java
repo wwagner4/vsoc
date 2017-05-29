@@ -12,7 +12,7 @@ public class InitialPlacementNone implements InitialPlacement {
     }
 
     @Override
-    public Values placementValues(int number, boolean east) {
+    public Values placementValuesWest(int number) {
         throw new IllegalStateException("Sould never be called");
     }
 }

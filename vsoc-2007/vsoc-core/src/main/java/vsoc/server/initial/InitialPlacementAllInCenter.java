@@ -19,7 +19,8 @@ public class InitialPlacementAllInCenter implements InitialPlacement {
     }
 
     @Override
-    public Values placementValues(int number, boolean east) {
-        return new Values(0.0, 0.0, 0.0);
+    public Values placementValuesWest(int number) {
+        Values values = new Values(0.0, 0.0, 0.0);
+        return values;
     }
 }

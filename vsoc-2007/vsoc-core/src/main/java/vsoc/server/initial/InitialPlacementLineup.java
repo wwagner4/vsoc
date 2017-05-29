@@ -28,7 +28,7 @@ public class InitialPlacementLineup implements InitialPlacement {
     }
 
     @Override
-    public Values placementValues(int number, boolean east) {
+    public Values placementValuesWest(int number) {
         if (number < 0) {
             throw new IllegalArgumentException(String.format("Number must be positive. %d", number));
         }
