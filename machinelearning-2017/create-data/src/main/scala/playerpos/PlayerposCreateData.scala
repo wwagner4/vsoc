@@ -21,12 +21,12 @@ object PlayerposCreateData {
       val filename = s"${name}_$size.csv"
       val file = dataFile(filename)
       writeToFile(file, pw => {
-        val srv = ServerUtil.current().createServer(10, 10)
+        val srv = ServerUtil.current().createServer(0, 1)
         srv.getPlayers.asScala.foreach { p =>
           val ctrl = PlayerposCreateData.createController(Some(pw), fPlacement)
           p.setController(ctrl)
         }
-        val to = size / 20
+        val to = size
         for (_ <- 1 to to) {
           srv.takeStep()
         }
@@ -55,10 +55,10 @@ object PlayerposCreateData {
           throw new IllegalArgumentException("Test data can only be created with 'west' players")
         }
 
-        fPlacePlayer(player, cnt)
-
         val pos: Vec2D = vp.getPosition
         val dir: Double = radToDeg(vp.getDirection)
+
+        fPlacePlayer(player, cnt)
 
         val in: Option[Array[Double]] = stv(sens)
         in.foreach { a =>
@@ -114,7 +114,7 @@ object Placement {
 
   def placeControllerRandomPos: (Player, Int) => Unit = {
     case (player, _) =>
-      player.move(ran(-60, 60), ran(-30, 30))
+      player.move(ran(-55, 55), ran(-35, 35))
       player.turn(ran(0, 360))
   }
 
