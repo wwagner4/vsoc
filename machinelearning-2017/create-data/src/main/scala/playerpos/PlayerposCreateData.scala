@@ -16,14 +16,14 @@ import vsoc.util.Vec2D
 
 object PlayerposCreateData {
 
-  def createDataFiles(name: String, sizes: Seq[Int], fPlacement: (Player, Int) => Unit): Unit = {
+  def createDataFiles(name: String, sizes: Seq[Int], fPlacement: (Player, Int) => Unit, initialPlacement: vsoc.server.InitialPlacement): Unit = {
 
     sizes.foreach { size =>
       val filename = s"${name}_$size.csv"
       val file = dataFile(filename)
       writeToFile(file, pw => {
         val east = new InitialPlacementNone
-        val west = new InitialPlacementAllInCenter(1)
+        val west = initialPlacement
         val srv = ServerUtil.current().createServer(east, west)
         srv.getPlayers.asScala.foreach { p =>
           val ctrl = PlayerposCreateData.createController(Some(pw), fPlacement)
@@ -103,7 +103,7 @@ object PlayerposCreateData {
 
 object Placement {
 
-  private val rand = new Random
+  import PlacementUtil._
 
   def placeControllerRandomWalkFromCenter: (Player, Int) => Unit = {
     case (player, cnt) =>
@@ -131,10 +131,33 @@ object Placement {
       }
   }
 
-  private def ran(from: Int, to: Int): Int = {
+}
+
+import vsoc.server.InitialPlacement
+import vsoc.server.InitialPlacement._
+
+class InitialPlacementRandomPos(val numberOfPlayers: Int) extends InitialPlacement {
+
+  import PlacementUtil._
+
+  def placementValuesWest(num: Int): Values = {
+    val x = ran(-55, 55)
+    val y = ran(-35, 35)
+    val dir = ran(0, 360)
+    new Values(x, y, dir)
+  }
+
+}
+
+object PlacementUtil {
+
+  private val rand = new Random
+
+  def ran(from: Int, to: Int): Int = {
     require(from < to)
     val w = to - from
     from + rand.nextInt(w)
   }
+
 
 }
