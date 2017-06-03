@@ -40,7 +40,7 @@ public interface InitialPlacement {
 
         private final double posx;
         private final double posy;
-        private final double direction;
+        private final double direction; // Must be in rad
 
 
         public Values(double posx, double posy, double direction) {
