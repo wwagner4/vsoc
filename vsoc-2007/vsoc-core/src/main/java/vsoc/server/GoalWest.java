@@ -47,9 +47,9 @@ public class GoalWest extends SimObject {
         double w = 2;
         double h = getGoalWidth();
         Shape rect = new Rectangle2D.Double(x, y, w, h);
-        g.setColor(Color.red);
+        g.setColor(Color.YELLOW);
         g.fill(rect);
-        g.setColor(Color.black);
+        g.setColor(Color.BLACK);
         g.draw(rect);
     }
 }

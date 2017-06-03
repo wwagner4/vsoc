@@ -17,7 +17,7 @@ public class ServerUtil {
 		return current;
 	}
 
-	public CtrlServer createServer(InitialPlacement placementEast, InitialPlacement placementWest) {
+	public CtrlServer createServer(InitialPlacement placementWest, InitialPlacement placementEast) {
 		CtrlServer srv = new CtrlServer();
 		addGoalWest(srv, -Server.WIDTH / 2, 0);
 		addGoalEast(srv, Server.WIDTH / 2, 0);

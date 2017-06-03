@@ -40,7 +40,7 @@ public class VsocPlayerWest extends VsocPlayer {
 	}
 
 	protected Color color() {
-		return Color.RED;
+		return Color.YELLOW;
 	}
 
 

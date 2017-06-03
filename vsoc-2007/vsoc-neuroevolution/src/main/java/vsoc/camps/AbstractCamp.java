@@ -1,7 +1,7 @@
 package vsoc.camps;
 
 /**
- * Runns a Camp in a seperate Thread
+ * Runs a Camp in a separate Thread
  */
 import java.util.*;
 
@@ -79,7 +79,7 @@ public abstract class AbstractCamp<M extends Member<?>, N extends VectorFunction
 	private CtrlServer createServer() {
 		InitialPlacementLineup east = new InitialPlacementLineup(eastPlayerCount());
 		InitialPlacementLineup west = new InitialPlacementLineup(westPlayerCount());
-		return ServerUtil.current().createServer(east, west);
+		return ServerUtil.current().createServer(west, east);
 	}
 
 	public int getStepsPerMatch() {

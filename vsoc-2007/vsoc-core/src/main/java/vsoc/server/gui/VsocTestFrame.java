@@ -17,7 +17,7 @@ public class VsocTestFrame extends javax.swing.JFrame {
 
 	private Random ran = new Random();
 
-	Optional<Server> srv = Optional.empty();
+	private Optional<Server> srv = Optional.empty();
 
 	/**
 	 * Creates new form VsocTestFrame
@@ -26,9 +26,9 @@ public class VsocTestFrame extends javax.swing.JFrame {
 		initComponents();
 		InitialPlacementLineup east = new InitialPlacementLineup(1);
 		InitialPlacementNone west = new InitialPlacementNone();
-		srv = Optional.of(ServerUtil.current().createServer(east, west));
+		srv = Optional.of(ServerUtil.current().createServer(west, east));
 		srv.ifPresent(s -> {
-			s.getPlayers().stream().forEach((p) -> {
+			s.getPlayers().forEach((p) -> {
 			  p.setController(createController());
 		  });
 			this.fieldPanel.setSim(s);

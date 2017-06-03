@@ -41,7 +41,7 @@ public class VsocPlayerEast extends VsocPlayer {
 	}
 
 	protected Color color() {
-		return Color.ORANGE;
+		return Color.RED;
 	}
 
 	public String getTeamName() {
