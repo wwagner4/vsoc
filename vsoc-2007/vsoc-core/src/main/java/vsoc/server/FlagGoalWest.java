@@ -11,6 +11,7 @@ class FlagGoalWest extends SimObject {
 
     FlagGoalWest(ServerFlag type, double x, double y) {
         super(x, y);
+        this.type = type;
     }
 
     Vision createVisionForWestPlayer() {

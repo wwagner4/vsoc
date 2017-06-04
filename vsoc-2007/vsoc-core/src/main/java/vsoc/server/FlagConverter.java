@@ -19,9 +19,11 @@ public class FlagConverter {
     
     private Map<ServerFlag, Flag> initForWestMap() {
         Map<ServerFlag, Flag> map = new HashMap<>();
+
         map.put(ServerFlag.CENTER, Flag.FLAG_CENTER);
         map.put(ServerFlag.NORTH, Flag.FLAG_LEFT);
         map.put(ServerFlag.SOUTH, Flag.FLAG_RIGHT);
+
         map.put(ServerFlag.NORTH_10, Flag.FLAG_LEFT_10);
         map.put(ServerFlag.NORTH_20, Flag.FLAG_LEFT_20);
         map.put(ServerFlag.NORTH_30, Flag.FLAG_LEFT_30);
