@@ -1,7 +1,6 @@
 package vsoc.server;
 
 import atan.model.*;
-import org.junit.Assert;
 import org.junit.Test;
 import vsoc.server.initial.InitialPlacementNone;
 
@@ -83,8 +82,7 @@ public class TestPlaceLookSee {
         int eastCnt = eastFlags.size();
         assertEquals(String.format("Number of flags seen by the east player are not equal to the number of flags seen by the west player. west %d. east %d",
                 westCnt, eastCnt), westCnt, eastCnt);
-        for (int i = 0; i < westCnt; i++) {
-            FlagDesc wDesc = westFlags.get(i);
+        for (FlagDesc wDesc : westFlags) {
             FlagDesc eDesc = find(eastFlags, wDesc.getName());
             assertFlagDescsEqual(wDesc, eDesc);
         }
@@ -108,16 +106,6 @@ public class TestPlaceLookSee {
 
     private void assertContains(List<FlagDesc> flags, String name) {
         assertTrue("Found no flag named " + name, flags.stream().map(d -> d.getName()).anyMatch(n -> n.endsWith(name)));
-    }
-
-    private boolean doubleIsDifferent(double d1, double d2, double delta) {
-        if (Double.compare(d1, d2) == 0) {
-            return false;
-        }
-        if ((Math.abs(d1 - d2) <= delta)) {
-            return false;
-        }
-        return true;
     }
 
 }
