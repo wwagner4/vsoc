@@ -28,6 +28,34 @@ public class TestPlaceLookSee {
         assertContains(flags, "Other_FLAG_RIGHT_10");
     }
 
+    @Test
+    public void test_beforeTheOwnGoal() {
+        List<FlagDesc> flags = place(-40, 0, 180);
+
+        assertContains(flags, "GoalOwn_FLAG_LEFT");
+        assertContains(flags, "GoalOwn_FLAG_CENTER");
+        assertContains(flags, "GoalOwn_FLAG_RIGHT");
+
+        assertContains(flags, "Own_FLAG_LEFT_10");
+        assertContains(flags, "Own_FLAG_RIGHT_10");
+    }
+
+    @Test
+    public void test_beforeTheOwnGoalGreatDist() {
+        List<FlagDesc> flags = place(-10, 0, 180);
+
+        assertContains(flags, "GoalOwn_FLAG_LEFT");
+        assertContains(flags, "GoalOwn_FLAG_CENTER");
+        assertContains(flags, "GoalOwn_FLAG_RIGHT");
+
+        assertContains(flags, "Own_FLAG_LEFT_10");
+        assertContains(flags, "Own_FLAG_RIGHT_10");
+
+        assertContains(flags, "PenaltyOwn_FLAG_LEFT");
+        assertContains(flags, "PenaltyOwn_FLAG_CENTER");
+        assertContains(flags, "PenaltyOwn_FLAG_RIGHT");
+    }
+
     /**
      * @param x   Players X Position. Relative to own side
      * @param y   Players y Position. Relative to own side

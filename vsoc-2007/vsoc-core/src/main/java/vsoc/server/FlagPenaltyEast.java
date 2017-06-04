@@ -15,12 +15,10 @@ class FlagPenaltyEast extends SimObject {
     }
 
     Vision createVisionForWestPlayer() {
-        return new VisionFlagPenaltyOther(FlagConverter.current().forWest(
-                this.type));
+        return new VisionFlagPenaltyOther(FlagConverter.current().forWest(this.type));
     }
 
     Vision createVisionForEastPlayer() {
-        return new VisionFlagPenaltyOwn(FlagConverter.current().forEast(
-                this.type));
+        return new VisionFlagPenaltyOwn(FlagConverter.current().forEast(this.type));
     }
 }

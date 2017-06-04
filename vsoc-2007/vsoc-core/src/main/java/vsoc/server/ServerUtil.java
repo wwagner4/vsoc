@@ -76,6 +76,7 @@ public class ServerUtil {
 		addFlagWest(srv, ServerFlag.NORTH_30, defaultXWestFlag(), 30);
 		addFlagWest(srv, ServerFlag.NORTH_20, defaultXWestFlag(), 20);
 		addFlagWest(srv, ServerFlag.NORTH_10, defaultXWestFlag(), 10);
+
 		addFlagWest(srv, ServerFlag.SOUTH_10, defaultXWestFlag(), -10);
 		addFlagWest(srv, ServerFlag.SOUTH_20, defaultXWestFlag(), -20);
 		addFlagWest(srv, ServerFlag.SOUTH_30, defaultXWestFlag(), -30);
@@ -83,6 +84,7 @@ public class ServerUtil {
 		addFlagEast(srv, ServerFlag.NORTH_30, defaultXEastFlag(), 30);
 		addFlagEast(srv, ServerFlag.NORTH_20, defaultXEastFlag(), 20);
 		addFlagEast(srv, ServerFlag.NORTH_10, defaultXEastFlag(), 10);
+
 		addFlagEast(srv, ServerFlag.SOUTH_10, defaultXEastFlag(), -10);
 		addFlagEast(srv, ServerFlag.SOUTH_20, defaultXEastFlag(), -20);
 		addFlagEast(srv, ServerFlag.SOUTH_30, defaultXEastFlag(), -30);

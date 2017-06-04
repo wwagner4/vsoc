@@ -19,6 +19,6 @@ class FlagSouth extends SimObject {
     }
 
     Vision createVisionForEastPlayer() {
-        return new VisionFlagLeft(FlagConverter.current().forWest(this.type));
+        return new VisionFlagLeft(FlagConverter.current().forEast(this.type));
     }
 }

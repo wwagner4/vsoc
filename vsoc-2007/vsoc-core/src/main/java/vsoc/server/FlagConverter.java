@@ -27,6 +27,7 @@ public class FlagConverter {
         map.put(ServerFlag.NORTH_10, Flag.FLAG_LEFT_10);
         map.put(ServerFlag.NORTH_20, Flag.FLAG_LEFT_20);
         map.put(ServerFlag.NORTH_30, Flag.FLAG_LEFT_30);
+
         map.put(ServerFlag.SOUTH_10, Flag.FLAG_RIGHT_10);
         map.put(ServerFlag.SOUTH_20, Flag.FLAG_RIGHT_20);
         map.put(ServerFlag.SOUTH_30, Flag.FLAG_RIGHT_30);
@@ -55,6 +56,7 @@ public class FlagConverter {
         map.put(ServerFlag.NORTH_10, Flag.FLAG_RIGHT_10);
         map.put(ServerFlag.NORTH_20, Flag.FLAG_RIGHT_20);
         map.put(ServerFlag.NORTH_30, Flag.FLAG_RIGHT_30);
+
         map.put(ServerFlag.SOUTH_10, Flag.FLAG_LEFT_10);
         map.put(ServerFlag.SOUTH_20, Flag.FLAG_LEFT_20);
         map.put(ServerFlag.SOUTH_30, Flag.FLAG_LEFT_30);
@@ -82,11 +84,11 @@ public class FlagConverter {
     }
     
     public Flag forEast(ServerFlag serverFlag) {
-        return (Flag) this.forEast.get(serverFlag);
+        return this.forEast.get(serverFlag);
     }
 
     public Flag forWest(ServerFlag serverFlag) {
-        return (Flag) this.forWest.get(serverFlag);
+        return this.forWest.get(serverFlag);
     }
 
 }
