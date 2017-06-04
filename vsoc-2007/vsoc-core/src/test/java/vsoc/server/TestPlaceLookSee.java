@@ -56,6 +56,31 @@ public class TestPlaceLookSee {
         assertContains(flags, "PenaltyOwn_FLAG_RIGHT");
     }
 
+    @Test
+    public void test_atTheCenterLineLookRight_Far() {
+        List<FlagDesc> flags = place(0, -20, 90);
+
+        assertContains(flags, "Right_FLAG_OWN_10");
+        assertContains(flags, "Right_FLAG_OTHER_10");
+        // And many more
+
+    }
+
+    @Test
+    public void test_atTheCenterLineLookRight_Near() {
+        List<FlagDesc> flags = place(0, 20, 90);
+
+        assertContains(flags, "Right_FLAG_OWN_10");
+        assertContains(flags, "Right_FLAG_OTHER_10");
+
+    }
+
+    @Test
+    public void test_distAlwaysPos() {
+        List<FlagDesc> flags = place(0, 20, 90);
+        flags.forEach(f -> assertTrue("distance smaller 0 " + f.getDist(), f.getDist() >= 0));
+    }
+
     /**
      * @param x   Players X Position. Relative to own side
      * @param y   Players y Position. Relative to own side
@@ -221,57 +246,57 @@ class ControllerFlagDesc implements Controller {
 
     @Override
     public void infoSeeFlagRight(Flag flag, double distance, double direction) {
-        this.flagDescs.add(new FlagDesc("Right_" + flag.name(), direction, direction));
+        this.flagDescs.add(new FlagDesc("Right_" + flag.name(), distance, direction));
     }
 
     @Override
     public void infoSeeFlagLeft(Flag flag, double distance, double direction) {
-        this.flagDescs.add(new FlagDesc("Left_" + flag.name(), direction, direction));
+        this.flagDescs.add(new FlagDesc("Left_" + flag.name(), distance, direction));
     }
 
     @Override
     public void infoSeeFlagOwn(Flag flag, double distance, double direction) {
-        this.flagDescs.add(new FlagDesc("Own_" + flag.name(), direction, direction));
+        this.flagDescs.add(new FlagDesc("Own_" + flag.name(), distance, direction));
     }
 
     @Override
     public void infoSeeFlagOther(Flag flag, double distance, double direction) {
-        this.flagDescs.add(new FlagDesc("Other_" + flag.name(), direction, direction));
+        this.flagDescs.add(new FlagDesc("Other_" + flag.name(), distance, direction));
     }
 
     @Override
     public void infoSeeFlagCenter(Flag flag, double distance, double direction) {
-        this.flagDescs.add(new FlagDesc("Center_" + flag.name(), direction, direction));
+        this.flagDescs.add(new FlagDesc("Center_" + flag.name(), distance, direction));
     }
 
     @Override
     public void infoSeeFlagCornerOwn(Flag flag, double distance, double direction) {
-        this.flagDescs.add(new FlagDesc("CornerOwn_" + flag.name(), direction, direction));
+        this.flagDescs.add(new FlagDesc("CornerOwn_" + flag.name(), distance, direction));
     }
 
     @Override
     public void infoSeeFlagCornerOther(Flag flag, double distance, double direction) {
-        this.flagDescs.add(new FlagDesc("CornerOther_" + flag.name(), direction, direction));
+        this.flagDescs.add(new FlagDesc("CornerOther_" + flag.name(), distance, direction));
     }
 
     @Override
     public void infoSeeFlagPenaltyOwn(Flag flag, double distance, double direction) {
-        this.flagDescs.add(new FlagDesc("PenaltyOwn_" + flag.name(), direction, direction));
+        this.flagDescs.add(new FlagDesc("PenaltyOwn_" + flag.name(), distance, direction));
     }
 
     @Override
     public void infoSeeFlagPenaltyOther(Flag flag, double distance, double direction) {
-        this.flagDescs.add(new FlagDesc("PenaltyOther_" + flag.name(), direction, direction));
+        this.flagDescs.add(new FlagDesc("PenaltyOther_" + flag.name(), distance, direction));
     }
 
     @Override
     public void infoSeeFlagGoalOwn(Flag flag, double distance, double direction) {
-        this.flagDescs.add(new FlagDesc("GoalOwn_" + flag.name(), direction, direction));
+        this.flagDescs.add(new FlagDesc("GoalOwn_" + flag.name(), distance, direction));
     }
 
     @Override
     public void infoSeeFlagGoalOther(Flag flag, double distance, double direction) {
-        this.flagDescs.add(new FlagDesc("GoalOther_" + flag.name(), direction, direction));
+        this.flagDescs.add(new FlagDesc("GoalOther_" + flag.name(), distance, direction));
     }
 
     @Override
