@@ -1,5 +1,5 @@
 lazy val breezeVersion = "0.13"
-lazy val _scalaVersion = "2.11.11"
+lazy val _scalaVersion = "2.12.2"
 
 lazy val commonSettings = Seq(
   organization := "net.entelijan.vsoc",
@@ -11,13 +11,13 @@ lazy val commonSettings = Seq(
 lazy val root = (project in file("."))
   .settings(
     commonSettings,
-    name := "root")
+    name := "machinelearning-root")
   .aggregate(common, create_data, playerpos_breeze)
 
 lazy val common = (project in file("common"))
   .settings(
     commonSettings,
-    name := "common")
+    name := "machinelearning-common")
 
 lazy val create_data = (project in file("create-data"))
   .settings(
