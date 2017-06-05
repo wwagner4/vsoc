@@ -4,16 +4,16 @@ import java.awt._
 import java.awt.event._
 import javax.swing._
 
-import vsoc.server.{Server, ServerUtil}
+import vsoc.server._
 import vsoc.server.gui.FieldPanel
-import vsoc.server.initial.{InitialPlacementAllInCenter, InitialPlacementNone}
+import vsoc.server.initial._
 
 import scala.collection.JavaConverters._
 
 object PlayerposCreateDataMainGui extends App {
 
   val f = new FieldFrame()
-  f.setSize(900, 600)
+  f.setSize(800, 600)
   f.setVisible(true)
 
 }
@@ -24,11 +24,11 @@ class FieldFrame extends JFrame with WindowListener {
   import Placement._
 
   def createServer: Server = {
+    val west = new InitialPlacementFullControl(-5, 0, 179)
     val east = new InitialPlacementNone
-    val west = new InitialPlacementRandomPos(1)
-    val server = ServerUtil.current().createServer(east, west)
+    val server = ServerUtil.current().createServer(west, east)
     for (p <- server.getPlayers.asScala) {
-      p.setController(createController(None, placeControllerRandomPos))
+      p.setController(createController(None, placeControllerStraightFromCenter(100)))
     }
     server
   }

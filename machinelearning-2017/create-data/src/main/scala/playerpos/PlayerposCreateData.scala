@@ -22,8 +22,8 @@ object PlayerposCreateData {
       val filename = s"${name}_$size.csv"
       val file = dataFile(filename)
       writeToFile(file, pw => {
-        val east = new InitialPlacementNone
-        val west = initialPlacement
+        val west = new InitialPlacementNone
+        val east = initialPlacement
         val srv = ServerUtil.current().createServer(east, west)
         srv.getPlayers.asScala.foreach { p =>
           val ctrl = PlayerposCreateData.createController(Some(pw), fPlacement)
@@ -44,17 +44,18 @@ object PlayerposCreateData {
 
     val behav = new Behaviour() {
 
-      private val _radToDeg = 180.0 / math.Pi
-
       val stv: SensToVec = new FlagDirectionSensToVector()
 
       var cnt = 0
 
       def apply(sens: Sensors, player: Player): Unit = {
 
+        import PlacementUtil._
+
         val vp: VsocPlayer = player.asInstanceOf[VsocPlayer]
         if (vp.isTeamEast) {
           // Creating test data for 'east' players would require some extra transformation
+          // of x, y and direction
           throw new IllegalArgumentException("Test data can only be created with 'west' players")
         }
 
@@ -70,14 +71,6 @@ object PlayerposCreateData {
           else println(line)
         }
         cnt += 1
-      }
-
-      def radToDeg(rad: Double): Double = {
-        val deg = rad * _radToDeg
-        val m360 = deg % 360.0
-        if (m360 < -180) m360 + 360
-        else if (m360 > 180) m360 - 360
-        else m360
       }
 
       def getChild: Optional[Behaviour] = Optional.empty()
@@ -121,14 +114,9 @@ object Placement {
       player.turn(ran(0, 360))
   }
 
-  def placeControllerStraightFromCenter(direction: Double, dash: Int): (Player, Int) => Unit = {
-    case (player, cnt) =>
-      if (cnt == 0) {
-        player.move(0, 0)
-        player.turn(direction)
-      } else {
-        player.dash(dash)
-      }
+  def placeControllerStraightFromCenter(dash: Int): (Player, Int) => Unit = {
+    case (player, _) =>
+      player.dash(dash)
   }
 
 }
@@ -144,6 +132,16 @@ class InitialPlacementRandomPos(val numberOfPlayers: Int) extends InitialPlaceme
     val x = ran(-55, 55)
     val y = ran(-35, 35)
     val dir = ran(0, 360)
+    new Values(x, y, degToRad(dir))
+  }
+
+}
+
+class InitialPlacementFullControl(x: Double, y: Double, dir: Double) extends InitialPlacement {
+
+  def numberOfPlayers = 1
+
+  def placementValuesWest(num: Int): Values = {
     new Values(x, y, dir)
   }
 
@@ -152,11 +150,25 @@ class InitialPlacementRandomPos(val numberOfPlayers: Int) extends InitialPlaceme
 object PlacementUtil {
 
   private val rand = new Random
+  private val _radToDeg = 180.0 / math.Pi
+  private val _degToRad = math.Pi / 180.0
 
   def ran(from: Int, to: Int): Int = {
     require(from < to)
     val w = to - from
     from + rand.nextInt(w)
+  }
+
+  def radToDeg(rad: Double): Double = {
+    val deg = rad * _radToDeg
+    val m360 = deg % 360.0
+    if (m360 < -180) m360 + 360
+    else if (m360 > 180) m360 - 360
+    else m360
+  }
+
+  def degToRad(deg: Double): Double = {
+    deg * _degToRad
   }
 
 

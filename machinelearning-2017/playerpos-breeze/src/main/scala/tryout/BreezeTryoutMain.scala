@@ -5,11 +5,7 @@ import breeze.numerics.sin
 
 object BreezeTryoutMain extends App {
 
-  // columnsOfMatrix()
-  // allColumnsOfMatrix()
-  // createMatrixFromVectors()
-  // splitVectorInSubvectors()
-  // summarizeRowsOfMatrix()
+  // Use one of the methods below. e.g 'matrixMutable()'
   matrixMutable()
 
   def matrixMutable(): Unit = {

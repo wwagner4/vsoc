@@ -127,18 +127,13 @@ object TryoutMinimizer extends App {
   
   iterations.foreach { iter =>
     val ds = datasets(1)
-    //val (yName, (x, y)) = ("X", readDataSetX(ds.filename))
-    //val (yName, (x, y)) = ("Y", readDataSetY(ds.filename))
     val (yName, (x, y)) = ("dir", readDataSetDir(ds.filename))
 
     val (hypName, hyp) = ("SinExt", PlayerposOpt.hypothesisSinExt _)
-    //val (hypName, hyp) = ("Sin", PlayerposOpt.hypothesisSin _)
-    //val (hypName, hyp) = ("Poli", PlayerposOpt.hypothesisPoli(3) _)
-    
+
     val diff = diffFunctionApprox(hyp)(x, y)
     val thetaInitial = DenseVector.zeros[Double](172)
     
-    //val (minimizerName, minimizer = ("LBFGS", minimizerLbfgs(iter))
     val (minimizerName, minimizer) = ("LBFGSB", minimizerLbfgsb(thetaInitial.length)(iter))
 
     val thetaOpt = minimizer.minimize(diff, thetaInitial)
