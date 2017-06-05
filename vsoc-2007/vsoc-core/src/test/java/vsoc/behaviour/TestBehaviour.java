@@ -5,6 +5,7 @@ import atan.model.Flag;
 import atan.model.Player;
 import org.junit.Test;
 import vsoc.server.CtrlServer;
+import vsoc.server.InitialPlacement;
 import vsoc.server.ServerUtil;
 import vsoc.server.VsocPlayer;
 import vsoc.server.initial.InitialPlacementNone;
@@ -13,6 +14,7 @@ import vsoc.server.initial.InitialPlacementOnePlayerFull;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 import static org.junit.Assert.*;
@@ -21,6 +23,8 @@ import static org.junit.Assert.*;
  * Tests for behaviour and sensors
  */
 public class TestBehaviour {
+
+    private Random ran = new Random();
 
     @Test
     public void test_OwnGoal_Far() {
@@ -86,12 +90,19 @@ public class TestBehaviour {
     }
 
     private Sensors runBehaviour(double x, double y, double dir) {
-        InitialPlacementOnePlayerFull east = new InitialPlacementOnePlayerFull(x, y, dir);
-        InitialPlacementNone west = new InitialPlacementNone();
+        InitialPlacement east;
+        InitialPlacement west;
+        if (ran.nextBoolean()) {
+            west = new InitialPlacementOnePlayerFull(x, y, dir);
+            east = new InitialPlacementNone();
+        } else {
+            west = new InitialPlacementNone();
+            east = new InitialPlacementOnePlayerFull(x, y, dir);
+        }
         CtrlServer server = ServerUtil.current().createServer(west, east);
         BehaviourSensorExtracting behav = new BehaviourSensorExtracting();
         Controller ctrl = new BehaviourController(behav);
-        for(VsocPlayer player : server.getPlayers()) {
+        for (VsocPlayer player : server.getPlayers()) {
             player.setController(ctrl);
         }
         server.takeStep();
