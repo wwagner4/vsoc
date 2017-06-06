@@ -4,7 +4,7 @@ object PlayerposCreateDataMain extends App {
 
   import Placement._
 
-  val sizes: Seq[Int] = List(10)
+  val sizes: Seq[Int] = List(10, 100, 1000, 50000, 200000)
 
 
   PlayerposCreateData.createDataFiles("random_pos", sizes, placeControllerRandomPos, new InitialPlacementRandomPos(1))
