@@ -1,4 +1,4 @@
-# Random-Pos-00
+# Random-Pos-001
 
 ## Description
 
@@ -16,7 +16,8 @@ x, y values outside the range are possible but lay outside the field.
 
 Position and direction seen from the east and west side.
 
-<img src="#" data-canonical-src="images/posdir_east_thumb.png" width="200" height="400" />
+<img src="images/posdir_east_thumb.png" width="200" height="400" />
+
 ![[](images/posdir_west.png)](images/posdir_west_thumb.png)
 
 ## Features
