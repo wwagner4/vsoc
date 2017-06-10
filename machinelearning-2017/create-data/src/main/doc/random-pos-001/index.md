@@ -56,8 +56,8 @@ Prerequisites
 
 Steps
 
-* clone the vsoc repository. call 'git clone https://github.com/wwagner4/vsoc.git'
-* change to the directory vsoc/vsoc-2007/ and call 'mvn install'
-* change to the directory vsoc/machinelearning-2017/ and call 'sbt ";project create_data;runMain playerpos.PlayerposCreateDataMain"'
+* clone the vsoc repository. call 'git clone https://github.com/wwagner4/vsoc.git' to get the latests source code
+* change to the directory vsoc/vsoc-2007/ and call 'mvn install' to compile the old java code that is needed to create new data
+* change to the directory vsoc/machinelearning-2017/ and call 'sbt ";project create_data;runMain playerpos.PlayerposCreateDataMain"' to create new datasets
 
 
