@@ -56,7 +56,5 @@ Steps
 
 * clone the vsoc repository. git clone https://github.com/wwagner4/vsoc.git
 * change to the directory vsoc/machinelearning-2017/
-* call 'sbt'
-* change to module 'create_data' by typing 'project create_data'
-* create new datasets in $HOME/vsoc/data by typing 'runMain playerpos.PlayerposCreateDataMain'
+* call 'sbt ";project create_data;runMain playerpos.PlayerposCreateDataMain"'
 
