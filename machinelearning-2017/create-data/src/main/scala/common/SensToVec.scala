@@ -36,7 +36,7 @@ trait SensToVec {
   */
 class FlagDirectionSensToVector extends SensToVec {
 
-  val offset = 1000
+  val offset = 100
 
   def apply(sens: Sensors): Option[Array[Double]] = {
     val re = new Array[Double](42) // Initialize an array with 42 zeros
