@@ -16,8 +16,8 @@ x, y values outside the range are possible but lay outside the field.
 
 Position and direction seen from the east and west side.
 
-<img src="images/posdir_east.png" width="400" />
-<img src="images/posdir_west.png" width="400" />
+<img src="images/posdir_east.jpg" width="400" />
+<img src="images/posdir_west.jpg" width="400" />
 
 ## Features
 
@@ -25,7 +25,7 @@ The features contained in the dataset define weather a player sees a certain fla
 
 The following image explains the feature values for one player and  three flags.
 
-<img src="images/FeatureValues.png" width="400" />
+<img src="images/FeatureValues.jpg" width="400" />
 
 
 * Flag A: The player sees the flag in an angle of +10° → The feature value is 100 + 10 = 110.
@@ -34,8 +34,8 @@ The following image explains the feature values for one player and  three flags.
 
 Flags seen from east and west side
 
-<img src="images/flags_west.png" width="400" />
-<img src="images/flags_east.png" width="400" />
+<img src="images/flags_west.jpg" width="400" />
+<img src="images/flags_east.jpg" width="400" />
 
 ## Datacolumns
 
