@@ -16,7 +16,7 @@ x, y values outside the range are possible but lay outside the field.
 
 Position and direction seen from the east and west side.
 
-![](images/posdir_east_thumb.png =10)
+<img src="#" data-canonical-src="images/posdir_east_thumb.png" width="200" height="400" />
 ![[](images/posdir_west.png)](images/posdir_west_thumb.png)
 
 ## Features
