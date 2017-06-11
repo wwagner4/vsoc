@@ -1,5 +1,5 @@
 lazy val breezeVersion = "0.13"
-lazy val _scalaVersion = "2.12.2"
+lazy val _scalaVersion = "2.11.11"
 
 lazy val commonSettings = Seq(
   organization := "net.entelijan.vsoc",
@@ -13,7 +13,7 @@ lazy val root = (project in file("."))
   .settings(
     commonSettings,
     name := "machinelearning-root")
-  .aggregate(common, create_data, playerpos_breeze)
+  .aggregate(common, create_data, playerpos_breeze, dl4j)
 
 lazy val common = (project in file("common"))
   .settings(
@@ -28,15 +28,23 @@ lazy val create_data = (project in file("create-data"))
     libraryDependencies += "org.slf4j" % "slf4j-simple" % "1.7.24")
   .dependsOn(common)
 
-
 lazy val playerpos_breeze = (project in file("playerpos-breeze"))
   .settings(
     commonSettings,
     name := "playerpos-breeze",
     libraryDependencies += "net.entelijan" % "vsoc-core" % "0.0.1-SNAPSHOT",
-  	libraryDependencies += "org.scalanlp" %% "breeze" % breezeVersion,
-  	libraryDependencies += "org.scalanlp" %% "breeze-natives" % breezeVersion,
+    libraryDependencies += "org.scalanlp" %% "breeze" % breezeVersion,
+    libraryDependencies += "org.scalanlp" %% "breeze-natives" % breezeVersion,
     libraryDependencies += "org.slf4j" % "slf4j-simple" % "1.7.24")
   .dependsOn(common)
-  
+
+lazy val dl4jVersion = "0.8.0"
+
+lazy val dl4j = (project in file("dl4j"))
+  .settings(
+    commonSettings,
+    name := "dl4j",
+    libraryDependencies += "org.deeplearning4j" %  "rl4j-core" % dl4jVersion)
+  .dependsOn(common)
+
 // scalacOptions += "-deprecation",
