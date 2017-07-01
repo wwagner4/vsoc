@@ -1,6 +1,5 @@
 package vsoc.ml;
 
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
@@ -57,26 +56,24 @@ public class DataSetReader {
 
         log.info("Created Spark Context: " + sc);
 
-        JavaRDD<String> stringData = sc.textFile(file.getAbsolutePath());
-        List<String> inputDataCollected = stringData.collect();
+        JavaRDD<String> inputRdd = sc.textFile(file.getAbsolutePath());
 
         System.out.println("\n\n---- Original Data ----");
-        for(String s : inputDataCollected) System.out.println(s);
+        List<String> inputLines = inputRdd.collect();
+        for(String s : inputLines) System.out.println(s);
 
         //We first need to parse this format. It's comma-delimited (CSV) format, so let's parse it using CSVRecordReader:
-        RecordReader rr = new CSVRecordReader();
-        JavaRDD<List<Writable>> parsedInputData = stringData.map(new StringToWritablesFunction(rr));
-
+        RecordReader recordReader = new CSVRecordReader(0, ",");
+        JavaRDD<List<Writable>> parsedInputData = inputRdd.map(new StringToWritablesFunction(recordReader));
         JavaRDD<List<Writable>> processedData = SparkTransformExecutor.execute(parsedInputData, tp);
 
+        // Prepare processed data for output
+        JavaRDD<String> processedAsString = processedData.map(new WritablesToStringFunction(","));
+
         // Write processed data to stdout
-        JavaRDD<String> processedAsString = processedData
-                .map(new WritablesToStringFunction(","));
-        List<String> processedCollected = processedAsString.collect();
-
         System.out.println("\n\n---- Processed Data ----");
-        for(String s : processedCollected) System.out.println(s);
-
+        List<String> outputLines = processedAsString.collect();
+        for(String s : outputLines) System.out.println(s);
 
         // Write processed data to txt-file
         File tmpDir = new File(System.getProperty("java.io.tmpdir"));
