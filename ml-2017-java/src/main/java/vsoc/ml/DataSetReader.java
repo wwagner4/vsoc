@@ -1,5 +1,6 @@
 package vsoc.ml;
 
+import org.datavec.api.transform.TransformProcess;
 import org.datavec.api.transform.schema.Schema;
 
 import java.io.File;
@@ -23,14 +24,24 @@ public class DataSetReader {
 
         System.out.println("Reading data from " + file);
 
-        Schema schema = createPlayerposSchema();
+        Schema playerposSchema = createPlayerposSchema();
 
-        System.out.println("Input data schema details:");
-        System.out.println(schema);
+        System.out.println("Playerpos Schema:");
+        System.out.println(playerposSchema);
+
+        TransformProcess tp = new TransformProcess.Builder(playerposSchema)
+                .removeColumns("nr", "y", "dir")
+                .build();
+
+        Schema playerposXSchema = tp.getFinalSchema();
+
+        System.out.println("\n\n\nPlayerpos Schema X-Values:");
+        System.out.println(playerposXSchema);
+
 
     }
 
-    private Schema createPlayerposSchema() {
+    protected Schema createPlayerposSchema() {
         Schema.Builder inBuilder = new Schema.Builder()
                 .addColumnDouble("nr")
                 .addColumnDouble("x")
