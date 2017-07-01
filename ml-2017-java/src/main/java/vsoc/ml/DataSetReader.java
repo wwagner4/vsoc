@@ -3,22 +3,34 @@ package vsoc.ml;
 import org.datavec.api.transform.schema.Schema;
 
 import java.io.File;
-import java.io.IOException;
 
 /**
  * Read e vsoc dataset
  */
 public class DataSetReader {
 
-    public static void main(String... arg) throws IOException {
+    public static void main(String... arg) {
         String baseDirName = "/Users/wwagner4/vsoc/data";
         String dataFileName = "random_pos_100.csv";
+
+        new DataSetReader().readDataSet(baseDirName, dataFileName);
+    }
+
+    public void readDataSet(String baseDirName, String dataFileName) {
 
         File dataDir = new File(baseDirName);
         File file = new File(dataDir, dataFileName);
 
-        System.out.println("Reading data from " + file.getCanonicalPath());
+        System.out.println("Reading data from " + file);
 
+        Schema schema = createPlayerposSchema();
+
+        System.out.println("Input data schema details:");
+        System.out.println(schema);
+
+    }
+
+    private Schema createPlayerposSchema() {
         Schema.Builder inBuilder = new Schema.Builder()
                 .addColumnDouble("nr")
                 .addColumnDouble("x")
@@ -27,18 +39,7 @@ public class DataSetReader {
         for (int i = 0; i < 42; i++) {
             inBuilder = inBuilder.addColumnDouble("flag" + i);
         }
-
-        Schema inputDataSchema = inBuilder.build();
-
-        System.out.println("Input data schema details:");
-        System.out.println(inputDataSchema);
-
-        System.out.println("\n\nOther information obtainable from schema:");
-        System.out.println("Number of columns: " + inputDataSchema.numColumns());
-        System.out.println("Column names: " + inputDataSchema.getColumnNames());
-        System.out.println("Column types: " + inputDataSchema.getColumnTypes());
-
-
+        return inBuilder.build();
     }
 
 
