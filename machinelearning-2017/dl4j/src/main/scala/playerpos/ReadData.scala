@@ -32,7 +32,8 @@ object ReadData {
 
 object Tryout extends App {
 
-  ReadData.readData("/Users/wwagner4/prj/vsoc/machinelearning-2017/create-data/src/main/doc/random-pos-001/data/random_pos_10.csv")
+  // ReadData.readData("/Users/wwagner4/prj/vsoc/machinelearning-2017/create-data/src/main/doc/random-pos-001/data/random_pos_10.csv")
+  ReadData.readData("C:/Users/31100428/vsoc/data/random_pos_100.csv")
   println("ready")
 
 }
