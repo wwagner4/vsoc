@@ -23,5 +23,18 @@
 
     </build>
 
+    <dependencies>
+            <dependency>
+                <groupId>org.datavec</groupId>
+                <artifactId>datavec-api</artifactId>
+                <version>${dl4j.version}</version>
+            </dependency>
+
+    </dependencies>
+
+    <properties>
+        <dl4j.version>0.8.0</dl4j.version>
+    </properties>
+
 
 </project>
