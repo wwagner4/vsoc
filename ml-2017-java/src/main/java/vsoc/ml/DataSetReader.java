@@ -1,7 +1,10 @@
 package vsoc.ml;
 
+import freemarker.log.SLF4JLoggerFactory;
 import org.datavec.api.transform.TransformProcess;
 import org.datavec.api.transform.schema.Schema;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 
@@ -9,6 +12,8 @@ import java.io.File;
  * Read e vsoc dataset
  */
 public class DataSetReader {
+
+    private static final Logger log = LoggerFactory.getLogger(DataSetReader.class);
 
     public static void main(String... arg) {
         String baseDirName = "/Users/wwagner4/vsoc/data";
@@ -22,12 +27,12 @@ public class DataSetReader {
         File dataDir = new File(baseDirName);
         File file = new File(dataDir, dataFileName);
 
-        System.out.println("Reading data from " + file);
+        log.info("Reading data from " + file);
 
         Schema playerposSchema = createPlayerposSchema();
 
-        System.out.println("Playerpos Schema:");
-        System.out.println(playerposSchema);
+        log.info("Playerpos Schema:\n");
+        log.info("" + playerposSchema);
 
         TransformProcess tp = new TransformProcess.Builder(playerposSchema)
                 .removeColumns("nr", "y", "dir")
@@ -35,8 +40,10 @@ public class DataSetReader {
 
         Schema playerposXSchema = tp.getFinalSchema();
 
-        System.out.println("\n\n\nPlayerpos Schema X-Values:");
-        System.out.println(playerposXSchema);
+        log.info("Playerpos Schema X-Values:\n");
+        log.info("" + playerposXSchema);
+
+
 
 
     }

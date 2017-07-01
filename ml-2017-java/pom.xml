@@ -24,12 +24,16 @@
     </build>
 
     <dependencies>
-            <dependency>
-                <groupId>org.datavec</groupId>
-                <artifactId>datavec-api</artifactId>
-                <version>${dl4j.version}</version>
-            </dependency>
-
+        <dependency>
+            <groupId>org.datavec</groupId>
+            <artifactId>datavec-api</artifactId>
+            <version>${dl4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>1.7.25</version>
+        </dependency>
     </dependencies>
 
     <properties>
