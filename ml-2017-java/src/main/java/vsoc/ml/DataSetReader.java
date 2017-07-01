@@ -8,7 +8,9 @@ import org.datavec.api.records.reader.impl.csv.CSVRecordReader;
 import org.datavec.api.transform.TransformProcess;
 import org.datavec.api.transform.schema.Schema;
 import org.datavec.api.writable.Writable;
+import org.datavec.spark.transform.SparkTransformExecutor;
 import org.datavec.spark.transform.misc.StringToWritablesFunction;
+import org.datavec.spark.transform.misc.WritablesToStringFunction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -65,6 +67,28 @@ public class DataSetReader {
         JavaRDD<List<Writable>> parsedInputData = stringData.map(new StringToWritablesFunction(rr));
 
         log.info("Parsed input Data " + parsedInputData);
+
+
+        //Now, let's execute the transforms we defined earlier:
+        JavaRDD<List<Writable>> processedData = SparkTransformExecutor.execute(parsedInputData, tp);
+
+        //For the sake of this example, let's collect the data locally and print it:
+        JavaRDD<String> processedAsString = processedData.map(new WritablesToStringFunction(","));
+        //processedAsString.saveAsTextFile("file://your/local/save/path/here");   //To save locally
+        //processedAsString.saveAsTextFile("hdfs://your/hdfs/save/path/here");   //To save to hdfs
+
+        List<String> processedCollected = processedAsString.collect();
+        List<String> inputDataCollected = stringData.collect();
+
+
+        System.out.println("\n\n---- Original Data ----");
+        for(String s : inputDataCollected) System.out.println(s);
+
+        System.out.println("\n\n---- Processed Data ----");
+        for(String s : processedCollected) System.out.println(s);
+
+
+        System.out.println("\n\nDONE");
 
     }
 
