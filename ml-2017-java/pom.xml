@@ -2,6 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>net.entelijan</groupId>
@@ -20,7 +21,6 @@
                 </configuration>
             </plugin>
         </plugins>
-
     </build>
 
     <dependencies>
@@ -28,6 +28,21 @@
             <groupId>org.datavec</groupId>
             <artifactId>datavec-api</artifactId>
             <version>${dl4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.datavec</groupId>
+            <artifactId>datavec-spark_${scala.binary.version}</artifactId>
+            <version>${dl4j.version}_spark_1</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-log4j12</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -38,6 +53,7 @@
 
     <properties>
         <dl4j.version>0.8.0</dl4j.version>
+        <scala.binary.version>2.11</scala.binary.version>
     </properties>
 
 

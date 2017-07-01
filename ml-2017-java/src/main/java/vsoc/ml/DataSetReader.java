@@ -1,5 +1,7 @@
 package vsoc.ml;
 
+import org.apache.spark.SparkConf;
+import org.apache.spark.api.java.JavaSparkContext;
 import org.datavec.api.transform.TransformProcess;
 import org.datavec.api.transform.schema.Schema;
 import org.slf4j.Logger;
@@ -18,10 +20,10 @@ public class DataSetReader {
         String baseDirName = "/Users/wwagner4/vsoc/data";
         String dataFileName = "random_pos_100.csv";
 
-        new DataSetReader().readDataSet(baseDirName, dataFileName);
+        new DataSetReader().readPlayerposXDataSet(baseDirName, dataFileName);
     }
 
-    public void readDataSet(String baseDirName, String dataFileName) {
+    public void readPlayerposXDataSet(String baseDirName, String dataFileName) {
 
         File dataDir = new File(baseDirName);
         File file = new File(dataDir, dataFileName);
@@ -41,6 +43,18 @@ public class DataSetReader {
 
         log.info("Playerpos Schema X-Values:\n");
         log.info("" + playerposXSchema);
+
+
+
+
+
+        SparkConf conf = new SparkConf();
+        conf.setMaster("local[*]");
+        conf.setAppName("DataVec Example");
+
+        JavaSparkContext sc = new JavaSparkContext(conf);
+
+        log.info("Created Spark Context: " + sc);
 
 
 
