@@ -15,6 +15,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -44,8 +46,13 @@ public class DataSetReader {
         log.debug("Playerpos Schema:\n");
         log.debug("" + playerposSchema);
 
+        // Reorder the data to have 'x' at the end
+        Collection<String> reorder = flagNames();
+        reorder.add("x");
+
         TransformProcess tp = new TransformProcess.Builder(playerposSchema)
                 .removeColumns("nr", "y", "dir")
+                .reorderColumns(reorder.toArray(new String[reorder.size()]))
                 .build();
 
         SparkConf conf = new SparkConf();
@@ -90,10 +97,19 @@ public class DataSetReader {
                 .addColumnDouble("x")
                 .addColumnDouble("y")
                 .addColumnDouble("dir");
-        for (int i = 0; i < 42; i++) {
-            inBuilder = inBuilder.addColumnDouble("flag" + i);
+        Collection<String> flagNames = flagNames();
+        for (String flagName : flagNames) {
+            inBuilder = inBuilder.addColumnDouble(flagName);
         }
         return inBuilder.build();
+    }
+
+    protected Collection<String> flagNames() {
+        ArrayList<String> re = new ArrayList<>();
+        for (int i = 0; i < 42; i++) {
+            re.add("flag" + i);
+        }
+        return re;
     }
 
 
