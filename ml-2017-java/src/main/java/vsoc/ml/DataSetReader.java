@@ -27,7 +27,7 @@ public class DataSetReader {
 
     public static void main(String... arg) {
         String baseDirName = "/Users/wwagner4/vsoc/data";
-        String dataFileName = "random_pos_100.csv";
+        String dataFileName = "random_pos_10.csv";
 
         new DataSetReader().readPlayerposXDataSet(baseDirName, dataFileName);
     }
