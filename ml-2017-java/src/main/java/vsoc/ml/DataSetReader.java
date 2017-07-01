@@ -1,5 +1,6 @@
 package vsoc.ml;
 
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
@@ -16,6 +17,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Read e vsoc dataset
@@ -61,34 +63,32 @@ public class DataSetReader {
         log.info("Created Spark Context: " + sc);
 
         JavaRDD<String> stringData = sc.textFile(file.getAbsolutePath());
+        List<String> inputDataCollected = stringData.collect();
+
+        System.out.println("\n\n---- Original Data ----");
+        for(String s : inputDataCollected) System.out.println(s);
 
         //We first need to parse this format. It's comma-delimited (CSV) format, so let's parse it using CSVRecordReader:
         RecordReader rr = new CSVRecordReader();
         JavaRDD<List<Writable>> parsedInputData = stringData.map(new StringToWritablesFunction(rr));
 
-        log.info("Parsed input Data " + parsedInputData);
-
-
-        //Now, let's execute the transforms we defined earlier:
         JavaRDD<List<Writable>> processedData = SparkTransformExecutor.execute(parsedInputData, tp);
 
-        //For the sake of this example, let's collect the data locally and print it:
-        JavaRDD<String> processedAsString = processedData.map(new WritablesToStringFunction(","));
-        //processedAsString.saveAsTextFile("file://your/local/save/path/here");   //To save locally
-        //processedAsString.saveAsTextFile("hdfs://your/hdfs/save/path/here");   //To save to hdfs
-
+        // Write processed data to stdout
+        JavaRDD<String> processedAsString = processedData
+                .map(new WritablesToStringFunction(","));
         List<String> processedCollected = processedAsString.collect();
-        List<String> inputDataCollected = stringData.collect();
-
-
-        System.out.println("\n\n---- Original Data ----");
-        for(String s : inputDataCollected) System.out.println(s);
 
         System.out.println("\n\n---- Processed Data ----");
         for(String s : processedCollected) System.out.println(s);
 
 
-        System.out.println("\n\nDONE");
+        // Write processed data to txt-file
+        File tmpDir = new File(System.getProperty("java.io.tmpdir"));
+        UUID uuid = UUID.randomUUID();
+        File outTxt = new File(tmpDir, "playerpos-" + uuid);
+        processedAsString.saveAsTextFile("file://" + outTxt);
+        log.info("Wrote processed data to txt-file: " + outTxt);
 
     }
 
