@@ -49,11 +49,6 @@ public class DataSetReader {
                 .removeColumns("nr", "y", "dir")
                 .build();
 
-        Schema playerposXSchema = tp.getFinalSchema();
-
-        log.debug("Playerpos Schema X-Values:\n");
-        log.debug("" + playerposXSchema);
-
         SparkConf conf = new SparkConf();
         conf.setMaster("local[*]");
         conf.setAppName("DataVec Example");
@@ -86,9 +81,9 @@ public class DataSetReader {
         // Write processed data to txt-file
         File tmpDir = new File(System.getProperty("java.io.tmpdir"));
         UUID uuid = UUID.randomUUID();
-        File outTxt = new File(tmpDir, "playerpos-" + uuid);
-        processedAsString.saveAsTextFile("file://" + outTxt);
-        log.info("Wrote processed data to txt-file: " + outTxt);
+        File outDir = new File(tmpDir, "playerpos-" + uuid);
+        processedAsString.saveAsTextFile("file://" + outDir);
+        log.info("Wrote processed data to txt-file: " + outDir);
 
     }
 
