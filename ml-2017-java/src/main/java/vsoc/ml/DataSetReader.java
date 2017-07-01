@@ -11,18 +11,16 @@ import org.datavec.api.transform.schema.Schema;
 import org.datavec.api.writable.Writable;
 import org.datavec.spark.transform.SparkTransformExecutor;
 import org.datavec.spark.transform.misc.StringToWritablesFunction;
-import org.datavec.spark.transform.misc.WritablesToStringFunction;
 import org.deeplearning4j.datasets.datavec.RecordReaderDataSetIterator;
 import org.nd4j.linalg.dataset.DataSet;
+import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * Read e vsoc dataset
@@ -72,37 +70,14 @@ public class DataSetReader {
         JavaRDD<List<Writable>> parsedInputData = inputRdd.map(new StringToWritablesFunction(recordReader));
         JavaRDD<List<Writable>> processedData = SparkTransformExecutor.execute(parsedInputData, tp);
 
-        writeToStdout(processedData);
-
         CollectionRecordReader reader = new CollectionRecordReader(processedData.collect());
+        DataSetIterator dataSetIterator = new RecordReaderDataSetIterator(reader,30, 42, 42, true);
 
-        RecordReaderDataSetIterator dataSetIterator = new RecordReaderDataSetIterator(reader,10, 42, 42, true);
-        log.info("iterator: " + dataSetIterator);
         while (dataSetIterator.hasNext()) {
             DataSet dataSet = dataSetIterator.next();
-            log.info("META:" + dataSet.toString());
+            log.info("--- DataSet ---\n" + dataSet.toString());
         }
-        log.info("showed iterations");
-    }
-
-    void writeToStdout(JavaRDD<List<Writable>> processedData) {
-        JavaRDD<String> processedAsString = processedData.map(new WritablesToStringFunction(","));
-        writeStringToStdout(processedAsString);
-    }
-
-    void writeStringToStdout(JavaRDD<String> stringRdd) {
-        // Write processed data to stdout
-        List<String> outputLines = stringRdd.collect();
-        for (String s : outputLines) System.out.println(s);
-    }
-
-    void writeToFile(JavaRDD<List<Writable>> processedData) {
-        JavaRDD<String> stringRdd = processedData.map(new WritablesToStringFunction(","));
-        File tmpDir = new File(System.getProperty("java.io.tmpdir"));
-        UUID uuid = UUID.randomUUID();
-        File outDir = new File(tmpDir, "playerpos-" + uuid);
-        stringRdd.saveAsTextFile("file://" + outDir);
-        log.info("Wrote processed data to txt-file: " + outDir);
+        log.info("-- Finished ---");
     }
 
     protected Schema createPlayerposSchema() {
