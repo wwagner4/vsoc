@@ -1,13 +1,19 @@
 package vsoc.ml;
 
 import org.apache.spark.SparkConf;
+import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
+import org.datavec.api.records.reader.RecordReader;
+import org.datavec.api.records.reader.impl.csv.CSVRecordReader;
 import org.datavec.api.transform.TransformProcess;
 import org.datavec.api.transform.schema.Schema;
+import org.datavec.api.writable.Writable;
+import org.datavec.spark.transform.misc.StringToWritablesFunction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.util.List;
 
 /**
  * Read e vsoc dataset
@@ -32,8 +38,8 @@ public class DataSetReader {
 
         Schema playerposSchema = createPlayerposSchema();
 
-        log.info("Playerpos Schema:\n");
-        log.info("" + playerposSchema);
+        log.debug("Playerpos Schema:\n");
+        log.debug("" + playerposSchema);
 
         TransformProcess tp = new TransformProcess.Builder(playerposSchema)
                 .removeColumns("nr", "y", "dir")
@@ -41,12 +47,8 @@ public class DataSetReader {
 
         Schema playerposXSchema = tp.getFinalSchema();
 
-        log.info("Playerpos Schema X-Values:\n");
-        log.info("" + playerposXSchema);
-
-
-
-
+        log.debug("Playerpos Schema X-Values:\n");
+        log.debug("" + playerposXSchema);
 
         SparkConf conf = new SparkConf();
         conf.setMaster("local[*]");
@@ -56,8 +58,13 @@ public class DataSetReader {
 
         log.info("Created Spark Context: " + sc);
 
+        JavaRDD<String> stringData = sc.textFile(file.getAbsolutePath());
 
+        //We first need to parse this format. It's comma-delimited (CSV) format, so let's parse it using CSVRecordReader:
+        RecordReader rr = new CSVRecordReader();
+        JavaRDD<List<Writable>> parsedInputData = stringData.map(new StringToWritablesFunction(rr));
 
+        log.info("Parsed input Data " + parsedInputData);
 
     }
 
