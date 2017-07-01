@@ -1,6 +1,5 @@
 package vsoc.ml;
 
-import freemarker.log.SLF4JLoggerFactory;
 import org.datavec.api.transform.TransformProcess;
 import org.datavec.api.transform.schema.Schema;
 import org.slf4j.Logger;
