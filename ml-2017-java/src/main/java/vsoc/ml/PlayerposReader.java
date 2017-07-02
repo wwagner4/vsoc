@@ -12,7 +12,6 @@ import org.datavec.api.writable.Writable;
 import org.datavec.spark.transform.SparkTransformExecutor;
 import org.datavec.spark.transform.misc.StringToWritablesFunction;
 import org.deeplearning4j.datasets.datavec.RecordReaderDataSetIterator;
-import org.nd4j.linalg.dataset.DataSet;
 import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,20 +22,24 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * Read e vsoc dataset
+ * Read a vsoc dataset
  */
-public class DataSetReader {
+public class PlayerposReader {
 
-    private static final Logger log = LoggerFactory.getLogger(DataSetReader.class);
+    private static final Logger log = LoggerFactory.getLogger(PlayerposReader.class);
 
     public static void main(String... arg) {
         String baseDirName = "/Users/wwagner4/vsoc/data";
         String dataFileName = "random_pos_100.csv";
 
-        new DataSetReader().readPlayerposXDataSet(baseDirName, dataFileName);
+        MlUtil util = new MlUtil();
+        PlayerposReader datasetReader = new PlayerposReader();
+
+        DataSetIterator dataSetIterator = datasetReader.readPlayerposXDataSet(baseDirName, dataFileName);
+        util.printDataSetIterator(dataSetIterator);
     }
 
-    public void readPlayerposXDataSet(String baseDirName, String dataFileName) {
+    public DataSetIterator readPlayerposXDataSet(String baseDirName, String dataFileName) {
 
         File dataDir = new File(baseDirName);
         File file = new File(dataDir, dataFileName);
@@ -71,13 +74,8 @@ public class DataSetReader {
         JavaRDD<List<Writable>> processedData = SparkTransformExecutor.execute(parsedInputData, tp);
 
         CollectionRecordReader reader = new CollectionRecordReader(processedData.collect());
-        DataSetIterator dataSetIterator = new RecordReaderDataSetIterator(reader,30, 42, 42, true);
 
-        while (dataSetIterator.hasNext()) {
-            DataSet dataSet = dataSetIterator.next();
-            log.info("--- DataSet ---\n" + dataSet.toString());
-        }
-        log.info("-- Finished ---");
+        return new RecordReaderDataSetIterator(reader, 30, 42, 42, true);
     }
 
     protected Schema createPlayerposSchema() {
