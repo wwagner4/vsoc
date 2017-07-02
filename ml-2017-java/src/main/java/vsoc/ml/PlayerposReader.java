@@ -7,8 +7,10 @@ import org.apache.spark.api.java.JavaSparkContext;
 import org.datavec.api.records.reader.RecordReader;
 import org.datavec.api.records.reader.impl.collection.CollectionRecordReader;
 import org.datavec.api.records.reader.impl.csv.CSVRecordReader;
+import org.datavec.api.split.FileSplit;
 import org.datavec.api.transform.TransformProcess;
 import org.datavec.api.transform.schema.Schema;
+import org.datavec.api.util.ClassPathResource;
 import org.datavec.api.writable.Writable;
 import org.datavec.spark.transform.SparkTransformExecutor;
 import org.datavec.spark.transform.misc.StringToWritablesFunction;
@@ -38,19 +40,25 @@ public class PlayerposReader {
         String inputFileName = "random_pos_200000.csv";
         String outputFileName = "random_pos_200000_xval.csv";
 
-        PlayerposReader datasetReader = new PlayerposReader();
+        SparkConf conf = new SparkConf();
+        conf.setMaster("local[*]");
+        conf.setAppName("DataVec Example");
 
-        File dataDir = new File(baseDirName);
-        File inputFile = new File(dataDir, inputFileName);
-        File outputFile = new File(dataDir, outputFileName);
-        JavaRDD<List<Writable>> listJavaRDD = datasetReader.transformToX(inputFile);
+        try (JavaSparkContext sc = new JavaSparkContext(conf)) {
+            PlayerposReader datasetReader = new PlayerposReader();
 
-        JavaRDD<String> processedAsString = listJavaRDD
-                .map(new WritablesToStringFunction(","));
+            File dataDir = new File(baseDirName);
+            File inputFile = new File(dataDir, inputFileName);
+            File outputFile = new File(dataDir, outputFileName);
+            JavaRDD<List<Writable>> listJavaRDD = datasetReader.transformToX(inputFile, sc);
 
-        // Write processed data to CSV-File
-        datasetReader.writeToFile(outputFile, processedAsString);
-        log.info("wrote transformed data to: " + outputFile);
+            JavaRDD<String> processedAsString = listJavaRDD
+                    .map(new WritablesToStringFunction(","));
+
+            // Write processed data to CSV-File
+            datasetReader.writeToFile(outputFile, processedAsString);
+            log.info("wrote transformed data to: " + outputFile);
+        }
     }
 
     private void writeToFile(File outFile, JavaRDD<String> lines) {
@@ -82,7 +90,7 @@ public class PlayerposReader {
         return new File(new File(tmpDirName), "ml" + uuid.getMostSignificantBits());
     }
 
-    private JavaRDD<List<Writable>> transformToX(File file) {
+    private JavaRDD<List<Writable>> transformToX(File file, JavaSparkContext sc) {
         log.info("Reading data from " + file);
 
         Schema playerposSchema = createPlayerposSchema();
@@ -99,11 +107,6 @@ public class PlayerposReader {
                 .reorderColumns(reorder.toArray(new String[reorder.size()]))
                 .build();
 
-        SparkConf conf = new SparkConf();
-        conf.setMaster("local[*]");
-        conf.setAppName("DataVec Example");
-
-        JavaSparkContext sc = new JavaSparkContext(conf);
 
         JavaRDD<String> inputRdd = sc.textFile(file.getAbsolutePath());
 
@@ -113,12 +116,20 @@ public class PlayerposReader {
         return SparkTransformExecutor.execute(parsedInputData, tp);
     }
 
-    public DataSetIterator readPlayerposXDataSet(String baseDirName, String dataFileName) {
-        File dataDir = new File(baseDirName);
-        File file = new File(dataDir, dataFileName);
-        JavaRDD<List<Writable>> processedData = transformToX(file);
+    public DataSetIterator readPlayerposDataSetWithTransform(File inFile, int batchSize, JavaSparkContext sc) {
+        JavaRDD<List<Writable>> processedData = transformToX(inFile, sc);
         CollectionRecordReader reader = new CollectionRecordReader(processedData.collect());
-        return new RecordReaderDataSetIterator(reader, 30, 42, 42, true);
+        return new RecordReaderDataSetIterator(reader, batchSize, 42, 42, true);
+    }
+
+    public DataSetIterator readPlayerposXDataSet(File inFile, int batchSize) {
+        try {
+            RecordReader recordReader = new CSVRecordReader(0, ",");
+            recordReader.initialize(new FileSplit(inFile));
+            return new RecordReaderDataSetIterator(recordReader, batchSize, 42, 42, true);
+        } catch (IOException | InterruptedException e) {
+            throw new IllegalStateException("Error in 'readPlayerposXDataSet'. " + e.getMessage(), e);
+        }
     }
 
     protected Schema createPlayerposSchema() {
