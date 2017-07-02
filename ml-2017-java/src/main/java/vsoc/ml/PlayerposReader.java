@@ -1,5 +1,6 @@
 package vsoc.ml;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
@@ -11,15 +12,19 @@ import org.datavec.api.transform.schema.Schema;
 import org.datavec.api.writable.Writable;
 import org.datavec.spark.transform.SparkTransformExecutor;
 import org.datavec.spark.transform.misc.StringToWritablesFunction;
+import org.datavec.spark.transform.misc.WritablesToStringFunction;
 import org.deeplearning4j.datasets.datavec.RecordReaderDataSetIterator;
 import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Read a vsoc dataset
@@ -30,20 +35,54 @@ public class PlayerposReader {
 
     public static void main(String... arg) {
         String baseDirName = "/Users/wwagner4/vsoc/data";
-        String dataFileName = "random_pos_100.csv";
+        String inputFileName = "random_pos_200000.csv";
+        String outputFileName = "random_pos_200000_xval.csv";
 
-        MlUtil util = new MlUtil();
         PlayerposReader datasetReader = new PlayerposReader();
 
-        DataSetIterator dataSetIterator = datasetReader.readPlayerposXDataSet(baseDirName, dataFileName);
-        util.printDataSetIterator(dataSetIterator);
+        File dataDir = new File(baseDirName);
+        File inputFile = new File(dataDir, inputFileName);
+        File outputFile = new File(dataDir, outputFileName);
+        JavaRDD<List<Writable>> listJavaRDD = datasetReader.transformToX(inputFile);
+
+        JavaRDD<String> processedAsString = listJavaRDD
+                .map(new WritablesToStringFunction(","));
+
+        // Write processed data to CSV-File
+        datasetReader.writeToFile(outputFile, processedAsString);
+        log.info("wrote transformed data to: " + outputFile);
     }
 
-    public DataSetIterator readPlayerposXDataSet(String baseDirName, String dataFileName) {
+    private void writeToFile(File outFile, JavaRDD<String> lines) {
+        File tmp = createTempDirectory();
+        lines.saveAsTextFile(tmp.getAbsolutePath());
+        log.info("Collecting in temporary directory: " + tmp.getAbsolutePath());
 
-        File dataDir = new File(baseDirName);
-        File file = new File(dataDir, dataFileName);
+        try {
+            try (final FileOutputStream pw = new FileOutputStream(outFile)) {
+                File[] files = tmp.listFiles();
+                if (files == null || files.length == 0) {
+                    throw new IllegalStateException("No data found");
+                }
+                for (File file : files) {
+                    if (file.getName().startsWith("part")) {
+                        log.info("Reading part: " + file);
+                        FileUtils.copyFile(file, pw);
+                    }
+                }
+            }
+        } catch (IOException ex) {
+            throw new IllegalStateException(ex);
+        }
+    }
 
+    private File createTempDirectory() {
+        String tmpDirName = System.getProperty("java.io.tmpdir");
+        UUID uuid = UUID.randomUUID();
+        return new File(new File(tmpDirName), "ml" + uuid.getMostSignificantBits());
+    }
+
+    private JavaRDD<List<Writable>> transformToX(File file) {
         log.info("Reading data from " + file);
 
         Schema playerposSchema = createPlayerposSchema();
@@ -71,10 +110,14 @@ public class PlayerposReader {
         //We first need to parse this format. It's comma-delimited (CSV) format, so let's parse it using CSVRecordReader:
         RecordReader recordReader = new CSVRecordReader(0, ",");
         JavaRDD<List<Writable>> parsedInputData = inputRdd.map(new StringToWritablesFunction(recordReader));
-        JavaRDD<List<Writable>> processedData = SparkTransformExecutor.execute(parsedInputData, tp);
+        return SparkTransformExecutor.execute(parsedInputData, tp);
+    }
 
+    public DataSetIterator readPlayerposXDataSet(String baseDirName, String dataFileName) {
+        File dataDir = new File(baseDirName);
+        File file = new File(dataDir, dataFileName);
+        JavaRDD<List<Writable>> processedData = transformToX(file);
         CollectionRecordReader reader = new CollectionRecordReader(processedData.collect());
-
         return new RecordReaderDataSetIterator(reader, 30, 42, 42, true);
     }
 
