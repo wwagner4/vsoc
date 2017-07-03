@@ -5,8 +5,8 @@ lazy val commonSettings = Seq(
   organization := "net.entelijan.vsoc",
   scalaVersion := _scalaVersion,
   version := "0.0.1-SNAPSHOT",
-  //resolvers += "Local Maven Repository" at "file://" + sbt.Path.userHome.absolutePath + "/.m2/repository",
-  resolvers += "Local Maven Repository" at "file:///C:/ta30/nutzb/_m2_repo/",
+  resolvers += "Local Maven Repository" at "file://" + sbt.Path.userHome.absolutePath + "/.m2/repository",
+  //resolvers += "Local Maven Repository" at "file:///C:/ta30/nutzb/_m2_repo/",
   libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.2" % "test")
 
 lazy val root = (project in file("."))
