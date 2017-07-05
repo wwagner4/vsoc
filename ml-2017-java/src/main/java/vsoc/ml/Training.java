@@ -48,7 +48,6 @@ public class Training {
 
     private MultiLayerNetwork train(DataSetIterator dataSetIterator) {
         MultiLayerConfiguration nnConf = nnConfiguration();
-        // System.out.printf("nn conf: %s%n", nnConfiguration);
 
         //Create the network
         final MultiLayerNetwork net = new MultiLayerNetwork(nnConf);

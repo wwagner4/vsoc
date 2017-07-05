@@ -2,7 +2,6 @@ package vsoc.ml;
 
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.deeplearning4j.util.ModelSerializer;
-import org.nd4j.linalg.api.ndarray.BaseNDArray;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
 import org.slf4j.Logger;
@@ -14,7 +13,7 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * Read a trained net and use it with testdata
+ * Read a trained net and use it with test data
  */
 public class UseNN {
 
