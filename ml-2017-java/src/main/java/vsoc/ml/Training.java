@@ -28,7 +28,6 @@ public class Training {
 
     public static void main(String... args) throws IOException {
 
-        final String baseDirName = "/Users/wwagner4/vsoc/data";
         final String dataFileNameTransformed = "random_pos_200000_xval.csv";
 
         MlUtil util = new MlUtil();
@@ -36,7 +35,7 @@ public class Training {
         Training training = new Training();
 
         log.info("Start read data");
-        File dataDir = new File(baseDirName);
+        File dataDir = util.dataDir();
         DataSetIterator dataSetIterator = datasetReader.readPlayerposXDataSet(new File(dataDir, dataFileNameTransformed), 5000);
         log.info("Start training");
         MultiLayerNetwork nn = training.train(dataSetIterator);

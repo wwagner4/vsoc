@@ -36,9 +36,10 @@ public class PlayerposReader {
     private static final Logger log = LoggerFactory.getLogger(PlayerposReader.class);
 
     public static void main(String... arg) {
-        String baseDirName = "/Users/wwagner4/vsoc/data";
         String inputFileName = "random_pos_200000.csv";
         String outputFileName = "random_pos_200000_xval.csv";
+
+        MlUtil util = new MlUtil();
 
         SparkConf conf = new SparkConf();
         conf.setMaster("local[*]");
@@ -47,7 +48,7 @@ public class PlayerposReader {
         try (JavaSparkContext sc = new JavaSparkContext(conf)) {
             PlayerposReader datasetReader = new PlayerposReader();
 
-            File dataDir = new File(baseDirName);
+            File dataDir = util.dataDir();
             File inputFile = new File(dataDir, inputFileName);
             File outputFile = new File(dataDir, outputFileName);
             JavaRDD<List<Writable>> listJavaRDD = datasetReader.transformToX(inputFile, sc);
