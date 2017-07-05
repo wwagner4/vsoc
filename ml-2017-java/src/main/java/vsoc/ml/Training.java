@@ -9,6 +9,7 @@ import org.deeplearning4j.nn.conf.layers.OutputLayer;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.deeplearning4j.nn.weights.WeightInit;
 import org.deeplearning4j.optimize.listeners.ScoreIterationListener;
+import org.deeplearning4j.util.ModelSerializer;
 import org.nd4j.linalg.activations.Activation;
 import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
 import org.nd4j.linalg.lossfunctions.LossFunctions;
@@ -16,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.io.IOException;
 
 /**
  * Trains a NN to learn the values of the playerpos datasets
@@ -24,7 +26,7 @@ public class Training {
 
     private static final Logger log = LoggerFactory.getLogger(Training.class);
 
-    public static void main(String... args) {
+    public static void main(String... args) throws IOException {
 
         final String baseDirName = "/Users/wwagner4/vsoc/data";
         final String dataFileNameTransformed = "random_pos_200000_xval.csv";
@@ -37,11 +39,15 @@ public class Training {
         File dataDir = new File(baseDirName);
         DataSetIterator dataSetIterator = datasetReader.readPlayerposXDataSet(new File(dataDir, dataFileNameTransformed), 5000);
         log.info("Start training");
-        training.train(dataSetIterator);
+        MultiLayerNetwork nn = training.train(dataSetIterator);
         log.info("Finished training");
+
+        File netFile = new File(dataDir, "nn.ser");
+        ModelSerializer.writeModel(nn, netFile, true);
+        log.info("Saved model to " + netFile);
     }
 
-    private void train(DataSetIterator dataSetIterator) {
+    private MultiLayerNetwork train(DataSetIterator dataSetIterator) {
         MultiLayerConfiguration nnConf = nnConfiguration();
         // System.out.printf("nn conf: %s%n", nnConfiguration);
 
@@ -49,8 +55,8 @@ public class Training {
         final MultiLayerNetwork net = new MultiLayerNetwork(nnConf);
         net.init();
         net.setListeners(new ScoreIterationListener(1));
-
         net.fit(dataSetIterator);
+        return net;
     }
 
     /**
