@@ -14,7 +14,7 @@ public class MlUtil {
      *
      * @param dataSetIterator A dataset iterator to be displayed in stdout
      */
-    public void printDataSetIterator(DataSetIterator dataSetIterator) {
+    public static void printDataSetIterator(DataSetIterator dataSetIterator) {
         int cnt = 0;
         while (dataSetIterator.hasNext()) {
             DataSet dataSet = dataSetIterator.next();
@@ -27,14 +27,14 @@ public class MlUtil {
     /**
      * @return The data-directory. Creates the directory if it does not exist
      */
-    public File dataDir() {
+    public static File dataDir() {
         String homeDirName = System.getProperty("user.home");
         File homeDir = new File(homeDirName);
         File vsocDir = subdir(homeDir, "vsoc");
         return subdir(vsocDir, "data");
     }
 
-    private File subdir(File parentDir, String name) {
+    private static File subdir(File parentDir, String name) {
         File dataDir = new File(parentDir, name);
         if (!dataDir.exists()) {
             boolean ok = dataDir.mkdir();
@@ -45,8 +45,12 @@ public class MlUtil {
         return dataDir;
     }
 
-    public String delim() {
+    public static String delim() {
         return ";";
+    }
+
+    public static String f(String format, Object... params) {
+        return String.format(format, params);
     }
 
 

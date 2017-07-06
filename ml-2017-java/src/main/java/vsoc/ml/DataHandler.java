@@ -22,10 +22,9 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+
+import static vsoc.ml.MlUtil.*;
 
 /**
  * Read a vsoc dataset and converts it in a form
@@ -36,30 +35,35 @@ public class DataHandler {
     private static final Logger log = LoggerFactory.getLogger(DataHandler.class);
 
     public static void main(String... arg) {
-        String inputFileName = "random_pos_200000.csv";
-        String outputFileName = "random_pos_200000_xval.csv";
-
-        MlUtil util = new MlUtil();
-
         SparkConf conf = new SparkConf();
         conf.setMaster("local[*]");
         conf.setAppName("DataVec Example");
 
         try (JavaSparkContext sc = new JavaSparkContext(conf)) {
-            DataHandler datasetReader = new DataHandler();
-
-            File dataDir = util.dataDir();
-            File inputFile = new File(dataDir, inputFileName);
-            File outputFile = new File(dataDir, outputFileName);
-            JavaRDD<List<Writable>> listJavaRDD = datasetReader.transformToX(inputFile, sc, util.delim());
-
-            JavaRDD<String> processedAsString = listJavaRDD
-                    .map(new WritablesToStringFunction(util.delim()));
-
-            // Write processed data to CSV-File
-            datasetReader.writeToFile(outputFile, processedAsString);
-            log.info("wrote transformed data to: " + outputFile);
+            DataHandler dh = new DataHandler();
+            List<String> qualis = Arrays.asList("10", "100", "1000", "50000", "200000");
+            qualis.forEach(q -> dh.convert(q, sc));
         }
+    }
+
+    private void convert(String quali, JavaSparkContext sc) {
+
+        String inputFileName = f("random_pos_%s.csv", quali);
+        String outputFileName = f("random_pos_%s_xval.csv", quali);
+
+
+        File dataDir = dataDir();
+        File inputFile = new File(dataDir, inputFileName);
+        File outputFile = new File(dataDir, outputFileName);
+        JavaRDD<List<Writable>> listJavaRDD = transformToX(inputFile, sc);
+
+        JavaRDD<String> processedAsString = listJavaRDD
+                .map(new WritablesToStringFunction(delim()));
+
+        // Write processed data to CSV-File
+        writeToFile(outputFile, processedAsString);
+        log.info("wrote transformed data to: " + outputFile);
+
     }
 
     private void writeToFile(File outFile, JavaRDD<String> lines) {
@@ -91,7 +95,7 @@ public class DataHandler {
         return new File(new File(tmpDirName), "ml" + uuid.getMostSignificantBits());
     }
 
-    private JavaRDD<List<Writable>> transformToX(File file, JavaSparkContext sc, String delim) {
+    private JavaRDD<List<Writable>> transformToX(File file, JavaSparkContext sc) {
         log.info("Reading data from " + file);
 
         Schema playerposSchema = createPlayerposSchema();
@@ -112,20 +116,20 @@ public class DataHandler {
         JavaRDD<String> inputRdd = sc.textFile(file.getAbsolutePath());
 
         //We first need to parse this format. It's comma-delimited (CSV) format, so let's parse it using CSVRecordReader:
-        RecordReader recordReader = new CSVRecordReader(0, delim);
+        RecordReader recordReader = new CSVRecordReader(0, delim());
         JavaRDD<List<Writable>> parsedInputData = inputRdd.map(new StringToWritablesFunction(recordReader));
         return SparkTransformExecutor.execute(parsedInputData, tp);
     }
 
-    public DataSetIterator readPlayerposDataSetWithTransform(File inFile, int batchSize, JavaSparkContext sc, String delim) {
-        JavaRDD<List<Writable>> processedData = transformToX(inFile, sc, delim);
+    public DataSetIterator readPlayerposDataSetWithTransform(File inFile, int batchSize, JavaSparkContext sc) {
+        JavaRDD<List<Writable>> processedData = transformToX(inFile, sc);
         CollectionRecordReader reader = new CollectionRecordReader(processedData.collect());
         return new RecordReaderDataSetIterator(reader, batchSize, 42, 42, true);
     }
 
-    public DataSetIterator readPlayerposXDataSet(File inFile, int batchSize, String delim) {
+    public DataSetIterator readPlayerposXDataSet(File inFile, int batchSize) {
         try {
-            RecordReader recordReader = new CSVRecordReader(0, delim);
+            RecordReader recordReader = new CSVRecordReader(0, delim());
             recordReader.initialize(new FileSplit(inFile));
             return new RecordReaderDataSetIterator(recordReader, batchSize, 42, 42, true);
         } catch (IOException | InterruptedException e) {

@@ -19,6 +19,8 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 
+import static vsoc.ml.MlUtil.*;
+
 /**
  * Trains a NN to learn the values of the playerpos datasets
  */
@@ -30,18 +32,16 @@ public class Training {
 
         final String dataFileNameTransformed = "random_pos_200000_xval.csv";
 
-        MlUtil util = new MlUtil();
         DataHandler datasetReader = new DataHandler();
         Training training = new Training();
 
         log.info("Start read data");
-        File dataDir = util.dataDir();
-        DataSetIterator dataSetIterator = datasetReader.readPlayerposXDataSet(new File(dataDir, dataFileNameTransformed), 5000, util.delim());
+        DataSetIterator dataSetIterator = datasetReader.readPlayerposXDataSet(new File(dataDir(), dataFileNameTransformed), 5000);
         log.info("Start training");
         MultiLayerNetwork nn = training.train(dataSetIterator);
         log.info("Finished training");
 
-        File netFile = new File(dataDir, "nn.ser");
+        File netFile = new File(dataDir(), "nn.ser");
         ModelSerializer.writeModel(nn, netFile, true);
         log.info("Saved model to " + netFile);
     }
