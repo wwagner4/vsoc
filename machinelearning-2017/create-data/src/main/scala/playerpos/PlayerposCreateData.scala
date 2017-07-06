@@ -16,6 +16,8 @@ import vsoc.util.Vec2D
 
 object PlayerposCreateData {
 
+  implicit val sepaStr = ";"
+
   def createDataFiles(name: String, sizes: Seq[Int], fPlacement: (Player, Int) => Unit, initialPlacement: vsoc.server.InitialPlacement): Unit = {
 
     sizes.foreach { size =>
@@ -81,8 +83,6 @@ object PlayerposCreateData {
   }
 
   def format(cnt: Int, pos: Vec2D, dir: Double, features: Array[Double]): String = {
-
-    implicit val sepaStr = ","
 
     val cntStr = Formatter.formatWide(cnt)
     val xStr = Formatter.formatWide(pos.getX)

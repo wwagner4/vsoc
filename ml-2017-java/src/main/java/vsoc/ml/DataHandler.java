@@ -28,11 +28,12 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * Read a vsoc dataset
+ * Read a vsoc dataset and converts it in a form
+ * that can be used for training NNs
  */
-public class PlayerposReader {
+public class DataHandler {
 
-    private static final Logger log = LoggerFactory.getLogger(PlayerposReader.class);
+    private static final Logger log = LoggerFactory.getLogger(DataHandler.class);
 
     public static void main(String... arg) {
         String inputFileName = "random_pos_200000.csv";
@@ -45,15 +46,15 @@ public class PlayerposReader {
         conf.setAppName("DataVec Example");
 
         try (JavaSparkContext sc = new JavaSparkContext(conf)) {
-            PlayerposReader datasetReader = new PlayerposReader();
+            DataHandler datasetReader = new DataHandler();
 
             File dataDir = util.dataDir();
             File inputFile = new File(dataDir, inputFileName);
             File outputFile = new File(dataDir, outputFileName);
-            JavaRDD<List<Writable>> listJavaRDD = datasetReader.transformToX(inputFile, sc);
+            JavaRDD<List<Writable>> listJavaRDD = datasetReader.transformToX(inputFile, sc, util.delim());
 
             JavaRDD<String> processedAsString = listJavaRDD
-                    .map(new WritablesToStringFunction(","));
+                    .map(new WritablesToStringFunction(util.delim()));
 
             // Write processed data to CSV-File
             datasetReader.writeToFile(outputFile, processedAsString);
@@ -90,7 +91,7 @@ public class PlayerposReader {
         return new File(new File(tmpDirName), "ml" + uuid.getMostSignificantBits());
     }
 
-    private JavaRDD<List<Writable>> transformToX(File file, JavaSparkContext sc) {
+    private JavaRDD<List<Writable>> transformToX(File file, JavaSparkContext sc, String delim) {
         log.info("Reading data from " + file);
 
         Schema playerposSchema = createPlayerposSchema();
@@ -111,20 +112,20 @@ public class PlayerposReader {
         JavaRDD<String> inputRdd = sc.textFile(file.getAbsolutePath());
 
         //We first need to parse this format. It's comma-delimited (CSV) format, so let's parse it using CSVRecordReader:
-        RecordReader recordReader = new CSVRecordReader(0, ",");
+        RecordReader recordReader = new CSVRecordReader(0, delim);
         JavaRDD<List<Writable>> parsedInputData = inputRdd.map(new StringToWritablesFunction(recordReader));
         return SparkTransformExecutor.execute(parsedInputData, tp);
     }
 
-    public DataSetIterator readPlayerposDataSetWithTransform(File inFile, int batchSize, JavaSparkContext sc) {
-        JavaRDD<List<Writable>> processedData = transformToX(inFile, sc);
+    public DataSetIterator readPlayerposDataSetWithTransform(File inFile, int batchSize, JavaSparkContext sc, String delim) {
+        JavaRDD<List<Writable>> processedData = transformToX(inFile, sc, delim);
         CollectionRecordReader reader = new CollectionRecordReader(processedData.collect());
         return new RecordReaderDataSetIterator(reader, batchSize, 42, 42, true);
     }
 
-    public DataSetIterator readPlayerposXDataSet(File inFile, int batchSize) {
+    public DataSetIterator readPlayerposXDataSet(File inFile, int batchSize, String delim) {
         try {
-            RecordReader recordReader = new CSVRecordReader(0, ",");
+            RecordReader recordReader = new CSVRecordReader(0, delim);
             recordReader.initialize(new FileSplit(inFile));
             return new RecordReaderDataSetIterator(recordReader, batchSize, 42, 42, true);
         } catch (IOException | InterruptedException e) {

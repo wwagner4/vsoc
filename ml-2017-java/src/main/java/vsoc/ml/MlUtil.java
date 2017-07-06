@@ -45,5 +45,9 @@ public class MlUtil {
         return dataDir;
     }
 
+    public String delim() {
+        return ";";
+    }
+
 
 }

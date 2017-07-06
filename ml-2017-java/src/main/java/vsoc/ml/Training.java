@@ -31,12 +31,12 @@ public class Training {
         final String dataFileNameTransformed = "random_pos_200000_xval.csv";
 
         MlUtil util = new MlUtil();
-        PlayerposReader datasetReader = new PlayerposReader();
+        DataHandler datasetReader = new DataHandler();
         Training training = new Training();
 
         log.info("Start read data");
         File dataDir = util.dataDir();
-        DataSetIterator dataSetIterator = datasetReader.readPlayerposXDataSet(new File(dataDir, dataFileNameTransformed), 5000);
+        DataSetIterator dataSetIterator = datasetReader.readPlayerposXDataSet(new File(dataDir, dataFileNameTransformed), 5000, util.delim());
         log.info("Start training");
         MultiLayerNetwork nn = training.train(dataSetIterator);
         log.info("Finished training");
