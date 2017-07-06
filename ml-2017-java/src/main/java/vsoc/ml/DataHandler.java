@@ -1,7 +1,6 @@
 package vsoc.ml;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.datavec.api.records.reader.RecordReader;
@@ -35,18 +34,15 @@ public class DataHandler {
     private static final Logger log = LoggerFactory.getLogger(DataHandler.class);
 
     public static void main(String... arg) {
-        SparkConf conf = new SparkConf();
-        conf.setMaster("local[*]");
-        conf.setAppName("DataVec Example");
 
-        try (JavaSparkContext sc = new JavaSparkContext(conf)) {
+        try (JavaSparkContext sc = new JavaSparkContext(sparkConfSimple())) {
             DataHandler dh = new DataHandler();
             List<String> qualis = Arrays.asList("10", "100", "1000", "50000", "200000");
             qualis.forEach(q -> dh.convert(q, sc));
         }
     }
 
-    private void convert(String quali, JavaSparkContext sc) {
+    private void convert(String quali, JavaSparkContext sparkContext) {
 
         String inputFileName = f("random_pos_%s.csv", quali);
         String outputFileName = f("random_pos_%s_xval.csv", quali);
@@ -55,7 +51,7 @@ public class DataHandler {
         File dataDir = dataDir();
         File inputFile = new File(dataDir, inputFileName);
         File outputFile = new File(dataDir, outputFileName);
-        JavaRDD<List<Writable>> listJavaRDD = transformToX(inputFile, sc);
+        JavaRDD<List<Writable>> listJavaRDD = transformToX(inputFile, sparkContext);
 
         JavaRDD<String> processedAsString = listJavaRDD
                 .map(new WritablesToStringFunction(delim()));
@@ -95,7 +91,7 @@ public class DataHandler {
         return new File(new File(tmpDirName), "ml" + uuid.getMostSignificantBits());
     }
 
-    private JavaRDD<List<Writable>> transformToX(File file, JavaSparkContext sc) {
+    private JavaRDD<List<Writable>> transformToX(File file, JavaSparkContext sparkContext) {
         log.info("Reading data from " + file);
 
         Schema playerposSchema = createPlayerposSchema();
@@ -113,7 +109,7 @@ public class DataHandler {
                 .build();
 
 
-        JavaRDD<String> inputRdd = sc.textFile(file.getAbsolutePath());
+        JavaRDD<String> inputRdd = sparkContext.textFile(file.getAbsolutePath());
 
         //We first need to parse this format. It's comma-delimited (CSV) format, so let's parse it using CSVRecordReader:
         RecordReader recordReader = new CSVRecordReader(0, delim());

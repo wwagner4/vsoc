@@ -1,5 +1,6 @@
 package vsoc.ml;
 
+import org.apache.spark.SparkConf;
 import org.nd4j.linalg.dataset.DataSet;
 import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
 
@@ -51,6 +52,13 @@ public class MlUtil {
 
     public static String f(String format, Object... params) {
         return String.format(format, params);
+    }
+
+    public static SparkConf sparkConfSimple() {
+        SparkConf conf = new SparkConf();
+        conf.setMaster("local[*]");
+        conf.setAppName("DataVec Example");
+        return conf;
     }
 
 
