@@ -62,10 +62,10 @@ public class Training {
      */
     private static MultiLayerConfiguration nnConfiguration() {
         final int numHiddenNodes = 50;
-        final double learningRate = 0.005;
-        final int iterations = 1;
+        final double learningRate = 0.0001;
+        final int iterations = 5;
         return new NeuralNetConfiguration.Builder()
-                .seed(29847298437L)
+                .seed(923847L)
                 .iterations(iterations)
                 .optimizationAlgo(OptimizationAlgorithm.STOCHASTIC_GRADIENT_DESCENT)
                 .learningRate(learningRate)
