@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.nio.IntBuffer;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -45,22 +46,16 @@ public class UseNN {
 
         List<INDArray> output = nn.feedForward(features, false);
 
+
+
         INDArray out = output.get(output.size() - 1);
         INDArray diff = labels.sub(out);
-        log.info("out:    " + out);
-        log.info("labels: " + labels);
-        log.info("diff:   " + diff);
+        log.info("out:          " + out);
+        log.info("labels:       " + labels);
+        log.info("diff:         " + diff);
 
-        
+        log.info("diff shape:   " + Arrays.toString(diff.shape()));
 
-    }
-
-    private static INDArray createInput() {
-        double[] vals = new double[42];
-        for (int i = 0; i < 42; i++) {
-            vals[i] = 950 + ran.nextInt(100);
-        }
-        return Nd4j.create(vals);
     }
 
 }

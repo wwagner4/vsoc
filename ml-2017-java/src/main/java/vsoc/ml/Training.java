@@ -30,13 +30,13 @@ public class Training {
 
     public static void main(String... args) throws IOException {
 
-        final String dataFileNameTransformed = "random_pos_200000_xval.csv";
+        final String dataFileNameTransformed = "random_pos_1000000_xval.csv";
 
         DataHandler datasetReader = new DataHandler();
         Training training = new Training();
 
         log.info("Start read data");
-        DataSetIterator dataSetIterator = datasetReader.readPlayerposXDataSet(new File(dataDir(), dataFileNameTransformed), 5000);
+        DataSetIterator dataSetIterator = datasetReader.readPlayerposXDataSet(new File(dataDir(), dataFileNameTransformed), 15000);
         log.info("Start training");
         MultiLayerNetwork nn = training.train(dataSetIterator);
         log.info("Finished training");
@@ -62,12 +62,12 @@ public class Training {
      */
     private static MultiLayerConfiguration nnConfiguration() {
         final int numHiddenNodes = 50;
-        final double learningRate = 0.0001;
-        final int iterations = 5;
+        final double learningRate = 0.001;
+        final int iterations = 3;
         return new NeuralNetConfiguration.Builder()
-                .seed(923847L)
+                .seed(234234L)
                 .iterations(iterations)
-                .optimizationAlgo(OptimizationAlgorithm.STOCHASTIC_GRADIENT_DESCENT)
+                .optimizationAlgo(OptimizationAlgorithm.LINE_GRADIENT_DESCENT)
                 .learningRate(learningRate)
                 .weightInit(WeightInit.XAVIER)
                 .updater(Updater.NESTEROVS)

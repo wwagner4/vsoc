@@ -37,7 +37,7 @@ public class DataHandler {
 
         try (JavaSparkContext sc = new JavaSparkContext(sparkConfSimple())) {
             DataHandler dh = new DataHandler();
-            List<String> qualis = Arrays.asList("10", "100", "1000", "50000", "200000");
+            List<String> qualis = Arrays.asList("10", "100", "1000", "50000", "200000", "500000", "1000000");
             qualis.forEach(q -> dh.convert(q, sc));
         }
     }
