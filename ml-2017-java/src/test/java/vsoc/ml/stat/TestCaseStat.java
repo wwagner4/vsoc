@@ -3,6 +3,7 @@ package vsoc.ml.stat;
 import org.apache.commons.math.stat.descriptive.DescriptiveStatistics;
 import org.junit.Test;
 import org.nd4j.linalg.api.ndarray.INDArray;
+import org.nd4j.linalg.cpu.nativecpu.NDArray;
 
 import static org.junit.Assert.*;
 
@@ -16,7 +17,8 @@ public class TestCaseStat {
     }
 
     private INDArray createDiffs() {
-        throw new IllegalStateException("NOT YET IMPLEMENTED");
+        double[][] data = {{0.1, 0.2, 0.5, 1.2, -0.6, -1.0}};
+        return new NDArray(data).transpose();
     }
 
 }

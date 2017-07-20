@@ -8,6 +8,7 @@ import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
 import org.nd4j.linalg.factory.Nd4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import vsoc.ml.stat.Stat;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,28 +34,22 @@ public class UseNN {
 
         MultiLayerNetwork nn = ModelSerializer.restoreMultiLayerNetwork(nnFile);
 
-        log.info("Loaded NN " + nn);
-
         final DataHandler datasetReader = new DataHandler();
 
-        final String dataFileNameTransformed = "random_pos_100_xval.csv";
+        final String dataFileNameTransformed = "random_pos_1000_xval.csv";
         final File dataFileTransformed = new File(dataDir(), dataFileNameTransformed);
-        DataSet dataSet = datasetReader.readPlayerposXDataSet(new File(dataDir(), dataFileNameTransformed), 100).next();
+        DataSet dataSet = datasetReader.readPlayerposXDataSet(new File(dataDir(), dataFileNameTransformed), 1000).next();
 
         INDArray features = dataSet.getFeatures();
         INDArray labels = dataSet.getLabels();
 
         List<INDArray> output = nn.feedForward(features, false);
 
-
-
         INDArray out = output.get(output.size() - 1);
         INDArray diff = labels.sub(out);
-        log.info("out:          " + out);
-        log.info("labels:       " + labels);
-        log.info("diff:         " + diff);
 
-        log.info("diff shape:   " + Arrays.toString(diff.shape()));
+        Stat stat = new Stat(diff);
+        log.info("diff: " + stat.toString());
 
     }
 
