@@ -1,9 +1,13 @@
 package common
 
+import java.util.Locale
+
 /**
   * Formats various data structures to comma separated lines
   */
 object Formatter {
+
+  val locale = Locale.ENGLISH
 
   def formatWide(a: Array[Double])(implicit sepaStr: String): String = {
     a.map {
@@ -45,20 +49,19 @@ object Formatter {
   }
 
   def formatDense(d: Double): String = {
-    f"$d%5.2f"
+    "%5.2f".formatLocal(locale, d)
   }
 
   def formatWide(d: Double): String = {
-    f"$d%10.2f"
+    "%10.2f".formatLocal(locale, d)
   }
 
   def formatDense(l: Long): String = {
-    f"$l%5d"
+    "%5d".formatLocal(locale, l)
   }
 
   def formatWide(l: Long): String = {
-    f"$l%10d"
+    "%10d".formatLocal(locale, l)
   }
-
 
 }
