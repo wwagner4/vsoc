@@ -1,6 +1,9 @@
 package common
 
-import java.io.{File, PrintWriter}
+import java.io.{Closeable, File, PrintWriter}
+import java.util.UUID
+
+import scala.io.Source
 
 /**
   * Util functions
@@ -14,7 +17,7 @@ object Util {
     try {op(pw)} finally {pw.close()}
   }
 
-  def lines(f: File): Int = io.Source.fromFile(f).getLines.size
+  def lines(f: File): Int = Source.fromFile(f).getLines.size
 
   def dir(path: String): File = {
     val home = new File(System.getProperty("user.home"))
@@ -33,6 +36,21 @@ object Util {
 
   def dataFile(fileName: String): File ={
     new File(dataDir, fileName)
+  }
+
+  def createTempDirectory: File = {
+    val tmpDirName = System.getProperty("java.io.tmpdir")
+    val uuid = UUID.randomUUID
+    new File(new File(tmpDirName), "ml" + uuid.getMostSignificantBits)
+  }
+
+  def use[T <: Closeable](closeable: T)(f: T => Unit): Unit = {
+    try {
+      f(closeable)
+    }
+    finally {
+      closeable.close()
+    }
   }
 
 
