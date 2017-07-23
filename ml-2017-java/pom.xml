@@ -37,7 +37,7 @@
         <dependency>
             <groupId>org.datavec</groupId>
             <artifactId>datavec-spark_${scala.binary.version}</artifactId>
-            <version>${dl4j.version}_spark_1</version>
+            <version>${dl4j.version}_spark_2</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.slf4j</groupId>

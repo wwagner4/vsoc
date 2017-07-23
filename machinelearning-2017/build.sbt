@@ -1,5 +1,5 @@
 lazy val breezeVersion = "0.13"
-lazy val _scalaVersion = "2.12.2"
+lazy val _scalaVersion = "2.11.11"
 
 lazy val commonSettings = Seq(
   organization := "net.entelijan.vsoc",
@@ -44,14 +44,7 @@ lazy val dl4j = (project in file("dl4j"))
   .settings(
     commonSettings,
     name := "dl4j",
-    libraryDependencies += "org.deeplearning4j" %  "rl4j-core" % dl4jVersion,
-
-    libraryDependencies += "org.nd4j" %  "nd4j-native" % dl4jVersion,
-    libraryDependencies += "org.nd4j" %  "nd4j-native-platform" % dl4jVersion)
-    
-    // Windows binaries
-    // libraryDependencies += "org.nd4j" %  "nd4j-native" % dl4jVersion classifier "windows-x86_64-openblas",
-    //libraryDependencies += "org.nd4j" %  "nd4j-native" % dl4jVersion classifier "windows-x86_64")
+    libraryDependencies += "org.datavec" %% "datavec-spark" % (dl4jVersion + "_spark_2"))
   .dependsOn(common)
 
 // scalacOptions += "-deprecation",
