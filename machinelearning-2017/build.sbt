@@ -37,4 +37,12 @@ lazy val dl4j_datavec = (project in file("dl4j-datavec"))
     libraryDependencies += "org.datavec" %% "datavec-spark" % (dl4jVersion + "_spark_2"))
   .dependsOn(common)
 
+lazy val dl4j_training = (project in file("dl4j-training"))
+  .settings(
+    commonSettings,
+    name := "dl4j-training",
+    libraryDependencies += "org.deeplearning4j" % "deeplearning4j-core" % dl4jVersion,
+    libraryDependencies += "org.nd4j" % "nd4j-native-platform" % dl4jVersion)
+  .dependsOn(common)
+
 // scalacOptions += "-deprecation",
