@@ -1,13 +1,13 @@
 lazy val breezeVersion = "0.13"
 lazy val _scalaVersion = "2.11.11"
 lazy val dl4jVersion = "0.8.0"
-
+lazy val userHome = System.getProperty("user.home")
 
 lazy val commonSettings = Seq(
   organization := "net.entelijan.vsoc",
   scalaVersion := _scalaVersion,
   version := "0.0.1-SNAPSHOT",
-  resolvers += "Local Maven Repository" at "file://" + sbt.Path.userHome.absolutePath + "/.m2/repository",
+  resolvers += "Local Maven Repository" at s"file://$userHome/.m2/repository",
   //resolvers += "Local Maven Repository" at "file:///C:/ta30/nutzb/_m2_repo/",
   libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.2" % "test")
 
@@ -42,7 +42,8 @@ lazy val dl4j_training = (project in file("dl4j-training"))
     commonSettings,
     name := "dl4j-training",
     libraryDependencies += "org.deeplearning4j" % "deeplearning4j-core" % dl4jVersion,
-    libraryDependencies += "org.nd4j" % "nd4j-native-platform" % dl4jVersion)
+    libraryDependencies += "org.nd4j" % "nd4j-native-platform" % dl4jVersion,
+    libraryDependencies += "org.slf4j" % "slf4j-log4j12" % "1.7.25")
   .dependsOn(common)
 
 // scalacOptions += "-deprecation",
