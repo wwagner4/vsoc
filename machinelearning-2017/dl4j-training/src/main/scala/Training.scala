@@ -1,9 +1,15 @@
+import java.io.{File, IOException}
+
+import org.datavec.api.records.reader.impl.csv.CSVRecordReader
+import org.datavec.api.split.FileSplit
+import org.deeplearning4j.datasets.datavec.RecordReaderDataSetIterator
 import org.deeplearning4j.nn.api.OptimizationAlgorithm
 import org.deeplearning4j.nn.conf.layers.{DenseLayer, OutputLayer}
-import org.deeplearning4j.nn.conf.{MultiLayerConfiguration, NeuralNetConfiguration, Updater}
+import org.deeplearning4j.nn.conf.{NeuralNetConfiguration, Updater}
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork
 import org.deeplearning4j.nn.weights.WeightInit
 import org.deeplearning4j.optimize.listeners.ScoreIterationListener
+import org.deeplearning4j.util.ModelSerializer
 import org.nd4j.linalg.activations.Activation
 import org.nd4j.linalg.dataset.api.iterator.DataSetIterator
 import org.nd4j.linalg.lossfunctions.LossFunctions
@@ -16,17 +22,47 @@ object Training extends App {
 
 class Training(log: Logger) {
 
+  import common.Util._
+
+  val delim = ";"
+
   def train(): Unit = {
     log.info("start training")
+
+    val dataFileNameTransformed = "random_pos_1000_xval.csv"
+
+    log.info("Start read data")
+    val dataSetIterator = readPlayerposXDataSet(new File(dataDir, dataFileNameTransformed), 15000)
+    log.info("Start training")
+    val nn = train(dataSetIterator)
+    log.info("Finished training")
+
+    val netFile = new File(dataDir, "nn.ser")
+    ModelSerializer.writeModel(nn, netFile, true)
+    log.info("Saved model to " + netFile)
+
+
   }
 
-  private def train(dataSetIterator: DataSetIterator): Unit = {
+
+  def readPlayerposXDataSet(inFile: File, batchSize: Int): DataSetIterator = try {
+    val recordReader = new CSVRecordReader(0, delim)
+    recordReader.initialize(new FileSplit(inFile))
+    new RecordReaderDataSetIterator(recordReader, batchSize, 42, 42, true)
+  } catch {
+    case e@(_: IOException | _: InterruptedException) =>
+      throw new IllegalStateException("Error in 'readPlayerposXDataSet'. " + e.getMessage, e)
+  }
+
+
+  private def train(dataSetIterator: DataSetIterator): MultiLayerNetwork = {
     val nnConf = nnConfiguration
     //Create the network
-    val net = new MultiLayerNetwork(nnConf)
+    val net: MultiLayerNetwork = new MultiLayerNetwork(nnConf)
     net.init()
     net.setListeners(new ScoreIterationListener(1))
     net.fit(dataSetIterator)
+    net
   }
 
 
