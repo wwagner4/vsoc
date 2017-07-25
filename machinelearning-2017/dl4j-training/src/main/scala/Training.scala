@@ -5,7 +5,7 @@ import org.datavec.api.split.FileSplit
 import org.deeplearning4j.datasets.datavec.RecordReaderDataSetIterator
 import org.deeplearning4j.nn.api.OptimizationAlgorithm
 import org.deeplearning4j.nn.conf.layers.{DenseLayer, OutputLayer}
-import org.deeplearning4j.nn.conf.{NeuralNetConfiguration, Updater}
+import org.deeplearning4j.nn.conf.{MultiLayerConfiguration, NeuralNetConfiguration, Updater}
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork
 import org.deeplearning4j.nn.weights.WeightInit
 import org.deeplearning4j.optimize.listeners.ScoreIterationListener
@@ -20,6 +20,10 @@ object Training extends App {
   new Training(log).train()
 }
 
+case class MetaParam(
+                           learningRate: Double = 0.001
+                         )
+
 class Training(log: Logger) {
 
   import common.Util._
@@ -27,22 +31,28 @@ class Training(log: Logger) {
   val delim = ";"
 
   def train(): Unit = {
+    val metas = Seq(0.01, 0.001, 0.0001).map(lr => MetaParam(learningRate = lr))
     log.info("start training")
+    metas.map(mparam => train(mparam))
+  }
 
-    val dataFileNameTransformed = "random_pos_1000_xval.csv"
+  def test(nn: MultiLayerNetwork, testDataFileName: String): Double = {
+    ???
+  }
+
+  def train(mparam: MetaParam): Double = {
+    val trainingDataFileName = "random_pos_1000_xval.csv"
+    val testDataFileName = "random_pos_50000_xval.csv"
 
     log.info("Start read data")
-    val dataSetIterator = readPlayerposXDataSet(new File(dataDir, dataFileNameTransformed), 15000)
+    val trainingData = readPlayerposXDataSet(new File(dataDir, trainingDataFileName), 1000)
+    val testData = readPlayerposXDataSet(new File(dataDir, testDataFileName), 50000)
     log.info("Start training")
-    val nn = train(dataSetIterator)
+    val nn = train(trainingData, nnConfiguration(mparam))
     log.info("Finished training")
-
-    val netFile = new File(dataDir, "nn.ser")
-    ModelSerializer.writeModel(nn, netFile, true)
-    log.info("Saved model to " + netFile)
-
-
+    test(nn, testDataFileName)
   }
+
 
 
   def readPlayerposXDataSet(inFile: File, batchSize: Int): DataSetIterator = try {
@@ -55,13 +65,14 @@ class Training(log: Logger) {
   }
 
 
-  private def train(dataSetIterator: DataSetIterator): MultiLayerNetwork = {
-    val nnConf = nnConfiguration
-    //Create the network
+  private def train(dataSetIterator: DataSetIterator, nnConf: MultiLayerConfiguration): MultiLayerNetwork = {
+    // create the net
     val net: MultiLayerNetwork = new MultiLayerNetwork(nnConf)
     net.init()
     net.setListeners(new ScoreIterationListener(1))
+    // train the net
     net.fit(dataSetIterator)
+    // return the trained net
     net
   }
 
@@ -69,9 +80,9 @@ class Training(log: Logger) {
   /**
     * Returns the network configuration, 2 hidden DenseLayers
     */
-  private def nnConfiguration = {
+  private def nnConfiguration(mparam: MetaParam): MultiLayerConfiguration = {
     val numHiddenNodes = 50
-    val learningRate = 0.001
+    val learningRate = mparam.learningRate
     val iterations = 3
     new NeuralNetConfiguration.Builder()
       .seed(234234L)
@@ -81,10 +92,11 @@ class Training(log: Logger) {
       .weightInit(WeightInit.XAVIER)
       .updater(Updater.NESTEROVS)
       .momentum(0.9)
-      .list.layer(0, new DenseLayer.Builder()
-      .nIn(42)
-      .nOut(numHiddenNodes)
-      .activation(Activation.TANH).build)
+      .list
+      .layer(0, new DenseLayer.Builder()
+        .nIn(42)
+        .nOut(numHiddenNodes)
+        .activation(Activation.TANH).build)
       .layer(1, new DenseLayer.Builder()
         .nIn(numHiddenNodes)
         .nOut(numHiddenNodes)
