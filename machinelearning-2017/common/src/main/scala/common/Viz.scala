@@ -1,6 +1,7 @@
 package common
 
 import java.io.File
+import java.util.Locale
 
 import common.Viz._
 
@@ -25,16 +26,39 @@ object Viz {
   case class Style_POINTS(size: Double) extends Style
   case object Style_DOTS extends Style
   case object Style_LINESPOINTS extends Style
-  
-  case class XY(
-                 x: Number,
-                 y: Number
-               )
+
+  trait Lineable {
+    def line(f: Number => String): String
+  }
+
+  case class XY (
+                  x: Number,
+                  y: Number
+                ) extends Lineable {
+    def line(f: Number => String): String = {
+      val sx = f(x)
+      val sy = f(y)
+      sx + " " + sy
+    }
+  }
+
+  case class XYZ (
+                   x: Number,
+                   y: Number,
+                   z: Number
+                ) extends Lineable {
+    def line(f: Number => String): String = {
+      val sx = f(x)
+      val sy = f(y)
+      val sz = f(z)
+      sx + " " + sy + " " + sz
+    }
+  }
 
   case class DataRow(
                       name: String,
                       style: Style = Style_LINES,
-                      data: Seq[XY] = Seq.empty
+                      data: Seq[Lineable] = Seq.empty
                     )
 
   sealed trait Dia {
@@ -169,14 +193,18 @@ case class VizCreatorGnuplot(outDir: File, execute: Boolean = true) extends VizC
 
   def createDiagramData(dia: Diagram, script: String): String = {
 
-    def values(values: Seq[XY]) = values.map {
-      xy: XY =>
-        val x = formatNumber(xy.x)
-        val y = formatNumber(xy.y)
-        s"$x $y"
+    val loc = Locale.ENGLISH
+
+    def values[T <: Lineable] (values: Seq[T]) = values.map {
+      lin => lin.line(formatNumber)
     }.mkString("\n")
 
-    def formatNumber(n: Number): String = "" + n
+    def formatNumber(n: Number): String = n match {
+      case a :java.lang.Byte => "%d" formatLocal(loc, a.longValue())
+      case a :java.lang.Integer => "%d" formatLocal(loc, a.longValue())
+      case a :java.lang.Long => "%d" formatLocal(loc, a.longValue())
+      case a: Any => "%f" formatLocal(loc, a.doubleValue())
+    }
 
     def data(dataRows: Seq[DataRow]) = dataRows.zipWithIndex.map {
       case (dr, i) => s"""
