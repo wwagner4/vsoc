@@ -9,7 +9,6 @@ import org.deeplearning4j.nn.conf.{MultiLayerConfiguration, NeuralNetConfigurati
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork
 import org.deeplearning4j.nn.weights.WeightInit
 import org.deeplearning4j.optimize.listeners.ScoreIterationListener
-import org.deeplearning4j.util.ModelSerializer
 import org.nd4j.linalg.activations.Activation
 import org.nd4j.linalg.dataset.api.iterator.DataSetIterator
 import org.nd4j.linalg.lossfunctions.LossFunctions
@@ -21,7 +20,11 @@ object Training extends App {
 }
 
 case class MetaParam(
-                           learningRate: Double = 0.001
+                           learningRate: Double = 0.001,
+                           sizeTrainingData: Int = 1000,
+                           batchSizeTrainingData: Int = 100,
+                           sizeTestData: Int = 50000,
+                           batchSizeTestData: Int = 5000
                          )
 
 class Training(log: Logger) {
@@ -36,25 +39,44 @@ class Training(log: Logger) {
     metas.map(mparam => train(mparam))
   }
 
-  def test(nn: MultiLayerNetwork, testDataFileName: String): Double = {
-    ???
+  def test(nn: MultiLayerNetwork, testDataFileName: String, sizeTestData: Int): Double = {
+
+    val dataFileNameTransformed = s"random_pos_${sizeTestData}_xval.csv"
+    val dataSet = readPlayerposXDataSet(new File(dataDir, dataFileNameTransformed), sizeTestData).next()
+
+    val features = dataSet.getFeatures
+    val labels = dataSet.getLabels
+
+    val output = nn.feedForward(features, false)
+
+    val out = output.get(output.size - 1)
+    val diff = labels.sub(out)
+
+    log.info("" + diff)
+
+    0.0
   }
 
   def train(mparam: MetaParam): Double = {
-    val trainingDataFileName = "random_pos_1000_xval.csv"
-    val testDataFileName = "random_pos_50000_xval.csv"
+
+    require(mparam.sizeTestData != mparam.sizeTrainingData, "Test- and training data must be different")
+
+    val trainingDataFileName = s"random_pos_${mparam.sizeTrainingData}_xval.csv"
+    val testDataFileName = s"random_pos_${mparam.sizeTestData}_xval.csv"
 
     log.info("Start read data")
-    val trainingData = readPlayerposXDataSet(new File(dataDir, trainingDataFileName), 1000)
-    val testData = readPlayerposXDataSet(new File(dataDir, testDataFileName), 50000)
+    val trainingData = readPlayerposXDataSet(new File(dataDir, trainingDataFileName), mparam.batchSizeTrainingData)
+    val testData = readPlayerposXDataSet(new File(dataDir, testDataFileName), mparam.batchSizeTestData)
     log.info("Start training")
     val nn = train(trainingData, nnConfiguration(mparam))
     log.info("Finished training")
-    test(nn, testDataFileName)
+    test(nn, testDataFileName, mparam.sizeTestData)
   }
 
 
-
+  /**
+    * @return DataSetIterator from the data of a file with a certain batch size
+    */
   def readPlayerposXDataSet(inFile: File, batchSize: Int): DataSetIterator = try {
     val recordReader = new CSVRecordReader(0, delim)
     recordReader.initialize(new FileSplit(inFile))
