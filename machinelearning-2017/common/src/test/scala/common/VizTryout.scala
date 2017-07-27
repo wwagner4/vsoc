@@ -4,17 +4,17 @@ import common.Viz._
 
 object VizTryout extends App {
 
-  implicit val creator = VizCreatorGnuplot(Util.scriptsDir)
+  implicit val creator = VizCreatorGnuplot[XY](Util.scriptsDir)
 
   val sin = (1.0 to(20.0, 0.1)).map(x => XY(x, 5 + math.sin(x) * 2))
   val log = (1.0 to(20.0, 0.1)).map(x => XY(x, math.log(x) * 2.0))
 
-  val dataRows = List(
+  val dataRows: Seq[Viz.DataRow[XY]] = List(
     DataRow("sin", data = sin),
     DataRow("log", data = log)
   )
 
-  val dia = Diagram(
+  val dia: Viz.Dia[XY] = Diagram(
     "a",
     "Test A",
     yLabel = Some("label y"),

@@ -3,7 +3,7 @@ package common
 import java.io.File
 import java.util.Locale
 
-import common.Viz._
+import common.Viz.{Lineable, _}
 
 /**
   * Interface for data visualisation
@@ -55,17 +55,17 @@ object Viz {
     }
   }
 
-  case class DataRow(
+  case class DataRow[T <: Lineable](
                       name: String,
                       style: Style = Style_LINES,
-                      data: Seq[Lineable] = Seq.empty
+                      data: Seq[T] = Seq.empty
                     )
 
-  sealed trait Dia {
+  sealed trait Dia[T <: Lineable] {
     def id: String
   }
 
-  case class Diagram(
+  case class Diagram[T <: Lineable](
                       id: String,
                       title: String,
                       imgWidth: Int = 800,
@@ -76,17 +76,17 @@ object Viz {
                       yRange: Option[Range] = None,
                       legendPlacement: LegendPlacement = LegendPlacement_LEFT,
                       legendTitle: Option[String] = None,
-                      dataRows: Seq[DataRow] = Seq.empty
-                    ) extends Dia
+                      dataRows: Seq[DataRow[T]] = Seq.empty
+                    ) extends Dia[T]
 
-  case class MultiDiagram(
+  case class MultiDiagram[T <: Lineable](
                            id: String,
                            columns: Int,
                            title: Option[String] = None,
                            imgWidth: Int = 800,
                            imgHeight: Int = 600,
-                           diagrams: Seq[Diagram]
-                         ) extends Dia {
+                           diagrams: Seq[Diagram[T]]
+                         ) extends Dia[T] {
     def rows: Int = math.ceil(diagrams.size.toDouble / columns).toInt
   }
 
@@ -95,10 +95,10 @@ object Viz {
                     to: Option[Number]
                   )
 
-  def createDiagram(dia: Dia)(implicit creator: VizCreator): Unit = {
+  def createDiagram[T <: Lineable](dia: Dia[T])(implicit creator: VizCreator[T]): Unit = {
     dia match {
-      case d: Diagram => creator.createDiagram(d)
-      case md: MultiDiagram => creator.createMultiDiagram(md)
+      case d: Diagram[T] => creator.createDiagram(d)
+      case md: MultiDiagram[T] => creator.createMultiDiagram(md)
     }
   }
 }
@@ -106,16 +106,16 @@ object Viz {
 /**
   * Interface for actual data visualisation
   */
-trait VizCreator {
+trait VizCreator[T <: Lineable] {
 
-  def createDiagram(dia: Diagram): Unit = {
+  def createDiagram(dia: Diagram[T]): Unit = {
     val script1 = createDiagramInit(dia)
     val script2 = createDiagramData(dia, script1)
     val script3 = createDiagramCommands(dia, script2)
     create(dia, script3)
   }
 
-  def createMultiDiagram(mdia: MultiDiagram): Unit = {
+  def createMultiDiagram(mdia: MultiDiagram[T]): Unit = {
     val script1 = createMultiDiagramInit(mdia)
     val script2 = mdia.diagrams.foldRight(script1) { (dia, script) => createDiagramData(dia, script) }
     val script3 = mdia.diagrams.foldRight(script2) { (dia, script) => createDiagramCommands(dia, script) }
@@ -123,17 +123,17 @@ trait VizCreator {
     create(mdia, script4)
   }
 
-  def createDiagramInit(dia: Diagram): String
+  def createDiagramInit(dia: Diagram[T]): String
 
-  def createDiagramData(dia: Diagram, script: String): String
+  def createDiagramData(dia: Diagram[T], script: String): String
 
-  def createDiagramCommands(dia: Diagram, script: String): String
+  def createDiagramCommands(dia: Diagram[T], script: String): String
 
-  def createMultiDiagramInit(mdia: MultiDiagram): String
+  def createMultiDiagramInit(mdia: MultiDiagram[T]): String
 
-  def createMultiDiagramClose(mdia: MultiDiagram, script: String): String
+  def createMultiDiagramClose(mdia: MultiDiagram[T], script: String): String
 
-  def create(dia: Dia, script: String): Unit
+  def create(dia: Dia[T], script: String): Unit
 
 }
 
@@ -142,9 +142,9 @@ trait VizCreator {
   *
   * @param outDir Directory in which gnuplot scripts are created
   */
-case class VizCreatorGnuplot(outDir: File, execute: Boolean = true) extends VizCreator {
+case class VizCreatorGnuplot[T <: Lineable](outDir: File, execute: Boolean = true) extends VizCreator[T] {
 
-  def create(dia: Dia, script: String): Unit = {
+  def create(dia: Dia[T], script: String): Unit = {
 
     val id = dia.id
     val filename = s"$id.gp"
@@ -169,7 +169,7 @@ case class VizCreatorGnuplot(outDir: File, execute: Boolean = true) extends VizC
 
   }
 
-  def createMultiDiagramInit(mdia: MultiDiagram): String = {
+  def createMultiDiagramInit(mdia: MultiDiagram[T]): String = {
     val titleString = if(mdia.title.isDefined) s"title '${mdia.title.get}'" else ""
     s"""
        |set terminal pngcairo dashed enhanced size ${mdia.imgWidth}, ${mdia.imgHeight}
@@ -178,24 +178,24 @@ case class VizCreatorGnuplot(outDir: File, execute: Boolean = true) extends VizC
        |""".stripMargin
   }
 
-  def createMultiDiagramClose(mdia: MultiDiagram, script: String): String = {
+  def createMultiDiagramClose(mdia: MultiDiagram[T], script: String): String = {
     script + s"""
        |unset multiplot
        |""".stripMargin
   }
 
-  def createDiagramInit(dia: Diagram): String = {
+  def createDiagramInit(dia: Diagram[T]): String = {
     s"""
        |set terminal pngcairo dashed enhanced size ${dia.imgWidth}, ${dia.imgHeight}
        |set output 'img/${dia.id}.png'
        |""".stripMargin
   }
 
-  def createDiagramData(dia: Diagram, script: String): String = {
+  def createDiagramData(dia: Diagram[T], script: String): String = {
 
     val loc = Locale.ENGLISH
 
-    def values[T <: Lineable] (values: Seq[T]) = values.map {
+    def values(values: Seq[T]) = values.map {
       lin => lin.line(formatNumber)
     }.mkString("\n")
 
@@ -206,7 +206,7 @@ case class VizCreatorGnuplot(outDir: File, execute: Boolean = true) extends VizC
       case a: Any => "%f" formatLocal(loc, a.doubleValue())
     }
 
-    def data(dataRows: Seq[DataRow]) = dataRows.zipWithIndex.map {
+    def data(dataRows: Seq[DataRow[T]]): String = dataRows.zipWithIndex.map {
       case (dr, i) => s"""
                          |${datablockName(dia, i)} << EOD
                          |${values(dr.data)}
@@ -217,9 +217,9 @@ case class VizCreatorGnuplot(outDir: File, execute: Boolean = true) extends VizC
     script + "\n" + data(dia.dataRows)
   }
 
-  def datablockName(dia: Dia, i: Int): String = s"$$data_${dia.id}_$i"
+  def datablockName(dia: Dia[T], i: Int): String = s"$$data_${dia.id}_$i"
 
-  def createDiagramCommands(dia: Diagram, script: String): String = {
+  def createDiagramCommands(dia: Diagram[T], script: String): String = {
 
     def formatNumber(n: Number): String = "" + n
 
@@ -242,7 +242,7 @@ case class VizCreatorGnuplot(outDir: File, execute: Boolean = true) extends VizC
       case Viz.Style_LINESPOINTS => "linespoints"
     }
 
-    def series(dataRows: Seq[DataRow]) = dataRows.zipWithIndex.map {
+    def series(dataRows: Seq[DataRow[T]]) = dataRows.zipWithIndex.map {
       case (dr, i) =>
         val style = mapStyle(dr.style)
         s"""${datablockName(dia, i)} using 1:2 title '${dr.name}' with $style"""
