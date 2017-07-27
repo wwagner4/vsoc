@@ -82,10 +82,11 @@ EOD
 set title "Test 3D"
 set yrange [0:40]
 set xrange [-1:10]
-set zrange [-10:10]
+set zrange [-2:2]
 set xlabel "x"
 set ylabel "y"
 set zlabel "z"
-set dgrid3d 50,10
+set dgrid3d 100,100
 set hidden3d
-splot $data_b u 1:2:3 with points notitle
+splot $data_b u 1:2:3 with lines notitle
+#show xyplane
