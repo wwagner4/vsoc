@@ -10,8 +10,8 @@ object VizTryout extends App {
   val log = (1.0 to(20.0, 0.1)).map(x => XY(x, math.log(x) * 2.0))
 
   val dataRows: Seq[Viz.DataRow[XY]] = List(
-    DataRow("sin", data = sin),
-    DataRow("log", data = log)
+    DataRow(name = Some("sin"), data = sin),
+    DataRow(name = Some("log"), data = log)
   )
 
   val dia: Viz.Dia[XY] = Diagram(

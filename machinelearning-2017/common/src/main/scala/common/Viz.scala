@@ -27,8 +27,14 @@ object Viz {
   case object Style_DOTS extends Style
   case object Style_LINESPOINTS extends Style
 
+  sealed trait DataDim
+
+  case object DataDim_2D extends DataDim
+  case object DataDim_3D extends DataDim
+
   trait Lineable {
     def line(f: Number => String): String
+    def dataDim: DataDim
   }
 
   case class XY (
@@ -40,6 +46,7 @@ object Viz {
       val sy = f(y)
       sx + " " + sy
     }
+    def dataDim = DataDim_2D
   }
 
   case class XYZ (
@@ -53,16 +60,23 @@ object Viz {
       val sz = f(z)
       sx + " " + sy + " " + sz
     }
+    def dataDim = DataDim_3D
   }
 
   case class DataRow[T <: Lineable](
-                      name: String,
+                      name: Option[String] = None,
                       style: Style = Style_LINES,
                       data: Seq[T] = Seq.empty
-                    )
+                    ) {
+    def dataDim: DataDim = {
+      if (data.isEmpty) throw new IllegalStateException("Cannot determine dimension because list of data is empty")
+      else data(0).dataDim
+    }
+  }
 
   sealed trait Dia[T <: Lineable] {
     def id: String
+    def dataDim: DataDim
   }
 
   case class Diagram[T <: Lineable](
@@ -72,12 +86,19 @@ object Viz {
                       imgHeight: Int = 600,
                       xLabel: Option[String] = None,
                       yLabel: Option[String] = None,
+                      zLabel: Option[String] = None,
                       xRange: Option[Range] = None,
                       yRange: Option[Range] = None,
+                      zRange: Option[Range] = None,
+                      xyGrid: Int = 100,
                       legendPlacement: LegendPlacement = LegendPlacement_LEFT,
                       legendTitle: Option[String] = None,
                       dataRows: Seq[DataRow[T]] = Seq.empty
-                    ) extends Dia[T]
+                    ) extends Dia[T] {
+    def dataDim: DataDim =
+      if (dataRows.isEmpty) throw new IllegalStateException("Cannot determine data dimension because no data are defined")
+      else dataRows(0).dataDim
+  }
 
   case class MultiDiagram[T <: Lineable](
                            id: String,
@@ -88,6 +109,9 @@ object Viz {
                            diagrams: Seq[Diagram[T]]
                          ) extends Dia[T] {
     def rows: Int = math.ceil(diagrams.size.toDouble / columns).toInt
+    def dataDim: DataDim =
+      if (diagrams.isEmpty) throw new IllegalStateException("Cannot determine data dimension because no diagram is defined")
+      else diagrams(0).dataDim
   }
 
   case class Range(
@@ -244,8 +268,17 @@ case class VizCreatorGnuplot[T <: Lineable](outDir: File, execute: Boolean = tru
 
     def series(dataRows: Seq[DataRow[T]]) = dataRows.zipWithIndex.map {
       case (dr, i) =>
+        def title: String = {
+          if (dr.name.isDefined) "title '" + dr.name.get + "'"
+          else "notitle"
+        }
+
+        val dim = dr.dataDim match {
+          case DataDim_2D => "1:2"
+          case DataDim_3D => "1:2:3"
+        }
         val style = mapStyle(dr.style)
-        s"""${datablockName(dia, i)} using 1:2 title '${dr.name}' with $style"""
+        s"""${datablockName(dia, i)} using $dim $title with $style"""
     }.mkString(", \\\n")
 
 
@@ -253,11 +286,31 @@ case class VizCreatorGnuplot[T <: Lineable](outDir: File, execute: Boolean = tru
 
     def yLabel: String = if (dia.yLabel.isDefined) s"""set ylabel "${dia.yLabel.get}"""" else ""
 
+    def zLabel: String = if (dia.zLabel.isDefined) s"""set zlabel "${dia.zLabel.get}"""" else ""
+
     def xRange: String = if (dia.xRange.isDefined) s"""set xrange ${formatRange(dia.xRange.get)}""" else ""
 
     def yRange: String = if (dia.yRange.isDefined) s"""set yrange ${formatRange(dia.yRange.get)}""" else ""
 
+    def zRange: String = if (dia.zRange.isDefined) s"""set zrange ${formatRange(dia.zRange.get)}""" else ""
+
     def legendTitle: String = if (dia.legendTitle.isDefined) s"""title "${dia.legendTitle.get}""" else ""
+
+    def plotCmd: String =
+      dia.dataDim match {
+        case DataDim_2D => "plot"
+        case DataDim_3D => "splot"
+      }
+
+    def settings3D: String =
+      dia.dataDim match {
+        case DataDim_2D => ""
+        case DataDim_3D =>
+          s"""
+             |set dgrid3d ${dia.xyGrid},${dia.xyGrid}
+             |set hidden3d
+             |""".stripMargin
+      }
 
     val lp = dia.legendPlacement match {
       case LegendPlacement_LEFT => "left"
@@ -271,9 +324,12 @@ case class VizCreatorGnuplot[T <: Lineable](outDir: File, execute: Boolean = tru
          |set title "${dia.title}"
          |$xLabel
          |$yLabel
+         |$zLabel
          |$xRange
          |$yRange
-         |plot \\
+         |$zRange
+         |$settings3D
+         |$plotCmd \\
          |${series(dia.dataRows)}
          |""".stripMargin
 
