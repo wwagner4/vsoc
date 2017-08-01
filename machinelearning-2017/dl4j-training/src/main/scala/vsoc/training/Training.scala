@@ -1,5 +1,9 @@
-import java.io.{File, IOException}
+package vsoc.training
 
+import java.io.{File, IOException}
+import java.util
+
+import common.{Viz, VizCreatorGnuplot}
 import org.datavec.api.records.reader.impl.csv.CSVRecordReader
 import org.datavec.api.split.FileSplit
 import org.deeplearning4j.datasets.datavec.RecordReaderDataSetIterator
@@ -10,22 +14,29 @@ import org.deeplearning4j.nn.multilayer.MultiLayerNetwork
 import org.deeplearning4j.nn.weights.WeightInit
 import org.deeplearning4j.optimize.listeners.ScoreIterationListener
 import org.nd4j.linalg.activations.Activation
+import org.nd4j.linalg.api.buffer.DataBuffer
+import org.nd4j.linalg.api.ndarray.INDArray
 import org.nd4j.linalg.dataset.api.iterator.DataSetIterator
 import org.nd4j.linalg.lossfunctions.LossFunctions
 import org.slf4j.{Logger, LoggerFactory}
 
-object Training extends App {
-  val log: Logger = LoggerFactory.getLogger(classOf[Training])
-  new Training(log).train()
-}
+import common.Util._
+
 
 case class MetaParam(
-                           learningRate: Double = 0.001,
-                           sizeTrainingData: Int = 1000,
-                           batchSizeTrainingData: Int = 100,
-                           sizeTestData: Int = 50000,
-                           batchSizeTestData: Int = 5000
-                         )
+                      learningRate: Double = 0.001,
+                      sizeTrainingData: Int = 1000,
+                      batchSizeTrainingData: Int = 100,
+                      sizeTestData: Int = 50000,
+                      batchSizeTestData: Int = 5000
+                    )
+
+
+object Training extends App {
+  val log: Logger = LoggerFactory.getLogger(classOf[Training])
+  val dia: Viz.Dia[Viz.XYZ] = new Training(log).train()
+  Viz.createDiagram(dia)(VizCreatorGnuplot[Viz.XYZ](dataDir, execute=false))
+}
 
 class Training(log: Logger) {
 
@@ -33,31 +44,44 @@ class Training(log: Logger) {
 
   val delim = ";"
 
-  def train(): Unit = {
+  def train(): Viz.Dia[Viz.XYZ] = {
     val metas = Seq(0.01, 0.001, 0.0001).map(lr => MetaParam(learningRate = lr))
     log.info("start training")
-    metas.map(mparam => train(mparam))
+    val dias: Seq[Viz.Diagram[Viz.XYZ]] = metas.map(mparam => train(mparam))
+
+    Viz.MultiDiagram[Viz.XYZ](id = "playerpos", columns= 3, diagrams = dias)
   }
 
-  def test(nn: MultiLayerNetwork, testDataFileName: String, sizeTestData: Int): Double = {
+  def test(nn: MultiLayerNetwork, testDataFileName: String, sizeTestData: Int): Viz.Diagram[Viz.XYZ] = {
 
-    val dataFileNameTransformed = s"random_pos_${sizeTestData}_xval.csv"
-    val dataSet = readPlayerposXDataSet(new File(dataDir, dataFileNameTransformed), sizeTestData).next()
+    val dataFileName = s"random_pos_$sizeTestData.csv"
+    val dataSet = readPlayerposXDataSet(new File(dataDir, dataFileName), sizeTestData).next()
 
-    val features = dataSet.getFeatures
-    val labels = dataSet.getLabels
+    val features: INDArray = dataSet.getFeatures
+    val labels: INDArray = dataSet.getLabels
 
-    val output = nn.feedForward(features, false)
+    val output: util.List[INDArray] = nn.feedForward(features, false)
 
-    val out = output.get(output.size - 1)
-    val diff = labels.sub(out)
+    val out: INDArray = output.get(output.size - 1)
+    val diff: INDArray = labels.sub(out)
 
     log.info("" + diff)
 
-    0.0
+    val buf: DataBuffer = diff.data()
+
+
+    val _data = Seq(
+      Viz.XYZ(1,2,3),
+      Viz.XYZ(2,3,4))
+
+    Viz.DataRow
+
+    val dr: Viz.DataRow[Viz.XYZ] = Viz.DataRow(name = Some("01"), data = _data)
+
+    Viz.Diagram(id = "playerpos_x", title = "Playerpos X", dataRows = Seq(dr))
   }
 
-  def train(mparam: MetaParam): Double = {
+  def train(mparam: MetaParam): Viz.Diagram[Viz.XYZ] = {
 
     require(mparam.sizeTestData != mparam.sizeTrainingData, "Test- and training data must be different")
 
