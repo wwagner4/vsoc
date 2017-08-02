@@ -8,17 +8,13 @@ import Matchers._
 
 class UtilTrainingSuite extends FunSuite {
 
-  val eps = 0.0001
+  val eps = 0.000001
 
   def convert(data: INDArray, colIdx: (Int, Int, Int)): Seq[Viz.XYZ] = {
-
-    val x = data.getColumns(colIdx._1).data.asDouble().toList
-    val y = data.getColumns(colIdx._2).data.asDouble().toList
-    val z = data.getColumns(colIdx._3).data.asDouble().toList
-
-    val zipped = x.zip(y.zip(z))
-
-    zipped.map { case (cx, (cy, cz)) => Viz.XYZ(cx, cy, cz) }
+    val x = data.getColumns(colIdx._1).data.asDouble()
+    val y = data.getColumns(colIdx._2).data.asDouble()
+    val z = data.getColumns(colIdx._3).data.asDouble()
+    x.zip(y.zip(z)).map { case (cx, (cy, cz)) => Viz.XYZ(cx, cy, cz) }
   }
 
   test("convert to xyz 0 1 3") {
