@@ -1,44 +1,106 @@
 package vsoc.training
 
+import common.Viz
 import org.nd4j.linalg.api.ndarray.INDArray
 import org.nd4j.linalg.factory.Nd4j
-import org.scalatest.FunSuite
+import org.scalatest._
+import Matchers._
 
 class UtilTrainingSuite extends FunSuite {
 
-  test("convert to xyz 01") {
-    val array = Nd4j.create(Array(
-      Array(1.0, 2.0, 3.8),
-      Array(1.2, 2.7, 3.9),
-      Array(1.3, 2.6, 3.0),
-      Array(1.4, 2.5, 3.2)
-    ))
-    println(array)
-    val x = array.getColumns(0).data.asDouble().toList
-    val y = array.getColumns(1).data.asDouble().toList
-    val z = array.getColumns(2).data.asDouble().toList
-    println(x)
-    println(y)
-    println(z)
+  val eps = 0.0001
+
+  def convert(data: INDArray, colIdx: (Int, Int, Int)): Seq[Viz.XYZ] = {
+
+    val x = data.getColumns(colIdx._1).data.asDouble().toList
+    val y = data.getColumns(colIdx._2).data.asDouble().toList
+    val z = data.getColumns(colIdx._3).data.asDouble().toList
 
     val zipped = x.zip(y.zip(z))
 
-    val trip = zipped.map{case (a, (b, c)) => (a, b, c)}
-    println(trip)
+    zipped.map { case (cx, (cy, cz)) => Viz.XYZ(cx, cy, cz) }
   }
 
-  test("convert to xyz 02") {
+  test("convert to xyz 0 1 3") {
     val array = Nd4j.create(Array(
-      Array(1.0, 2.0, 3.8),
-      Array(1.2, 2.7, 3.9),
-      Array(1.3, 2.6, 3.0),
-      Array(1.4, 2.5, 3.2)
+      Array(1.0, 2.0, 3.8, 4.4),
+      Array(1.2, 2.7, 3.9, 4.4),
+      Array(1.3, 2.6, 3.0, 4.4),
+      Array(1.4, 2.5, 3.2, 4.5)
     ))
-    val a1: INDArray = array.getColumns(0, 1)
-    for (i <- 0 until 4; j <- 0 until 2) yield {
+    val out = convert(array, (0, 1, 3))
+    assert(out.size === 4)
 
-    }
+    out(0).x.doubleValue() should equal(1.0 +- eps)
+    out(0).y.doubleValue() should equal(2.0 +- eps)
+    out(0).z.doubleValue() should equal(4.4 +- eps)
 
+    out(1).x.doubleValue() should equal(1.2 +- eps)
+    out(1).y.doubleValue() should equal(2.7 +- eps)
+    out(1).z.doubleValue() should equal(4.4 +- eps)
+
+    out(2).x.doubleValue() should equal(1.3 +- eps)
+    out(2).y.doubleValue() should equal(2.6 +- eps)
+    out(2).z.doubleValue() should equal(4.4 +- eps)
+
+    out(3).x.doubleValue() should equal(1.4 +- eps)
+    out(3).y.doubleValue() should equal(2.5 +- eps)
+    out(3).z.doubleValue() should equal(4.5 +- eps)
+  }
+
+  test("convert to xyz 0 1 2") {
+    val array = Nd4j.create(Array(
+      Array(1.0, 2.0, 3.8, 4.4),
+      Array(1.2, 2.7, 3.9, 4.4),
+      Array(1.3, 2.6, 3.0, 4.4),
+      Array(1.4, 2.5, 3.2, 4.5)
+    ))
+    val out = convert(array, (0, 1, 2))
+
+    assert(out.size === 4)
+
+    out(0).x.doubleValue() should equal(1.0 +- eps)
+    out(0).y.doubleValue() should equal(2.0 +- eps)
+    out(0).z.doubleValue() should equal(3.8 +- eps)
+
+    out(1).x.doubleValue() should equal(1.2 +- eps)
+    out(1).y.doubleValue() should equal(2.7 +- eps)
+    out(1).z.doubleValue() should equal(3.9 +- eps)
+
+    out(2).x.doubleValue() should equal(1.3 +- eps)
+    out(2).y.doubleValue() should equal(2.6 +- eps)
+    out(2).z.doubleValue() should equal(3.0 +- eps)
+
+    out(3).x.doubleValue() should equal(1.4 +- eps)
+    out(3).y.doubleValue() should equal(2.5 +- eps)
+    out(3).z.doubleValue() should equal(3.2 +- eps)
+  }
+  test("convert to xyz 0 2 1") {
+    val array = Nd4j.create(Array(
+      Array(1.0, 2.0, 3.8, 4.4),
+      Array(1.2, 2.7, 3.9, 4.4),
+      Array(1.3, 2.6, 3.0, 4.4),
+      Array(1.4, 2.5, 3.2, 4.5)
+    ))
+    val out = convert(array, (0, 2, 1))
+
+    assert(out.size === 4)
+
+    out(0).x.doubleValue() should equal(1.0 +- eps)
+    out(0).y.doubleValue() should equal(3.8 +- eps)
+    out(0).z.doubleValue() should equal(2.0 +- eps)
+
+    out(1).x.doubleValue() should equal(1.2 +- eps)
+    out(1).y.doubleValue() should equal(3.9 +- eps)
+    out(1).z.doubleValue() should equal(2.7 +- eps)
+
+    out(2).x.doubleValue() should equal(1.3 +- eps)
+    out(2).y.doubleValue() should equal(3.0 +- eps)
+    out(2).z.doubleValue() should equal(2.6 +- eps)
+
+    out(3).x.doubleValue() should equal(1.4 +- eps)
+    out(3).y.doubleValue() should equal(3.2 +- eps)
+    out(3).z.doubleValue() should equal(2.5 +- eps)
   }
 
 }
