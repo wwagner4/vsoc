@@ -19,8 +19,8 @@ import org.nd4j.linalg.api.ndarray.INDArray
 import org.nd4j.linalg.dataset.api.iterator.DataSetIterator
 import org.nd4j.linalg.lossfunctions.LossFunctions
 import org.slf4j.{Logger, LoggerFactory}
-
 import common.Util._
+import org.nd4j.linalg.dataset.DataSet
 
 
 case class MetaParam(
@@ -55,10 +55,13 @@ class Training(log: Logger) {
   def test(nn: MultiLayerNetwork, testDataFileName: String, sizeTestData: Int): Viz.Diagram[Viz.XYZ] = {
 
     val dataFileName = s"random_pos_$sizeTestData.csv"
-    val dataSet = readPlayerposXDataSet(new File(dataDir, dataFileName), sizeTestData).next()
+    val dataSet: DataSet = readPlayerposXDataSet(new File(dataDir, dataFileName), sizeTestData).next()
 
     val features: INDArray = dataSet.getFeatures
     val labels: INDArray = dataSet.getLabels
+
+    println("features " + util.Arrays.toString(features.shape()))
+    println("labels " + util.Arrays.toString(labels.shape()))
 
     val output: util.List[INDArray] = nn.feedForward(features, false)
 
