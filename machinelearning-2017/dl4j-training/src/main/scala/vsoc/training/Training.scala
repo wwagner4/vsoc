@@ -21,6 +21,7 @@ import org.nd4j.linalg.lossfunctions.LossFunctions
 import org.slf4j.{Logger, LoggerFactory}
 import common.Util._
 import org.nd4j.linalg.dataset.DataSet
+import org.nd4j.linalg.factory.Nd4j
 
 
 case class MetaParam(
@@ -35,7 +36,7 @@ case class MetaParam(
 object Training extends App {
   val log: Logger = LoggerFactory.getLogger(classOf[Training])
   val dia: Viz.Dia[Viz.XY] = new Training(log).train()
-  Viz.createDiagram(dia)(VizCreatorGnuplot[Viz.XY](dataDir, execute=false))
+  Viz.createDiagram(dia)(VizCreatorGnuplot[Viz.XY](dataDir, execute=true))
 }
 
 class Training(log: Logger) {
@@ -60,29 +61,19 @@ class Training(log: Logger) {
     val features: INDArray = dataSet.getFeatures
     val labels: INDArray = dataSet.getLabels
 
-    println("labels " + util.Arrays.toString(labels.shape()))
-
     val output: util.List[INDArray] = nn.feedForward(features, false)
 
     val out: INDArray = output.get(output.size - 1)
     val diff: INDArray = labels.sub(out)
 
+    val all: INDArray = Nd4j.hstack(labels, diff)
+
     println("labels " + util.Arrays.toString(labels.shape()))
     println("diff   " + util.Arrays.toString(diff.shape()))
+    println("all    " + util.Arrays.toString(all.shape()))
 
-
-    log.info("" + diff)
-
-    val buf: DataBuffer = diff.data()
-
-
-    val _data = Seq(
-      Viz.XY(1,2),
-      Viz.XY(2,3))
-
-    Viz.DataRow
-
-    val dr: Viz.DataRow[Viz.XY] = Viz.DataRow(name = Some("01"), data = _data)
+    val _data: Seq[Viz.XY] = UtilTraining.convertXY(all, (0, 1))
+    val dr: Viz.DataRow[Viz.XY] = Viz.DataRow(name = Some("01"), style = Viz.Style_POINTS, data = _data)
 
     Viz.Diagram(id = "playerpos_x", title = "Playerpos X", dataRows = Seq(dr))
   }
@@ -100,7 +91,7 @@ class Training(log: Logger) {
     log.info("Start training")
     val nn = train(trainingData, nnConfiguration(mparam))
     log.info("Finished training")
-    test(nn, testDataFileName, mparam.sizeTestData)
+    test(nn, testDataFileName, 100)
   }
 
 
