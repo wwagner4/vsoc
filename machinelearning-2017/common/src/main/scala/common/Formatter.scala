@@ -49,19 +49,22 @@ object Formatter {
   }
 
   def formatDense(d: Double): String = {
-    "%5.2f".formatLocal(locale, d)
+    formatNumber("%5.2f", d)
   }
 
   def formatWide(d: Double): String = {
-    "%10.2f".formatLocal(locale, d)
+    formatNumber("%10.2f", d)
   }
 
   def formatDense(l: Long): String = {
-    "%5d".formatLocal(locale, l)
+    formatNumber("%5d", l)
   }
 
   def formatWide(l: Long): String = {
-    "%10d".formatLocal(locale, l)
+    formatNumber("%10d", l)
   }
 
+  def formatNumber(format: String, num: Number): String = {
+    format.formatLocal(locale, num)
+  }
 }
