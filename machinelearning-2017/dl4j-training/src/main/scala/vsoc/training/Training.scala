@@ -34,8 +34,8 @@ case class MetaParam(
 
 object Training extends App {
   val log: Logger = LoggerFactory.getLogger(classOf[Training])
-  val dia: Viz.Dia[Viz.XYZ] = new Training(log).train()
-  Viz.createDiagram(dia)(VizCreatorGnuplot[Viz.XYZ](dataDir, execute=false))
+  val dia: Viz.Dia[Viz.XY] = new Training(log).train()
+  Viz.createDiagram(dia)(VizCreatorGnuplot[Viz.XY](dataDir, execute=false))
 }
 
 class Training(log: Logger) {
@@ -44,23 +44,22 @@ class Training(log: Logger) {
 
   val delim = ";"
 
-  def train(): Viz.Dia[Viz.XYZ] = {
+  def train(): Viz.Dia[Viz.XY] = {
     val metas = Seq(0.01, 0.001, 0.0001).map(lr => MetaParam(learningRate = lr))
     log.info("start training")
-    val dias: Seq[Viz.Diagram[Viz.XYZ]] = metas.map(mparam => train(mparam))
+    val dias: Seq[Viz.Diagram[Viz.XY]] = metas.map(mparam => train(mparam))
 
-    Viz.MultiDiagram[Viz.XYZ](id = "playerpos", columns= 3, diagrams = dias)
+    Viz.MultiDiagram[Viz.XY](id = "playerpos", columns= 3, diagrams = dias)
   }
 
-  def test(nn: MultiLayerNetwork, testDataFileName: String, sizeTestData: Int): Viz.Diagram[Viz.XYZ] = {
+  def test(nn: MultiLayerNetwork, testDataFileName: String, sizeTestData: Int): Viz.Diagram[Viz.XY] = {
 
-    val dataFileName = s"random_pos_$sizeTestData.csv"
+    val dataFileName = s"random_pos_${sizeTestData}_xval.csv"
     val dataSet: DataSet = readPlayerposXDataSet(new File(dataDir, dataFileName), sizeTestData).next()
 
     val features: INDArray = dataSet.getFeatures
     val labels: INDArray = dataSet.getLabels
 
-    println("features " + util.Arrays.toString(features.shape()))
     println("labels " + util.Arrays.toString(labels.shape()))
 
     val output: util.List[INDArray] = nn.feedForward(features, false)
@@ -68,23 +67,27 @@ class Training(log: Logger) {
     val out: INDArray = output.get(output.size - 1)
     val diff: INDArray = labels.sub(out)
 
+    println("labels " + util.Arrays.toString(labels.shape()))
+    println("diff   " + util.Arrays.toString(diff.shape()))
+
+
     log.info("" + diff)
 
     val buf: DataBuffer = diff.data()
 
 
     val _data = Seq(
-      Viz.XYZ(1,2,3),
-      Viz.XYZ(2,3,4))
+      Viz.XY(1,2),
+      Viz.XY(2,3))
 
     Viz.DataRow
 
-    val dr: Viz.DataRow[Viz.XYZ] = Viz.DataRow(name = Some("01"), data = _data)
+    val dr: Viz.DataRow[Viz.XY] = Viz.DataRow(name = Some("01"), data = _data)
 
     Viz.Diagram(id = "playerpos_x", title = "Playerpos X", dataRows = Seq(dr))
   }
 
-  def train(mparam: MetaParam): Viz.Diagram[Viz.XYZ] = {
+  def train(mparam: MetaParam): Viz.Diagram[Viz.XY] = {
 
     require(mparam.sizeTestData != mparam.sizeTrainingData, "Test- and training data must be different")
 

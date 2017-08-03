@@ -19,7 +19,7 @@ class UtilTrainingSuite extends FunSuite {
       Array(1.3, 2.6, 3.0, 4.4),
       Array(1.4, 2.5, 3.2, 4.5)
     ))
-    val out = convert(array, (0, 1, 3))
+    val out = convertXYZ(array, (0, 1, 3))
     assert(out.size === 4)
 
     out(0).x.doubleValue() should equal(1.0 +- eps)
@@ -46,7 +46,7 @@ class UtilTrainingSuite extends FunSuite {
       Array(1.3, 2.6, 3.0, 4.4),
       Array(1.4, 2.5, 3.2, 4.5)
     ))
-    val out = convert(array, (0, 1, 2))
+    val out = convertXYZ(array, (0, 1, 2))
 
     assert(out.size === 4)
 
@@ -73,7 +73,7 @@ class UtilTrainingSuite extends FunSuite {
       Array(1.3, 2.6, 3.0, 4.4),
       Array(1.4, 2.5, 3.2, 4.5)
     ))
-    val out = convert(array, (0, 2, 1))
+    val out = convertXYZ(array, (0, 2, 1))
 
     assert(out.size === 4)
 
