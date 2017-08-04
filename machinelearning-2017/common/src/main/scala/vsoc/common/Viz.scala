@@ -193,7 +193,13 @@ case class VizCreatorGnuplot[T <: Lineable](outDir: File, execute: Boolean = tru
 
   }
 
+  def diagramNamesDistinct(diagrams: Seq[Diagram[T]]): Boolean = {
+    val distNames = diagrams.map(dia => dia.id).distinct
+    distNames.size == diagrams.size
+  }
+
   def createMultiDiagramInit(mdia: MultiDiagram[T]): String = {
+    require(diagramNamesDistinct(mdia.diagrams), "diagram names in multidiagram must be distinct")
     val titleString = if(mdia.title.isDefined) s"title '${mdia.title.get}'" else ""
     s"""
        |set terminal pngcairo dashed enhanced size ${mdia.imgWidth}, ${mdia.imgHeight}
