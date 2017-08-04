@@ -141,8 +141,8 @@ trait VizCreator[T <: Lineable] {
 
   def createMultiDiagram(mdia: MultiDiagram[T]): Unit = {
     val script1 = createMultiDiagramInit(mdia)
-    val script2 = mdia.diagrams.foldRight(script1) { (dia, script) => createDiagramData(dia, script) }
-    val script3 = mdia.diagrams.foldRight(script2) { (dia, script) => createDiagramCommands(dia, script) }
+    val script2 = mdia.diagrams.reverse.foldRight(script1) { (dia, script) => createDiagramData(dia, script) }
+    val script3 = mdia.diagrams.reverse.foldRight(script2) { (dia, script) => createDiagramCommands(dia, script) }
     val script4 = createMultiDiagramClose(mdia, script3)
     create(mdia, script4)
   }
