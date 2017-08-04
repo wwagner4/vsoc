@@ -1,4 +1,4 @@
-package playerpos
+package vsoc.playerpos
 
 object PlayerposCreateDataMain extends App {
 

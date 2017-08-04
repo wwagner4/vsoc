@@ -1,4 +1,4 @@
-package playerpos
+package vsoc.playerpos
 
 import java.awt._
 import java.awt.event._

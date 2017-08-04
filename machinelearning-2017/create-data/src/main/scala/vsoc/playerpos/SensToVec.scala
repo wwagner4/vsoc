@@ -1,9 +1,9 @@
-package common
+package vsoc.playerpos
 
-import vsoc.behaviour.Sensors
 import atan.model.Flag
+import vsoc.behaviour.{DistDirVision, Sensors}
+
 import scala.collection.JavaConverters._
-import vsoc.behaviour.DistDirVision
 
 /**
   * Maps vsoc sensors to a vector of doubles

@@ -1,4 +1,4 @@
-package playerpos
+package vsoc.playerpos
 
 import java.io.{File, FileOutputStream, OutputStream}
 import java.util

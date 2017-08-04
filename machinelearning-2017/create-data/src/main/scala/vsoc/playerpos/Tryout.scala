@@ -1,3 +1,5 @@
+package vsoc.playerpos
+
 /**
   * Tryout the things you want to do
   */
