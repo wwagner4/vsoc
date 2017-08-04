@@ -1,10 +1,7 @@
 package vsoc.training
 
-import java.io.{File, IOException}
-import java.util
+import java.io.File
 
-import vsoc.common.Util._
-import vsoc.common.{Viz, VizCreatorGnuplot}
 import org.datavec.api.records.reader.impl.csv.CSVRecordReader
 import org.datavec.api.split.FileSplit
 import org.deeplearning4j.datasets.datavec.RecordReaderDataSetIterator
@@ -21,6 +18,8 @@ import org.nd4j.linalg.dataset.api.iterator.DataSetIterator
 import org.nd4j.linalg.factory.Nd4j
 import org.nd4j.linalg.lossfunctions.LossFunctions
 import org.slf4j.{Logger, LoggerFactory}
+import vsoc.common.Util._
+import vsoc.common.{Viz, VizCreatorGnuplot}
 
 import scala.util.Random
 
@@ -39,7 +38,7 @@ case class MetaParam(
 object Training extends App {
   val log: Logger = LoggerFactory.getLogger(classOf[Training])
   val dia: Viz.Dia[Viz.XY] = new Training(log).train()
-  Viz.createDiagram(dia)(VizCreatorGnuplot[Viz.XY](dataDir, execute=true))
+  Viz.createDiagram(dia)(VizCreatorGnuplot[Viz.XY](dataDir, execute = true))
 }
 
 class Training(log: Logger) {
@@ -49,34 +48,52 @@ class Training(log: Logger) {
   val delim = ";"
 
   def train(): Viz.Dia[Viz.XY] = {
-    val metas = Seq(1, 3, 10).map{iter =>
+    val metas = Seq(50, 1).map { iter =>
       MetaParam(
         seed = Random.nextLong(),
-        iterations = iter)}
+        iterations = iter)
+    }
     log.info("start training")
     val dias: Seq[Viz.Diagram[Viz.XY]] = metas.map(mparam => train(mparam))
 
-    Viz.MultiDiagram[Viz.XY](id = "playerpos_iter_02",
-      imgWidth = 2000,
-      columns= 3,
+    Viz.MultiDiagram[Viz.XY](id = "playerpos_iter_C2",
+      imgWidth = 1500,
+      columns = 2,
       diagrams = dias)
   }
 
+  def train(mparam: MetaParam): Viz.Diagram[Viz.XY] = {
+
+    require(mparam.sizeTestData != mparam.sizeTrainingData, "Test- and training data must be different")
+    val trainingDataFileName = s"random_pos_${mparam.sizeTrainingData}_xval.csv"
+    val trainingDataFile = new File(dataDir, trainingDataFileName)
+    val trainingData = readPlayerposXDataSet(trainingDataFile, mparam.batchSizeTrainingData)
+    val nnConf: MultiLayerConfiguration = nnConfiguration(mparam)
+    val nn = train(trainingData, nnConf)
+    val re = test(nn, mparam)
+    re
+  }
+
+  private def train(data: DataSetIterator, nnConf: MultiLayerConfiguration): MultiLayerNetwork = {
+    val nn = new MultiLayerNetwork(nnConf)
+    nn.init()
+    nn.setListeners(new ScoreIterationListener(50))
+    nn.fit(data)
+    nn
+  }
+
   def test(nn: MultiLayerNetwork, metaParam: MetaParam): Viz.Diagram[Viz.XY] = {
-
-    log.info("test for metaparameter: " + metaParam)
-
     import common.Formatter._
 
-    val dataFileName = s"random_pos_${metaParam.sizeTestData}_xval.csv"
-    val dataSet: DataSet = readPlayerposXDataSet(new File(dataDir, dataFileName), metaParam.sizeTestData).next()
+    val testDataFileName = s"random_pos_${metaParam.sizeTestData}_xval.csv"
+    val testDataFile = new File(dataDir, testDataFileName)
+    val testDataSet: DataSet = readPlayerposXDataSet(testDataFile, metaParam.sizeTestData).next()
 
-    val features: INDArray = dataSet.getFeatures
-    val labels: INDArray = dataSet.getLabels
+    val features: INDArray = testDataSet.getFeatures
+    val labels: INDArray = testDataSet.getLabels
 
-    val output: util.List[INDArray] = nn.feedForward(features, false)
+    val out: INDArray = nn.output(features)
 
-    val out: INDArray = output.get(output.size - 1)
     val diff: INDArray = labels.sub(out)
     val all: INDArray = Nd4j.hstack(labels, diff)
 
@@ -84,69 +101,31 @@ class Training(log: Logger) {
     val dr: Viz.DataRow[Viz.XY] = Viz.DataRow(style = Viz.Style_POINTS,
       data = _data)
 
-    Viz.Diagram(id = "playerpos_x",
-      title =  formatNumber("iterations: %d", metaParam.iterations),
+    Viz.Diagram(id = "_",
+      title = formatNumber("iterations: %d", metaParam.iterations),
       xLabel = Some("x"),
       yLabel = Some("diff"),
+      xRange = Some(Viz.Range(Some(-60), Some(60))),
+      yRange = Some(Viz.Range(Some(-60), Some(60))),
       dataRows = Seq(dr))
   }
 
-  def train(mparam: MetaParam): Viz.Diagram[Viz.XY] = {
-
-    require(mparam.sizeTestData != mparam.sizeTrainingData, "Test- and training data must be different")
-
-    val trainingDataFileName = s"random_pos_${mparam.sizeTrainingData}_xval.csv"
-
-    log.info("Start read data")
-    val trainingData = readPlayerposXDataSet(new File(dataDir, trainingDataFileName), mparam.batchSizeTrainingData)
-    log.info("Start training")
-    val configuration = nnConfiguration(mparam)
-    log.info("Training net with the following configuration: \n" + configuration)
-    val nn = train(trainingData, configuration)
-    log.info("Start testing")
-    val re = test(nn, mparam)
-    log.info("Finished")
-    re
-  }
-
-
-  /**
-    * @return DataSetIterator from the data of a file with a certain batch size
-    */
-  def readPlayerposXDataSet(inFile: File, batchSize: Int): DataSetIterator = try {
+  def readPlayerposXDataSet(inFile: File, batchSize: Int): DataSetIterator = {
     val recordReader = new CSVRecordReader(0, delim)
     recordReader.initialize(new FileSplit(inFile))
     new RecordReaderDataSetIterator(recordReader, batchSize, 42, 42, true)
-  } catch {
-    case e@(_: IOException | _: InterruptedException) =>
-      throw new IllegalStateException("Error in 'readPlayerposXDataSet'. " + e.getMessage, e)
   }
-
-
-  private def train(dataSetIterator: DataSetIterator, nnConf: MultiLayerConfiguration): MultiLayerNetwork = {
-    // create the net
-    val net: MultiLayerNetwork = new MultiLayerNetwork(nnConf)
-    net.init()
-    net.setListeners(new ScoreIterationListener(40))
-    // train the net
-    net.fit(dataSetIterator)
-    // return the trained net
-    net
-  }
-
 
   /**
     * Returns the network configuration, 2 hidden DenseLayers
     */
   private def nnConfiguration(mparam: MetaParam): MultiLayerConfiguration = {
     val numHiddenNodes = 50
-    val learningRate = mparam.learningRate
-    val iterations = mparam.iterations
     new NeuralNetConfiguration.Builder()
       .seed(mparam.seed)
-      .iterations(iterations)
+      .iterations(mparam.iterations)
       .optimizationAlgo(OptimizationAlgorithm.STOCHASTIC_GRADIENT_DESCENT)
-      .learningRate(learningRate)
+      .learningRate(mparam.learningRate)
       .weightInit(WeightInit.XAVIER)
       .updater(Updater.NESTEROVS)
       .momentum(0.9)
