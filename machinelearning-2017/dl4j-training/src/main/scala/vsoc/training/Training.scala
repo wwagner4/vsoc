@@ -25,8 +25,9 @@ import scala.util.Random
 
 
 case class MetaParam(
+                      id: String,
                       learningRate: Double = 0.001,
-                      sizeTrainingData: Int = 500000,
+                      sizeTrainingData: Int = 1000000,
                       batchSizeTrainingData: Int = 10000,
                       sizeTestData: Int = 1000,
                       batchSizeTestData: Int = 1000,
@@ -48,16 +49,18 @@ class Training(log: Logger) {
   val delim = ";"
 
   def train(): Viz.Dia[Viz.XY] = {
-    val metas = Seq(50, 1).map { iter =>
+    val metas = Seq(1, 5, 20, 50).map { iter =>
       MetaParam(
+        id = "ID" + iter,
         seed = Random.nextLong(),
         iterations = iter)
     }
     log.info("start training")
     val dias: Seq[Viz.Diagram[Viz.XY]] = metas.map(mparam => train(mparam))
 
-    Viz.MultiDiagram[Viz.XY](id = "playerpos_iter_C2",
+    Viz.MultiDiagram[Viz.XY](id = "playerpos_iter_C4",
       imgWidth = 1500,
+      imgHeight = 1200,
       columns = 2,
       diagrams = dias)
   }
@@ -70,8 +73,7 @@ class Training(log: Logger) {
     val trainingData = readPlayerposXDataSet(trainingDataFile, mparam.batchSizeTrainingData)
     val nnConf: MultiLayerConfiguration = nnConfiguration(mparam)
     val nn = train(trainingData, nnConf)
-    val re = test(nn, mparam)
-    re
+    test(nn, mparam)
   }
 
   private def train(data: DataSetIterator, nnConf: MultiLayerConfiguration): MultiLayerNetwork = {
@@ -101,7 +103,7 @@ class Training(log: Logger) {
     val dr: Viz.DataRow[Viz.XY] = Viz.DataRow(style = Viz.Style_POINTS,
       data = _data)
 
-    Viz.Diagram(id = "_",
+    Viz.Diagram(id = "DIA" + metaParam.id,
       title = formatNumber("iterations: %d", metaParam.iterations),
       xLabel = Some("x"),
       yLabel = Some("diff"),
