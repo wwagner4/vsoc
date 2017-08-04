@@ -1,7 +1,5 @@
 package vsoc.training
 
-import java.util.Locale
-
 import org.scalatest.{FunSuite, Matchers}
 
 class TryoutSuite extends FunSuite with Matchers {
