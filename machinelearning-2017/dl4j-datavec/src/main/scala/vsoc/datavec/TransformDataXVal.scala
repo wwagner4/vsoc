@@ -1,4 +1,4 @@
-package vsoc.playerpos
+package vsoc.datavec
 
 import java.io.{File, FileOutputStream, OutputStream}
 import java.util
@@ -17,7 +17,7 @@ import org.datavec.spark.transform.misc.{StringToWritablesFunction, WritablesToS
 import org.slf4j.LoggerFactory
 
 /**
-  * Read data from the playerpos datasets and converts them to be used for training
+  * Read data from the datavec datasets and converts them to be used for training
   */
 object TransformDataXVal extends App {
 

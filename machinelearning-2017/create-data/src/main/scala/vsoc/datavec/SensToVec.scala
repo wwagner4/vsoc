@@ -1,4 +1,4 @@
-package vsoc.playerpos
+package vsoc.datavec
 
 import atan.model.Flag
 import vsoc.behaviour.{DistDirVision, Sensors}

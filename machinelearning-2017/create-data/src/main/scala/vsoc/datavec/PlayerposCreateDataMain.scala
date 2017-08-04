@@ -1,4 +1,4 @@
-package vsoc.playerpos
+package vsoc.datavec
 
 object PlayerposCreateDataMain extends App {
 

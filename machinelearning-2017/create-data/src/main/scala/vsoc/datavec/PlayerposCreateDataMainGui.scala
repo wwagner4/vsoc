@@ -1,4 +1,4 @@
-package vsoc.playerpos
+package vsoc.datavec
 
 import java.awt._
 import java.awt.event._
