@@ -3,7 +3,7 @@ package playerpos
 import java.io.{File, FileOutputStream, OutputStream}
 import java.util
 
-import common.Util
+import vsoc.common.Util
 import org.apache.commons.io.FileUtils
 import org.apache.spark.SparkConf
 import org.apache.spark.api.java.{JavaRDD, JavaSparkContext}
@@ -38,7 +38,7 @@ object TransformDataXVal extends App {
 
   private def convert(filename: (String, String), sparkContext: JavaSparkContext): Unit = {
 
-    val (inputFileName, outputFileName) = filename;
+    val (inputFileName, outputFileName) = filename
     val inputFile: File = Util.dataFile(inputFileName)
     val outputFile: File = Util.dataFile(outputFileName)
 

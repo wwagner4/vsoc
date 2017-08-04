@@ -3,8 +3,8 @@ package vsoc.training
 import java.io.{File, IOException}
 import java.util
 
-import common.Util._
-import common.{Viz, VizCreatorGnuplot}
+import vsoc.common.Util._
+import vsoc.common.{Viz, VizCreatorGnuplot}
 import org.datavec.api.records.reader.impl.csv.CSVRecordReader
 import org.datavec.api.split.FileSplit
 import org.deeplearning4j.datasets.datavec.RecordReaderDataSetIterator
@@ -44,7 +44,7 @@ object Training extends App {
 
 class Training(log: Logger) {
 
-  import common.Util._
+  import vsoc.common.Util._
 
   val delim = ";"
 

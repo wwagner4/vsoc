@@ -1,6 +1,6 @@
 package vsoc.training
 
-import common.Viz
+import vsoc.common.Viz
 import org.nd4j.linalg.api.ndarray.INDArray
 
 object UtilTraining {

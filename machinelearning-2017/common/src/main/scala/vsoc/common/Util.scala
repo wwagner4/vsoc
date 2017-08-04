@@ -1,4 +1,4 @@
-package common
+package vsoc.common
 
 import java.io.{Closeable, File, PrintWriter}
 import java.util.UUID

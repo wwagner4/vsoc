@@ -1,6 +1,6 @@
-package common
+package vsoc.common
 
-import common.Viz._
+import vsoc.common.Viz._
 
 object VizTryout extends App {
 

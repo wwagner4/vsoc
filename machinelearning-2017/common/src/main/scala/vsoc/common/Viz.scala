@@ -1,9 +1,9 @@
-package common
+package vsoc.common
 
 import java.io.File
 import java.util.Locale
 
-import common.Viz.{Lineable, _}
+import vsoc.common.Viz._
 
 /**
   * Interface for data visualisation
