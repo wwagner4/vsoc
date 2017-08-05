@@ -134,24 +134,25 @@ trait VizCreator[T <: Lineable] {
 
   def createDiagram(dia: Diagram[T]): Unit = {
     val script1 = createDiagramInit(dia)
-    val script2 = createDiagramData(dia, script1)
-    val script3 = createDiagramCommands(dia, script2)
+    val script2 = createDiagramData(dia, 0, script1)
+    val script3 = createDiagramCommands(dia, 0, script2)
     create(dia, script3)
   }
 
   def createMultiDiagram(mdia: MultiDiagram[T]): Unit = {
     val script1 = createMultiDiagramInit(mdia)
-    val script2 = mdia.diagrams.reverse.foldRight(script1) { (dia, script) => createDiagramData(dia, script) }
-    val script3 = mdia.diagrams.reverse.foldRight(script2) { (dia, script) => createDiagramCommands(dia, script) }
+    val dias: Seq[(Diagram[T], Int)] = mdia.diagrams.reverse.zipWithIndex
+    val script2 = dias.foldRight(script1) { (diaAndIdx, script) => createDiagramData(diaAndIdx._1, diaAndIdx._2,script) }
+    val script3 = dias.foldRight(script2) { (diaAndIdx, script) => createDiagramCommands(diaAndIdx._1, diaAndIdx._2, script) }
     val script4 = createMultiDiagramClose(mdia, script3)
     create(mdia, script4)
   }
 
   def createDiagramInit(dia: Diagram[T]): String
 
-  def createDiagramData(dia: Diagram[T], script: String): String
+  def createDiagramData(dia: Diagram[T], diaIndex: Int, script: String): String
 
-  def createDiagramCommands(dia: Diagram[T], script: String): String
+  def createDiagramCommands(dia: Diagram[T], diaIndex: Int, script: String): String
 
   def createMultiDiagramInit(mdia: MultiDiagram[T]): String
 
@@ -193,13 +194,7 @@ case class VizCreatorGnuplot[T <: Lineable](outDir: File, execute: Boolean = tru
 
   }
 
-  def diagramNamesDistinct(diagrams: Seq[Diagram[T]]): Boolean = {
-    val distNames = diagrams.map(dia => dia.id).distinct
-    distNames.size == diagrams.size
-  }
-
   def createMultiDiagramInit(mdia: MultiDiagram[T]): String = {
-    require(diagramNamesDistinct(mdia.diagrams), "diagram names in multidiagram must be distinct")
     val titleString = if(mdia.title.isDefined) s"title '${mdia.title.get}'" else ""
     s"""
        |set terminal pngcairo dashed enhanced size ${mdia.imgWidth}, ${mdia.imgHeight}
@@ -221,7 +216,7 @@ case class VizCreatorGnuplot[T <: Lineable](outDir: File, execute: Boolean = tru
        |""".stripMargin
   }
 
-  def createDiagramData(dia: Diagram[T], script: String): String = {
+  def createDiagramData(dia: Diagram[T], diaIndex: Int, script: String): String = {
 
     val loc = Locale.ENGLISH
 
@@ -238,7 +233,7 @@ case class VizCreatorGnuplot[T <: Lineable](outDir: File, execute: Boolean = tru
 
     def data(dataRows: Seq[DataRow[T]]): String = dataRows.zipWithIndex.map {
       case (dr, i) => s"""
-                         |${datablockName(dia, i)} << EOD
+                         |${datablockName(dia, diaIndex, i)} << EOD
                          |${values(dr.data)}
                          |EOD
                          |""".stripMargin.trim
@@ -247,9 +242,9 @@ case class VizCreatorGnuplot[T <: Lineable](outDir: File, execute: Boolean = tru
     script + "\n" + data(dia.dataRows)
   }
 
-  def datablockName(dia: Dia[T], i: Int): String = s"$$data_${dia.id}_$i"
+  def datablockName(dia: Dia[T], diaIndex: Int, dataIndex: Int): String = s"$$data_${dia.id}_${diaIndex}_$dataIndex"
 
-  def createDiagramCommands(dia: Diagram[T], script: String): String = {
+  def createDiagramCommands(dia: Diagram[T], diaIndex: Int, script: String): String = {
 
     def formatNumber(n: Number): String = "" + n
 
@@ -284,7 +279,7 @@ case class VizCreatorGnuplot[T <: Lineable](outDir: File, execute: Boolean = tru
           case DataDim_3D => "1:2:3"
         }
         val style = mapStyle(dr.style)
-        s"""${datablockName(dia, i)} using $dim $title with $style"""
+        s"""${datablockName(dia, diaIndex, i)} using $dim $title with $style"""
     }.mkString(", \\\n")
 
 
