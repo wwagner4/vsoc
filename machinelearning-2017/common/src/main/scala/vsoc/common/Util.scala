@@ -30,8 +30,11 @@ object Util {
   }
 
   def scriptsDir: File = {
-    dir(s"$workDirName/scripts/img")
     dir(s"$workDirName/scripts")
+  }
+
+  def imgDir: File = {
+    dir(s"$workDirName/img")
   }
 
   def dataFile(fileName: String): File ={

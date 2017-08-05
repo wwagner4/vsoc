@@ -4,7 +4,7 @@ import org.scalatest.{FunSuite, Matchers}
 
 class TryoutSuite extends FunSuite with Matchers {
 
-  import common.Formatter._
+  import vsoc.common.Formatter._
 
   test("format double") {
     val d = 0.001

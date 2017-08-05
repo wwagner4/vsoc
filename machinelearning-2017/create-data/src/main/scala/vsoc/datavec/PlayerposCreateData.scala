@@ -10,7 +10,7 @@ import vsoc.server.{ServerUtil, VsocPlayer}
 import scala.collection.JavaConverters._
 import scala.util.Random
 import vsoc.common.Util._
-import common._
+import vsoc.common.Formatter
 import vsoc.server.initial._
 import vsoc.util.Vec2D
 

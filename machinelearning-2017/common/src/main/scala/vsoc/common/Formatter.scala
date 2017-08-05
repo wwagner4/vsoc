@@ -1,4 +1,4 @@
-package common
+package vsoc.common
 
 import java.util.Locale
 

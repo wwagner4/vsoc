@@ -2,7 +2,6 @@ package vsoc.training
 
 import java.io.File
 
-import common.Formatter
 import org.datavec.api.records.reader.impl.csv.CSVRecordReader
 import org.datavec.api.split.FileSplit
 import org.deeplearning4j.datasets.datavec.RecordReaderDataSetIterator
@@ -20,16 +19,15 @@ import org.nd4j.linalg.factory.Nd4j
 import org.nd4j.linalg.lossfunctions.LossFunctions
 import org.slf4j.{Logger, LoggerFactory}
 import vsoc.common.Util._
-import vsoc.common.{Viz, VizCreatorGnuplot}
+import vsoc.common.{Formatter, Viz, VizCreatorGnuplot}
 
 import scala.util.Random
 
 
 case class MetaParam(
-                      id: String,
                       learningRate: Double = 0.001,
                       sizeTrainingData: Int = 1000000,
-                      batchSizeTrainingData: Int = 10000,
+                      batchSizeTrainingData: Int = 100000,
                       sizeTestData: Int = 1000,
                       batchSizeTestData: Int = 1000,
                       iterations: Int = 3,
@@ -40,7 +38,7 @@ case class MetaParam(
 object Training extends App {
   val log: Logger = LoggerFactory.getLogger(classOf[Training])
   val dia: Viz.Dia[Viz.XY] = new Training(log).train()
-  Viz.createDiagram(dia)(VizCreatorGnuplot[Viz.XY](dataDir, dataDir, execute = true))
+  Viz.createDiagram(dia)(VizCreatorGnuplot[Viz.XY](dataDir, imgDir, execute = true))
 }
 
 class Training(log: Logger) {
@@ -52,7 +50,6 @@ class Training(log: Logger) {
   def train(): Viz.Dia[Viz.XY] = {
     val metas = Seq(5, 20, 50, 100).map { iter =>
       MetaParam(
-        id = "ID" + iter,
         seed = Random.nextLong(),
         iterations = iter)
     }
@@ -60,7 +57,7 @@ class Training(log: Logger) {
 
     val learningRateStr = Formatter.formatNumber("%.5f", metas(0).learningRate)
 
-    Viz.MultiDiagram[Viz.XY](id = "playerpos_iter_D3",
+    Viz.MultiDiagram[Viz.XY](id = "playerpos_iter_D5",
       imgWidth = 1500,
       imgHeight = 1200,
       title = Some(s"Learning Rate $learningRateStr"),
@@ -88,7 +85,7 @@ class Training(log: Logger) {
   }
 
   def test(nn: MultiLayerNetwork, metaParam: MetaParam): Viz.Diagram[Viz.XY] = {
-    import common.Formatter._
+    import Formatter._
 
     val testDataFileName = s"random_pos_${metaParam.sizeTestData}_xval.csv"
     val testDataFile = new File(dataDir, testDataFileName)
@@ -106,7 +103,7 @@ class Training(log: Logger) {
     val dr: Viz.DataRow[Viz.XY] = Viz.DataRow(style = Viz.Style_POINTS,
       data = _data)
 
-    Viz.Diagram(id = "DIA" + metaParam.id,
+    Viz.Diagram(id = "_",
       title = formatNumber("iterations: %d", metaParam.iterations),
       xLabel = Some("x"),
       yLabel = Some("diff"),
