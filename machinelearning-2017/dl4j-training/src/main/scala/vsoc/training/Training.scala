@@ -40,7 +40,7 @@ case class MetaParam(
 object Training extends App {
   val log: Logger = LoggerFactory.getLogger(classOf[Training])
   val dia: Viz.Dia[Viz.XY] = new Training(log).train()
-  Viz.createDiagram(dia)(VizCreatorGnuplot[Viz.XY](dataDir, execute = true))
+  Viz.createDiagram(dia)(VizCreatorGnuplot[Viz.XY](dataDir, dataDir, execute = true))
 }
 
 class Training(log: Logger) {

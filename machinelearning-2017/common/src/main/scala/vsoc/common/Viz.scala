@@ -165,20 +165,20 @@ trait VizCreator[T <: Lineable] {
 /**
   * An implementation for data visualisation using gnuplot
   *
-  * @param outDir Directory in which gnuplot scripts are created
+  * @param scriptDir Directory in which gnuplot scripts are created
   */
-case class VizCreatorGnuplot[T <: Lineable](outDir: File, execute: Boolean = true) extends VizCreator[T] {
+case class VizCreatorGnuplot[T <: Lineable](scriptDir: File, imageDir: File, execute: Boolean = true) extends VizCreator[T] {
 
   def create(dia: Dia[T], script: String): Unit = {
 
     val id = dia.id
     val filename = s"$id.gp"
-    val f = new File(outDir, filename)
+    val f = new File(scriptDir, filename)
     Util.writeToFile(f, pw => pw.print(script))
     println(s"wrote diagram '$id' to $f")
 
     if (execute) {
-      exec(f, outDir)
+      exec(f, scriptDir)
     }
 
     def exec(script: File, workdir: File): Unit = {
@@ -198,7 +198,7 @@ case class VizCreatorGnuplot[T <: Lineable](outDir: File, execute: Boolean = tru
     val titleString = if(mdia.title.isDefined) s"title '${mdia.title.get}'" else ""
     s"""
        |set terminal pngcairo dashed enhanced size ${mdia.imgWidth}, ${mdia.imgHeight}
-       |set output 'img/${mdia.id}.png'
+       |set output '${imageDir.getAbsolutePath}/${mdia.id}.png'
        |set multiplot layout ${mdia.rows}, ${mdia.columns} $titleString
        |""".stripMargin
   }
@@ -212,7 +212,7 @@ case class VizCreatorGnuplot[T <: Lineable](outDir: File, execute: Boolean = tru
   def createDiagramInit(dia: Diagram[T]): String = {
     s"""
        |set terminal pngcairo dashed enhanced size ${dia.imgWidth}, ${dia.imgHeight}
-       |set output 'img/${dia.id}.png'
+       |set output '${imageDir.getAbsolutePath}/${dia.id}.png'
        |""".stripMargin
   }
 
