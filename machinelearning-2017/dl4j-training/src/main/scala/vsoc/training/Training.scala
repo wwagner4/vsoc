@@ -2,6 +2,7 @@ package vsoc.training
 
 import java.io.File
 
+import common.Formatter
 import org.datavec.api.records.reader.impl.csv.CSVRecordReader
 import org.datavec.api.split.FileSplit
 import org.deeplearning4j.datasets.datavec.RecordReaderDataSetIterator
@@ -49,18 +50,20 @@ class Training(log: Logger) {
   val delim = ";"
 
   def train(): Viz.Dia[Viz.XY] = {
-    val metas = Seq(1, 5, 20, 50).map { iter =>
+    val metas = Seq(5, 20, 50, 100).map { iter =>
       MetaParam(
         id = "ID" + iter,
         seed = Random.nextLong(),
         iterations = iter)
     }
-    log.info("start training")
     val dias: Seq[Viz.Diagram[Viz.XY]] = metas.map(mparam => train(mparam))
 
-    Viz.MultiDiagram[Viz.XY](id = "playerpos_iter_C4",
+    val learningRateStr = Formatter.formatNumber("%.5f", metas(0).learningRate)
+
+    Viz.MultiDiagram[Viz.XY](id = "playerpos_iter_D3",
       imgWidth = 1500,
       imgHeight = 1200,
+      title = Some(s"Learning Rate $learningRateStr"),
       columns = 2,
       diagrams = dias)
   }
