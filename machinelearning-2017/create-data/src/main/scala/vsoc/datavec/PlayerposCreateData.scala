@@ -9,8 +9,8 @@ import vsoc.server.{ServerUtil, VsocPlayer}
 
 import scala.collection.JavaConverters._
 import scala.util.Random
-import vsoc.common.Util._
-import vsoc.common.{Formatter, Util}
+import vsoc.common.UtilIO._
+import vsoc.common.{Formatter, UtilIO}
 import vsoc.server.initial._
 import vsoc.util.Vec2D
 
@@ -22,7 +22,7 @@ object PlayerposCreateData {
 
     sizes.foreach { size =>
       val filename = s"${name}_$size.csv"
-      val file = new File(Util.dirData, filename)
+      val file = new File(UtilIO.dirData, filename)
       use(new PrintWriter(file))(pw => {
         val west = new InitialPlacementNone
         val east = initialPlacement

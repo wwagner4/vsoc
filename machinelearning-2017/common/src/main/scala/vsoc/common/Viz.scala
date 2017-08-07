@@ -174,7 +174,7 @@ case class VizCreatorGnuplot[T <: Lineable](scriptDir: File, imageDir: File, exe
     val id = dia.id
     val filename = s"$id.gp"
     val f = new File(scriptDir, filename)
-    Util.use(new PrintWriter(f))(pw => pw.print(script))
+    UtilIO.use(new PrintWriter(f))(pw => pw.print(script))
     println(s"wrote diagram '$id' to $f")
 
     if (execute) {

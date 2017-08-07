@@ -3,7 +3,7 @@ package vsoc.datavec
 import java.io.{File, FileOutputStream, OutputStream}
 import java.util
 
-import vsoc.common.Util
+import vsoc.common.UtilIO
 import org.apache.commons.io.FileUtils
 import org.apache.spark.SparkConf
 import org.apache.spark.api.java.{JavaRDD, JavaSparkContext}
@@ -21,7 +21,7 @@ import org.slf4j.LoggerFactory
   */
 object TransformDataXVal extends App {
 
-  import Util._
+  import UtilIO._
 
   private val log = LoggerFactory.getLogger("vsoc.ReadData")
   private val delim = ";"
@@ -39,8 +39,8 @@ object TransformDataXVal extends App {
   private def convert(filename: (String, String), sparkContext: JavaSparkContext): Unit = {
 
     val (inputFileName, outputFileName) = filename
-    val inputFile: File = new File(Util.dirData, inputFileName)
-    val outputFile: File = new File(Util.dirData, outputFileName)
+    val inputFile: File = new File(UtilIO.dirData, inputFileName)
+    val outputFile: File = new File(UtilIO.dirData, outputFileName)
 
     val data = readFile(inputFile, sparkContext)
     val transformed = transform(data)

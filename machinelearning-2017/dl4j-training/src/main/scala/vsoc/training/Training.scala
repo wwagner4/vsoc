@@ -18,7 +18,7 @@ import org.nd4j.linalg.dataset.api.iterator.DataSetIterator
 import org.nd4j.linalg.factory.Nd4j
 import org.nd4j.linalg.lossfunctions.LossFunctions
 import org.slf4j.{Logger, LoggerFactory}
-import vsoc.common.Util._
+import vsoc.common.UtilIO._
 import vsoc.common.{Formatter, Viz, VizCreatorGnuplot}
 
 import scala.util.Random
@@ -43,7 +43,7 @@ object Training extends App {
 
 class Training(log: Logger) {
 
-  import vsoc.common.Util._
+  import vsoc.common.UtilIO._
 
   val delim = ";"
 

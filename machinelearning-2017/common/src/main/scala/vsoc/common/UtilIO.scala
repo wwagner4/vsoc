@@ -6,9 +6,9 @@ import java.util.UUID
 import scala.io.Source
 
 /**
-  * Util functions
+  * General IO Utillities
   */
-object Util {
+object UtilIO {
 
   /**
     * Return a sub dir inside the parent dir.

@@ -4,7 +4,7 @@ import vsoc.common.Viz._
 
 object VizTryout extends App {
 
-  implicit val creator = VizCreatorGnuplot[XY](Util.dirScripts, Util.dirScripts)
+  implicit val creator = VizCreatorGnuplot[XY](UtilIO.dirScripts, UtilIO.dirScripts)
 
   val sin = (1.0 to(20.0, 0.1)).map(x => XY(x, 5 + math.sin(x) * 2))
   val log = (1.0 to(20.0, 0.1)).map(x => XY(x, math.log(x) * 2.0))
