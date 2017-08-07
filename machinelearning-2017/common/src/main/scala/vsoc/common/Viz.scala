@@ -26,6 +26,7 @@ object Viz {
   case class Style_POINTS(size: Double) extends Style
   case object Style_DOTS extends Style
   case object Style_LINESPOINTS extends Style
+  case object Style_BOXPLOT extends Style
 
   sealed trait DataDim
 
@@ -265,6 +266,7 @@ case class VizCreatorGnuplot[T <: Lineable](scriptDir: File, imageDir: File, exe
       case Viz.Style_LINESDASHED(size) => s"lines lw $size dashtype 2"
       case Viz.Style_DOTS => "dots"
       case Viz.Style_LINESPOINTS => "linespoints"
+      case Viz.Style_BOXPLOT => "boxplot"
     }
 
     def series(dataRows: Seq[DataRow[T]]) = dataRows.zipWithIndex.map {
