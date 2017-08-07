@@ -4,7 +4,7 @@ import vsoc.common.Viz.{Diagram, _}
 
 object VizMultiTryout extends App {
 
-  val d = Util.scriptsDir
+  val d = Util.dirScripts
   implicit val vc = VizCreatorGnuplot[XY](d, d, execute = true)
 
   val d1 = (0.0 to(1.0, 0.1)).map(x => XY(x, math.cos(x)))

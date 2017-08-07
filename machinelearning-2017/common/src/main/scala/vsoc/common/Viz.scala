@@ -1,6 +1,6 @@
 package vsoc.common
 
-import java.io.File
+import java.io.{File, PrintWriter}
 import java.util.Locale
 
 import vsoc.common.Viz._
@@ -174,7 +174,7 @@ case class VizCreatorGnuplot[T <: Lineable](scriptDir: File, imageDir: File, exe
     val id = dia.id
     val filename = s"$id.gp"
     val f = new File(scriptDir, filename)
-    Util.writeToFile(f, pw => pw.print(script))
+    Util.use(new PrintWriter(f))(pw => pw.print(script))
     println(s"wrote diagram '$id' to $f")
 
     if (execute) {

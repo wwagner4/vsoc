@@ -10,50 +10,57 @@ import scala.io.Source
   */
 object Util {
 
-  val workDirName = "vsoc"
-
-  def writeToFile(file: File, op: (PrintWriter) => Unit): Unit = {
-    val pw = new PrintWriter(file)
-    try {op(pw)} finally {pw.close()}
-  }
-
-  def lines(f: File): Int = Source.fromFile(f).getLines.size
-
+  /**
+    * Return a sub dir inside the parent dir.
+    * Create the sub dir if it does not exist
+    */
   def dirSub(parent: File, subDirName: String): File = {
     val dir = new File(parent, subDirName)
     if (!dir.exists()) dir.mkdirs()
     dir
   }
 
-  def dirHome: File = {
-    new File(System.getProperty("user.home"))
-  }
-
+  /**
+    * Default work directory for 'vsoc'
+    */
   def dirWork: File = {
+    def dirHome: File = {
+      new File(System.getProperty("user.home"))
+    }
     dirSub(dirHome, "vsoc")
   }
 
-  def dataDir: File = {
+  /**
+    * Default data directory
+    */
+  def dirData: File = {
     dirSub(dirWork, "data")
   }
 
-  def scriptsDir: File = {
+  /**
+    * Default scripts directory
+    */
+  def dirScripts: File = {
     dirSub(dirWork, "scripts")
   }
 
-  def imgDir: File = {
+  /**
+    * Default directory for images
+    */
+  def dirImg: File = {
     dirSub(dirWork, "img")
   }
 
-  def dataFile(fileName: String): File ={
-    new File(dataDir, fileName)
-  }
-
-  def createTempDirectory: File = {
+  /**
+    * Creates a new tem directory
+    */
+  def dirTmp: File = {
     val tmpDirName = System.getProperty("java.io.tmpdir")
     val uuid = UUID.randomUUID
     new File(new File(tmpDirName), "ml" + uuid.getMostSignificantBits)
   }
+
+  def lines(f: File): Int = Source.fromFile(f).getLines.size
 
   def use[T <: Closeable](closeable: T)(f: T => Unit): Unit = {
     try {
@@ -63,7 +70,5 @@ object Util {
       closeable.close()
     }
   }
-
-
 
 }

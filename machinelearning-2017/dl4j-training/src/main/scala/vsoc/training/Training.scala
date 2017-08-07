@@ -38,7 +38,7 @@ case class MetaParam(
 object Training extends App {
   val log: Logger = LoggerFactory.getLogger(classOf[Training])
   val dia: Viz.Dia[Viz.XY] = new Training(log).train()
-  Viz.createDiagram(dia)(VizCreatorGnuplot[Viz.XY](dataDir, imgDir, execute = true))
+  Viz.createDiagram(dia)(VizCreatorGnuplot[Viz.XY](dirData, dirImg, execute = true))
 }
 
 class Training(log: Logger) {
@@ -69,7 +69,7 @@ class Training(log: Logger) {
 
     require(mparam.sizeTestData != mparam.sizeTrainingData, "Test- and training data must be different")
     val trainingDataFileName = s"random_pos_${mparam.sizeTrainingData}_xval.csv"
-    val trainingDataFile = new File(dataDir, trainingDataFileName)
+    val trainingDataFile = new File(dirData, trainingDataFileName)
     val trainingData = readPlayerposXDataSet(trainingDataFile, mparam.batchSizeTrainingData)
     val nnConf: MultiLayerConfiguration = nnConfiguration(mparam)
     val nn = train(trainingData, nnConf)
@@ -88,7 +88,7 @@ class Training(log: Logger) {
     import Formatter._
 
     val testDataFileName = s"random_pos_${metaParam.sizeTestData}_xval.csv"
-    val testDataFile = new File(dataDir, testDataFileName)
+    val testDataFile = new File(dirData, testDataFileName)
     val testDataSet: DataSet = readPlayerposXDataSet(testDataFile, metaParam.sizeTestData).next()
 
     val features: INDArray = testDataSet.getFeatures

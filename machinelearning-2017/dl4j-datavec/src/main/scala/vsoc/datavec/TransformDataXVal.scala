@@ -39,8 +39,8 @@ object TransformDataXVal extends App {
   private def convert(filename: (String, String), sparkContext: JavaSparkContext): Unit = {
 
     val (inputFileName, outputFileName) = filename
-    val inputFile: File = Util.dataFile(inputFileName)
-    val outputFile: File = Util.dataFile(outputFileName)
+    val inputFile: File = new File(Util.dirData, inputFileName)
+    val outputFile: File = new File(Util.dirData, outputFileName)
 
     val data = readFile(inputFile, sparkContext)
     val transformed = transform(data)
@@ -80,7 +80,7 @@ object TransformDataXVal extends App {
   }
 
   private def writeToFile(outFile: File, lines: JavaRDD[util.List[Writable]]) = {
-    val tmpDir = createTempDirectory
+    val tmpDir = dirTmp
 
     lines
       .map(new WritablesToStringFunction(delim))
