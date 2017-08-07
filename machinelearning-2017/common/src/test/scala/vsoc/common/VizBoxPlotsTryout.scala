@@ -28,29 +28,29 @@ plot 'silver.dat' using (1):2, '' using (2):(3*$3)
    */
 
 
-  implicit val creator = VizCreatorGnuplot[XY](UtilIO.dirScripts, UtilIO.dirSub(UtilIO.dirScripts, "test-img"), true)
+  implicit val creator = VizCreatorGnuplot[X](UtilIO.dirScripts, UtilIO.dirSub(UtilIO.dirScripts, "test-img"), true)
 
-  case class Gaussian(mean: Double, vari: Double)
+  case class Gaussian(id: String, mean: Double, vari: Double)
 
   val ran = new java.util.Random()
 
   val dataConfList = List(
-    Gaussian(2, 5.1),
-    Gaussian(-5, 1.1),
-    Gaussian(1, 5.5),
-    Gaussian(0, 0.6)
+    Gaussian("Hallo", 2, 5.1),
+    Gaussian("wo", -5, 1.1),
+    Gaussian("ist", 1, 5.5),
+    Gaussian("der", 0, 0.6)
   )
 
-  val data: Seq[DataRow[XY]] = dataConfList.map { c =>
-    val d = (1 to 100).map { n =>
+  val data: Seq[DataRow[X]] = dataConfList.map { c =>
+    val d = (1 to 100).map { _ =>
       val v = c.mean + ran.nextGaussian() * c.vari
-      XY(n, v)
+      X(v)
     }
-    new DataRow[XY](style = Style_BOXPLOT, data = d)
+    new DataRow[X](style = Style_BOXPLOT, name = Some(c.id), data = d)
   }
 
-  val diagram = new Diagram[XY](id= "BP01", title="Boxplot Tryout", dataRows = data)
+  val diagram = new Diagram[X](id= "BP01", title="Boxplot Tryout", dataRows = data)
 
-  Viz.createDiagram[XY](diagram)
+  Viz.createDiagram[X](diagram)
 
 }

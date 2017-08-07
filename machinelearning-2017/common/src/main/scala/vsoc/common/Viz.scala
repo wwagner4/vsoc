@@ -30,12 +30,20 @@ object Viz {
 
   sealed trait DataDim
 
+  case object DataDim_1D extends DataDim
   case object DataDim_2D extends DataDim
   case object DataDim_3D extends DataDim
 
   trait Lineable {
     def line(f: Number => String): String
     def dataDim: DataDim
+  }
+
+  case class X (
+                  x: Number
+                ) extends Lineable {
+    def line(f: Number => String): String = f(x)
+    def dataDim = DataDim_1D
   }
 
   case class XY (
@@ -276,12 +284,13 @@ case class VizCreatorGnuplot[T <: Lineable](scriptDir: File, imageDir: File, exe
           else "notitle"
         }
 
-        val dim = dr.dataDim match {
+        def dim(nr: Int) = dr.dataDim match {
+          case DataDim_1D => s"($nr):1"
           case DataDim_2D => "1:2"
           case DataDim_3D => "1:2:3"
         }
         val style = mapStyle(dr.style)
-        s"""${datablockName(dia, diaIndex, i)} using $dim $title with $style"""
+        s"""${datablockName(dia, diaIndex, i)} using ${dim(i + 1)} $title with $style"""
     }.mkString(", \\\n")
 
 
@@ -301,12 +310,14 @@ case class VizCreatorGnuplot[T <: Lineable](scriptDir: File, imageDir: File, exe
 
     def plotCmd: String =
       dia.dataDim match {
+        case DataDim_1D => "plot"
         case DataDim_2D => "plot"
         case DataDim_3D => "splot"
       }
 
     def settings3D: String =
       dia.dataDim match {
+        case DataDim_1D => ""
         case DataDim_2D => ""
         case DataDim_3D =>
           s"""
@@ -320,9 +331,43 @@ case class VizCreatorGnuplot[T <: Lineable](scriptDir: File, imageDir: File, exe
       case LegendPlacement_RIGHT => "right"
     }
 
+    def isBoxplot(dataRows: Seq[Viz.DataRow[T]]): Boolean = {
+      if (dataRows.exists(_.style == Style_BOXPLOT )) {
+        require(dataRows.exists(_.style == Style_BOXPLOT ), "If any datarow has style BOXPLOT all rows must be of style BOXPLOT")
+        true
+      } else {
+        false
+      }
+    }
+
+    def descr[U <: Lineable](dr: DataRow[U], idx: Int): String = {
+      if (dr.name.isDefined) dr.name.get
+      else "" + idx
+    }
+
+    def xtics(dataRows: Seq[Viz.DataRow[T]]): String =
+      dataRows.zipWithIndex.map{ case(dr, idx) =>
+        s"'${descr(dr, idx)}' ${idx + 1}"
+      }.mkString(", ")
+
+    def settings: String =
+      if (isBoxplot(dia.dataRows))
+        s"""
+          |unset key
+          |set style data boxplot
+          |set xtics (${xtics(dia.dataRows)})
+          |#set border 2
+          |set xtics nomirror
+          |set ytics nomirror
+        """.stripMargin
+      else
+        s"""
+          |set key inside $lp top vertical Right noreverse enhanced autotitle $legendTitle
+        """.stripMargin
+
     script +
       s"""
-         |set key inside $lp top vertical Right noreverse enhanced autotitle $legendTitle
+         |$settings
          |set minussign
          |set title "${dia.title}"
          |$xLabel

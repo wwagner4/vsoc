@@ -4,8 +4,10 @@ import vsoc.common.Viz.{Diagram, _}
 
 object VizMultiTryout extends App {
 
-  val d = UtilIO.dirScripts
-  implicit val vc = VizCreatorGnuplot[XY](d, d, execute = true)
+  import UtilIO._
+
+  val img = dirSub(dirScripts, "test-img")
+  implicit val vc = VizCreatorGnuplot[XY](dirScripts, img, execute = true)
 
   val d1 = (0.0 to(1.0, 0.1)).map(x => XY(x, math.cos(x)))
   val d2 = (0.0 to(1.0, 0.1)).map(x => XY(x, math.pow(x, 2)))

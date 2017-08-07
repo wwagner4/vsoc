@@ -4,7 +4,9 @@ import vsoc.common.Viz._
 
 object Viz3dTryout extends App {
 
-  implicit val creator: VizCreatorGnuplot[XYZ] = VizCreatorGnuplot[XYZ](UtilIO.dirScripts, UtilIO.dirScripts)
+  import UtilIO._
+
+  implicit val creator: VizCreatorGnuplot[XYZ] = VizCreatorGnuplot[XYZ](dirScripts, dirSub(dirScripts, "test-img"))
 
   val data01: Seq[XYZ] = for (x <- 0.0 to 30.0 by 1; y <- 0.0 to 40.0 by 1) yield {
     val z = (x * y) -200
