@@ -19,22 +19,30 @@ object Util {
 
   def lines(f: File): Int = Source.fromFile(f).getLines.size
 
-  def dir(path: String): File = {
-    val home = new File(System.getProperty("user.home"))
-    val dir = new File(home, path)
+  def dirSub(parent: File, subDirName: String): File = {
+    val dir = new File(parent, subDirName)
     if (!dir.exists()) dir.mkdirs()
     dir
   }
+
+  def dirHome: File = {
+    new File(System.getProperty("user.home"))
+  }
+
+  def dirWork: File = {
+    dirSub(dirHome, "vsoc")
+  }
+
   def dataDir: File = {
-    dir(s"$workDirName/data")
+    dirSub(dirWork, "data")
   }
 
   def scriptsDir: File = {
-    dir(s"$workDirName/scripts")
+    dirSub(dirWork, "scripts")
   }
 
   def imgDir: File = {
-    dir(s"$workDirName/img")
+    dirSub(dirWork, "img")
   }
 
   def dataFile(fileName: String): File ={
