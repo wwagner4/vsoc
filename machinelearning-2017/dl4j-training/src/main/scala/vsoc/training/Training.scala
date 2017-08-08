@@ -18,11 +18,15 @@ import org.nd4j.linalg.dataset.api.iterator.DataSetIterator
 import org.nd4j.linalg.factory.Nd4j
 import org.nd4j.linalg.lossfunctions.LossFunctions
 import org.slf4j.{Logger, LoggerFactory}
-import vsoc.common.UtilIO._
 import vsoc.common.{Formatter, Viz, VizCreatorGnuplot}
 
 import scala.util.Random
 
+
+case class MetaParamSeries(
+                          decription: String,
+                          metaParams: Seq[MetaParam]
+                          )
 
 case class MetaParam(
                       learningRate: Double = 0.001,
@@ -37,8 +41,7 @@ case class MetaParam(
 
 object Training extends App {
   val log: Logger = LoggerFactory.getLogger(classOf[Training])
-  val dia: Viz.Dia[Viz.XY] = new Training(log).train()
-  Viz.createDiagram(dia)(VizCreatorGnuplot[Viz.XY](dirData, dirImg, execute = true))
+  new Training(log).train()
 }
 
 class Training(log: Logger) {
@@ -47,8 +50,9 @@ class Training(log: Logger) {
 
   val delim = ";"
 
-  def train(): Viz.Dia[Viz.XY] = {
-    val metas = Seq(5, 20, 50, 100).map { iter =>
+  def train(): Unit = {
+
+    val metas = Seq(5, 20, 50, 100, 500, 1000).map { iter =>
       MetaParam(
         seed = Random.nextLong(),
         iterations = iter)
@@ -57,12 +61,22 @@ class Training(log: Logger) {
 
     val learningRateStr = Formatter.formatNumber("%.5f", metas(0).learningRate)
 
-    Viz.MultiDiagram[Viz.XY](id = "playerpos_iter_D5",
+    val multiDia = Viz.MultiDiagram[Viz.XY](id = "playerpos_iter_D5",
       imgWidth = 1500,
-      imgHeight = 1200,
+      imgHeight = 2000,
       title = Some(s"Learning Rate $learningRateStr"),
       columns = 2,
       diagrams = dias)
+
+    implicit val vicCreator = VizCreatorGnuplot[Viz.XY](dirData, dirOut, execute = true)
+
+    Viz.createDiagram(multiDia)
+  }
+
+  def dirOut: File = {
+    val work = dirSub(dirWork, "playerpos_x")
+    val ts = new java.text.SimpleDateFormat("yyyyMMdd-HHmmss").format(new java.util.Date())
+    dirSub(work, ts);
   }
 
   def train(mparam: MetaParam): Viz.Diagram[Viz.XY] = {
