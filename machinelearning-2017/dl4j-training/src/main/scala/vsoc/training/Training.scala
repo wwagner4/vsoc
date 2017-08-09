@@ -23,9 +23,18 @@ import vsoc.common.{Formatter, Viz, VizCreatorGnuplot}
 import scala.util.Random
 
 
+case class MetaParamRun(
+                         decription: Option[String] = None,
+                         imgWidth: Int,
+                         imgHeight: Int,
+                         columns: Int,
+                         series: Seq[MetaParamSeries]
+                       )
+
+
 case class MetaParamSeries(
-                          decription: String,
-                          metaParams: Seq[MetaParam]
+                            decription: String,
+                            metaParams: Seq[MetaParam]
                           )
 
 case class MetaParam(
@@ -41,36 +50,59 @@ case class MetaParam(
 
 object Training extends App {
   val log: Logger = LoggerFactory.getLogger(classOf[Training])
-  new Training(log).train()
+  val metaParams: Seq[MetaParam] = Seq(1, 10, 50, 100).map { iter =>
+    MetaParam(
+      seed = Random.nextLong(),
+      iterations = iter)
+  }
+
+  val sizeTrainingDatas = List(100, 50000, 200000, 500000, 1000000, 1000000)
+
+  val series = sizeTrainingDatas.map{s =>
+    val title = "Trainingdata size:" + s
+    val mpar = metaParams.map(mp => mp.copy(sizeTrainingData = s, batchSizeTrainingData = s / 10))
+    MetaParamSeries("Trainingdata size:" + s, mpar)}
+  val run = MetaParamRun(imgWidth = 1800, imgHeight = 1200, columns = 3, series = series)
+  new Training(log).trainSeries(run)
 }
 
 class Training(log: Logger) {
+
+  type L = Viz.X
 
   import vsoc.common.UtilIO._
 
   val delim = ";"
 
-  def train(): Unit = {
+  def trainSeries(run: MetaParamRun): Unit = {
 
-    val metas = Seq(5, 20, 50, 100, 500, 1000).map { iter =>
-      MetaParam(
-        seed = Random.nextLong(),
-        iterations = iter)
-    }
-    val dias: Seq[Viz.Diagram[Viz.XY]] = metas.map(mparam => train(mparam))
+    val _dirOut = dirOut
 
-    val learningRateStr = Formatter.formatNumber("%.5f", metas(0).learningRate)
+    val dias = run.series.map { s => trainSerie(s) }
 
-    val multiDia = Viz.MultiDiagram[Viz.XY](id = "playerpos_iter_D5",
-      imgWidth = 1500,
-      imgHeight = 2000,
-      title = Some(s"Learning Rate $learningRateStr"),
-      columns = 2,
+    val dia = Viz.MultiDiagram[L](id = "playerpos_x",
+      imgWidth = run.imgWidth,
+      imgHeight = run.imgHeight,
+      title = run.decription,
+      columns = run.columns,
       diagrams = dias)
 
-    implicit val vicCreator = VizCreatorGnuplot[Viz.XY](dirData, dirOut, execute = true)
 
-    Viz.createDiagram(multiDia)
+    implicit val vicCreator = VizCreatorGnuplot[L](dirScripts, _dirOut, execute = true)
+
+    Viz.createDiagram(dia)
+    log.info(s"output in ${_dirOut}")
+  }
+
+  def trainSerie(serie: MetaParamSeries): Viz.Diagram[L] = {
+    val drs: Seq[Viz.DataRow[L]] = serie.metaParams.map(mparam => train(mparam))
+    Viz.Diagram(id = "_",
+      title = serie.decription,
+      yLabel = Some("diff"),
+      xLabel = Some("iterations"),
+      yRange = Some(Viz.Range(Some(-60), Some(60))),
+      dataRows = drs)
+
   }
 
   def dirOut: File = {
@@ -79,8 +111,7 @@ class Training(log: Logger) {
     dirSub(work, ts);
   }
 
-  def train(mparam: MetaParam): Viz.Diagram[Viz.XY] = {
-
+  def train(mparam: MetaParam): Viz.DataRow[L] = {
     require(mparam.sizeTestData != mparam.sizeTrainingData, "Test- and training data must be different")
     val trainingDataFileName = s"random_pos_${mparam.sizeTrainingData}_xval.csv"
     val trainingDataFile = new File(dirData, trainingDataFileName)
@@ -98,8 +129,7 @@ class Training(log: Logger) {
     nn
   }
 
-  def test(nn: MultiLayerNetwork, metaParam: MetaParam): Viz.Diagram[Viz.XY] = {
-    import Formatter._
+  def test(nn: MultiLayerNetwork, metaParam: MetaParam): Viz.DataRow[L] = {
 
     val testDataFileName = s"random_pos_${metaParam.sizeTestData}_xval.csv"
     val testDataFile = new File(dirData, testDataFileName)
@@ -113,17 +143,11 @@ class Training(log: Logger) {
     val diff: INDArray = labels.sub(out)
     val all: INDArray = Nd4j.hstack(labels, diff)
 
-    val _data: Seq[Viz.XY] = UtilTraining.convertXY(all, (0, 1))
-    val dr: Viz.DataRow[Viz.XY] = Viz.DataRow(style = Viz.Style_POINTS,
+    val _data: Seq[L] = UtilTraining.convertX(all, 1)
+    Viz.DataRow(
+      style = Viz.Style_BOXPLOT,
+      name = Some(Formatter.formatNumber("%d", metaParam.iterations)),
       data = _data)
-
-    Viz.Diagram(id = "_",
-      title = formatNumber("iterations: %d", metaParam.iterations),
-      xLabel = Some("x"),
-      yLabel = Some("diff"),
-      xRange = Some(Viz.Range(Some(-60), Some(60))),
-      yRange = Some(Viz.Range(Some(-60), Some(60))),
-      dataRows = Seq(dr))
   }
 
   def readPlayerposXDataSet(inFile: File, batchSize: Int): DataSetIterator = {

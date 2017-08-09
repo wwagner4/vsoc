@@ -205,9 +205,11 @@ case class VizCreatorGnuplot[T <: Lineable](scriptDir: File, imageDir: File, exe
 
   def createMultiDiagramInit(mdia: MultiDiagram[T]): String = {
     val titleString = if(mdia.title.isDefined) s"title '${mdia.title.get}'" else ""
+    val outfileName = s"${mdia.id}.png"
+    val outfile = new File(imageDir, outfileName)
     s"""
        |set terminal pngcairo dashed enhanced size ${mdia.imgWidth}, ${mdia.imgHeight}
-       |set output '${imageDir.getAbsolutePath}/${mdia.id}.png'
+       |set output '${outfile.getAbsolutePath}'
        |set multiplot layout ${mdia.rows}, ${mdia.columns} $titleString
        |""".stripMargin
   }
@@ -219,9 +221,11 @@ case class VizCreatorGnuplot[T <: Lineable](scriptDir: File, imageDir: File, exe
   }
 
   def createDiagramInit(dia: Diagram[T]): String = {
+    val outfileName = s"${dia.id}.png"
+    val outfile = new File(imageDir, outfileName)
     s"""
        |set terminal pngcairo dashed enhanced size ${dia.imgWidth}, ${dia.imgHeight}
-       |set output '${imageDir.getAbsolutePath}/${dia.id}.png'
+       |set output '${outfile.getAbsolutePath}'
        |""".stripMargin
   }
 

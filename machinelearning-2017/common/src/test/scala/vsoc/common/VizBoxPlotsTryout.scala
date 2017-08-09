@@ -49,7 +49,13 @@ plot 'silver.dat' using (1):2, '' using (2):(3*$3)
     new DataRow[X](style = Style_BOXPLOT, name = Some(c.id), data = d)
   }
 
-  val diagram = new Diagram[X](id= "BP01", title="Boxplot Tryout", dataRows = data)
+  val diagram = new Diagram[X](
+    id= "BP01",
+    title="Boxplot Tryout",
+    yLabel = Some("Y"),
+    xLabel = Some("X"),
+    yRange = Some(Viz.Range(Some(-60), Some(60))),
+    dataRows = data)
 
   Viz.createDiagram[X](diagram)
 
