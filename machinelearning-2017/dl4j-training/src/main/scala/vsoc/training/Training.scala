@@ -38,6 +38,7 @@ case class MetaParamSeries(
                           )
 
 case class MetaParam(
+                      description: String,
                       learningRate: Double = 0.001,
                       sizeTrainingData: Int = 1000000,
                       batchSizeTrainingData: Int = 100000,
@@ -47,24 +48,6 @@ case class MetaParam(
                       seed: Long = 1L
                     )
 
-
-object Training extends App {
-  val log: Logger = LoggerFactory.getLogger(classOf[Training])
-  val metaParams: Seq[MetaParam] = Seq(1, 10, 50, 100).map { iter =>
-    MetaParam(
-      seed = Random.nextLong(),
-      iterations = iter)
-  }
-
-  val sizeTrainingDatas = List(100, 50000, 200000, 500000, 1000000, 1000000)
-
-  val series = sizeTrainingDatas.map{s =>
-    val title = "Trainingdata size:" + s
-    val mpar = metaParams.map(mp => mp.copy(sizeTrainingData = s, batchSizeTrainingData = s / 10))
-    MetaParamSeries("Trainingdata size:" + s, mpar)}
-  val run = MetaParamRun(imgWidth = 1800, imgHeight = 1200, columns = 3, series = series)
-  new Training(log).trainSeries(run)
-}
 
 class Training(log: Logger) {
 
@@ -98,8 +81,8 @@ class Training(log: Logger) {
     val drs: Seq[Viz.DataRow[L]] = serie.metaParams.map(mparam => train(mparam))
     Viz.Diagram(id = "_",
       title = serie.decription,
-      yLabel = Some("diff"),
-      xLabel = Some("iterations"),
+      yLabel = Some("error"),
+      xLabel = Some(serie.decription),
       yRange = Some(Viz.Range(Some(-60), Some(60))),
       dataRows = drs)
 
@@ -108,7 +91,7 @@ class Training(log: Logger) {
   def dirOut: File = {
     val work = dirSub(dirWork, "playerpos_x")
     val ts = new java.text.SimpleDateFormat("yyyyMMdd-HHmmss").format(new java.util.Date())
-    dirSub(work, ts);
+    dirSub(work, ts)
   }
 
   def train(mparam: MetaParam): Viz.DataRow[L] = {
