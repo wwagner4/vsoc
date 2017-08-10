@@ -17,14 +17,11 @@ import org.nd4j.linalg.dataset.DataSet
 import org.nd4j.linalg.dataset.api.iterator.DataSetIterator
 import org.nd4j.linalg.factory.Nd4j
 import org.nd4j.linalg.lossfunctions.LossFunctions
-import org.slf4j.{Logger, LoggerFactory}
+import org.slf4j.{Logger}
 import vsoc.common.{Formatter, Viz, VizCreatorGnuplot}
 
-import scala.util.Random
-
-
 case class MetaParamRun(
-                         decription: Option[String] = None,
+                         description: Option[String] = None,
                          imgWidth: Int,
                          imgHeight: Int,
                          columns: Int,
@@ -33,7 +30,7 @@ case class MetaParamRun(
 
 
 case class MetaParamSeries(
-                            decription: String,
+                            description: String,
                             metaParams: Seq[MetaParam]
                           )
 
@@ -45,7 +42,8 @@ case class MetaParam(
                       sizeTestData: Int = 1000,
                       batchSizeTestData: Int = 1000,
                       iterations: Int = 3,
-                      seed: Long = 1L
+                      seed: Long = 1L,
+                      variableParmDescription: () => String
                     )
 
 
@@ -66,7 +64,7 @@ class Training(log: Logger) {
     val dia = Viz.MultiDiagram[L](id = "playerpos_x",
       imgWidth = run.imgWidth,
       imgHeight = run.imgHeight,
-      title = run.decription,
+      title = run.description,
       columns = run.columns,
       diagrams = dias)
 
@@ -80,9 +78,9 @@ class Training(log: Logger) {
   def trainSerie(serie: MetaParamSeries): Viz.Diagram[L] = {
     val drs: Seq[Viz.DataRow[L]] = serie.metaParams.map(mparam => train(mparam))
     Viz.Diagram(id = "_",
-      title = serie.decription,
+      title = serie.description,
       yLabel = Some("error"),
-      xLabel = Some(serie.decription),
+      xLabel = Some(serie.metaParams(0).description),
       yRange = Some(Viz.Range(Some(-60), Some(60))),
       dataRows = drs)
 
@@ -100,6 +98,7 @@ class Training(log: Logger) {
     val trainingDataFile = new File(dirData, trainingDataFileName)
     val trainingData = readPlayerposXDataSet(trainingDataFile, mparam.batchSizeTrainingData)
     val nnConf: MultiLayerConfiguration = nnConfiguration(mparam)
+    log.info("Start training")
     val nn = train(trainingData, nnConf)
     test(nn, mparam)
   }
@@ -127,9 +126,10 @@ class Training(log: Logger) {
     val all: INDArray = Nd4j.hstack(labels, diff)
 
     val _data: Seq[L] = UtilTraining.convertX(all, 1)
+
     Viz.DataRow(
       style = Viz.Style_BOXPLOT,
-      name = Some(Formatter.formatNumber("%d", metaParam.iterations)),
+      name = Some(metaParam.variableParmDescription()),
       data = _data)
   }
 

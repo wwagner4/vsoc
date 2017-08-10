@@ -11,7 +11,9 @@ object SizeIterationsTraining extends App {
     MetaParam(
       description= "Iterations",
       seed = Random.nextLong(),
-      iterations = iter)
+      iterations = iter,
+      variableParmDescription = () => "" + iter
+    )
   }
 
   val sizeTrainingDatas = List(150000, 200000, 500000, 1000000)
