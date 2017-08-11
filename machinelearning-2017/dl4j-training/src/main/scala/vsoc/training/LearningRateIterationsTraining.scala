@@ -6,7 +6,7 @@ import scala.util.Random
 
 object LearningRateIterationsTraining extends App {
 
-  val _iterations = 50;
+  val _iterations = 50
 
   val learningRates = Map(0.01 -> "10^-2", 0.001 -> "10^-3", 0.0001 -> "10^-4", 0.00001 -> "10^-5", 0.000001 -> "10^-6")
 
@@ -25,7 +25,7 @@ object LearningRateIterationsTraining extends App {
 
   val series = sizeTrainingDatas.map{s =>
     val title = "Trainingdata size:" + s
-    val mpar = metaParams.map(mp => mp.copy(sizeTrainingData = s, batchSizeTrainingData = s / 10))
+    val mpar = metaParams.map(mp => mp.copy(sizeTrainingData = s))
     MetaParamSeries(title, mpar)}
 
   val run = MetaParamRun(

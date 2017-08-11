@@ -16,13 +16,12 @@ object SizeIterationsTraining extends App {
     )
   }
 
-  val sizeTrainingDatas = List(150000, 200000, 500000, 1000000)
+  val sizeTrainingDatas = List(100000, 200000, 500000, 1000000)
 
   val series = sizeTrainingDatas.map{size =>
     val title = "Trainingdata size:" + size
     val mpar = metaParams.map(mp => mp.copy(
-      sizeTrainingData = size,
-      batchSizeTrainingData = size / 10))
+      sizeTrainingData = size))
     MetaParamSeries(title, mpar)}
 
   val run = MetaParamRun(imgWidth = 1800, imgHeight = 1200, columns = 2, series = series)

@@ -17,8 +17,8 @@ import org.nd4j.linalg.dataset.DataSet
 import org.nd4j.linalg.dataset.api.iterator.DataSetIterator
 import org.nd4j.linalg.factory.Nd4j
 import org.nd4j.linalg.lossfunctions.LossFunctions
-import org.slf4j.{Logger}
-import vsoc.common.{Formatter, Viz, VizCreatorGnuplot}
+import org.slf4j.Logger
+import vsoc.common.{Viz, VizCreatorGnuplot}
 
 case class MetaParamRun(
                          description: Option[String] = None,
@@ -38,7 +38,7 @@ case class MetaParam(
                       description: String,
                       learningRate: Double = 0.001,
                       sizeTrainingData: Int = 1000000,
-                      batchSizeTrainingData: Int = 100000,
+                      batchSizeTrainingDataRelative: Double = 0.8,
                       sizeTestData: Int = 1000,
                       batchSizeTestData: Int = 1000,
                       iterations: Int = 3,
@@ -96,7 +96,7 @@ class Training(log: Logger) {
     require(mparam.sizeTestData != mparam.sizeTrainingData, "Test- and training data must be different")
     val trainingDataFileName = s"random_pos_${mparam.sizeTrainingData}_xval.csv"
     val trainingDataFile = new File(dirData, trainingDataFileName)
-    val trainingData = readPlayerposXDataSet(trainingDataFile, mparam.batchSizeTrainingData)
+    val trainingData = readPlayerposXDataSet(trainingDataFile, mparam.sizeTrainingData, mparam.batchSizeTrainingDataRelative)
     val nnConf: MultiLayerConfiguration = nnConfiguration(mparam)
     log.info("Start training")
     val nn = train(trainingData, nnConf)
@@ -115,7 +115,7 @@ class Training(log: Logger) {
 
     val testDataFileName = s"random_pos_${metaParam.sizeTestData}_xval.csv"
     val testDataFile = new File(dirData, testDataFileName)
-    val testDataSet: DataSet = readPlayerposXDataSet(testDataFile, metaParam.sizeTestData).next()
+    val testDataSet: DataSet = readPlayerposXDataSet(testDataFile, metaParam.sizeTestData, metaParam.sizeTestData).next()
 
     val features: INDArray = testDataSet.getFeatures
     val labels: INDArray = testDataSet.getLabels
@@ -133,10 +133,10 @@ class Training(log: Logger) {
       data = _data)
   }
 
-  def readPlayerposXDataSet(inFile: File, batchSize: Int): DataSetIterator = {
+  def readPlayerposXDataSet(inFile: File, size: Int, batchSizeRelative: Double): DataSetIterator = {
     val recordReader = new CSVRecordReader(0, delim)
     recordReader.initialize(new FileSplit(inFile))
-    new RecordReaderDataSetIterator(recordReader, batchSize, 42, 42, true)
+    new RecordReaderDataSetIterator(recordReader, (size * batchSizeRelative).toInt, 42, 42, true)
   }
 
   /**
