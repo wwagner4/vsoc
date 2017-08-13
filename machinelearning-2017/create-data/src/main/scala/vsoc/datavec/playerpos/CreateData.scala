@@ -16,14 +16,14 @@ import scala.collection.JavaConverters._
 
 object CreateData {
 
-  implicit val sepaStr = ";"
+  implicit val sepaStr: String = ";"
 
-  def createDataFile(desc: Datasets.DataDesc): File = {
+  def createDataFile(desc: Dat.DataDesc): File = {
 
     val file = new File(UtilIO.dirData, desc.filename)
     if (!file.exists()) {
       desc.data match {
-        case Datasets.Data_PLAYERPOS_X => {
+        case Dat.Data_PLAYERPOS_X =>
           use(new PrintWriter(file))(pw => {
             val west = new InitialPlacementNone
             val east = new InitialPlacementRandomPos(1)
@@ -37,7 +37,6 @@ object CreateData {
               srv.takeStep()
             }
           })
-        }
       }
     }
     file

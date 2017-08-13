@@ -1,6 +1,6 @@
 package vsoc.datavec
 
-import vsoc.common.Datasets
+import vsoc.common.Dat
 import vsoc.datavec.playerpos.CreateData
 
 /**
@@ -9,7 +9,7 @@ import vsoc.datavec.playerpos.CreateData
 object DataTryout extends App {
 
 
-  val ds = Datasets.DataDesc(Datasets.Data_PLAYERPOS_X, Datasets.Id_B, Datasets.Size_100)
+  val ds = Dat.DataDesc(Dat.Data_PLAYERPOS_X, Dat.Id_B, Dat.Size_100)
 
   val f = CreateData.createDataFile(ds)
 

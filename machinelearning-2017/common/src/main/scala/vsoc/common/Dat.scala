@@ -1,6 +1,6 @@
 package vsoc.common
 
-object Datasets {
+object Dat {
 
   sealed trait Size {
     def size: Int
