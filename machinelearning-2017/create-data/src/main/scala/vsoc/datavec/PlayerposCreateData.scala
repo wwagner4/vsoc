@@ -16,7 +16,7 @@ import vsoc.util.Vec2D
 
 object PlayerposCreateData {
 
-  implicit val sepaStr = ";"
+  private implicit val sepaStr: String = ";"
 
   def createDataFiles(name: String, sizes: Seq[Int], fPlacement: (Player, Int) => Unit, initialPlacement: vsoc.server.InitialPlacement): Unit = {
 

@@ -3,6 +3,7 @@ lazy val _scalaVersion = "2.11.11"
 lazy val dl4jVersion = "0.8.0"
 lazy val userHome = System.getProperty("user.home")
 
+//noinspection SpellCheckingInspection
 lazy val commonSettings = Seq(
   organization := "net.entelijan.vsoc",
   scalaVersion := _scalaVersion,

@@ -82,8 +82,6 @@ object CreateData {
   def format(cnt: Int, pos: Vec2D, dir: Double, features: Array[Double]): String = {
 
     val xStr = Formatter.formatWide(pos.getX)
-    val yStr = Formatter.formatWide(pos.getY)
-    val dirStr = Formatter.formatWide(dir)
     val featuresStr = Formatter.formatLimitatedWide(features)
     s"$featuresStr$sepaStr$xStr"
   }

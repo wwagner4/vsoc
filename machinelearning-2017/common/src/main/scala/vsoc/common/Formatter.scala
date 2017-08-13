@@ -7,7 +7,7 @@ import java.util.Locale
   */
 object Formatter {
 
-  val locale = Locale.ENGLISH
+  private val locale = Locale.ENGLISH
 
   def formatWide(a: Array[Double])(implicit sepaStr: String): String = {
     a.map {

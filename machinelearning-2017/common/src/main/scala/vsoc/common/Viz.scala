@@ -43,7 +43,7 @@ object Viz {
                   x: Number
                 ) extends Lineable {
     def line(f: Number => String): String = f(x)
-    def dataDim = DataDim_1D
+    def dataDim: DataDim = DataDim_1D
   }
 
   case class XY (
@@ -55,7 +55,7 @@ object Viz {
       val sy = f(y)
       sx + " " + sy
     }
-    def dataDim = DataDim_2D
+    def dataDim: DataDim = DataDim_2D
   }
 
   case class XYZ (
@@ -69,7 +69,7 @@ object Viz {
       val sz = f(z)
       sx + " " + sy + " " + sz
     }
-    def dataDim = DataDim_3D
+    def dataDim: DataDim = DataDim_3D
   }
 
   case class DataRow[T <: Lineable](

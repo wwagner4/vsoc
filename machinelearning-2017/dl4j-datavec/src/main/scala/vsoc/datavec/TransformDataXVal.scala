@@ -79,7 +79,7 @@ object TransformDataXVal extends App {
       .execute(inData, tp)
   }
 
-  private def writeToFile(outFile: File, lines: JavaRDD[util.List[Writable]]) = {
+  private def writeToFile(outFile: File, lines: JavaRDD[util.List[Writable]]): Unit = {
     val tmpDir = dirTmp
 
     lines

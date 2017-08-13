@@ -6,7 +6,7 @@ import java.util.UUID
 import scala.io.Source
 
 /**
-  * General IO Utillities
+  * General IO Utilities
   */
 object UtilIO {
 

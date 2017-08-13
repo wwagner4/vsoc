@@ -8,8 +8,8 @@ object UtilTraining {
 
   /**
     * @param data NDArray containing the data
-    * @param colIdx Indexes of the colums to be selected
-    * @return A sequence of XYZ values from tree colums of an NDArray
+    * @param colIdx Indexes of the column to be selected
+    * @return A sequence of XYZ values from tree column of an NDArray
     */
   def convertXYZ(data: INDArray, colIdx: (Int, Int, Int)): Seq[Viz.XYZ] = {
     val x = data.getColumns(colIdx._1).data.asDouble()
@@ -20,8 +20,8 @@ object UtilTraining {
 
   /**
     * @param data NDArray containing the data
-    * @param colIdx Indexes of the colums to be selected
-    * @return A sequence of XY values from tree colums of an NDArray
+    * @param colIdx Indexes of the columns to be selected
+    * @return A sequence of XY values from tree columns of an NDArray
     */
   def convertXY(data: INDArray, colIdx: (Int, Int)): Seq[Viz.XY] = {
     val x = data.getColumns(colIdx._1).data.asDouble()
@@ -31,8 +31,8 @@ object UtilTraining {
 
   /**
     * @param data NDArray containing the data
-    * @param colIdx Indexes of the colums to be selected
-    * @return A sequence of X values from tree colums of an NDArray
+    * @param colIdx Indexes of the columns to be selected
+    * @return A sequence of X values from tree columns of an NDArray
     */
   def convertX(data: INDArray, colIdx: Int): Seq[Viz.X] = {
     data.getColumns(colIdx).data.asDouble().map(v => X(v))

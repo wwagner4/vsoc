@@ -18,7 +18,7 @@ import org.nd4j.linalg.dataset.api.iterator.DataSetIterator
 import org.nd4j.linalg.factory.Nd4j
 import org.nd4j.linalg.lossfunctions.LossFunctions
 import org.slf4j.Logger
-import vsoc.common.{Viz, VizCreatorGnuplot}
+import vsoc.common.{Viz, VizCreator, VizCreatorGnuplot}
 
 case class MetaParamRun(
                          description: Option[String] = None,
@@ -69,7 +69,7 @@ class Training(log: Logger) {
       diagrams = dias)
 
 
-    implicit val vicCreator = VizCreatorGnuplot[L](dirScripts, _dirOut, execute = true)
+    implicit val vicCreator: VizCreator[L] = VizCreatorGnuplot[L](dirScripts, _dirOut, execute = true)
 
     Viz.createDiagram(dia)
     log.info(s"output in ${_dirOut}")
