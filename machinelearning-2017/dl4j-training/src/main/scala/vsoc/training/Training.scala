@@ -20,6 +20,9 @@ import org.nd4j.linalg.lossfunctions.LossFunctions
 import org.slf4j.Logger
 import vsoc.common.{Viz, VizCreator, VizCreatorGnuplot}
 
+import vsoc.datavec.playerpos.CreateData
+import vsoc.common.Dat
+
 case class MetaParamRun(
                          description: Option[String] = None,
                          imgWidth: Int,
@@ -31,16 +34,16 @@ case class MetaParamRun(
 
 case class MetaParamSeries(
                             description: String,
+                            descriptionX: String,
+                            descriptionY: String = "error",
                             metaParams: Seq[MetaParam]
                           )
 
 case class MetaParam(
-                      description: String,
                       learningRate: Double = 0.001,
-                      sizeTrainingData: Int = 1000000,
+                      trainingData: Dat.DataDesc = Dat.DataDesc(Dat.Data_PLAYERPOS_X, Dat.Id_A, Dat.Size_500000),
                       batchSizeTrainingDataRelative: Double = 0.8,
-                      sizeTestData: Int = 1000,
-                      batchSizeTestData: Int = 1000,
+                      testData: Dat.DataDesc = Dat.DataDesc(Dat.Data_PLAYERPOS_X, Dat.Id_B, Dat.Size_1000),
                       iterations: Int = 3,
                       seed: Long = 1L,
                       variableParmDescription: () => String
@@ -79,8 +82,8 @@ class Training(log: Logger) {
     val drs: Seq[Viz.DataRow[L]] = serie.metaParams.map(mparam => train(mparam))
     Viz.Diagram(id = "_",
       title = serie.description,
-      yLabel = Some("error"),
-      xLabel = Some(serie.metaParams(0).description),
+      yLabel = Some(serie.descriptionY),
+      xLabel = Some(serie.descriptionX),
       yRange = Some(Viz.Range(Some(-60), Some(60))),
       dataRows = drs)
 
@@ -93,10 +96,8 @@ class Training(log: Logger) {
   }
 
   def train(mparam: MetaParam): Viz.DataRow[L] = {
-    require(mparam.sizeTestData != mparam.sizeTrainingData, "Test- and training data must be different")
-    val trainingDataFileName = s"random_pos_${mparam.sizeTrainingData}_xval.csv"
-    val trainingDataFile = new File(dirData, trainingDataFileName)
-    val trainingData = readPlayerposXDataSet(trainingDataFile, mparam.sizeTrainingData, mparam.batchSizeTrainingDataRelative)
+    require(mparam.testData != mparam.trainingData, "Test- and training data must be different")
+    val trainingData = readPlayerposXDataSet(mparam.trainingData, mparam.batchSizeTrainingDataRelative)
     val nnConf: MultiLayerConfiguration = nnConfiguration(mparam)
     log.info("Start training")
     val nn = train(trainingData, nnConf)
@@ -113,9 +114,7 @@ class Training(log: Logger) {
 
   def test(nn: MultiLayerNetwork, metaParam: MetaParam): Viz.DataRow[L] = {
 
-    val testDataFileName = s"random_pos_${metaParam.sizeTestData}_xval.csv"
-    val testDataFile = new File(dirData, testDataFileName)
-    val testDataSet: DataSet = readPlayerposXDataSet(testDataFile, metaParam.sizeTestData, metaParam.sizeTestData).next()
+    val testDataSet: DataSet = readPlayerposXDataSet(metaParam.testData, 1.0).next()
 
     val features: INDArray = testDataSet.getFeatures
     val labels: INDArray = testDataSet.getLabels
@@ -133,10 +132,11 @@ class Training(log: Logger) {
       data = _data)
   }
 
-  def readPlayerposXDataSet(inFile: File, size: Int, batchSizeRelative: Double): DataSetIterator = {
+  def readPlayerposXDataSet(desc: Dat.DataDesc, batchSizeRelative: Double): DataSetIterator = {
+    val infile = CreateData.createDataFile(desc)
     val recordReader = new CSVRecordReader(0, delim)
-    recordReader.initialize(new FileSplit(inFile))
-    new RecordReaderDataSetIterator(recordReader, (size * batchSizeRelative).toInt, 42, 42, true)
+    recordReader.initialize(new FileSplit(infile))
+    new RecordReaderDataSetIterator(recordReader, (desc.size.size * batchSizeRelative).toInt, 42, 42, true)
   }
 
   /**

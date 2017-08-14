@@ -28,7 +28,7 @@ lazy val create_data = (project in file("create-data"))
     commonSettings,
     name := "create-data",
     libraryDependencies += "net.entelijan" % "vsoc-core" % "0.0.1-SNAPSHOT",
-    libraryDependencies += "org.slf4j" % "slf4j-simple" % "1.7.24")
+    libraryDependencies += "org.slf4j" % "slf4j-log4j12" % "1.7.25")
   .dependsOn(common)
 
 lazy val dl4j_datavec = (project in file("dl4j-datavec"))
@@ -43,8 +43,7 @@ lazy val dl4j_training = (project in file("dl4j-training"))
     commonSettings,
     name := "dl4j-training",
     libraryDependencies += "org.deeplearning4j" % "deeplearning4j-core" % dl4jVersion,
-    libraryDependencies += "org.nd4j" % "nd4j-native-platform" % dl4jVersion,
-    libraryDependencies += "org.slf4j" % "slf4j-log4j12" % "1.7.25")
-  .dependsOn(common)
+    libraryDependencies += "org.nd4j" % "nd4j-native-platform" % dl4jVersion)
+  .dependsOn(create_data)
 
 // scalacOptions += "-deprecation",

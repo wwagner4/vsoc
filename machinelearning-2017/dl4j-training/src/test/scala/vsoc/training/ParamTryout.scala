@@ -9,7 +9,7 @@ import org.nd4j.linalg.lossfunctions.LossFunctions
 
 object ParamTryout extends App {
 
-  val mp = MetaParam(description = "NO", variableParmDescription = () => "")
+  val mp = MetaParam(variableParmDescription = () => "")
 
   val cfg = nnConfiguration(mp)
 
