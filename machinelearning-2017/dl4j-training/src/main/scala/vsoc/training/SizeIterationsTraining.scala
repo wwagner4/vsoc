@@ -9,8 +9,8 @@ object SizeIterationsTraining extends App {
 
   val log: Logger = LoggerFactory.getLogger(classOf[Training])
 
-  val sizeTrainingDatas = List(Dat.Size_5000, Dat.Size_10000, Dat.Size_50000, Dat.Size_100000)
-  val iterations = Seq(1, 5, 10, 30)
+  val sizeTrainingDatas = List(Dat.Size_50000, Dat.Size_100000, Dat.Size_500000, Dat.Size_1000000)
+  val iterations = Seq(1, 50, 100, 200)
 
   val series = for (size <- sizeTrainingDatas) yield {
     val params = for (iter <- iterations) yield {
@@ -19,7 +19,7 @@ object SizeIterationsTraining extends App {
         iterations = iter,
         variableParmDescription = () => "" + iter,
         trainingData = Dat.DataDesc(Dat.Data_PLAYERPOS_X, Dat.Id_A, size),
-        testData = Dat.DataDesc(Dat.Data_PLAYERPOS_X, Dat.Id_B, Dat.Size_10000)
+        testData = Dat.DataDesc(Dat.Data_PLAYERPOS_X, Dat.Id_B, Dat.Size_5000)
       )
     }
     MetaParamSeries(
