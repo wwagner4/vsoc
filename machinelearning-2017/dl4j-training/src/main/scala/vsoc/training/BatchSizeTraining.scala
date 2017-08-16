@@ -9,9 +9,9 @@ object BatchSizeTraining extends App {
 
   val log: Logger = LoggerFactory.getLogger(classOf[Training])
 
-  val iterationsList = List(10, 20, 50, 100, 200)
-  val sizeTrainingDatas = Dat.Size_500000
-  val batchSizes = Seq(0.1, 0.5, 0.7, 0.9)
+  val iterationsList = List(50, 100, 200, 500)
+  val sizeTrainingDatas = Dat.Size_5000000
+  val batchSizes = Seq(0.1, 0.2)
 
   val series = for (iterations <- iterationsList) yield {
     val params = for (batchSize <- batchSizes) yield {
