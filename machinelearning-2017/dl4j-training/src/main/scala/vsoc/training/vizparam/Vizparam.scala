@@ -1,8 +1,19 @@
 package vsoc.training.vizparam
 
-import vsoc.training.{MetaParamRun, MetaParamSeries}
+import java.io.{File, PrintWriter}
+
+import vsoc.common.{Dat, Formatter}
+import vsoc.training.{MetaParam, MetaParamRun}
 
 object Vizparam {
+
+  import vsoc.common.UtilIO._
+
+  def fileHtml(run: MetaParamRun, dir: File, fileName: String): Unit = {
+    val file = new File(dir, fileName)
+    val content = html(run)
+    use(new PrintWriter(file)) { _.print(content) }
+  }
 
   def html(run: MetaParamRun): String = {
     s"""
@@ -12,7 +23,7 @@ object Vizparam {
        |</head
        |<body>
        |</body>
-       |${tableOuter(run)}
+       |${table(run)}
        |</html>
      """.stripMargin
   }
@@ -25,85 +36,110 @@ object Vizparam {
      """.stripMargin
   }
 
-  def cssProps: String ={
+  def cssProps: String = {
     """
       |table.darkTable {
       |  font-family: Tahoma, Geneva, sans-serif;
-      |  border: 2px solid #000000;
-      |  background-color: #4A4A4A;
+      |  border: 1px solid #000000;
+      |  background-color: #777777;
       |  width: 100%;
-      |  height: 200px;
       |  text-align: center;
       |  border-collapse: collapse;
+      |  text-padding: 20px;
       |}
       |table.darkTable td, table.darkTable th {
-      |  border: 1px solid #4A4A4A;
-      |  padding: 3px 2px;
+      |  border: 1px solid #000000;
+      |  padding: 5px;
       |}
       |table.darkTable tbody td {
       |  font-size: 13px;
       |  color: #E6E6E6;
       |}
       |table.darkTable tr:nth-child(even) {
-      |  background: #888888;
-      |}
-      |table.darkTable thead {
-      |  background: #000000;
-      |  border-bottom: 3px solid #000000;
-      |}
-      |table.darkTable thead th {
-      |  font-size: 15px;
-      |  font-weight: bold;
-      |  color: #E6E6E6;
-      |  text-align: center;
-      |  border-left: 2px solid #4A4A4A;
-      |}
-      |table.darkTable thead th:first-child {
-      |  border-left: none;
-      |}
-      |
-      |table.darkTable tfoot {
-      |  font-size: 12px;
-      |  font-weight: bold;
-      |  color: #E6E6E6;
-      |  background: #000000;
-      |  background: -moz-linear-gradient(top, #404040 0%, #191919 66%, #000000 100%);
-      |  background: -webkit-linear-gradient(top, #404040 0%, #191919 66%, #000000 100%);
-      |  background: linear-gradient(to bottom, #404040 0%, #191919 66%, #000000 100%);
-      |  border-top: 1px solid #4A4A4A;
-      |}
-      |table.darkTable tfoot td {
-      |  font-size: 12px;
+      |  padding: 5px;
+      |  background: #666666;
       |}
     """.stripMargin
   }
 
-  def tableOuter(run: MetaParamRun): String = {
+  def table(run: MetaParamRun): String = {
     s"""
        |<table class="darkTable">
-       |${rowsOuter(run)}
+       |${rows(run)}
        |</table>
      """.stripMargin
   }
 
-  def rowsOuter(run: MetaParamRun): String = {
-    val rows: Iterator[Seq[MetaParamSeries]] = run.series.grouped(run.columns)
-    rows.map(r => colsOuter(r)).mkString("<tr>", "</tr><tr>", "</tr>")
+  def rows(run: MetaParamRun): String = {
+    (for ((k, v) <- PropsManager.toMultiProps(run)) yield {
+      s"""
+         |<tr>
+         |<td>$k</td>
+         |<td>${v.mkString(", ")}</td>
+         |</tr>
+         """.stripMargin
+    }).mkString("")
   }
 
-  def colsOuter(cols: Seq[MetaParamSeries]): String = {
-    cols.map(col => colOuter(col)).mkString("\n")
+
+  object PropsManager {
+
+    def toMultiProps(run: MetaParamRun): Seq[(String, Seq[String])] = {
+      val mps: Seq[Seq[(String, String)]] = run.series.flatMap(ser => ser.metaParams.map(mp => toProps(mp)))
+      reduce(mps)
+    }
+
+    def toProps(mp: MetaParam): Seq[(String, String)] = Seq(
+      ("learningRate", formatDoubleExp(mp.learningRate)),
+      ("trainingData", formatDataDesc(mp.trainingData)),
+      ("batchSizeTrainingDataRelative", formatDouble(mp.batchSizeTrainingDataRelative)),
+      ("testData", formatDataDesc(mp.testData)),
+      ("iterations", "" + mp.iterations),
+      ("seed", "" + mp.seed)
+    )
+
+    def reduce(mps: Seq[Seq[(String, String)]]): Seq[(String, Seq[String])] = {
+      mps match {
+        case Nil => throw new IllegalStateException("mps must not be empty")
+        case a :: Nil => {
+          val empty = createEmpty(a)
+          merge(empty, a)
+        }
+        case a :: b => {
+          val reduced = reduce(b)
+          merge(reduced, a)
+        }
+      }
+    }
+
+    def createEmpty(mp: Seq[(String, String)]): Seq[(String, Seq[String])] = {
+      mp.map { case (k, v) => (k, Seq.empty[String]) }
+    }
+
+    def merge(multiMp: Seq[(String, Seq[String])], mp: Seq[(String, String)]): Seq[(String, scala.Seq[String])] = {
+      for (((multiKey, multiVal), i) <- multiMp.zipWithIndex) yield {
+        val (propKey, propVal) = mp(i)
+        if (multiKey != propKey) throw new IllegalStateException(s"Keys not matching. $multiMp <--> $mp")
+        if (multiVal.contains(propVal)) {
+          (multiKey, multiVal)
+        } else {
+          (multiKey, propVal +: multiVal)
+        }
+      }
+    }
+
+    def formatDouble(value: Double): String = {
+      Formatter.formatNumber("%.2f", value)
+    }
+
+    def formatDoubleExp(value: Double): String = {
+      Formatter.formatNumber("%.1E", value)
+    }
+
+    def formatDataDesc(value: Dat.DataDesc): String = {
+      s"${value.data.code} ${value.id.code} ${value.size.size}"
+    }
+
   }
 
-  def colOuter(mp: MetaParamSeries): String = {
-    s"""
-      |<td>
-      |${tableInner(mp)}
-      |</td>
-    """.stripMargin
-  }
-
-  def tableInner(ser: MetaParamSeries): String = {
-    ser.description
-  }
 }

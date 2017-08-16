@@ -19,9 +19,9 @@ import org.nd4j.linalg.factory.Nd4j
 import org.nd4j.linalg.lossfunctions.LossFunctions
 import org.slf4j.Logger
 import vsoc.common.{Viz, VizCreator, VizCreatorGnuplot}
-
 import vsoc.datavec.playerpos.CreateData
 import vsoc.common.Dat
+import vsoc.training.vizparam.Vizparam
 
 case class MetaParamRun(
                          description: Option[String] = None,
@@ -61,6 +61,8 @@ class Training(log: Logger) {
   def trainSeries(run: MetaParamRun): Unit = {
 
     val _dirOut = dirOut
+
+    Vizparam.fileHtml(run, _dirOut, "params.html")
 
     val dias = run.series.map { s => trainSerie(s) }
 

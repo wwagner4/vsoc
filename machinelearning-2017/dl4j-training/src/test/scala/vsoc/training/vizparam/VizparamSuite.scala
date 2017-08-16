@@ -1,12 +1,18 @@
 package vsoc.training.vizparam
 
-import org.scalatest.{FunSuite, MustMatchers, TestSuite}
-import vsoc.common.{Dat, Formatter}
+import org.scalatest.{FunSuite, MustMatchers}
 import vsoc.training.MetaParam
 
 class VizparamSuite extends FunSuite with MustMatchers {
 
+  import Vizparam.PropsManager._
+
   val mp = MetaParam(variableParmDescription = () => "vd")
+
+  test("to pairs size") {
+    val props = toProps(mp)
+    props.size mustEqual 6
+  }
 
   test("to pairs learning rate 0.001") {
     val props = toProps(mp)
@@ -23,9 +29,77 @@ class VizparamSuite extends FunSuite with MustMatchers {
     value(props, "trainingData") mustEqual "playerpos_x A 500000"
   }
 
-  test("to pairs size") {
+  test("to pairs batchSizeTrainingDataRelative") {
     val props = toProps(mp)
-    props.size mustEqual 6
+    value(props, "batchSizeTrainingDataRelative") mustEqual "0.80"
+  }
+
+  test("to pairs testData") {
+    val props = toProps(mp)
+    value(props, "testData") mustEqual "playerpos_x B 1000"
+  }
+
+  test("to pairs iterations") {
+    val props = toProps(mp)
+    value(props, "iterations") mustEqual "3"
+  }
+
+  test("to pairs seed") {
+    val props = toProps(mp)
+    value(props, "seed") mustEqual "1"
+  }
+
+  test("reduce empty list") {
+    an [IllegalStateException] must be thrownBy reduce(List.empty[Seq[(String, String)]])
+  }
+
+  test("reduce list with one elem") {
+    val propsList: Seq[Seq[(String, String)]] = List(toProps(mp))
+    val collected = reduce(propsList)
+    for (((key, values), i) <- collected.zipWithIndex) {
+      i match {
+        case 0 => values must be (Seq("1.0E-03"))
+        case 1 => values must be (Seq("playerpos_x A 500000"))
+        case 2 => values must be (Seq("0.80"))
+        case 3 => values must be (Seq("playerpos_x B 1000"))
+        case 4 => values must be (Seq("3"))
+        case 5 => values must be (Seq("1"))
+      }
+    }
+  }
+
+  test("reduce list with two equal elems") {
+    val props1: Seq[(String, String)] = toProps(mp)
+    val props2: Seq[(String, String)] = toProps(mp)
+    val propsList = List(props1, props2)
+    val collected = reduce(propsList)
+    for (((key, values), i) <- collected.zipWithIndex) {
+      i match {
+        case 0 => values must be (Seq("1.0E-03"))
+        case 1 => values must be (Seq("playerpos_x A 500000"))
+        case 2 => values must be (Seq("0.80"))
+        case 3 => values must be (Seq("playerpos_x B 1000"))
+        case 4 => values must be (Seq("3"))
+        case 5 => values must be (Seq("1"))
+      }
+    }
+  }
+
+  test("reduce list with two non equal elems") {
+    val props1: Seq[(String, String)] = toProps(mp)
+    val props2: Seq[(String, String)] = toProps(mp.copy(learningRate = 0.00045))
+    val propsList = List(props1, props2)
+    val collected = reduce(propsList)
+    for (((key, values), i) <- collected.zipWithIndex) {
+      i match {
+        case 0 => values must be (Seq("1.0E-03", "4.5E-04"))
+        case 1 => values must be (Seq("playerpos_x A 500000"))
+        case 2 => values must be (Seq("0.80"))
+        case 3 => values must be (Seq("playerpos_x B 1000"))
+        case 4 => values must be (Seq("3"))
+        case 5 => values must be (Seq("1"))
+      }
+    }
   }
 
   def value(props: Seq[(String, String)], key: String): String = {
@@ -34,27 +108,6 @@ class VizparamSuite extends FunSuite with MustMatchers {
       case _ => false
     }(0)
     _value
-  }
-
-  def toProps(mp: MetaParam): Seq[(String, String)] = Seq(
-    ("learningRate", formatDoubleExp(mp.learningRate)),
-    ("trainingData", formatDataDesc(mp.trainingData)),
-    ("batchSizeTrainingDataRelative", ""),
-    ("testData", ""),
-    ("iterations", ""),
-    ("seed", "")
-  )
-
-  def formatDouble(value: Double): String = {
-    Formatter.formatNumber("%f", value)
-  }
-
-  def formatDoubleExp(value: Double): String = {
-    Formatter.formatNumber("%.1E", value)
-  }
-
-  def formatDataDesc(value: Dat.DataDesc): String = {
-    s"${value.data.code} ${value.id.code} ${value.size.size}"
   }
 
 }
