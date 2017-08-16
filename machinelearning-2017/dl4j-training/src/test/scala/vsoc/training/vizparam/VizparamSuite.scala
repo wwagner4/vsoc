@@ -1,7 +1,7 @@
 package vsoc.training.vizparam
 
 import org.scalatest.{FunSuite, MustMatchers, TestSuite}
-import vsoc.common.Formatter
+import vsoc.common.{Dat, Formatter}
 import vsoc.training.MetaParam
 
 class VizparamSuite extends FunSuite with MustMatchers {
@@ -16,6 +16,11 @@ class VizparamSuite extends FunSuite with MustMatchers {
   test("to pairs learning rate 0.00045") {
     val props = toProps(mp.copy(learningRate = 0.00045))
     value(props, "learningRate") mustEqual "4.5E-04"
+  }
+
+  test("to pairs training data") {
+    val props = toProps(mp)
+    value(props, "trainingData") mustEqual "playerpos_x A 500000"
   }
 
   test("to pairs size") {
@@ -33,7 +38,7 @@ class VizparamSuite extends FunSuite with MustMatchers {
 
   def toProps(mp: MetaParam): Seq[(String, String)] = Seq(
     ("learningRate", formatDoubleExp(mp.learningRate)),
-    ("trainingData", ""),
+    ("trainingData", formatDataDesc(mp.trainingData)),
     ("batchSizeTrainingDataRelative", ""),
     ("testData", ""),
     ("iterations", ""),
@@ -46,6 +51,10 @@ class VizparamSuite extends FunSuite with MustMatchers {
 
   def formatDoubleExp(value: Double): String = {
     Formatter.formatNumber("%.1E", value)
+  }
+
+  def formatDataDesc(value: Dat.DataDesc): String = {
+    s"${value.data.code} ${value.id.code} ${value.size.size}"
   }
 
 }
