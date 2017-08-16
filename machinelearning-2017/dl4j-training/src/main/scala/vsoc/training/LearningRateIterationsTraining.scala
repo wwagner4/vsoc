@@ -9,24 +9,25 @@ object LearningRateIterationsTraining extends App {
 
   val log: Logger = LoggerFactory.getLogger(classOf[Training])
 
-  val _iterations = 50
+  val _iterations = 500
 
-  val learningRates = Seq((0.01, "10^-2"), (0.001, "10^-3"), (0.0001, "10^-4"), (0.00001, "10^-5"))
-  val sizeTrainingDatas = List(Dat.Size_10000, Dat.Size_50000, Dat.Size_100000, Dat.Size_500000)
+  val learningRates = Seq(0.0005, 0.0001, 0.00005, 0.00001)
+  val sizeTrainingDatas = List(Dat.Size_50000, Dat.Size_100000, Dat.Size_500000, Dat.Size_1000000)
 
-  val  series = for ((lr, lrDesc) <- learningRates) yield {
+  val  series = for (lr <- learningRates) yield {
     val mpar = for (sizeDat <- sizeTrainingDatas) yield {
       MetaParam(
         seed = Random.nextLong(),
         learningRate = lr,
+        batchSizeTrainingDataRelative = 0.5,
         trainingData = Dat.DataDesc(Dat.Data_PLAYERPOS_X, Dat.Id_A, sizeDat),
-        testData = Dat.DataDesc(Dat.Data_PLAYERPOS_X, Dat.Id_B, sizeDat),
+        testData = Dat.DataDesc(Dat.Data_PLAYERPOS_X, Dat.Id_B, Dat.Size_1000),
         iterations = _iterations,
         variableParmDescription = () => sizeDat.size.toString
       )
     }
     MetaParamSeries(
-      description = "learning rate: " + lrDesc,
+      description = "learning rate: " + Formatter.formatNumber("%.2E", lr),
       descriptionX = "size",
       metaParams = mpar
     )
@@ -34,6 +35,7 @@ object LearningRateIterationsTraining extends App {
 
   val run = MetaParamRun(
     description = Some("test learning rate | iterations: " + _iterations),
+    clazz = LearningRateIterationsTraining.getClass.toString,
     imgWidth = 1000,
     imgHeight = 1500,
     columns = 2,

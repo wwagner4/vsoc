@@ -86,7 +86,13 @@ object Vizparam {
 
     def toMultiProps(run: MetaParamRun): Seq[(String, Seq[String])] = {
       val mps: Seq[Seq[(String, String)]] = run.series.flatMap(ser => ser.metaParams.map(mp => toProps(mp)))
-      reduce(mps)
+      val re0: Seq[(String, Seq[String])] = reduce(mps)
+      val re1 = ("class", Seq(run.clazz)) +: re0
+      if (run.description.isDefined) {
+        ("title", Seq(run.description.get)) +: re1
+      } else {
+        ("title", Seq(run.series(0).description)) +: re1
+      }
     }
 
     def toProps(mp: MetaParam): Seq[(String, String)] = Seq(
@@ -101,14 +107,12 @@ object Vizparam {
     def reduce(mps: Seq[Seq[(String, String)]]): Seq[(String, Seq[String])] = {
       mps match {
         case Nil => throw new IllegalStateException("mps must not be empty")
-        case a :: Nil => {
+        case a :: Nil =>
           val empty = createEmpty(a)
           merge(empty, a)
-        }
-        case a :: b => {
+        case a :: b =>
           val reduced = reduce(b)
           merge(reduced, a)
-        }
       }
     }
 

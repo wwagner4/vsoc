@@ -30,6 +30,7 @@ object SizeIterationsTraining extends App {
 
   val run = MetaParamRun(
     description = Some("test the effect of multiple iterations for different sized datasets"),
+    clazz = SizeIterationsTraining.getClass.toString,
     imgWidth = 1800,
     imgHeight = 1200,
     columns = 2,

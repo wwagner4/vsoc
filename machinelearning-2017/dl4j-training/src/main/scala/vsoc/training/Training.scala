@@ -25,6 +25,7 @@ import vsoc.training.vizparam.Vizparam
 
 case class MetaParamRun(
                          description: Option[String] = None,
+                         clazz: String,
                          imgWidth: Int,
                          imgHeight: Int,
                          columns: Int,

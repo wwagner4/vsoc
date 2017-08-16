@@ -32,6 +32,7 @@ object VizparamTryout extends App {
 
   val run = MetaParamRun(
     description = Some(s"batch size relative on different sized datasets. iterations:$iterations"),
+    clazz = VizparamTryout.getClass.toString,
     imgWidth = 1800,
     imgHeight = 1200,
     columns = 2,
