@@ -9,7 +9,7 @@ object SizeIterationsTraining extends App {
 
   val log: Logger = LoggerFactory.getLogger(classOf[Training])
 
-  val sizeTrainingDatas = List(Dat.Size_50000, Dat.Size_100000, Dat.Size_500000, Dat.Size_1000000)
+  val sizeTrainingDatas = List(Dat.Size_100000, Dat.Size_500000, Dat.Size_1000000, Dat.Size_5000000)
   val iterations = Seq(1, 50, 100, 200)
 
   val series = for (size <- sizeTrainingDatas) yield {
@@ -29,7 +29,7 @@ object SizeIterationsTraining extends App {
   }
 
   val run = MetaParamRun(
-    description = Some("test the effect of multiple iterations for different sized datasets"),
+    description = Some("multiple iterations for different sized datasets"),
     clazz = SizeIterationsTraining.getClass.toString,
     imgWidth = 1800,
     imgHeight = 1200,

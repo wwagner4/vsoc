@@ -19,7 +19,6 @@ object Vizparam {
     s"""
        |<html>
        |<head>
-       |$css
        |</head
        |<body>
        |</body>
@@ -28,43 +27,9 @@ object Vizparam {
      """.stripMargin
   }
 
-  def css: String = {
-    s"""
-       |<style>
-       |$cssProps
-       |</style>
-     """.stripMargin
-  }
-
-  def cssProps: String = {
-    """
-      |table.darkTable {
-      |  font-family: Tahoma, Geneva, sans-serif;
-      |  border: 1px solid #000000;
-      |  background-color: #777777;
-      |  width: 100%;
-      |  text-align: center;
-      |  border-collapse: collapse;
-      |  text-padding: 20px;
-      |}
-      |table.darkTable td, table.darkTable th {
-      |  border: 1px solid #000000;
-      |  padding: 5px;
-      |}
-      |table.darkTable tbody td {
-      |  font-size: 13px;
-      |  color: #E6E6E6;
-      |}
-      |table.darkTable tr:nth-child(even) {
-      |  padding: 5px;
-      |  background: #666666;
-      |}
-    """.stripMargin
-  }
-
   def table(run: MetaParamRun): String = {
     s"""
-       |<table class="darkTable">
+       |<table style="border: 1px solid #000000;border-collapse: collapse;">
        |${rows(run)}
        |</table>
      """.stripMargin
@@ -74,8 +39,8 @@ object Vizparam {
     (for ((k, v) <- PropsManager.toMultiProps(run)) yield {
       s"""
          |<tr>
-         |<td>$k</td>
-         |<td>${v.mkString(", ")}</td>
+         |<td style="border: 1px solid #000000;padding:5px;min-width: 200px;">$k</td>
+         |<td style="border: 1px solid #000000;padding:5px;min-width: 200px;">${v.mkString(", ")}</td>
          |</tr>
          """.stripMargin
     }).mkString("")
