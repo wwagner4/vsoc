@@ -11,11 +11,12 @@ object SizeIterationsTraining extends App {
 
   val sizeTrainingDatas = List(Dat.Size_100000, Dat.Size_500000, Dat.Size_1000000, Dat.Size_5000000)
   val iterations = Seq(1, 50, 100, 200)
+  val _seed = Random.nextLong()
 
   val series = for (size <- sizeTrainingDatas) yield {
     val params = for (iter <- iterations) yield {
       MetaParam(
-        seed = Random.nextLong(),
+        seed = _seed,
         iterations = iter,
         variableParmDescription = () => "" + iter,
         trainingData = Dat.DataDesc(Dat.Data_PLAYERPOS_X, Dat.Id_A, size),

@@ -10,6 +10,7 @@ object LearningRateIterationsTraining extends App {
   val log: Logger = LoggerFactory.getLogger(classOf[Training])
 
   val _iterations = 500
+  val _seed = Random.nextLong()
 
   val learningRates = Seq(0.0005, 0.0001, 0.00005, 0.00001)
   val sizeTrainingDatas = List(Dat.Size_50000, Dat.Size_100000, Dat.Size_500000, Dat.Size_1000000)
@@ -17,7 +18,7 @@ object LearningRateIterationsTraining extends App {
   val  series = for (lr <- learningRates) yield {
     val mpar = for (sizeDat <- sizeTrainingDatas) yield {
       MetaParam(
-        seed = Random.nextLong(),
+        seed = _seed,
         learningRate = lr,
         batchSizeTrainingDataRelative = 0.5,
         trainingData = Dat.DataDesc(Dat.Data_PLAYERPOS_X, Dat.Id_A, sizeDat),
