@@ -37,8 +37,8 @@ object LearningRateIterationsTraining extends App {
   val run = MetaParamRun(
     description = Some("test learning rate | iterations: " + _iterations),
     clazz = LearningRateIterationsTraining.getClass.toString,
-    imgWidth = 1000,
-    imgHeight = 1500,
+    imgWidth = 1500,
+    imgHeight = 1200,
     columns = 2,
     series = series)
 
