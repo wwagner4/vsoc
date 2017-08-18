@@ -42,9 +42,9 @@ case class MetaParamSeries(
 
 case class MetaParam(
                       description: String,
-                      learningRate: Double = 0.001,
+                      learningRate: Double = 0.0001,
                       trainingData: Dat.DataDesc = Dat.DataDesc(Dat.Data_PLAYERPOS_X, Dat.Id_A, Dat.Size_500000),
-                      batchSizeTrainingDataRelative: Double = 0.8,
+                      batchSizeTrainingDataRelative: Double = 0.1,
                       testData: Dat.DataDesc = Dat.DataDesc(Dat.Data_PLAYERPOS_X, Dat.Id_B, Dat.Size_1000),
                       iterations: Int = 3,
                       seed: Long = 1L,
