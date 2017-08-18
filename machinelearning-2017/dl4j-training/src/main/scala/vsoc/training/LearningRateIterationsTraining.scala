@@ -12,7 +12,7 @@ object LearningRateIterationsTraining extends App {
   val _iterations = 500
   val _seed = Random.nextLong()
 
-  val learningRates = Seq(0.01, 0.0001, 0.0005, 0.00001)
+  val learningRates = Seq(0.01, 0.001, 0.0001, 0.00001)
   val sizeTrainingDatas = List(Dat.Size_50000, Dat.Size_100000, Dat.Size_500000, Dat.Size_1000000)
 
   val series = for (sizeDat <- sizeTrainingDatas) yield {
