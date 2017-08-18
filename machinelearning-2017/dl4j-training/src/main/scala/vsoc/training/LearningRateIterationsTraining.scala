@@ -12,24 +12,25 @@ object LearningRateIterationsTraining extends App {
   val _iterations = 500
   val _seed = Random.nextLong()
 
-  val learningRates = Seq(0.0005, 0.0001, 0.00005, 0.00001)
+  val learningRates = Seq(0.01, 0.0001, 0.0005, 0.00001)
   val sizeTrainingDatas = List(Dat.Size_50000, Dat.Size_100000, Dat.Size_500000, Dat.Size_1000000)
 
-  val  series = for (lr <- learningRates) yield {
-    val mpar = for (sizeDat <- sizeTrainingDatas) yield {
+  val series = for (sizeDat <- sizeTrainingDatas) yield {
+    val  mpar = for (lr <- learningRates) yield {
       MetaParam(
+        description = s"""sizeDat:$sizeDat - learningRate:${Formatter.formatNumber("%.2E", lr)}""",
         seed = _seed,
         learningRate = lr,
         batchSizeTrainingDataRelative = 0.5,
         trainingData = Dat.DataDesc(Dat.Data_PLAYERPOS_X, Dat.Id_A, sizeDat),
         testData = Dat.DataDesc(Dat.Data_PLAYERPOS_X, Dat.Id_B, Dat.Size_1000),
         iterations = _iterations,
-        variableParmDescription = () => sizeDat.size.toString
+        variableParmDescription = () => Formatter.formatNumber("%.2E", lr)
       )
     }
     MetaParamSeries(
-      description = "learning rate: " + Formatter.formatNumber("%.2E", lr),
-      descriptionX = "size",
+      description = "size: " + sizeDat.size.toString,
+      descriptionX = "learning rate",
       metaParams = mpar
     )
   }

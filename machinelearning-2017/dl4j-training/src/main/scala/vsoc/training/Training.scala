@@ -41,6 +41,7 @@ case class MetaParamSeries(
                           )
 
 case class MetaParam(
+                      description: String,
                       learningRate: Double = 0.001,
                       trainingData: Dat.DataDesc = Dat.DataDesc(Dat.Data_PLAYERPOS_X, Dat.Id_A, Dat.Size_500000),
                       batchSizeTrainingDataRelative: Double = 0.8,
@@ -102,7 +103,7 @@ class Training(log: Logger) {
     require(mparam.testData != mparam.trainingData, "Test- and training data must be different")
     val trainingData = readPlayerposXDataSet(mparam.trainingData, mparam.batchSizeTrainingDataRelative)
     val nnConf: MultiLayerConfiguration = nnConfiguration(mparam)
-    log.info("Start training")
+    log.info("Start training - " + mparam.description)
     val nn = train(trainingData, nnConf)
     test(nn, mparam)
   }

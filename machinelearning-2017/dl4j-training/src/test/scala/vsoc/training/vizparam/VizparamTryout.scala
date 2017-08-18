@@ -12,11 +12,13 @@ object VizparamTryout extends App {
   val iterations = 100
   val sizeTrainingDatas = List(Dat.Size_50000, Dat.Size_100000, Dat.Size_500000, Dat.Size_1000000)
   val batchSizes = Seq(0.1, 0.5, 0.7, 0.9)
+  val _seed = Random.nextLong()
 
   val series = for (size <- sizeTrainingDatas) yield {
     val params = for (batchSize <- batchSizes) yield {
       MetaParam(
-        seed = Random.nextLong(),
+        description = s"""size:$size - ${Formatter.formatNumber("%.2f", batchSize)}""",
+        seed = _seed,
         iterations = iterations,
         batchSizeTrainingDataRelative = batchSize,
         variableParmDescription = () => Formatter.formatNumber("%.2f", batchSize),

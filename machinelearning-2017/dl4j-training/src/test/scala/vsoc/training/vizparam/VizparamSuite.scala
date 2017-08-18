@@ -7,7 +7,9 @@ class VizparamSuite extends FunSuite with MustMatchers {
 
   import Vizparam.PropsManager._
 
-  val mp = MetaParam(variableParmDescription = () => "vd")
+  val mp = MetaParam(
+    description = "test",
+    variableParmDescription = () => "vd")
 
   test("to pairs size") {
     val props = toProps(mp)

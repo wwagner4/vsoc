@@ -17,6 +17,7 @@ object BatchSizeTraining extends App {
   val series = for (iterations <- iterationsList) yield {
     val params = for (batchSize <- batchSizes) yield {
       MetaParam(
+        description = s"""iter:$iterations - batchsize:${Formatter.formatNumber("%.2f", batchSize)}""",
         seed = _seed,
         iterations = iterations,
         batchSizeTrainingDataRelative = batchSize,

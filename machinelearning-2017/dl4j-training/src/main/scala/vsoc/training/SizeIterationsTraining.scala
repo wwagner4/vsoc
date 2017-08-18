@@ -1,7 +1,7 @@
 package vsoc.training
 
 import org.slf4j.{Logger, LoggerFactory}
-import vsoc.common.Dat
+import vsoc.common.{Dat, Formatter}
 
 import scala.util.Random
 
@@ -16,6 +16,7 @@ object SizeIterationsTraining extends App {
   val series = for (size <- sizeTrainingDatas) yield {
     val params = for (iter <- iterations) yield {
       MetaParam(
+        description = s"sizeDat:$size - iter:$iter",
         seed = _seed,
         iterations = iter,
         variableParmDescription = () => "" + iter,
@@ -32,8 +33,8 @@ object SizeIterationsTraining extends App {
   val run = MetaParamRun(
     description = Some("multiple iterations for different sized datasets"),
     clazz = SizeIterationsTraining.getClass.toString,
-    imgWidth = 1800,
-    imgHeight = 1200,
+    imgWidth = 1500,
+    imgHeight = 1000,
     columns = 2,
     series = series)
 
