@@ -92,8 +92,6 @@ class Training(log: Logger, _dirOut: File) {
 
   type L = Viz.X
 
-  import vsoc.common.UtilIO._
-
   val delim = ";"
 
   def run(run: MetaParamRun): Unit = {
@@ -110,7 +108,7 @@ class Training(log: Logger, _dirOut: File) {
       diagrams = dias)
 
 
-    implicit val vicCreator: VizCreator[L] = VizCreatorGnuplot[L](dirScripts, _dirOut, execute = true)
+    implicit val vicCreator: VizCreator[L] = VizCreatorGnuplot[L](_dirOut, _dirOut, execute = true)
 
     Viz.createDiagram(dia)
     log.info(s"output in ${_dirOut}")
