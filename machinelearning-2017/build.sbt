@@ -16,7 +16,7 @@ lazy val root = (project in file("."))
   .settings(
     commonSettings,
     name := "machinelearning-root")
-  .aggregate(common, create_data, dl4j_datavec)
+  .aggregate(common, create_data, dl4j_datavec, dl4j_training)
 
 lazy val common = (project in file("common"))
   .settings(
