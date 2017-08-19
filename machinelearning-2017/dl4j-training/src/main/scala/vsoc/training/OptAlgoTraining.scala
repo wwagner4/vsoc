@@ -5,7 +5,7 @@ import vsoc.common.{Dat, Formatter}
 
 import scala.util.Random
 
-object LearningRateIterationsTraining extends App {
+object OptAlgoTraining extends App {
 
   val _iterations = 500
   val _seed = Random.nextLong()

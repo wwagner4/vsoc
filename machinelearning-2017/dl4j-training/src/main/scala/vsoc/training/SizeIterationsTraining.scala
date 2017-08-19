@@ -7,8 +7,6 @@ import scala.util.Random
 
 object SizeIterationsTraining extends App {
 
-  val log: Logger = LoggerFactory.getLogger(classOf[Training])
-
   val sizeTrainingDatas = List(Dat.Size_100000, Dat.Size_500000, Dat.Size_1000000, Dat.Size_5000000)
   val iterations = Seq(1, 50, 100, 200)
   val _seed = Random.nextLong()
@@ -38,6 +36,6 @@ object SizeIterationsTraining extends App {
     columns = 2,
     series = series)
 
-  new Training(log).trainSeries(run)
+  Training().trainSeries(run)
 
 }

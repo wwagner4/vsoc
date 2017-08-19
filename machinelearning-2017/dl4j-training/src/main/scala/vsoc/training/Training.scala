@@ -17,7 +17,7 @@ import org.nd4j.linalg.dataset.DataSet
 import org.nd4j.linalg.dataset.api.iterator.DataSetIterator
 import org.nd4j.linalg.factory.Nd4j
 import org.nd4j.linalg.lossfunctions.LossFunctions
-import org.slf4j.Logger
+import org.slf4j.{Logger, LoggerFactory}
 import vsoc.common.{Viz, VizCreator, VizCreatorGnuplot}
 import vsoc.datavec.playerpos.CreateData
 import vsoc.common.Dat
@@ -52,6 +52,16 @@ case class MetaParam(
                       variableParmDescription: () => String
                     )
 
+
+object Training {
+
+  val log: Logger = LoggerFactory.getLogger(classOf[Training])
+
+  def apply(): Training = {
+    new Training(log)
+  }
+
+}
 
 class Training(log: Logger) {
 

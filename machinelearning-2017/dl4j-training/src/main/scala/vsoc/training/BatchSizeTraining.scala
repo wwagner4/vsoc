@@ -7,8 +7,6 @@ import scala.util.Random
 
 object BatchSizeTraining extends App {
 
-  val log: Logger = LoggerFactory.getLogger(classOf[Training])
-
   val iterationsList = List(10, 50, 100, 200)
   val sizeTrainingDatas = Dat.Size_1000000
   val batchSizes = Seq(0.1, 0.2, 0.5, 0.8)
@@ -40,6 +38,6 @@ object BatchSizeTraining extends App {
     columns = 2,
     series = series)
 
-  new Training(log).trainSeries(run)
+  Training().trainSeries(run)
 
 }
