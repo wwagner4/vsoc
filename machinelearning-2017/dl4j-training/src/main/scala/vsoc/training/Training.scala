@@ -47,6 +47,7 @@ case class MetaParam(
                       batchSizeTrainingDataRelative: Double = 0.1,
                       testData: Dat.DataDesc = Dat.DataDesc(Dat.Data_PLAYERPOS_X, Dat.Id_B, Dat.Size_1000),
                       iterations: Int = 3,
+                      optAlgo: OptimizationAlgorithm = OptimizationAlgorithm.STOCHASTIC_GRADIENT_DESCENT,
                       seed: Long = 1L,
                       variableParmDescription: () => String
                     )
@@ -151,7 +152,7 @@ class Training(log: Logger) {
     new NeuralNetConfiguration.Builder()
       .seed(mparam.seed)
       .iterations(mparam.iterations)
-      .optimizationAlgo(OptimizationAlgorithm.STOCHASTIC_GRADIENT_DESCENT)
+      .optimizationAlgo(mparam.optAlgo)
       .learningRate(mparam.learningRate)
       .weightInit(WeightInit.XAVIER)
       .updater(Updater.NESTEROVS)

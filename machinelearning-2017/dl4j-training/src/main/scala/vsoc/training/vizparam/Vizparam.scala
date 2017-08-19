@@ -66,6 +66,7 @@ object Vizparam {
       ("batchSizeTrainingDataRelative", formatDouble(mp.batchSizeTrainingDataRelative)),
       ("testData", formatDataDesc(mp.testData)),
       ("iterations", "" + mp.iterations),
+      ("optAlgo", "" + mp.optAlgo),
       ("seed", "" + mp.seed)
     )
 
