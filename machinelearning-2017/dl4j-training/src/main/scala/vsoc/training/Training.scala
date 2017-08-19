@@ -96,7 +96,7 @@ class Training(log: Logger, _dirOut: File) {
 
   val delim = ";"
 
-  def trainSeries(run: MetaParamRun): Unit = {
+  def run(run: MetaParamRun): Unit = {
 
     Vizparam.fileHtml(run, _dirOut, "params.html")
 

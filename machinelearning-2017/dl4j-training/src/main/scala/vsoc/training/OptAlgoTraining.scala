@@ -16,27 +16,40 @@ object OptAlgoTraining extends App {
     OptimizationAlgorithm.LINE_GRADIENT_DESCENT,
     OptimizationAlgorithm.STOCHASTIC_GRADIENT_DESCENT
   )
-  val sizeTrainingDatas = List(Dat.Size_50000, Dat.Size_100000, Dat.Size_500000, Dat.Size_1000000)
+  val sizes = Seq(
+    Dat.Size_50000,
+    Dat.Size_100000,
+    Dat.Size_500000,
+    Dat.Size_1000000
+  )
 
-  val series = for (sizeDat <- sizeTrainingDatas) yield {
-    val  mpar = for (_optAlgo <- optAlgos) yield {
-      MetaParam(
-        description = s"""sizeDat:$sizeDat - optAlgo:${_optAlgo}""",
-        seed = _seed,
-        batchSizeTrainingDataRelative = 0.5,
-        trainingData = Dat.DataDesc(Dat.Data_PLAYERPOS_X, Dat.Id_A, sizeDat),
-        testData = Dat.DataDesc(Dat.Data_PLAYERPOS_X, Dat.Id_B, Dat.Size_1000),
-        iterations = _iterations,
-        optAlgo = _optAlgo,
-        variableParmDescription = () => formatOptAlgo(_optAlgo)
-      )
-    }
-    MetaParamSeries(
-      description = "size: " + sizeDat.size.toString,
-      descriptionX = "learning rate",
-      metaParams = mpar
+  Training().run(
+    MetaParamRun(
+      description = Some("test learning rate | iterations: " + _iterations),
+      clazz = LearningRateIterationsTraining.getClass.toString,
+      imgWidth = 1500,
+      imgHeight = 1200,
+      columns = 2,
+      series = for (size <- sizes) yield {
+        MetaParamSeries(
+          description = "size: " + size.size.toString,
+          descriptionX = "learning rate",
+          metaParams = for (_optAlgo <- optAlgos) yield {
+            MetaParam(
+              description = s"""size:$size - optAlgo:${_optAlgo}""",
+              seed = _seed,
+              batchSizeTrainingDataRelative = 0.5,
+              trainingData = Dat.DataDesc(Dat.Data_PLAYERPOS_X, Dat.Id_A, size),
+              testData = Dat.DataDesc(Dat.Data_PLAYERPOS_X, Dat.Id_B, Dat.Size_1000),
+              iterations = _iterations,
+              optAlgo = _optAlgo,
+              variableParmDescription = () => formatOptAlgo(_optAlgo)
+            )
+          }
+        )
+      }
     )
-  }
+  )
 
   def formatOptAlgo(optAlgo: OptimizationAlgorithm): String = {
     optAlgo match {
@@ -47,15 +60,5 @@ object OptAlgoTraining extends App {
       case _ => "??"
     }
   }
-
-  val run = MetaParamRun(
-    description = Some("test learning rate | iterations: " + _iterations),
-    clazz = LearningRateIterationsTraining.getClass.toString,
-    imgWidth = 1500,
-    imgHeight = 1200,
-    columns = 2,
-    series = series)
-
-  Training().trainSeries(run)
 
 }

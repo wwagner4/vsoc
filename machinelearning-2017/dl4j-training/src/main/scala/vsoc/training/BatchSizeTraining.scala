@@ -38,6 +38,6 @@ object BatchSizeTraining extends App {
     columns = 2,
     series = series)
 
-  Training().trainSeries(run)
+  Training().run(run)
 
 }
