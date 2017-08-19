@@ -7,7 +7,7 @@ import scala.util.Random
 
 object OptAlgoTraining extends App {
 
-  val _iterations = 500
+  val _iterations = 300
   val _seed = Random.nextLong()
 
   val optAlgos = Seq(
@@ -25,7 +25,7 @@ object OptAlgoTraining extends App {
 
   Training().run(
     MetaParamRun(
-      description = Some("test learning rate | iterations: " + _iterations),
+      description = Some("Test Optimzation Algorithm | iterations: " + _iterations),
       clazz = LearningRateIterationsTraining.getClass.toString,
       imgWidth = 1500,
       imgHeight = 1200,
@@ -33,12 +33,11 @@ object OptAlgoTraining extends App {
       series = for (size <- sizes) yield {
         MetaParamSeries(
           description = "size: " + size.size.toString,
-          descriptionX = "learning rate",
+          descriptionX = "Optimzation Algorithm",
           metaParams = for (_optAlgo <- optAlgos) yield {
             MetaParam(
               description = s"""size:$size - optAlgo:${_optAlgo}""",
               seed = _seed,
-              batchSizeTrainingDataRelative = 0.5,
               trainingData = Dat.DataDesc(Dat.Data_PLAYERPOS_X, Dat.Id_A, size),
               testData = Dat.DataDesc(Dat.Data_PLAYERPOS_X, Dat.Id_B, Dat.Size_1000),
               iterations = _iterations,
