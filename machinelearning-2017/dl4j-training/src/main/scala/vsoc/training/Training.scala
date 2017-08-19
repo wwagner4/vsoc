@@ -2,6 +2,7 @@ package vsoc.training
 
 import java.io.File
 
+import org.apache.log4j.Level
 import org.datavec.api.records.reader.impl.csv.CSVRecordReader
 import org.datavec.api.split.FileSplit
 import org.deeplearning4j.datasets.datavec.RecordReaderDataSetIterator
@@ -21,6 +22,7 @@ import org.slf4j.{Logger, LoggerFactory}
 import vsoc.common.{Viz, VizCreator, VizCreatorGnuplot}
 import vsoc.datavec.playerpos.CreateData
 import vsoc.common.Dat
+import vsoc.common.UtilIO.{dirSub, dirWork}
 import vsoc.training.vizparam.Vizparam
 
 case class MetaParamRun(
@@ -55,15 +57,38 @@ case class MetaParam(
 
 object Training {
 
-  val log: Logger = LoggerFactory.getLogger(classOf[Training])
-
   def apply(): Training = {
-    new Training(log)
+    val _dirOut = dirOut
+    initLogging(_dirOut)
+    val log: Logger = LoggerFactory.getLogger(classOf[Training])
+    new Training(log, _dirOut)
+  }
+
+  def initLogging(dir: File): Unit = {
+    import org.apache.log4j.FileAppender
+    import org.apache.log4j.Logger
+    import org.apache.log4j.PatternLayout
+
+    val fa = new FileAppender
+    fa.setName("FileLogger")
+    fa.setFile(new File(dir, "training.log").getAbsolutePath)
+    fa.setLayout(new PatternLayout("%d %-5p [%c{1}] %m%n"))
+    fa.setThreshold(Level.DEBUG)
+    fa.setAppend(true)
+    fa.activateOptions()
+
+    Logger.getRootLogger.addAppender(fa)
+  }
+
+  def dirOut: File = {
+    val work = dirSub(dirWork, "playerpos_x")
+    val ts = new java.text.SimpleDateFormat("yyyyMMdd-HHmmss").format(new java.util.Date())
+    dirSub(work, ts)
   }
 
 }
 
-class Training(log: Logger) {
+class Training(log: Logger, _dirOut: File) {
 
   type L = Viz.X
 
@@ -72,8 +97,6 @@ class Training(log: Logger) {
   val delim = ";"
 
   def trainSeries(run: MetaParamRun): Unit = {
-
-    val _dirOut = dirOut
 
     Vizparam.fileHtml(run, _dirOut, "params.html")
 
@@ -102,12 +125,6 @@ class Training(log: Logger) {
       yRange = Some(Viz.Range(Some(-60), Some(60))),
       dataRows = drs)
 
-  }
-
-  def dirOut: File = {
-    val work = dirSub(dirWork, "playerpos_x")
-    val ts = new java.text.SimpleDateFormat("yyyyMMdd-HHmmss").format(new java.util.Date())
-    dirSub(work, ts)
   }
 
   def train(mparam: MetaParam): Viz.DataRow[L] = {
