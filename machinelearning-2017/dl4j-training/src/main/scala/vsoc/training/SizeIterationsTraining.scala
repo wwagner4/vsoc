@@ -7,7 +7,7 @@ import scala.util.Random
 object SizeIterationsTraining extends App {
 
   val sizes = List(Dat.Size_100000, Dat.Size_500000, Dat.Size_1000000, Dat.Size_5000000)
-  val iterations = Seq(1, 50, 100, 200)
+  val iterations = Seq(50, 100, 200, 500)
   val _seed = Random.nextLong()
 
   Training().run(
