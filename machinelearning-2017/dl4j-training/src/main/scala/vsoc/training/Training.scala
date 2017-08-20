@@ -132,7 +132,12 @@ class Training(log: Logger, _dirOut: File) {
     require(mparam.testData != mparam.trainingData, "Test- and training data must be different")
     val trainingData = readPlayerposXDataSet(mparam.trainingData, mparam.batchSizeTrainingDataRelative)
     val nnConf: MultiLayerConfiguration = nnConfiguration(mparam)
-    log.info("Start training - " + mparam.description)
+    if (log.isDebugEnabled()) {
+      log.debug("Start training - " + mparam.description)
+      log.debug("Start training - nnconf: \n" + nnConf.toYaml)
+    } else {
+      log.info("Start training - " + mparam.description)
+    }
     val nn = train(trainingData, nnConf)
     test(nn, mparam)
   }

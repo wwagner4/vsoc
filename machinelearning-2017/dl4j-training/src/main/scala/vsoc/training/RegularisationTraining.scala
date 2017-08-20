@@ -6,10 +6,8 @@ import scala.util.Random
 
 object RegularisationTraining extends App {
 
-  val l1s = Seq(1.0E-2, 1.0E-4)
-  val l2s = Seq(1.0E-2, 1.0E-4)
-//  val l1s = Seq(0.0, 1.0E-2, 1.0E-3, 1.0E-4)
-//  val l2s = Seq(0.0, 1.0E-2, 1.0E-3, 1.0E-4)
+  val l1s = Seq(1.0E-2, 1.0E-3, 1.0E-4, 1.0E-5)
+  val l2s = Seq(1.0E-2, 1.0E-3, 1.0E-4, 1.0E-5)
 
   val _seed = Random.nextLong()
 
@@ -28,9 +26,10 @@ object RegularisationTraining extends App {
             MetaParam(
               description = s"l1:$l1 - l2:$l2",
               seed = _seed,
+              regularisation = Some(Regularisation(l1, l2)),
               variableParmDescription = () => "" + Formatter.formatNumber("%.2E", l2),
               trainingData = Dat.DataDesc(Dat.Data_PLAYERPOS_X, Dat.Id_A, Dat.Size_500000),
-              testData = Dat.DataDesc(Dat.Data_PLAYERPOS_X, Dat.Id_B, Dat.Size_5000)
+              testData = Dat.DataDesc(Dat.Data_PLAYERPOS_X, Dat.Id_B, Dat.Size_1000)
             )
           }
         )
