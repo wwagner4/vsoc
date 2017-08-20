@@ -25,6 +25,8 @@ import vsoc.common.Dat
 import vsoc.common.UtilIO.{dirSub, dirWork}
 import vsoc.training.vizparam.Vizparam
 
+case class Regularisation(l1: Double, l2: Double)
+
 case class MetaParamRun(
                          description: Option[String] = None,
                          clazz: String,
@@ -48,8 +50,9 @@ case class MetaParam(
                       trainingData: Dat.DataDesc = Dat.DataDesc(Dat.Data_PLAYERPOS_X, Dat.Id_A, Dat.Size_500000),
                       batchSizeTrainingDataRelative: Double = 0.1,
                       testData: Dat.DataDesc = Dat.DataDesc(Dat.Data_PLAYERPOS_X, Dat.Id_B, Dat.Size_1000),
-                      iterations: Int = 3,
+                      iterations: Int = 200,
                       optAlgo: OptimizationAlgorithm = OptimizationAlgorithm.STOCHASTIC_GRADIENT_DESCENT,
+                      regularisation: Option[Regularisation] = None,
                       seed: Long = 1L,
                       variableParmDescription: () => String
                     )
@@ -121,8 +124,8 @@ class Training(log: Logger, _dirOut: File) {
       yLabel = Some(serie.descriptionY),
       xLabel = Some(serie.descriptionX),
       yRange = Some(Viz.Range(Some(-60), Some(60))),
+      xZeroAxis = true,
       dataRows = drs)
-
   }
 
   def train(mparam: MetaParam): Viz.DataRow[L] = {
@@ -173,6 +176,9 @@ class Training(log: Logger, _dirOut: File) {
     * Returns the network configuration, 2 hidden DenseLayers
     */
   private def nnConfiguration(mparam: MetaParam): MultiLayerConfiguration = {
+
+    val nullReg = Regularisation(0.0, 0.0)
+
     val numHiddenNodes = 50
     new NeuralNetConfiguration.Builder()
       .seed(mparam.seed)
@@ -181,6 +187,9 @@ class Training(log: Logger, _dirOut: File) {
       .learningRate(mparam.learningRate)
       .weightInit(WeightInit.XAVIER)
       .updater(Updater.NESTEROVS)
+      .regularization(mparam.regularisation.isDefined)
+      .l1(mparam.regularisation.getOrElse(nullReg).l1)
+      .l2(mparam.regularisation.getOrElse(nullReg).l2)
       .momentum(0.9)
       .list
       .layer(0, new DenseLayer.Builder()
@@ -199,6 +208,7 @@ class Training(log: Logger, _dirOut: File) {
       .backprop(true)
       .build
   }
+
 
 
 }
