@@ -99,6 +99,9 @@ object Viz {
                       xRange: Option[Range] = None,
                       yRange: Option[Range] = None,
                       zRange: Option[Range] = None,
+                      xZeroAxis: Boolean = false,
+                      yZeroAxis: Boolean = false,
+                      zZeroAxis: Boolean = false,
                       xyGrid: Int = 100,
                       legendPlacement: LegendPlacement = LegendPlacement_LEFT,
                       legendTitle: Option[String] = None,
@@ -304,6 +307,12 @@ case class VizCreatorGnuplot[T <: Lineable](scriptDir: File, imageDir: File, exe
 
     def zLabel: String = if (dia.zLabel.isDefined) s"""set zlabel "${dia.zLabel.get}"""" else ""
 
+    def xZeroAxis: String = if (dia.xZeroAxis) s"""set xzeroaxis""" else ""
+
+    def yZeroAxis: String = if (dia.yZeroAxis) s"""set yzeroaxis""" else ""
+
+    def zZeroAxis: String = if (dia.zZeroAxis) s"""set zzeroaxis""" else ""
+
     def xRange: String = if (dia.xRange.isDefined) s"""set xrange ${formatRange(dia.xRange.get)}""" else ""
 
     def yRange: String = if (dia.yRange.isDefined) s"""set yrange ${formatRange(dia.yRange.get)}""" else ""
@@ -377,6 +386,9 @@ case class VizCreatorGnuplot[T <: Lineable](scriptDir: File, imageDir: File, exe
          |$xLabel
          |$yLabel
          |$zLabel
+         |$xZeroAxis
+         |$yZeroAxis
+         |$zZeroAxis
          |$xRange
          |$yRange
          |$zRange

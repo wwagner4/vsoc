@@ -19,10 +19,14 @@ object VizTryout extends App {
     "Test A",
     yLabel = Some("label y"),
     xRange = Some(Range(Some(-10), None)),
-    yRange = Some(Range(Some(0), Some(10))),
+    yRange = Some(Range(Some(-5), Some(10))),
+    xZeroAxis = true,
+    yZeroAxis = true,
     dataRows = dataRows
   )
 
   Viz.createDiagram(dia)
+
+
 
 }
