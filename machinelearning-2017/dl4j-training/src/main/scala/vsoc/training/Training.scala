@@ -41,6 +41,7 @@ case class MetaParamSeries(
                             description: String,
                             descriptionX: String,
                             descriptionY: String = "error",
+                            yRange: (Double, Double) = (-60.0, 60.0),
                             metaParams: Seq[MetaParam]
                           )
 
@@ -119,11 +120,12 @@ class Training(log: Logger, _dirOut: File) {
 
   def trainSerie(serie: MetaParamSeries): Viz.Diagram[L] = {
     val drs: Seq[Viz.DataRow[L]] = serie.metaParams.map(mparam => train(mparam))
+    val (yFrom, yTo) = serie.yRange
     Viz.Diagram(id = "_",
       title = serie.description,
       yLabel = Some(serie.descriptionY),
       xLabel = Some(serie.descriptionX),
-      yRange = Some(Viz.Range(Some(-60), Some(60))),
+      yRange = Some(Viz.Range(Some(yFrom), Some(yTo))),
       xZeroAxis = true,
       dataRows = drs)
   }

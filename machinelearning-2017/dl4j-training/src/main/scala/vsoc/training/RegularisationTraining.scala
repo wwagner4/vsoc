@@ -6,8 +6,8 @@ import scala.util.Random
 
 object RegularisationTraining extends App {
 
-  val l1s = Seq(1.0E-2, 1.0E-3, 1.0E-4, 1.0E-5)
-  val l2s = Seq(1.0E-2, 1.0E-3, 1.0E-4, 1.0E-5)
+  val l1s = Seq(1.0E-2, 1.0E-3, 1.0E-4, 1.0E-5, 1.0E-6, 0.0)
+  val l2s = Seq(1.0E-2, 1.0E-3, 1.0E-4, 1.0E-5, 1.0E-6, 0.0)
 
   val _seed = Random.nextLong()
 
@@ -16,12 +16,13 @@ object RegularisationTraining extends App {
       description = Some("Regularisation l1 l2"),
       clazz = SizeIterationsTraining.getClass.toString,
       imgWidth = 1500,
-      imgHeight = 1000,
+      imgHeight = 2000,
       columns = 2,
       series = for (l1 <- l1s) yield {
         MetaParamSeries(
           description = "regularisation l1: " + Formatter.formatNumber("%.2E", l1),
           descriptionX = "regularisation l2",
+          yRange = (-20, 20),
           metaParams = for (l2 <- l2s) yield {
             MetaParam(
               description = s"l1:$l1 - l2:$l2",
