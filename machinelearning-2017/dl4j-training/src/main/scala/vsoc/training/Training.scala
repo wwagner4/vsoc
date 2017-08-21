@@ -54,6 +54,7 @@ case class MetaParam(
                       iterations: Int = 200,
                       optAlgo: OptimizationAlgorithm = OptimizationAlgorithm.STOCHASTIC_GRADIENT_DESCENT,
                       regularisation: Option[Regularisation] = None,
+                      numHiddenNodes: Int = 50,
                       seed: Long = 1L,
                       variableParmDescription: () => String
                     )
@@ -186,7 +187,6 @@ class Training(log: Logger, _dirOut: File) {
 
     val nullReg = Regularisation(0.0, 0.0)
 
-    val numHiddenNodes = 50
     new NeuralNetConfiguration.Builder()
       .seed(mparam.seed)
       .iterations(mparam.iterations)
@@ -201,14 +201,14 @@ class Training(log: Logger, _dirOut: File) {
       .list
       .layer(0, new DenseLayer.Builder()
         .nIn(42)
-        .nOut(numHiddenNodes)
+        .nOut(mparam.numHiddenNodes)
         .activation(Activation.TANH).build)
       .layer(1, new DenseLayer.Builder()
-        .nIn(numHiddenNodes)
-        .nOut(numHiddenNodes)
+        .nIn(mparam.numHiddenNodes)
+        .nOut(mparam.numHiddenNodes)
         .activation(Activation.TANH).build)
       .layer(2, new OutputLayer.Builder(LossFunctions.LossFunction.MSE)
-        .activation(Activation.IDENTITY).nIn(numHiddenNodes)
+        .activation(Activation.IDENTITY).nIn(mparam.numHiddenNodes)
         .nOut(1)
         .build)
       .pretrain(false)

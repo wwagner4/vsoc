@@ -24,7 +24,7 @@ class VizparamSuite extends FunSuite with MustMatchers {
 
   test("to pairs size") {
     val props = toProps(mp)
-    props.size mustEqual 7
+    props.size mustEqual 8
   }
 
   test("to pairs learning rate 0.001") {
@@ -82,7 +82,8 @@ class VizparamSuite extends FunSuite with MustMatchers {
         case 3 => values must be(Seq("playerpos_x B 1000"))
         case 4 => values must be(Seq("3"))
         case 5 => values must be(Seq("STOCHASTIC_GRADIENT_DESCENT"))
-        case 6 => values must be(Seq("1"))
+        case 6 => values must be(Seq("50"))
+        case 7 => values must be(Seq("1"))
       }
     }
   }
@@ -100,7 +101,8 @@ class VizparamSuite extends FunSuite with MustMatchers {
         case 3 => values must be(Seq("playerpos_x B 1000"))
         case 4 => values must be(Seq("3"))
         case 5 => values must be(Seq("STOCHASTIC_GRADIENT_DESCENT"))
-        case 6 => values must be(Seq("1"))
+        case 6 => values must be(Seq("50"))
+        case 7 => values must be(Seq("1"))
       }
     }
   }
@@ -118,7 +120,8 @@ class VizparamSuite extends FunSuite with MustMatchers {
         case 3 => values must be(Seq("playerpos_x B 1000"))
         case 4 => values must be(Seq("3"))
         case 5 => values must be(Seq("STOCHASTIC_GRADIENT_DESCENT"))
-        case 6 => values must be(Seq("1"))
+        case 6 => values must be(Seq("50"))
+        case 7 => values must be(Seq("1"))
       }
     }
   }

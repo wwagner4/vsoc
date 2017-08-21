@@ -26,7 +26,7 @@ object OptAlgoTraining extends App {
   Training().run(
     MetaParamRun(
       description = Some("Test Optimzation Algorithm | iterations: " + _iterations),
-      clazz = LearningRateIterationsTraining.getClass.toString,
+      clazz = OptAlgoTraining.getClass.toString,
       imgWidth = 1500,
       imgHeight = 1200,
       columns = 2,

@@ -14,7 +14,7 @@ object RegularisationTraining extends App {
   Training().run(
     MetaParamRun(
       description = Some("Regularisation l1 l2"),
-      clazz = SizeIterationsTraining.getClass.toString,
+      clazz = RegularisationTraining.getClass.toString,
       imgWidth = 1500,
       imgHeight = 2000,
       columns = 2,

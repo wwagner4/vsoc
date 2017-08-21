@@ -67,6 +67,7 @@ object Vizparam {
       ("testData", formatDataDesc(mp.testData)),
       ("iterations", "" + mp.iterations),
       ("optAlgo", "" + mp.optAlgo),
+      ("numHiddenNodes", "" + mp.numHiddenNodes),
       ("seed", "" + mp.seed)
     )
 
