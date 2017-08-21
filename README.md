@@ -5,7 +5,7 @@ Collection of ideas how to continue the vsoc project using modern machinelearnin
 * [Apache Spark](http://spark.apache.org/)
 * [Deep Learning 4 Java DL4J](https://deeplearning4j.org/)
 
-# Results
-* https://vsoc1.blogspot.co.at/
+# Problems
+* https://github.com/wwagner4/vsoc/blob/master/machinelearning-2017/create-data/src/main/random-pos-001/index.md
 
 
