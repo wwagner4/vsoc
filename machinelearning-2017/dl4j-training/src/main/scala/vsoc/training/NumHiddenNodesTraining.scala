@@ -6,7 +6,7 @@ import scala.util.Random
 
 object NumHiddenNodesTraining extends App {
 
-  val _numHiddenNodes = Seq(100, 200, 500, 700)
+  val _numHiddenNodes = Seq(50, 100, 200, 500, 700)
   val seeds = Seq(
     Random.nextLong(),
     Random.nextLong(),
@@ -28,7 +28,7 @@ object NumHiddenNodesTraining extends App {
           yRange = (-20, 20),
           metaParams = for (num <- _numHiddenNodes) yield {
             MetaParam(
-              description = s"seed:$_seed - numOfHiddenNodes:$num",
+              description = s"seed:${_seed} - numOfHiddenNodes:$num",
               seed = _seed,
               numHiddenNodes = num,
               variableParmDescription = () => "" + num,
