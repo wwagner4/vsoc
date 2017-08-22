@@ -68,6 +68,7 @@ object Vizparam {
       ("iterations", "" + mp.iterations),
       ("optAlgo", "" + mp.optAlgo),
       ("numHiddenNodes", "" + mp.numHiddenNodes),
+      ("regularisation", "" + mp.regularisation),
       ("seed", "" + mp.seed)
     )
 

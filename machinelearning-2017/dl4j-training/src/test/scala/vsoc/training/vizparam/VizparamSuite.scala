@@ -3,7 +3,7 @@ package vsoc.training.vizparam
 import org.deeplearning4j.nn.api.OptimizationAlgorithm
 import org.scalatest.{FunSuite, MustMatchers}
 import vsoc.common.Dat
-import vsoc.training.MetaParam
+import vsoc.training.{MetaParam, Regularisation}
 
 //noinspection RedundantDefaultArgument
 class VizparamSuite extends FunSuite with MustMatchers {
@@ -24,7 +24,7 @@ class VizparamSuite extends FunSuite with MustMatchers {
 
   test("to pairs size") {
     val props = toProps(mp)
-    props.size mustEqual 8
+    props.size mustEqual 9
   }
 
   test("to pairs learning rate 0.001") {
@@ -83,7 +83,26 @@ class VizparamSuite extends FunSuite with MustMatchers {
         case 4 => values must be(Seq("3"))
         case 5 => values must be(Seq("STOCHASTIC_GRADIENT_DESCENT"))
         case 6 => values must be(Seq("50"))
-        case 7 => values must be(Seq("1"))
+        case 7 => values must be(Seq("None"))
+        case 8 => values must be(Seq("1"))
+      }
+    }
+  }
+
+  test("reduce list with one elem regularisation") {
+    val propsList: Seq[Seq[(String, String)]] = List(toProps(mp.copy(regularisation = Some(Regularisation(0.001, 0.000001)))))
+    val collected = reduce(propsList)
+    for (((_, values), i) <- collected.zipWithIndex) {
+      i match {
+        case 0 => values must be(Seq("1.0E-04"))
+        case 1 => values must be(Seq("playerpos_x A 500000"))
+        case 2 => values must be(Seq("0.10"))
+        case 3 => values must be(Seq("playerpos_x B 1000"))
+        case 4 => values must be(Seq("3"))
+        case 5 => values must be(Seq("STOCHASTIC_GRADIENT_DESCENT"))
+        case 6 => values must be(Seq("50"))
+        case 7 => values must be(Seq("Some(Regularisation(0.001,1.0E-6))"))
+        case 8 => values must be(Seq("1"))
       }
     }
   }
@@ -102,7 +121,8 @@ class VizparamSuite extends FunSuite with MustMatchers {
         case 4 => values must be(Seq("3"))
         case 5 => values must be(Seq("STOCHASTIC_GRADIENT_DESCENT"))
         case 6 => values must be(Seq("50"))
-        case 7 => values must be(Seq("1"))
+        case 7 => values must be(Seq("None"))
+        case 8 => values must be(Seq("1"))
       }
     }
   }
@@ -121,7 +141,8 @@ class VizparamSuite extends FunSuite with MustMatchers {
         case 4 => values must be(Seq("3"))
         case 5 => values must be(Seq("STOCHASTIC_GRADIENT_DESCENT"))
         case 6 => values must be(Seq("50"))
-        case 7 => values must be(Seq("1"))
+        case 7 => values must be(Seq("None"))
+        case 8 => values must be(Seq("1"))
       }
     }
   }
