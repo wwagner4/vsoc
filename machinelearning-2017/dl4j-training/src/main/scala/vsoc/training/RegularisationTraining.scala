@@ -6,31 +6,29 @@ import scala.util.Random
 
 object RegularisationTraining extends App {
 
-  val l1s = Seq(1.0E-2, 1.0E-3, 1.0E-4, 1.0E-5, 1.0E-6, 0.0)
-  val l2s = Seq(1.0E-2, 1.0E-3, 1.0E-4, 1.0E-5, 1.0E-6, 0.0)
+  val bias = Seq(1.0E-2, 1.0E-3, 1.0E-4, 1.0E-5, 1.0E-6, 0.0)
+  val nrOfHiddenNodes = Seq(50, 100, 200)
 
   val _seed = Random.nextLong()
 
   Training().run(
     MetaParamRun(
-      description = Some("Regularisation l1 l2"),
+      description = Some("Bias Regularisation"),
       clazz = RegularisationTraining.getClass.toString,
       imgWidth = 1500,
-      imgHeight = 2000,
-      columns = 2,
-      series = for (l1 <- l1s) yield {
+      imgHeight = 1200,
+      columns = 3,
+      series = for (_bias <- bias) yield {
         MetaParamSeries(
-          description = "regularisation l1: " + Formatter.formatNumber("%.2E", l1),
-          descriptionX = "regularisation l2",
+          description = "regularisation l1: " + Formatter.formatNumber("%.1E", _bias),
+          descriptionX = "hidden layers",
           yRange = (-20, 20),
-          metaParams = for (l2 <- l2s) yield {
+          metaParams = for (hl <- nrOfHiddenNodes) yield {
             MetaParam(
-              description = s"l1:$l1 - l2:$l2",
+              description = s"hiddenLayers:$hl - biasRegularisation:${_bias}",
               seed = _seed,
-              regularisation = Some(Regularisation(l1, l2)),
-              variableParmDescription = () => "" + Formatter.formatNumber("%.2E", l2),
-              trainingData = Dat.DataDesc(Dat.Data_PLAYERPOS_X, Dat.Id_A, Dat.Size_500000),
-              testData = Dat.DataDesc(Dat.Data_PLAYERPOS_X, Dat.Id_B, Dat.Size_1000)
+              regularisation = Some(Regularisation(0.0, 0.0, _bias, _bias)),
+              variableParmDescription = () => "" + Formatter.formatNumber("%d", hl)
             )
           }
         )

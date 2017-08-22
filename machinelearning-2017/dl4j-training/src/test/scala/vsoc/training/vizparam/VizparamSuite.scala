@@ -90,7 +90,7 @@ class VizparamSuite extends FunSuite with MustMatchers {
   }
 
   test("reduce list with one elem regularisation") {
-    val propsList: Seq[Seq[(String, String)]] = List(toProps(mp.copy(regularisation = Some(Regularisation(0.001, 0.000001)))))
+    val propsList: Seq[Seq[(String, String)]] = List(toProps(mp.copy(regularisation = Some(Regularisation(0.001, 0.000001, 0.001, 0.01)))))
     val collected = reduce(propsList)
     for (((_, values), i) <- collected.zipWithIndex) {
       i match {
@@ -101,7 +101,7 @@ class VizparamSuite extends FunSuite with MustMatchers {
         case 4 => values must be(Seq("3"))
         case 5 => values must be(Seq("STOCHASTIC_GRADIENT_DESCENT"))
         case 6 => values must be(Seq("50"))
-        case 7 => values must be(Seq("Some(Regularisation(0.001,1.0E-6))"))
+        case 7 => values must be(Seq("Some(Regularisation(0.001,1.0E-6,0.001,0.01))"))
         case 8 => values must be(Seq("1"))
       }
     }

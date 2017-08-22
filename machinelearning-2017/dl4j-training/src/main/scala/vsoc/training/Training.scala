@@ -25,7 +25,7 @@ import vsoc.common.Dat
 import vsoc.common.UtilIO.{dirSub, dirWork}
 import vsoc.training.vizparam.Vizparam
 
-case class Regularisation(l1: Double, l2: Double)
+case class Regularisation(l1: Double, l2: Double, l1Bias: Double, l2Bias: Double)
 
 case class MetaParamRun(
                          description: Option[String] = None,
@@ -185,7 +185,7 @@ class Training(log: Logger, _dirOut: File) {
     */
   private def nnConfiguration(mparam: MetaParam): MultiLayerConfiguration = {
 
-    val nullReg = Regularisation(0.0, 0.0)
+    val nullReg = Regularisation(0.0, 0.0, 0.0, 0.0)
 
     new NeuralNetConfiguration.Builder()
       .seed(mparam.seed)
@@ -197,6 +197,8 @@ class Training(log: Logger, _dirOut: File) {
       .regularization(mparam.regularisation.isDefined)
       .l1(mparam.regularisation.getOrElse(nullReg).l1)
       .l2(mparam.regularisation.getOrElse(nullReg).l2)
+      .l1Bias(mparam.regularisation.getOrElse(nullReg).l1Bias)
+      .l2Bias(mparam.regularisation.getOrElse(nullReg).l2Bias)
       .momentum(0.9)
       .list
       .layer(0, new DenseLayer.Builder()
