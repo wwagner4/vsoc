@@ -6,7 +6,7 @@ import scala.util.Random
 
 object RegularisationTraining extends App {
 
-  val bias = Seq(1.0E-2, 1.0E-3, 1.0E-4, 1.0E-5, 1.0E-6, 0.0)
+  val bias = Seq(2.0, 1.0, 1.0E-3, 1.0E-5, 0.0)
   val nrOfHiddenNodes = Seq(50, 100, 200)
 
   val _seed = Random.nextLong()
@@ -20,15 +20,16 @@ object RegularisationTraining extends App {
       columns = 3,
       series = for (_bias <- bias) yield {
         MetaParamSeries(
-          description = "regularisation l1: " + Formatter.formatNumber("%.1E", _bias),
+          description = "regularisation bias: " + Formatter.formatNumber("%.1E", _bias),
           descriptionX = "hidden layers",
           yRange = (-20, 20),
-          metaParams = for (hl <- nrOfHiddenNodes) yield {
+          metaParams = for (nr <- nrOfHiddenNodes) yield {
             MetaParam(
-              description = s"hiddenLayers:$hl - biasRegularisation:${_bias}",
+              description = s"hiddenLayers:$nr - biasRegularisation:${_bias}",
               seed = _seed,
               regularisation = Some(Regularisation(0.0, 0.0, _bias, _bias)),
-              variableParmDescription = () => "" + Formatter.formatNumber("%d", hl)
+              numHiddenNodes = nr,
+              variableParmDescription = () => "" + Formatter.formatNumber("%d", nr)
             )
           }
         )
