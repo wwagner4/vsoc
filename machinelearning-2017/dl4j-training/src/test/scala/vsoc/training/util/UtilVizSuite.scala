@@ -1,12 +1,12 @@
-package vsoc.training
+package vsoc.training.util
 
 import org.nd4j.linalg.factory.Nd4j
+import org.scalatest.Matchers._
 import org.scalatest._
-import Matchers._
 
-class UtilTrainingSuite extends FunSuite {
+class UtilVizSuite extends FunSuite {
 
-  import UtilTraining._
+  import vsoc.training.util.UtilViz._
 
   val eps = 0.000001
 

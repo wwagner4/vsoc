@@ -1,10 +1,10 @@
-package vsoc.training
+package vsoc.training.util
 
-import vsoc.common.Viz
 import org.nd4j.linalg.api.ndarray.INDArray
+import vsoc.common.Viz
 import vsoc.common.Viz.X
 
-object UtilTraining {
+object UtilViz {
 
   /**
     * @param data NDArray containing the data

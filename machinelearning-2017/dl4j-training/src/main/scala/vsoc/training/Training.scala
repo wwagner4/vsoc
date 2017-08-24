@@ -25,6 +25,7 @@ import vsoc.common.Dat
 import vsoc.common.UtilIO.{dirSub, dirWork}
 import vsoc.training.vizparam.Vizparam
 import org.deeplearning4j.util.ModelSerializer
+import vsoc.training.util.UtilViz
 
 
 case class Regularisation(l1: Double, l2: Double, l1Bias: Double, l2Bias: Double)
@@ -175,7 +176,7 @@ class Training(log: Logger, _dirOut: File) {
     val diff: INDArray = labels.sub(out)
     val all: INDArray = Nd4j.hstack(labels, diff)
 
-    val _data: Seq[L] = UtilTraining.convertX(all, 1)
+    val _data: Seq[L] = UtilViz.convertX(all, 1)
 
     Viz.DataRow(
       style = Viz.Style_BOXPLOT,

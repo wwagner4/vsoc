@@ -18,8 +18,9 @@ import vsoc.datavec.playerpos.CreateData
 
 object GeneticTryout extends App {
 
-  val delim = ";"
+  import vsoc.training.util.UtilNetwork._
 
+  val delim = ";"
 
   val nnConf = nnConfiguration()
   val nn: MultiLayerNetwork = new MultiLayerNetwork(nnConf)
@@ -31,16 +32,6 @@ object GeneticTryout extends App {
   nn.fit(data)
   println("after fit")
   printParam(nn)
-
-  private def printParam(_nn: MultiLayerNetwork) = {
-    for ((l, i) <- _nn.getLayers.zipWithIndex) {
-      println(s"--- layer $i ---")
-      println(s"l $i W: ${util.Arrays.toString(l.getParam("W").shape())}")
-      println(s"l $i W: ${l.getParam("W")}")
-      println(s"l $i b: ${util.Arrays.toString(l.getParam("b").shape())}")
-      println(s"l $i b: ${l.getParam("b")}")
-    }
-  }
 
   def readPlayerposXDataSet(desc: Dat.DataDesc, batchSizeRelative: Double): DataSetIterator = {
     val infile = CreateData.createDataFile(desc)
