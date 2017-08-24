@@ -24,6 +24,8 @@ import vsoc.datavec.playerpos.CreateData
 import vsoc.common.Dat
 import vsoc.common.UtilIO.{dirSub, dirWork}
 import vsoc.training.vizparam.Vizparam
+import org.deeplearning4j.util.ModelSerializer
+
 
 case class Regularisation(l1: Double, l2: Double, l1Bias: Double, l2Bias: Double)
 
@@ -46,6 +48,7 @@ case class MetaParamSeries(
                           )
 
 case class MetaParam(
+                      id: Option[String] = None,
                       description: String,
                       learningRate: Double = 0.0001,
                       trainingData: Dat.DataDesc = Dat.DataDesc(Dat.Data_PLAYERPOS_X, Dat.Id_A, Dat.Size_500000),
@@ -54,7 +57,7 @@ case class MetaParam(
                       iterations: Int = 200,
                       optAlgo: OptimizationAlgorithm = OptimizationAlgorithm.STOCHASTIC_GRADIENT_DESCENT,
                       regularisation: Option[Regularisation] = None,
-                      numHiddenNodes: Int = 50,
+                      numHiddenNodes: Int = 100,
                       seed: Long = 1L,
                       variableParmDescription: () => String
                     )
@@ -142,11 +145,18 @@ class Training(log: Logger, _dirOut: File) {
       log.info("Start training - " + mparam.description)
     }
     val nn = train(trainingData, nnConf)
+    mparam.id.foreach { id => saveNn(nn, id) }
     test(nn, mparam)
   }
 
+  def saveNn(nn: MultiLayerNetwork, id: String): Unit = {
+    val file = new File(_dirOut, s"nn_$id.ser")
+    ModelSerializer.writeModel(nn, file, true)
+    log.info(s"saved nn to $file")
+  }
+
   private def train(data: DataSetIterator, nnConf: MultiLayerConfiguration): MultiLayerNetwork = {
-    val nn = new MultiLayerNetwork(nnConf)
+    val nn: MultiLayerNetwork = new MultiLayerNetwork(nnConf)
     nn.init()
     nn.setListeners(new ScoreIterationListener(50))
     nn.fit(data)
@@ -217,7 +227,6 @@ class Training(log: Logger, _dirOut: File) {
       .backprop(true)
       .build
   }
-
 
 
 }
