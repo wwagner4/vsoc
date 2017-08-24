@@ -10,4 +10,4 @@ sbt "project dl4j_training" "runMain vsoc.training.RegularisationTraining"
 
 sbt "project dl4j_training" "runMain vsoc.training.NumHiddenNodesTraining"
 
-
+sbt "project dl4j_training" "runMain vsoc/training/ManualBiasTraining"
