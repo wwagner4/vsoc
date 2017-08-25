@@ -3,29 +3,21 @@ package vsoc.training
 import java.io.File
 
 import org.apache.log4j.Level
-import org.datavec.api.records.reader.impl.csv.CSVRecordReader
-import org.datavec.api.split.FileSplit
-import org.deeplearning4j.datasets.datavec.RecordReaderDataSetIterator
 import org.deeplearning4j.nn.api.OptimizationAlgorithm
 import org.deeplearning4j.nn.conf.layers.{DenseLayer, OutputLayer}
 import org.deeplearning4j.nn.conf.{MultiLayerConfiguration, NeuralNetConfiguration, Updater}
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork
 import org.deeplearning4j.nn.weights.WeightInit
 import org.deeplearning4j.optimize.listeners.ScoreIterationListener
+import org.deeplearning4j.util.ModelSerializer
 import org.nd4j.linalg.activations.Activation
-import org.nd4j.linalg.api.ndarray.INDArray
-import org.nd4j.linalg.dataset.DataSet
 import org.nd4j.linalg.dataset.api.iterator.DataSetIterator
-import org.nd4j.linalg.factory.Nd4j
 import org.nd4j.linalg.lossfunctions.LossFunctions
 import org.slf4j.{Logger, LoggerFactory}
-import vsoc.common.{Viz, VizCreator, VizCreatorGnuplot}
-import vsoc.datavec.playerpos.CreateData
-import vsoc.common.Dat
 import vsoc.common.UtilIO.{dirSub, dirWork}
+import vsoc.common.{Dat, Viz, VizCreator, VizCreatorGnuplot}
+import vsoc.training.util.UtilNetwork
 import vsoc.training.vizparam.Vizparam
-import org.deeplearning4j.util.ModelSerializer
-import vsoc.training.util.UtilViz
 
 
 case class Regularisation(l1: Double, l2: Double, l1Bias: Double, l2Bias: Double)
@@ -74,9 +66,7 @@ object Training {
   }
 
   def initLogging(dir: File): Unit = {
-    import org.apache.log4j.FileAppender
-    import org.apache.log4j.Logger
-    import org.apache.log4j.PatternLayout
+    import org.apache.log4j.{FileAppender, Logger, PatternLayout}
 
     val fa = new FileAppender
     fa.setName("FileLogger")
@@ -137,7 +127,7 @@ class Training(log: Logger, _dirOut: File) {
 
   def train(mparam: MetaParam): Viz.DataRow[L] = {
     require(mparam.testData != mparam.trainingData, "Test- and training data must be different")
-    val trainingData = readPlayerposXDataSet(mparam.trainingData, mparam.batchSizeTrainingDataRelative)
+    val trainingData = UtilNetwork.readPlayerposXDataSet(mparam.trainingData, mparam.batchSizeTrainingDataRelative)
     val nnConf: MultiLayerConfiguration = nnConfiguration(mparam)
     if (log.isDebugEnabled()) {
       log.debug("Start training - " + mparam.description)
@@ -164,31 +154,16 @@ class Training(log: Logger, _dirOut: File) {
     nn
   }
 
-  def test(nn: MultiLayerNetwork, metaParam: MetaParam): Viz.DataRow[L] = {
+  private def test(nn: MultiLayerNetwork, metaParam: MetaParam): Viz.DataRow[L] = {
 
-    val testDataSet: DataSet = readPlayerposXDataSet(metaParam.testData, 1.0).next()
+    val testData = metaParam.testData
 
-    val features: INDArray = testDataSet.getFeatures
-    val labels: INDArray = testDataSet.getLabels
-
-    val out: INDArray = nn.output(features)
-
-    val diff: INDArray = labels.sub(out)
-    val all: INDArray = Nd4j.hstack(labels, diff)
-
-    val _data: Seq[L] = UtilViz.convertX(all, 1)
+    val _data: Seq[L] = UtilNetwork.test(nn, testData)
 
     Viz.DataRow(
       style = Viz.Style_BOXPLOT,
       name = Some(metaParam.variableParmDescription()),
       data = _data)
-  }
-
-  def readPlayerposXDataSet(desc: Dat.DataDesc, batchSizeRelative: Double): DataSetIterator = {
-    val infile = CreateData.createDataFile(desc)
-    val recordReader = new CSVRecordReader(0, delim)
-    recordReader.initialize(new FileSplit(infile))
-    new RecordReaderDataSetIterator(recordReader, (desc.size.size * batchSizeRelative).toInt, 42, 42, true)
   }
 
   /**
