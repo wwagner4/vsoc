@@ -2,10 +2,16 @@ package vsoc.training.util
 
 import java.util
 
+import org.datavec.api.records.reader.impl.csv.CSVRecordReader
+import org.datavec.api.split.FileSplit
+import org.deeplearning4j.datasets.datavec.RecordReaderDataSetIterator
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork
 import org.nd4j.linalg.api.ndarray.INDArray
-import org.nd4j.linalg.cpu.nativecpu.NDArray
+import org.nd4j.linalg.dataset.DataSet
+import org.nd4j.linalg.dataset.api.iterator.DataSetIterator
 import org.nd4j.linalg.factory.Nd4j
+import vsoc.common.{Dat, Viz}
+import vsoc.datavec.playerpos.CreateData
 
 case class NetworkShape(layers: Seq[NetworkLayerShape])
 
@@ -27,6 +33,8 @@ case object Param_b extends Param {
 
 
 object UtilNetwork {
+
+  val delim = ";"
 
   def shape(nn: MultiLayerNetwork): NetworkShape = ???
 
@@ -83,9 +91,49 @@ object UtilNetwork {
     nn.init()
   }
 
+  def setNetworkParam(value: INDArray, nn: MultiLayerNetwork, layerIndex: Int, _param: Param): Unit = {
+    require(value.length > 0, "Size of data muts be greater 0")
+    require(nn.getnLayers() > layerIndex, "Layer index must be smaller than number of layers")
+    val layer = nn.getLayer(layerIndex)
+    val paramShape = shape(layer.getParam(_param.code))
+    require(paramShape == shape(value), s"Shape of parameter must be $paramShape")
+    layer.setParam(_param.code, value)
+    nn.init()
+  }
+
+  def getNetworkParam(nn: MultiLayerNetwork, layerIndex: Int, _param: Param): INDArray = {
+    require(nn.getnLayers() > layerIndex, "Layer index must be smaller than number of layers")
+    val layer = nn.getLayer(layerIndex)
+    layer.getParam(_param.code)
+  }
+
   def allEqual[U](seq: Iterable[U]): Boolean = {
     if (seq.isEmpty) true
     else seq.tail.foldLeft(true)((a: Boolean, b: U) => a && b == seq.head)
   }
+
+  def test(nn: MultiLayerNetwork, testData: Dat.DataDesc) = {
+    val testDataSet: DataSet = readPlayerposXDataSet(testData, 1.0).next()
+
+    val features: INDArray = testDataSet.getFeatures
+    val labels: INDArray = testDataSet.getLabels
+
+    val out: INDArray = nn.output(features)
+
+    val diff: INDArray = labels.sub(out)
+    val all: INDArray = Nd4j.hstack(labels, diff)
+
+    val _data: Seq[Viz.X] = UtilViz.convertX(all, 1)
+    _data
+  }
+
+  def readPlayerposXDataSet(desc: Dat.DataDesc, batchSizeRelative: Double): DataSetIterator = {
+    val infile = CreateData.createDataFile(desc)
+    val recordReader = new CSVRecordReader(0, delim)
+    recordReader.initialize(new FileSplit(infile))
+    new RecordReaderDataSetIterator(recordReader, (desc.size.size * batchSizeRelative).toInt, 42, 42, true)
+  }
+
+
 
 }
