@@ -43,7 +43,8 @@ lazy val dl4j_training = (project in file("dl4j-training"))
     commonSettings,
     name := "dl4j-training",
     libraryDependencies += "org.deeplearning4j" % "deeplearning4j-core" % dl4jVersion,
-    libraryDependencies += "org.nd4j" % "nd4j-native-platform" % dl4jVersion)
+    libraryDependencies += "org.nd4j" % "nd4j-native-platform" % dl4jVersion,
+    libraryDependencies += "org.planet42" %% "laika-core" % "0.7.0")
   .dependsOn(create_data)
 
 // scalacOptions += "-deprecation",

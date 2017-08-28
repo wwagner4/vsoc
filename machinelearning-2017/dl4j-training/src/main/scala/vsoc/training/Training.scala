@@ -32,6 +32,7 @@ case class Regularisation(l1: Double, l2: Double, l1Bias: Double, l2Bias: Double
 
 case class MetaParamRun(
                          description: Option[String] = None,
+                         descriptionMd: Option[String] = None,
                          clazz: String,
                          imgWidth: Int,
                          imgHeight: Int,
@@ -106,7 +107,9 @@ class Training(log: Logger, _dirOut: File) {
   def run(run: MetaParamRun): Unit = {
 
     Vizparam.fileHtml(run, _dirOut, "params.html")
-
+    if (run.descriptionMd.isDefined) {
+      descriptionHtml(run.descriptionMd.get, _dirOut)
+    }
     val dias = run.series.map { s => trainSerie(s) }
 
     val dia = Viz.MultiDiagram[L](id = "playerpos_x",
@@ -122,6 +125,8 @@ class Training(log: Logger, _dirOut: File) {
     Viz.createDiagram(dia)
     log.info(s"output in ${_dirOut}")
   }
+
+  def descriptionHtml(descMd: String, dirOut: File): Unit = ???
 
   def trainSerie(serie: MetaParamSeries): Viz.Diagram[L] = {
     val drs: Seq[Viz.DataRow[L]] = serie.metaParams.map(mparam => train(mparam))
