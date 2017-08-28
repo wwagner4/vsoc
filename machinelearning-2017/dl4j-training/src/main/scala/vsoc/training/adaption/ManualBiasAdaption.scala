@@ -87,7 +87,7 @@ object ManualBiasAdaption extends App {
     }
   )
 
-  Viz.createDiagram(mdia)(vsoc.common.VizCreatorGnuplot(dirWork, dirWork, true))
+  Viz.createDiagram(mdia)(vsoc.common.VizCreatorGnuplot(dirWork, dirWork))
 
   def trim(id: String) = id.replaceAll("_", "-")
 

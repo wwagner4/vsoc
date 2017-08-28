@@ -85,7 +85,7 @@ object Vizparam {
     }
 
     def createEmpty(mp: Seq[(String, String)]): Seq[(String, Seq[String])] = {
-      mp.map { case (k, v) => (k, Seq.empty[String]) }
+      mp.map { case (k, _) => (k, Seq.empty[String]) }
     }
 
     def merge(multiMp: Seq[(String, Seq[String])], mp: Seq[(String, String)]): Seq[(String, scala.Seq[String])] = {

@@ -36,9 +36,7 @@ object UtilNetwork {
 
   val delim = ";"
 
-  def shape(nn: MultiLayerNetwork): NetworkShape = ???
-
-  def printParam(nn: MultiLayerNetwork) = {
+  def printParam(nn: MultiLayerNetwork): Unit = {
     for ((l, i) <- nn.getLayers.zipWithIndex) {
       println(s"--- layer $i ---")
       println(s"l $i W: ${util.Arrays.toString(l.getParam("W").shape())}")
@@ -109,10 +107,10 @@ object UtilNetwork {
 
   def allEqual[U](seq: Iterable[U]): Boolean = {
     if (seq.isEmpty) true
-    else seq.tail.foldLeft(true)((a: Boolean, b: U) => a && b == seq.head)
+    else seq.tail.forall(_ == seq.head)
   }
 
-  def test(nn: MultiLayerNetwork, testData: Dat.DataDesc) = {
+  def test(nn: MultiLayerNetwork, testData: Dat.DataDesc): Seq[Viz.X] = {
     val testDataSet: DataSet = readPlayerposXDataSet(testData, 1.0).next()
 
     val features: INDArray = testDataSet.getFeatures
@@ -123,8 +121,7 @@ object UtilNetwork {
     val diff: INDArray = labels.sub(out)
     val all: INDArray = Nd4j.hstack(labels, diff)
 
-    val _data: Seq[Viz.X] = UtilViz.convertX(all, 1)
-    _data
+    UtilViz.convertX(all, 1)
   }
 
   def readPlayerposXDataSet(desc: Dat.DataDesc, batchSizeRelative: Double): DataSetIterator = {

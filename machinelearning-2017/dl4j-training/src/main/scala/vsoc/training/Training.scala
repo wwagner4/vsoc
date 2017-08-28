@@ -2,6 +2,10 @@ package vsoc.training
 
 import java.io.File
 
+import laika.api.Transform
+import laika.io.DocumentType.Markup
+import laika.parse.markdown.Markdown
+import laika.render.HTML
 import org.apache.log4j.Level
 import org.deeplearning4j.nn.api.OptimizationAlgorithm
 import org.deeplearning4j.nn.conf.layers.{DenseLayer, OutputLayer}
@@ -18,6 +22,8 @@ import vsoc.common.UtilIO.{dirSub, dirWork}
 import vsoc.common.{Dat, Viz, VizCreator, VizCreatorGnuplot}
 import vsoc.training.util.UtilNetwork
 import vsoc.training.vizparam.Vizparam
+
+import scala.io.Codec
 
 
 case class Regularisation(l1: Double, l2: Double, l1Bias: Double, l2Bias: Double)
@@ -116,7 +122,16 @@ class Training(log: Logger, _dirOut: File) {
     log.info(s"output in ${_dirOut}")
   }
 
-  def descriptionHtml(descMd: String, dirOut: File): Unit = ???
+  def descriptionHtml(descMd: String, dirOut: File): Unit = {
+    implicit val codec:Codec = Codec.UTF8
+    val outFile = new File(dirOut, "description.html")
+    Transform
+      .from(Markdown)
+      .to(HTML)
+      .fromString(descMd)
+      .toFile(outFile)
+    log.info("Wrote description to " + outFile)
+  }
 
   def trainSerie(serie: MetaParamSeries): Viz.Diagram[L] = {
     val drs: Seq[Viz.DataRow[L]] = serie.metaParams.map(mparam => train(mparam))
