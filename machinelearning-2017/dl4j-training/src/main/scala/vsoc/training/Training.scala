@@ -3,7 +3,6 @@ package vsoc.training
 import java.io.File
 
 import laika.api.Transform
-import laika.io.DocumentType.Markup
 import laika.parse.markdown.Markdown
 import laika.render.HTML
 import org.apache.log4j.Level

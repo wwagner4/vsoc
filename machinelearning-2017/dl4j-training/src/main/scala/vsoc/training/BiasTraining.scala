@@ -6,7 +6,7 @@ import scala.util.Random
 
 object BiasTraining extends App {
 
-  val ids = Seq(Dat.Id_A, Dat.Id_B, Dat.Id_E)
+  val ids = Seq(Dat.Id_A, Dat.Id_B, Dat.Id_C, Dat.Id_D, Dat.Id_E)
   val numHiddenNodes = Seq(100, 300, 500)
   val _seed = Random.nextLong()
 
@@ -25,7 +25,8 @@ object BiasTraining extends App {
       series = for (_num <- numHiddenNodes) yield
         MetaParamSeries(
           description = "hidden nodes " + _num,
-          descriptionX = "id",
+          descriptionX = "testdataset",
+          yRange = (10, 10),
           metaParams = for (id <- ids) yield {
             MetaParam(
               id = Some(id + "_" + _num),
