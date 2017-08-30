@@ -15,7 +15,7 @@ object BiasTraining extends App {
       description = Some("Bias"),
       descriptionMd = Some(
         """
-          |Testset to show that the learned bias is independend from the
+          |Testset to show that the (incorrect) learned bias is independend from the
           |testdata.
         """.stripMargin),
       clazz = BatchSizeTraining.getClass.toString,
@@ -26,7 +26,7 @@ object BiasTraining extends App {
         MetaParamSeries(
           description = "hidden nodes " + _num,
           descriptionX = "testdataset",
-          yRange = (10, 10),
+          yRange = (-5, 5),
           metaParams = for (id <- ids) yield {
             MetaParam(
               id = Some(id + "_" + _num),
