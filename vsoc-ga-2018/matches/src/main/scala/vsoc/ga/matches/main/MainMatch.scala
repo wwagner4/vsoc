@@ -7,8 +7,10 @@ object MainMatch extends App {
   val teamA = Teams.createSparringTeamA
   val teamB = Teams.createSparringTeamA
 
-  val result = Matches.createMatch(teamA, teamB).play
+  val m = Matches.createMatch(teamA, teamB)
+  for (_ <- 1 to 2000) m.takeStep()
+  val result = m.state
 
-  println(s"Finished match $teamA and $teamB. $result")
+  println(s"Finished match $teamA against $teamB. $result")
 
 }

@@ -1,14 +1,11 @@
 package vsoc.behaviour;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import atan.model.Flag;
 import atan.model.Line;
 import atan.model.PlayMode;
 import atan.model.RefereeMessage;
+
+import java.util.*;
 
 /**
  * Transforms the input to the controllers to sensors that can be 
@@ -62,8 +59,8 @@ public class Sensors {
         super();
     }
 
-    public DistDirVision getBall() {
-        return this.ball;
+    public Optional<DistDirVision> getBall() {
+        return Optional.ofNullable(this.ball);
     }
 
     public void setBall(DistDirVision ball) {

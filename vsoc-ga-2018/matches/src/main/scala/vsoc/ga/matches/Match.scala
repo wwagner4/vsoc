@@ -1,7 +1,13 @@
 package vsoc.ga.matches
 
+import vsoc.server.gui.SimulationChangeListener
+
 trait Match {
 
-  def play: MatchResult
+  def takeStep(): Unit
+
+  def state: MatchResult
+
+  def addSimListener(listener: SimulationChangeListener)
 
 }
