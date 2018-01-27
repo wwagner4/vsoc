@@ -10,4 +10,8 @@ trait Match {
 
   def addSimListener(listener: SimulationChangeListener)
 
+  def teamWestName: String
+
+  def teamEastName: String
+
 }

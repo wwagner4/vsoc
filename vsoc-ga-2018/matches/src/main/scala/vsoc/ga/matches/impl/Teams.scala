@@ -7,42 +7,46 @@ import vsoc.ga.matches.impl.Behaviours._
 
 object Teams {
 
-  def createSparringTeamA: Team = new AbstractTeam {
+  def createTogglers: Team = new AbstractTeam {
 
-    val controllers = Seq(
-      createController(kickBall(towardsTheBall(randomWalkA(remainOnField)))),
-      createController(kickBall(towardsTheBall(randomWalkA(remainOnField)))),
-      createController(kickBall(randomWalkA(remainOnField))),
+    override val controllers = Seq(
+      createController(kickBall(towardsTheBall(randomToggle(remainOnField)))),
+      createController(kickBall(towardsTheBall(randomToggle(remainOnField)))),
+      createController(kickBall(randomToggle(remainOnField))),
     )
 
-    override def toString: String = "SparringTeamA"
+    override def name: String = "Togglers"
+
+    override def toString: String = name
 
   }
 
-  def createSparringTeamB: Team = new AbstractTeam {
+  def createRandomHelix: Team = new AbstractTeam {
 
-    val controllers = Seq(
-      createController(kickBall(randomWalkB(remainOnField))),
-      createController(kickBall(towardsTheBall(randomWalkB(remainOnField)))),
-      createController(kickBall(towardsTheBall(randomWalkB(remainOnField)))),
+    override val controllers = Seq(
+      createController(kickBall(randomHelix(remainOnField))),
+      createController(kickBall(towardsTheBall(randomHelix(remainOnField)))),
+      createController(kickBall(towardsTheBall(randomHelix(remainOnField)))),
     )
 
-    override def toString: String = "SparringTeamB"
+    override def name: String = "Random Helix"
+
+    override def toString: String = name
 
   }
 
-}
+  abstract class AbstractTeam extends Team {
 
-abstract class AbstractTeam extends Team {
+    def controllers: Seq[Controller]
 
-  def controllers: Seq[Controller]
+    override def playersCount: Int = controllers.size
 
-  override def playersCount: Int = controllers.size
+    override def controller(i: Int): Controller = controllers(i)
 
-  override def controller(i: Int): Controller = controllers(i)
+    protected def createController(behav: Behaviour): BehaviourController = {
+      new BehaviourController(behav)
+    }
 
-  protected def createController(behav: Behaviour): BehaviourController = {
-    new BehaviourController(behav)
   }
-
 }
+

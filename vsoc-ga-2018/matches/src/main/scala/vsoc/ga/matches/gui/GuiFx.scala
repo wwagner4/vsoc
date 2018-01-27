@@ -1,6 +1,6 @@
 package vsoc.ga.matches.gui
 
-import javafx.application.Application
+import javafx.application.Platform
 import javafx.embed.swing.SwingNode
 import javafx.scene.Scene
 import javafx.scene.control.Label
@@ -10,60 +10,52 @@ import javafx.scene.layout._
 import javafx.scene.paint.Color
 import javafx.stage.Stage
 
-import vsoc.ga.matches.impl.{Matches, Teams}
-import vsoc.ga.matches.{Match, Team}
-import vsoc.server.gui.FieldPanel
+import vsoc.ga.matches.Match
+import vsoc.ga.matches.impl.MatchResults
+import vsoc.server.gui.{FieldPanel, Paintable, SimulationChangeListener}
 
 import scala.concurrent.Future
 
-class GuiFxSingleMatch extends Application {
+class GuiFx(val stage: Stage, val _match: Match) extends SimulationChangeListener {
 
   import scala.concurrent.ExecutionContext.Implicits.global
 
-  private val teamA: Team = Teams.createSparringTeamA
-  private val teamB: Team = Teams.createSparringTeamB
-  private val _match: Match = Matches.createMatch(teamA, teamB)
+  var running = false
+  var delay = 10
 
-  private var running = false
-  private var delay = 10
-
-  private val txtBgColor = "#a0aaaa" // Equal to field background
+  val txtBgColor = "#a0aaaa" // Equal to field background
 
   val txt = new Label()
 
-  override def start(stage: Stage): Unit = {
+  stage.setTitle("SingleMatch")
 
-    stage.setTitle("SingleMatch")
+  stage.getIcons.add(new Image("/logo.png"))
 
-    stage.getIcons.add(new Image("/logo.png"))
+  val root = new BorderPane()
+  val scene = new Scene(root, 900, 600)
+  stage.setScene(scene)
 
-    val root = new BorderPane()
-    val scene = new Scene(root, 800, 600)
-    stage.setScene(scene)
+  scene.setOnKeyPressed(keyPressed)
 
-    scene.setOnKeyPressed(keyPressed)
+  val fieldPanel = new FieldPanel()
+  _match.addSimListener(fieldPanel)
+  _match.addSimListener(this)
+  val swingNode = new SwingNode()
+  swingNode.setContent(fieldPanel)
 
-    val fieldPanel = new FieldPanel()
-    _match.addSimListener(fieldPanel)
-    val swingNode = new SwingNode()
-    swingNode.setContent(fieldPanel)
+  val vbox = new VBox()
+  vbox.setStyle(s"-fx-background-color: $txtBgColor;")
 
-    val vbox = new VBox()
-    vbox.setStyle(s"-fx-background-color: $txtBgColor;")
+  txt.setStyle(s"-fx-background-color: $txtBgColor;")
+  val bw = new BorderWidths(5, 5, 5, 5, false, false, false, false)
+  txt.setBorder(new Border(new BorderStroke(Color.valueOf(txtBgColor),
+    BorderStrokeStyle.SOLID, CornerRadii.EMPTY, bw)))
+  updateInfoText()
 
-    txt.setStyle(s"-fx-background-color: $txtBgColor;")
-    val bw = new BorderWidths(5, 5, 5, 5, false, false, false, false)
-    txt.setBorder(new Border(new BorderStroke(Color.valueOf(txtBgColor),
-      BorderStrokeStyle.SOLID, CornerRadii.EMPTY, bw)))
-    updateInfoText()
+  vbox.getChildren.add(txt)
 
-    vbox.getChildren.add(txt)
-
-    root.setCenter(swingNode)
-    root.setLeft(vbox)
-
-    stage.show()
-  }
+  root.setCenter(swingNode)
+  root.setLeft(vbox)
 
   def startStop(): Unit = {
     if (running) {
@@ -83,7 +75,6 @@ class GuiFxSingleMatch extends Application {
 
   def keyPressed(e: KeyEvent): Unit = {
     e.getCode match {
-      case KeyCode.I => updateInfoText()
       case KeyCode.SPACE =>
         startStop()
         updateInfoText()
@@ -117,18 +108,32 @@ class GuiFxSingleMatch extends Application {
   }
 
   def updateInfoText(): Unit = {
+
+    val stateStr = MatchResults.formatDefault(_match.state)
+
     txt.setText(
-      s""" space - start/stop
+      s"""INFO
+         |Team '${_match.teamWestName}'
+         | yellow west (w) ->
+         |
+         |Team '${_match.teamEastName}'
+         | red east (e) <-
+         |
+         |COMMANDS
+         | space - start/stop
          | m - speed up
          | n - slow down
-         | i - info
-         |- - - - - - - - - - - -
+         |
+         |STATUS
          |running : $running
          |delay : ${delay}ms
          |
-         |match:
-         |${_match.state}
+         |$stateStr
       """.stripMargin)
+  }
+
+  override def simulationChangePerformed(s: Paintable): Unit = {
+    Platform.runLater(() => updateInfoText())
   }
 
 }

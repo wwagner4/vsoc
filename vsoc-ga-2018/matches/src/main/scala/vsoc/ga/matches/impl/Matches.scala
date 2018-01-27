@@ -1,6 +1,6 @@
 package vsoc.ga.matches.impl
 
-import vsoc.ga.matches.{Match, MatchResult, Team}
+import vsoc.ga.matches._
 import vsoc.server.ServerUtil
 import vsoc.server.gui.{FieldPanel, SimulationChangeListener}
 import vsoc.server.initial.InitialPlacementLineup
@@ -11,7 +11,7 @@ object Matches {
 
   private val su = ServerUtil.current()
 
-  def createMatch(east: Team, west: Team): Match = {
+  def of(east: Team, west: Team): Match = {
 
     val placementEast = new InitialPlacementLineup(east.playersCount)
     val placementWest = new InitialPlacementLineup(west.playersCount)
@@ -26,24 +26,29 @@ object Matches {
       p.setController(west.controller(i))
     }
 
+    var steps = 0
 
     new Match {
       override def state: MatchResult = {
-        new MatchResult {
-          override def toString: String = "Result undefined"
-        }
+        MatchResults.of(steps, server.getPlayersEast.asScala, server.getPlayersWest.asScala)
       }
 
       override def takeStep(): Unit = {
-          server.takeStep()
+        server.takeStep()
+        steps += 1
       }
 
       override def addSimListener(listener: SimulationChangeListener): Unit = {
         listener match {
           case p: FieldPanel => p.setSim(server)
+          case _ => // For others do nothing
         }
         server.addListener(listener)
       }
+
+      override def teamWestName: String = west.name
+
+      override def teamEastName: String = east.name
     }
   }
 

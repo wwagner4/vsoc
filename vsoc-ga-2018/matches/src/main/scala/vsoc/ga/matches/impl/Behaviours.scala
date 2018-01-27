@@ -30,7 +30,7 @@ object Behaviours {
     }
   }
 
-  def randomWalkA(child: Behaviour): Behaviour = {
+  def randomToggle(child: Behaviour): Behaviour = {
     new Behaviour {
 
       private val ran = Random
@@ -47,7 +47,7 @@ object Behaviours {
 
       override def apply(sens: Sensors, player: Player): Unit = {
         player.turn(ranTurn)
-        player.dash(80)
+        player.dash(30)
       }
 
       override def getChild: Optional[Behaviour] = Optional.of(child)
@@ -57,7 +57,7 @@ object Behaviours {
 
 
 
-  def randomWalkB(child: Behaviour): Behaviour = {
+  def randomHelix(child: Behaviour): Behaviour = {
     new Behaviour {
 
       private var dir = 0.0
@@ -109,7 +109,7 @@ object Behaviours {
         def kickPower = ran.nextInt(60) + 10
 
         player.kick(kickPower, kickDir)
-        player.dash(10)
+        player.dash(40)
       }
 
       override def getChild: Optional[Behaviour] = Optional.of(child)
@@ -123,12 +123,12 @@ object Behaviours {
 
       private val ran = Random
 
-      override def shouldBeApplied(sens: Sensors): Boolean = sens.getBall.isPresent
+      override def shouldBeApplied(sens: Sensors): Boolean = sens.getBall.isPresent && sens.getBall.get().getDistance < 30
 
       override def apply(sens: Sensors, player: Player): Unit = {
         val dir = sens.getBall.get().getDirection
         player.turn(dir)
-        player.dash(ran.nextInt(50))
+        player.dash(ran.nextInt(30))
       }
 
       override def getChild: Optional[Behaviour] = Optional.of(child)
