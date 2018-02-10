@@ -1,5 +1,22 @@
 package vsoc.ga.genetic
 
+/**
+  * A complete genetic algorithm for arbitrary pheno- and genotype
+  * Phenotype: Any Class that can be somehow tested for fitness
+  * Genotype: Sequence of alleles. Alleles might be any type that allows
+  *           the creation of a phenotype out of this sequence and that
+  *           can be created out of a phenotype.
+  *
+  * For an example see TestGA
+  *
+  * @param tester Tests the fitness of phenotypes
+  * @param selStrat Selects a new population out of a sequence of rated
+  *                 genotypes. Might (should) apply mutation and crossover
+  *                 to the members of the newly generated population.
+  * @param transformer Transforms geno- to phenotype and vice versa.
+  * @tparam A Class of an allele
+  * @tparam P Class of the phenotype
+  */
 class GA[A, P](
                 val tester: PhenoTester[P],
                 val selStrat: SelectionStrategy[A],

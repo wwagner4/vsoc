@@ -67,8 +67,8 @@ public class Sensors {
         this.ball = ball;
     }
 
-    public BodyState getBodyState() {
-        return this.bodyState;
+    public Optional<BodyState> getBodyState() {
+        return Optional.ofNullable(this.bodyState);
     }
 
     public void setBodyState(BodyState bodyState) {
@@ -229,16 +229,16 @@ public class Sensors {
         this.playersOwn = playersOwn;
     }
 
-    public PlayMode getPlayMode() {
-        return this.playMode;
+    public Optional<PlayMode> getPlayMode() {
+        return Optional.ofNullable(this.playMode);
     }
 
     public void setPlayMode(PlayMode playMode) {
         this.playMode = playMode;
     }
 
-    public RefereeMessage getRefereeMessage() {
-        return this.refereeMessage;
+    public Optional<RefereeMessage> getRefereeMessage() {
+        return Optional.ofNullable(this.refereeMessage);
     }
 
     public void setRefereeMessage(RefereeMessage refereeMessage) {
@@ -273,63 +273,63 @@ public class Sensors {
     }
 
     public boolean sawFlagCenter() {
-        return this.flagsCenter != null;
+        return this.flagsCenter != null && !this.flagsCenter.isEmpty();
     }
 
     public boolean sawFlagCornerOther() {
-        return this.flagsCornerOther != null;
+        return this.flagsCornerOther != null && !this.flagsCornerOther.isEmpty();
     }
 
     public boolean sawFlagCornerOwn() {
-        return this.flagsCornerOwn != null;
+        return this.flagsCornerOwn != null && !this.flagsCornerOwn.isEmpty();
     }
 
     public boolean sawFlagGoalOther() {
-        return this.flagsGoalOther != null;
+        return this.flagsGoalOther != null && !this.flagsGoalOther.isEmpty();
     }
 
     public boolean sawFlagGoalOwn() {
-        return this.flagsGoalOwn != null;
+        return this.flagsGoalOwn != null && !this.flagsGoalOwn.isEmpty();
     }
 
     public boolean sawFlagLeft() {
-        return this.flagsLeft != null;
+        return this.flagsLeft != null && !this.flagsLeft.isEmpty();
     }
 
     public boolean sawFlagOther() {
-        return this.flagsOther != null;
+        return this.flagsOther != null && !this.flagsOther.isEmpty();
     }
 
     public boolean sawFlagOwn() {
-        return this.flagsOwn != null;
+        return this.flagsOwn != null && !this.flagsOwn.isEmpty();
     }
 
     public boolean sawFlagPenaltyOther() {
-        return this.flagsPenaltyOther != null;
+        return this.flagsPenaltyOther != null && !this.flagsPenaltyOther.isEmpty();
     }
 
     public boolean sawFlagPenaltyOwn() {
-        return this.flagsPenaltyOwn != null;
+        return this.flagsPenaltyOwn != null && !this.flagsPenaltyOwn.isEmpty();
     }
 
     public boolean sawFlagRight() {
-        return this.flagsRight != null;
+        return this.flagsRight != null && !this.flagsRight.isEmpty();
     }
 
     public boolean sawLines() {
-        return this.lines != null;
+        return this.lines != null && !this.lines.isEmpty();
     }
 
     public boolean isHearedMessage() {
-        return this.messages != null;
+        return this.messages != null && !this.messages.isEmpty();
     }
 
     public boolean sawPlayerOther() {
-        return this.playersOther != null;
+        return this.playersOther != null && !this.playersOther.isEmpty();
     }
 
     public boolean sawPlayerOwn() {
-        return this.playersOwn != null;
+        return this.playersOwn != null && !this.playersOwn.isEmpty();
     }
 
 }
