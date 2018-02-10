@@ -45,48 +45,79 @@ class TestGA extends FunSuite with MustMatchers {
     override def toGeno(pheno: String): Seq[Int] = pheno.toSeq.map(c => charToInt(c))
   }
 
+  case class Score(
+                    minRating: Double,
+                    meanRating: Double,
+                    maxRating: Double,
+                  )
+
   case class GAResultImpl(
-                           minRating: Double = 0.0,
-                           meanRating: Double = 0.0,
-                           maxRating: Double = 0.0,
+                           score: Option[Score],
                            newPopulation: Seq[Seq[Int]]
-                         ) extends GAResult[Int]
+                         ) extends GAResult[Int, Score]
 
   private def popToStr(pop: Seq[Seq[Int]]) = pop.map(p => p.map(x => intToChar(x)).mkString("")).mkString("  ")
 
-  private def popsToStdout(popStream: Stream[GAResult[Int]]): Unit =
+  private def popsToStdout(popStream: Stream[GAResult[Int, Score]]): Unit =
     for ((pop, n) <- popStream.take(500).zipWithIndex) {
       val popStr = popToStr(pop.newPopulation)
-      println(f"$n%4d ${pop.minRating}%7.1f ${pop.meanRating}%7.1f ${pop.maxRating}%7.1f   $popStr")
+      println(f"$n%4d ${pop.score.get.minRating}%7.1f ${pop.score.get.meanRating}%7.1f ${pop.score.get.maxRating}%7.1f   $popStr")
     }
 
   def ranAllele(ran: Random): Int = _alleles(ran.nextInt(_alleles.size))
 
+  class GaScore[A, P](
+                                tester: PhenoTester[P],
+                                selStrat: SelectionStrategy[A],
+                                transformer: Transformer[A, P]
+                              )
+    extends GA[A, P, Score](
+      tester,
+      selStrat,
+      transformer,
+      classOf[Score]
+    ) {
+
+    /**
+      * Score independent from phenotype.
+      * This implementation could be used for all GAs
+      */
+    override def createScore(testedPhenos: Seq[(Double, P)]): Option[Score] = {
+      val ratings = testedPhenos.map(t => t._1)
+      val (max, mean, min) = UtilGa.minMeanMax(ratings)
+      Some(Score(max, mean, min))
+    }
+  }
+
   test("GA mutationOnly") {
 
     val r1 = new Random(987987L)
-    val gat = new GA(new PhenoTesterT(), SelectionStrategies.mutationOnly(0.005, ranAllele, r1), new TransformerT)
+    val gat = new GaScore(new PhenoTesterT(), SelectionStrategies.mutationOnly(0.005, ranAllele, r1), new TransformerT)
+
     def randomGenome: Seq[Int] = (1 to 10).map(_ => ranAllele(r1))
-    val start: GAResult[Int] = GAResultImpl(newPopulation = for (_ <- 1 to 10) yield randomGenome)
+
+    val start: GAResult[Int, Score] = GAResultImpl(newPopulation = for (_ <- 1 to 10) yield randomGenome, score = None)
 
     val popStream = Stream.iterate(start)(r => gat.nextPopulation(r.newPopulation))
 
     val r500 = popStream(500)
-    r500.meanRating must be > 9.5
+    r500.score.get.meanRating must be > 9.5
 
   }
 
   test("GA crossover") {
 
     val ran = new Random(987987L)
-    val gaTest = new GA(new PhenoTesterT(), SelectionStrategies.crossover(0.005, ranAllele, ran), new TransformerT)
+    val gaTest = new GaScore(new PhenoTesterT(), SelectionStrategies.crossover(0.005, ranAllele, ran), new TransformerT)
+
     def randomGenome: Seq[Int] = (1 to 10).map(_ => ranAllele(ran))
-    val start: GAResult[Int] = GAResultImpl(newPopulation = for (_ <- 1 to 10) yield randomGenome)
+
+    val start: GAResult[Int, Score] = GAResultImpl(newPopulation = for (_ <- 1 to 10) yield randomGenome, score = None)
 
     val popStream = Stream.iterate(start)(r => gaTest.nextPopulation(r.newPopulation))
 
     val r500 = popStream(500)
-    r500.meanRating must be > 9.5
+    r500.score.get.meanRating must be > 9.5
 
   }
 

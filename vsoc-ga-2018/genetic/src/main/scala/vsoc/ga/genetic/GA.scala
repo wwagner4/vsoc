@@ -16,32 +16,28 @@ package vsoc.ga.genetic
   * @param transformer Transforms geno- to phenotype and vice versa.
   * @tparam A Class of an allele
   * @tparam P Class of the phenotype
+  * @tparam S Class of the score. The score might give you insight into the process of creating the
+  *           next generation. It can help to decide if generating more generations makes sense
   */
-class GA[A, P](
+class GA[A, P, S](
                 val tester: PhenoTester[P],
                 val selStrat: SelectionStrategy[A],
-                val transformer: Transformer[A, P]
+                val transformer: Transformer[A, P],
+                val scoreClass: Class[S],
               ) {
 
-  def nextPopulation(pop: Seq[Seq[A]]): GAResult[A] = {
-    def minMeanMax(values: Seq[Double]): (Double, Double, Double) = {
-      val sorted = values.sorted
-      val sum = values.sum
-      (sorted.head, sum / values.size, sorted.last)
-    }
+  def createScore(testedPhenos: Seq[(Double, P)]): Option[S] = None
+
+  def nextPopulation(pop: Seq[Seq[A]]): GAResult[A, S] = {
 
     val popSize = pop.size
     val phenos: Seq[P] = pop.map(transformer.toPheno)
     val testedPhenos: Seq[(Double, P)] = tester.test(phenos)
     val testedGenos: Seq[(Double, Seq[A])] = testedPhenos.map { case (r, g) => (r, transformer.toGeno(g)) }
     val newPop = selStrat.select(popSize, testedGenos)
-    val (min, mean, max) = minMeanMax(testedGenos.map(t => t._1))
-    new GAResult[A] {
-      override def minRating: Double = min
+    new GAResult[A, S] {
 
-      override def meanRating: Double = mean
-
-      override def maxRating: Double = max
+      def score: Option[S] = createScore(testedPhenos)
 
       override def newPopulation: Seq[Seq[A]] = newPop
 
@@ -49,12 +45,9 @@ class GA[A, P](
   }
 }
 
-trait GAResult[A] {
-  def minRating: Double
+trait GAResult[A, S] {
 
-  def meanRating: Double
-
-  def maxRating: Double
+  def score: Option[S]
 
   def newPopulation: Seq[Seq[A]]
 }
