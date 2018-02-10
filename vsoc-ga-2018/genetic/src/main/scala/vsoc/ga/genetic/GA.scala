@@ -9,7 +9,7 @@ package vsoc.ga.genetic
   *
   * For an example see TestGA
   *
-  * @param tester Tests the fitness of phenotypes
+  * @param tester Tests the fitness of phenotypes. Might also create a score
   * @param selStrat Selects a new population out of a sequence of rated
   *                 genotypes. Might (should) apply mutation and crossover
   *                 to the members of the newly generated population.
@@ -20,24 +20,21 @@ package vsoc.ga.genetic
   *           next generation. It can help to decide if generating more generations makes sense
   */
 class GA[A, P, S](
-                val tester: PhenoTester[P],
+                val tester: PhenoTester[P, S],
                 val selStrat: SelectionStrategy[A],
                 val transformer: Transformer[A, P],
-                val scoreClass: Class[S],
               ) {
-
-  def createScore(testedPhenos: Seq[(Double, P)]): Option[S] = None
 
   def nextPopulation(pop: Seq[Seq[A]]): GAResult[A, S] = {
 
     val popSize = pop.size
     val phenos: Seq[P] = pop.map(transformer.toPheno)
-    val testedPhenos: Seq[(Double, P)] = tester.test(phenos)
-    val testedGenos: Seq[(Double, Seq[A])] = testedPhenos.map { case (r, g) => (r, transformer.toGeno(g)) }
+    val testResult = tester.test(phenos)
+    val testedGenos: Seq[(Double, Seq[A])] = testResult.testedPhenos.map { case (r, g) => (r, transformer.toGeno(g)) }
     val newPop = selStrat.select(popSize, testedGenos)
     new GAResult[A, S] {
 
-      def score: Option[S] = createScore(testedPhenos)
+      def score: Option[S] = testResult.score
 
       override def newPopulation: Seq[Seq[A]] = newPop
 
@@ -52,8 +49,13 @@ trait GAResult[A, S] {
   def newPopulation: Seq[Seq[A]]
 }
 
-trait PhenoTester[P] {
-  def test(phenos: Seq[P]): Seq[(Double, P)]
+trait PhenoTesterResult[P, S] {
+  def testedPhenos: Seq[(Double, P)]
+  def score: Option[S]
+}
+
+trait PhenoTester[P, S] {
+  def test(phenos: Seq[P]): PhenoTesterResult[P, S]
 }
 
 trait SelectionStrategy[A] {

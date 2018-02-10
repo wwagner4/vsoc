@@ -26,14 +26,27 @@ class TestGA extends FunSuite with MustMatchers {
   private val rating: Map[Char, Double] = baseData.map(t => (t._1, t._3)).toMap
 
 
-  class PhenoTesterT extends PhenoTester[String] {
-    override def test(phenos: Seq[String]): Seq[(Double, String)] = {
+  class PhenoTesterT extends PhenoTester[String, Score] {
+    override def test(phenos: Seq[String]): PhenoTesterResult[String, Score] = {
       def test(p: String): (Double, String) = {
         val r: Double = p.toSeq.map(c => rating(c)).sum
         (r, p)
       }
 
-      phenos.map(test)
+      def calculateScore(testedPhenos: Seq[(Double, String)]): Score = {
+        val ratings = testedPhenos.map(t => t._1)
+        val (max, mean, min) = UtilGa.minMeanMax(ratings)
+        Score(max, mean, min)
+      }
+
+      val _testedPhenos = phenos.map(test)
+      val _score = calculateScore(_testedPhenos)
+
+      new PhenoTesterResult[String, Score] {
+        override def testedPhenos: Seq[(Double, String)] = _testedPhenos
+
+        override def score: Option[Score] = Some(_score)
+      }
     }
 
   }
@@ -66,33 +79,10 @@ class TestGA extends FunSuite with MustMatchers {
 
   def ranAllele(ran: Random): Int = _alleles(ran.nextInt(_alleles.size))
 
-  class GaScore[A, P](
-                                tester: PhenoTester[P],
-                                selStrat: SelectionStrategy[A],
-                                transformer: Transformer[A, P]
-                              )
-    extends GA[A, P, Score](
-      tester,
-      selStrat,
-      transformer,
-      classOf[Score]
-    ) {
-
-    /**
-      * Score independent from phenotype.
-      * This implementation could be used for all GAs
-      */
-    override def createScore(testedPhenos: Seq[(Double, P)]): Option[Score] = {
-      val ratings = testedPhenos.map(t => t._1)
-      val (max, mean, min) = UtilGa.minMeanMax(ratings)
-      Some(Score(max, mean, min))
-    }
-  }
-
   test("GA mutationOnly") {
 
     val r1 = new Random(987987L)
-    val gat = new GaScore(new PhenoTesterT(), SelectionStrategies.mutationOnly(0.005, ranAllele, r1), new TransformerT)
+    val gat = new GA(new PhenoTesterT(), SelectionStrategies.mutationOnly(0.005, ranAllele, r1), new TransformerT)
 
     def randomGenome: Seq[Int] = (1 to 10).map(_ => ranAllele(r1))
 
@@ -108,7 +98,7 @@ class TestGA extends FunSuite with MustMatchers {
   test("GA crossover") {
 
     val ran = new Random(987987L)
-    val gaTest = new GaScore(new PhenoTesterT(), SelectionStrategies.crossover(0.005, ranAllele, ran), new TransformerT)
+    val gaTest = new GA(new PhenoTesterT(), SelectionStrategies.crossover(0.005, ranAllele, ran), new TransformerT)
 
     def randomGenome: Seq[Int] = (1 to 10).map(_ => ranAllele(ran))
 
