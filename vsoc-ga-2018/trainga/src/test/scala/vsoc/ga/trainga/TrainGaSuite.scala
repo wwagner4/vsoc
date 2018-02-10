@@ -6,7 +6,7 @@ import org.scalatest.{FunSuite, MustMatchers}
 import vsoc.ga.trainga.nn.{NeuralNet, NeuralNetPersist, NeuralNets}
 import vsoc.ga.trainga.reflection.UtilReflection
 
-class CampsSuite extends FunSuite with MustMatchers {
+class TrainGaSuite extends FunSuite with MustMatchers {
 
   test("Wrapper get param") {
     val nn = NeuralNets.test
