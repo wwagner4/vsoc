@@ -4,6 +4,7 @@ lazy val commonSettings = Seq(
   organization := "net.entelijan",
   scalaVersion := "2.12.4",
   version := "0.0.1-SNAPSHOT",
+  fork := true,
   resolvers += "Local Maven Repository" at s"file://$userHome/.m2/repository",
   //resolvers += "Local Maven Repository" at "file:///C:/ta30/nutzb/_m2_repo/",
   libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.2" % "test",
@@ -28,6 +29,13 @@ lazy val matches = (project in file("matches"))
     libraryDependencies += "net.entelijan" % "vsoc-core" % "0.0.1-SNAPSHOT",
   )
 
+lazy val common = (project in file("common"))
+  .settings(
+    name := "common",
+    libraryDependencies += "org.scala-lang" % "scala-reflect" % "2.12.4",
+    commonSettings,
+  )
+
 lazy val genetic = (project in file("genetic"))
   .settings(
     name := "genetic",
@@ -41,7 +49,6 @@ lazy val trainga = (project in file("trainga"))
     libraryDependencies += "org.deeplearning4j" % "deeplearning4j-nn" % "0.9.1",
     libraryDependencies += "org.nd4j" % "nd4j-native-platform" % "0.9.1",
     libraryDependencies += "org.slf4j" % "slf4j-simple" % "1.7.25",
-    libraryDependencies += "org.scala-lang" % "scala-reflect" % "2.12.4",
-  ).dependsOn(matches, genetic)
+  ).dependsOn(matches, genetic, common)
 
 

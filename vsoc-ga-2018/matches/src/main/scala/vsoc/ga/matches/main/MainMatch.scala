@@ -1,12 +1,12 @@
 package vsoc.ga.matches.main
 
-import vsoc.ga.matches.impl._
+import vsoc.ga.matches.{MatchResults, Matches, Teams}
 
 object MainMatch extends App {
 
   (1 to 10).par.foreach { _ =>
-    val teamA = Teams.createTogglers
-    val teamB = Teams.createRandomHelix
+    val teamA = Teams.togglers
+    val teamB = Teams.ranHelix
 
     val m = Matches.of(teamA, teamB)
     for (_ <- 1 to 20000) m.takeStep()

@@ -1,6 +1,5 @@
-package vsoc.ga.matches.impl
+package vsoc.ga.matches
 
-import vsoc.ga.matches._
 import vsoc.server.ServerUtil
 import vsoc.server.gui.{FieldPanel, SimulationChangeListener}
 import vsoc.server.initial.InitialPlacementLineup

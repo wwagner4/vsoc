@@ -1,0 +1,47 @@
+Description of the Team and mapping to NN
+
+Players: 3 / Team
+Retinas resolution: 5
+
+populationSize: 20 playerCount: 3 playerParamSize:44404
+
+Output: 4
+    0: dash power
+    1: kick power
+    2: kick direction
+    3: turn angle
+
+Input: 140
+    Flags:
+     0  -   4 own goal left
+     5  -   9 own goal center
+    10  -  14 own goal right
+    15  -  19 own penalty left
+    20  -  24 own penalty center
+    25  -  29 own penalty right
+    30  -  34 own corner left
+    35  -  39 own corner center
+    40  -  44 own corner right
+    45  -  49 other goal left
+    50  -  54 other goal center
+    55  -  59 other goal right
+    60  -  64 other penalty left
+    65  -  69 other penalty center
+    70  -  74 other penalty right
+    75  -  79 other corner left
+    80  -  84 other corner center
+    85  -  89 other corner right
+    90  -  94 center left
+    95  -  99 center center
+    100 - 104 center right
+
+    Players:
+    105 - 109 own 0
+    110 - 114 own 1
+    115 - 119 own 2
+    120 - 124 other 0
+    125 - 129 other 1
+    130 - 134 other 2
+
+    Ball:
+    135 - 139 ball

@@ -78,4 +78,39 @@ object NeuralNets {
     }
 
   }
+
+  def team01: NeuralNet = new NnWrapperAbstract {
+
+    // id must be the name of the method creating the neural net
+    def id = "team01"
+
+    override val numInputNodes: Int = 140
+
+    override val numHiddenNodes: Int = 150
+
+    override val numOutputNodes: Int = 4
+
+    override protected def nnConfiguration(): MultiLayerConfiguration = {
+      new NeuralNetConfiguration.Builder()
+        .iterations(1)
+        .weightInit(WeightInit.XAVIER)
+        .list
+        .layer(0, new DenseLayer.Builder()
+          .nIn(numInputNodes)
+          .nOut(numHiddenNodes)
+          .activation(Activation.TANH)
+          .build)
+        .layer(1, new DenseLayer.Builder()
+          .nIn(numHiddenNodes)
+          .nOut(numHiddenNodes)
+          .activation(Activation.TANH)
+          .build)
+        .layer(2, new OutputLayer.Builder(LossFunctions.LossFunction.MSE)
+          .activation(Activation.IDENTITY).nIn(numHiddenNodes)
+          .nOut(numOutputNodes)
+          .build)
+        .build
+    }
+  }
+
 }

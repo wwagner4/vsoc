@@ -1,13 +1,22 @@
-package vsoc.ga.matches.impl
+package vsoc.ga.matches
 
 import atan.model.Controller
 import vsoc.behaviour.{Behaviour, BehaviourController}
-import vsoc.ga.matches.Team
-import vsoc.ga.matches.impl.Behaviours._
+import vsoc.ga.matches.Behaviours._
 
 object Teams {
 
-  def createTogglers: Team = new AbstractTeam {
+  def behaviours(behaviours: Seq[Behaviour], _name: String): Team = new AbstractTeam {
+
+    override val controllers: Seq[BehaviourController] = behaviours.map(createController)
+
+    override def name: String = _name
+
+    override def toString: String = name
+
+  }
+
+  def togglers: Team = new AbstractTeam {
 
     override val controllers = Seq(
       createController(kickBall(towardsTheBall(randomToggle(remainOnField)))),
@@ -21,7 +30,7 @@ object Teams {
 
   }
 
-  def createRandomHelix: Team = new AbstractTeam {
+  def ranHelix: Team = new AbstractTeam {
 
     override val controllers = Seq(
       createController(kickBall(randomHelix(remainOnField))),

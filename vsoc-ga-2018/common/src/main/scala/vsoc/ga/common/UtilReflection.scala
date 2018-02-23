@@ -1,4 +1,4 @@
-package vsoc.ga.trainga.reflection
+package vsoc.ga.common
 
 object UtilReflection {
 

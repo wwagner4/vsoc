@@ -4,6 +4,6 @@ import vsoc.behaviour.Sensors
 
 trait Retina {
 
-  def see(sens: Sensors): Array[Double]
+  def see(sens: Sensors, activations: Array[Double])
 
 }

@@ -1,7 +1,6 @@
 package vsoc.ga.matches
 
 import org.scalatest.{FunSuite, MustMatchers}
-import vsoc.ga.matches.impl.MatchResults
 import vsoc.server.{PlayerWrapper, VsocPlayer, VsocPlayerEast}
 
 class ResultSuite extends FunSuite with MustMatchers {

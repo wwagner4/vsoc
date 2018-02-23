@@ -4,12 +4,16 @@ import vsoc.behaviour.{DistDirVision, Sensors}
 import vsoc.ga.trainga.retina.Retina
 
 abstract class AbstractRetina extends Retina {
-
-  def see(sens: Sensors): Array[Double] = {
+  /**
+    * One Retina activates the activations
+    * from activationOffset
+    * to   activationOffset + (resolution - 1)
+    */
+  def see(sens: Sensors, activations: Array[Double]): Unit = {
 
     def fill(array: Array[Double], vision: DistDirVision): Unit = {
       for ((act, i) <- activation(vision)) {
-        array(i) += act
+        array(i + activationOffset) += act
       }
     }
 
@@ -30,22 +34,31 @@ abstract class AbstractRetina extends Retina {
         val dirVal = linpeakMap(i)(vision.getDirection)
         if (dirVal != 0.0) {
           val distVal = 10.0 - vision.getDistance * 0.1
-          val act = dirVal * distVal
+          val act = dirVal * distVal * activationFactor
           Some((act, i))
         }
         else None
       }
     }
 
-    val re = Array.fill(resolution)(0.0)
-    look(sens).foreach(v => fill(re, v))
-    re
+    look(sens).foreach(v => fill(activations, v))
   }
 
   /**
     * Defines the resolution of the retina
     */
   def resolution: Int
+
+  /**
+    * Defines the offset of the activation relevant for that retina in the activations array.
+    */
+  def activationOffset: Int
+
+  /**
+    * Factor for controlling the activation value.
+    * default: 1.0
+    */
+  def activationFactor: Double = 1.0
 
   /**
     * Defines which object is relevant for the retina

@@ -71,6 +71,7 @@ class TestGA extends FunSuite with MustMatchers {
 
   private def popToStr(pop: Seq[Seq[Int]]) = pop.map(p => p.map(x => intToChar(x)).mkString("")).mkString("  ")
 
+  //noinspection ScalaUnusedSymbol
   private def popsToStdout(popStream: Stream[GAResult[Int, Score]]): Unit =
     for ((pop, n) <- popStream.take(500).zipWithIndex) {
       val popStr = popToStr(pop.newPopulation)
@@ -111,5 +112,39 @@ class TestGA extends FunSuite with MustMatchers {
 
   }
 
+
+  test("GeneticOps crossover 10") {
+    val _ran = new Random(987987L)
+
+    val go = new GeneticOps[String] {
+      override def ran: Random = _ran
+    }
+
+    val n = 10
+    val a = Seq.fill(n)("A")
+    val b = Seq.fill(n)("B")
+    val r = go.crossover(a, b)
+
+    val (ra, rb) = r.splitAt(8)
+    ra mustBe Seq.fill(8)("A")
+    rb mustBe Seq.fill(2)("B")
+  }
+
+  test("GeneticOps crossover 9") {
+    val _ran = new Random(232L)
+
+    val go = new GeneticOps[String] {
+      override def ran: Random = _ran
+    }
+
+    val n = 9
+    val a = Seq.fill(n)("A")
+    val b = Seq.fill(n)("B")
+    val r = go.crossover(a, b)
+
+    val (ra, rb) = r.splitAt(1)
+    ra mustBe Seq.fill(1)("A")
+    rb mustBe Seq.fill(8)("B")
+  }
 }
 

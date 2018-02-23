@@ -1,0 +1,2 @@
+sbt ";project trainga;runMain vsoc.ga.trainga.ga.MainTrainGa01"
+sbt ";project trainga;runMain vsoc.ga.trainga.ga.MainTrainGaKicks01"

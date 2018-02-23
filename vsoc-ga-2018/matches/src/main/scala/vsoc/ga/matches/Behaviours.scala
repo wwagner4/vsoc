@@ -1,4 +1,4 @@
-package vsoc.ga.matches.impl
+package vsoc.ga.matches
 
 import java.util.Optional
 

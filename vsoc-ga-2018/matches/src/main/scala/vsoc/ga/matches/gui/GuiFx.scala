@@ -10,8 +10,7 @@ import javafx.scene.layout._
 import javafx.scene.paint.Color
 import javafx.stage.Stage
 
-import vsoc.ga.matches.Match
-import vsoc.ga.matches.impl.MatchResults
+import vsoc.ga.matches.{Match, MatchResults}
 import vsoc.server.gui.{FieldPanel, Paintable, SimulationChangeListener}
 
 import scala.concurrent.Future

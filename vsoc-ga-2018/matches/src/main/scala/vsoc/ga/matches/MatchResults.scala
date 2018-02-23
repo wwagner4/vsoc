@@ -1,6 +1,5 @@
-package vsoc.ga.matches.impl
+package vsoc.ga.matches
 
-import vsoc.ga.matches.{MatchResult, PlayerResult, TeamResult}
 import vsoc.server.VsocPlayer
 
 object MatchResults {

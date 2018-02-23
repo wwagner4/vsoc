@@ -10,14 +10,9 @@ trait GeneticOps[A] {
     require(a.size == b.size, "Sizes of gnomes must be the same")
     val cutPoint = ran.nextInt(a.size)
 
-    def co(al: List[A], bl: List[A], i: Int): List[A] = {
-      if (al.isEmpty) Nil
-      else if (i % 2 == 0 && i < cutPoint) al.head :: co(al.tail, bl.tail, i + 1)
-      else if (i % 2 == 1 && i <= cutPoint) al.head :: co(al.tail, bl.tail, i + 1)
-      else bl.head :: co(al.tail, bl.tail, i + 1)
-    }
-
-    co(a.toList, b.toList, 0)
+    val (a1, _) = a.splitAt(cutPoint)
+    val (_, b1) = b.splitAt(cutPoint)
+    a1 ++ b1
   }
 
   def mutation(a: Seq[A], mutationRate: Double, ranAllele: Random => A): Seq[A] = {
