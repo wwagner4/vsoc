@@ -72,13 +72,13 @@ class TrainGaSuite extends FunSuite with MustMatchers {
     p.save(file)(oos => NeuralNetPersist.save(nn, oos))
 
 
-    val nn1: NeuralNet = p.load(file) {
+    val nn1 = p.load(file) {
       ois =>
         val nn: AnyRef = NeuralNetPersist.load(ois)
         nn.asInstanceOf[NeuralNet]
     }
 
-    nn1.getParam.map(f).mkString(" ") mustBe params.map(f).mkString(" ")
+    nn1.get.getParam.map(f).mkString(" ") mustBe params.map(f).mkString(" ")
   }
 
   def f(d: Double): String = f"$d%2.0f"

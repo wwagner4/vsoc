@@ -31,7 +31,7 @@ class GA[A, P, S](
     val phenos: Seq[P] = pop.map(transformer.toPheno)
     val testResult = tester.test(phenos)
     val testedGenos: Seq[(Double, Seq[A])] = testResult.testedPhenos.map { case (r, g) => (r, transformer.toGeno(g)) }
-    val newPop = selStrategy.select(popSize, testedGenos)
+    val newPop = selStrategy.select(testedGenos)
     new GAResult[A, S] {
 
       def score: Option[S] = testResult.score
@@ -60,7 +60,7 @@ trait PhenoTester[P, S] {
 }
 
 trait SelectionStrategy[A] {
-  def select(popSize: Int, tested: Seq[(Double, Seq[A])]): Seq[Seq[A]]
+  def select(tested: Seq[(Double, Seq[A])]): Seq[Seq[A]]
 }
 
 trait Transformer[A, P] {

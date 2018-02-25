@@ -14,7 +14,7 @@ lazy val root = (project in file("."))
   .settings(
     name := "vsoc-ga-2018-root",
   )
-  .aggregate(matches, genetic, trainga)
+  .aggregate(common, matches, genetic, trainga)
 
 
 lazy val matches = (project in file("matches"))

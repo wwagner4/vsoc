@@ -146,5 +146,118 @@ class TestGA extends FunSuite with MustMatchers {
     ra mustBe Seq.fill(1)("A")
     rb mustBe Seq.fill(8)("B")
   }
+
+  test("selection strategy crossover") {
+
+    val r = Random.javaRandomToRandom(new java.util.Random(293847L))
+
+    def ra = (r: Random) => 0
+
+    val strat = SelectionStrategies.crossover(0.0, ra, r)
+
+    val tested = for (i <- 0 to 19) yield {
+      (i.toDouble, Seq.fill(15)(i))
+    }
+
+    def fmt(i: Int): String = "%3d" format i
+
+    val sel: Seq[Seq[Int]] = strat.select(tested)
+    val dist = sel.map(s => s.toSet)
+
+    dist.size mustBe tested.size
+
+    dist(0).size mustBe 1
+    dist(1).size mustBe 1
+    dist(2).size mustBe 1
+    dist(3).size mustBe 2
+    dist(4).size mustBe 2
+    dist(5).size mustBe 2
+    dist(6).size mustBe 2
+    dist(7).size mustBe 2
+    dist(8).size mustBe 2
+    dist(9).size mustBe 1
+    dist(10).size mustBe 1
+    dist(11).size mustBe 1
+    dist(12).size mustBe 1
+    dist(13).size mustBe 1
+    dist(14).size mustBe 1
+    dist(15).size mustBe 1
+    dist(16).size mustBe 1
+    dist(17).size mustBe 1
+    dist(18).size mustBe 1
+    dist(19).size mustBe 1
+
+    dist(0) must contain(19)
+    dist(1) must contain(18)
+    dist(2) must contain(17)
+
+    dist(3) must contain(19)
+    dist(3) must contain(18)
+    dist(4) must contain(19)
+    dist(4) must contain(17)
+    dist(5) must contain(19)
+    dist(5) must contain(16)
+
+    dist(6) must contain(18)
+    dist(6) must contain(17)
+    dist(7) must contain(18)
+    dist(7) must contain(16)
+
+    dist(8) must contain(17)
+    dist(8) must contain(16)
+
+    dist(9) must contain(16)
+    dist(10) must contain(15)
+    dist(11) must contain(14)
+    dist(12) must contain(13)
+    dist(13) must contain(12)
+    dist(14) must contain(11)
+    dist(15) must contain(10)
+    dist(16) must contain(9)
+    dist(17) must contain(8)
+    dist(18) must contain(7)
+    dist(19) must contain(6)
+  }
+
+  test("selection strategy mutation only") {
+
+    val r = Random.javaRandomToRandom(new java.util.Random(293847L))
+
+    def ra = (r: Random) => 111
+
+    val strat = SelectionStrategies.mutationOnly(0.5, ra, r)
+
+    val tested = for (i <- 0 to 7) yield {
+      (i.toDouble, Seq.fill(15)(i))
+    }
+
+    def fmt(i: Int): String = "%3d" format i
+
+    val sel: Seq[Seq[Int]] = strat.select(tested)
+    val dist = sel.map(s => s.distinct.sorted)
+
+    dist.size mustBe tested.size
+    dist(0) must contain(7)
+    dist(0) must contain(111)
+    dist(1) must contain(6)
+    dist(1) must contain(111)
+    dist(2) must contain(5)
+    dist(2) must contain(111)
+    dist(3) must contain(4)
+    dist(3) must contain(111)
+    dist(4) must contain(7)
+    dist(4) must contain(111)
+    dist(5) must contain(6)
+    dist(5) must contain(111)
+    dist(6) must contain(5)
+    dist(6) must contain(111)
+    dist(7) must contain(4)
+    dist(7) must contain(111)
+
+  }
+
+
+
+
 }
 

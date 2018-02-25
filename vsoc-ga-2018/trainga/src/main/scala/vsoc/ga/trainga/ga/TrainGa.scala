@@ -1,7 +1,19 @@
 package vsoc.ga.trainga.ga
 
-trait TrainGa {
+/**
+  * Trainer for Teams
+  * @tparam S type of score
+  */
+trait TrainGa[S] {
 
-  def run()
+  var iterations: Option[Int] = Option.empty
+
+  var population: Option[Seq[Seq[Double]]] = Option.empty
+
+  var listeners: Seq[TrainGaListener[S]] = Seq.empty[TrainGaListener[S]]
+
+  def id: String
+
+  def run(trainGaId: String, trainGaNr: String): Unit
 
 }

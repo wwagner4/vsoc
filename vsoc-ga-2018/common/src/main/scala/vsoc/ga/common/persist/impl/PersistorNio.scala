@@ -23,16 +23,26 @@ case class PersistorNio(absolute: Path) extends Persistor {
     }
   }
 
-  def load[T](path: Path)(f: ObjectInputStream => T): T = {
+  def load[T](path: Path)(f: ObjectInputStream => T): Option[T] = {
     if (path.isAbsolute)  throw new IllegalArgumentException(s"'$path' must be relative")
     val filePath = absolute.resolve(path)
-    if (!Files.exists(filePath.getParent)) throw new IllegalArgumentException(s"'$filePath' must exist")
-    val is = Files.newInputStream(filePath)
-    try {
-      val ois = new ObjectInputStream(is)
-      f(ois)
-    } finally {
-      is.close()
+    if (!Files.exists(filePath)) None
+    else {
+      val is = Files.newInputStream(filePath)
+      try {
+        val ois = new ObjectInputStream(is)
+        Some(f(ois))
+      } finally {
+        is.close()
+      }
     }
+  }
+
+  override def dir(path: Path): Path = {
+    if (path.isAbsolute)  throw new IllegalArgumentException(s"'$path' must be relative")
+    val re = absolute.resolve(path)
+    if (!Files.exists(re)) Files.createDirectories(re)
+    else if (!Files.isDirectory(re)) throw new IllegalStateException(s"$re must be a directory")
+    re
   }
 }

@@ -8,9 +8,9 @@ import vsoc.ga.trainga.nn.NeuralNet
 
 import scala.util.Random
 
-abstract class TrainGaAbstract extends TrainGa {
+abstract class TrainGaAbstract extends TrainGa[Double] {
 
-  private val  log =  LoggerFactory.getLogger(classOf[TrainGaAbstract])
+  private val log = LoggerFactory.getLogger(classOf[TrainGaAbstract])
 
   protected def createNeuralNet: () => NeuralNet
 
@@ -27,9 +27,9 @@ abstract class TrainGaAbstract extends TrainGa {
   log.info(s"start GA populationSize: $populationSize playerCount: $playerCount playerParamSize:$playerParamSize")
 
   private case class GAR(
-                  score: Option[Double],
-                  newPopulation: Seq[Seq[Double]]
-                ) extends GAResult[Double, Double]
+                          score: Option[Double],
+                          newPopulation: Seq[Seq[Double]]
+                        ) extends GAResult[Double, Double]
 
   def randomAllele(_ran: Random): Double = 2.0 * _ran.nextDouble() - 1.0
 
@@ -52,15 +52,35 @@ abstract class TrainGaAbstract extends TrainGa {
     }
   }
 
-  override def run(): Unit = {
-    val initialPop = createRandomPopGeno
+  def debug(pop: Seq[Seq[Double]]): Unit = {
+    val len = pop(0).size
+    val ids = Random.shuffle((0 until len).toList.take(20))
+    val red = pop.map(s => ids.map(i => "%.2f" format s(i)))
+    println("*** REDUCED: " + red)
+  }
+
+  override def run(trainGaId: String, trainGaNr: String): Unit = {
+
+
+
+    val initialPop: Seq[Seq[Double]] = population.getOrElse(createRandomPopGeno)
     var gar: GAResult[Double, Double] = GAR(None, initialPop)
-    var i = 0
+    var i = iterations.getOrElse(0)
     while (true) {
+      i += 1
+      debug(gar.newPopulation)
       gar = ga.nextPopulation(gar.newPopulation)
       val s = gar.score.map(s => f"$s%.2f").getOrElse("-")
       log.info(f"finished iteration $i. score: $s")
-      i += 1
+      iterations = Some(i)
+      population = Some(gar.newPopulation)
+      val data: Seq[(String, Any)] = Seq(
+        ("trainGaId", trainGaId),
+        ("trainGaNr", trainGaNr),
+        ("iterations", i),
+        ("score", gar.score.getOrElse(0.0))
+      )
+      listeners.foreach(l => l.onIterationFinished(i, gar.score, data))
     }
   }
 }
