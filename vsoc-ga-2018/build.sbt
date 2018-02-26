@@ -14,7 +14,7 @@ lazy val root = (project in file("."))
   .settings(
     name := "vsoc-ga-2018-root",
   )
-  .aggregate(common, matches, genetic, trainga)
+  .aggregate(common, matches, genetic, trainga, analyse)
 
 
 lazy val matches = (project in file("matches"))
@@ -50,5 +50,15 @@ lazy val trainga = (project in file("trainga"))
     libraryDependencies += "org.nd4j" % "nd4j-native-platform" % "0.9.1",
     libraryDependencies += "org.slf4j" % "slf4j-simple" % "1.7.25",
   ).dependsOn(matches, genetic, common)
+
+lazy val analyse = (project in file("analyse"))
+  .settings(
+    name := "analyse",
+    commonSettings,
+    // Checkout https://github.com/wwagner4/viz.git
+    // and call sbt publishLocal in the root directory
+    libraryDependencies += "net.entelijan" %% "viz" % "0.1-SNAPSHOT"
+  ).dependsOn(common)
+
 
 

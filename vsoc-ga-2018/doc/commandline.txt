@@ -1,2 +1,5 @@
-sbt ";project trainga;runMain vsoc.ga.trainga.ga.MainTrainGa01"
-sbt ";project trainga;runMain vsoc.ga.trainga.ga.MainTrainGaKicks01"
+git clone https://github.com/wwagner4/vsoc.git
+vim trainga/src/main/scala/vsoc/ga/trainga/ga/TrainGaMain.scala
+sbt ";project trainga;runMain vsoc.ga.trainga.ga.TrainGaMain"
+
+

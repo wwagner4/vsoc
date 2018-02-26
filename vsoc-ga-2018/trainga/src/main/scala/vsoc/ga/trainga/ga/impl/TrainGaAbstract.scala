@@ -68,7 +68,7 @@ abstract class TrainGaAbstract extends TrainGa[Double] {
     var i = iterations.getOrElse(0)
     while (true) {
       i += 1
-      debug(gar.newPopulation)
+      //debug(gar.newPopulation)
       gar = ga.nextPopulation(gar.newPopulation)
       val s = gar.score.map(s => f"$s%.2f").getOrElse("-")
       log.info(f"finished iteration $i. score: $s")
