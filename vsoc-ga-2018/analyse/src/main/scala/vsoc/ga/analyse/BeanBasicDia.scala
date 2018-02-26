@@ -3,39 +3,74 @@ package vsoc.ga.analyse
 import java.nio.file.Paths
 
 import entelijan.viz.{DefaultDirectories, Viz, VizCreator, VizCreatorGnuplot}
-
-object BeanBasicDia extends App {
-
-  val id = "???" // e.g. trainGaKicks01, trainGa01, ...
-
-  val nr = "???" // e.g. 001, 002, 003, ...
+import org.slf4j.LoggerFactory
 
 
+object BeanBasicDia extends {
 
-  def homeDir = Paths.get(System.getProperty("user.home"))
-  def workDir = Paths.get("work", "work-vsoc-ga-2018")
+  private val log = LoggerFactory.getLogger(BeanBasicDia.getClass)
 
+  private def homeDir = Paths.get(System.getProperty("user.home"))
+  private def workDir = Paths.get("work", "work-vsoc-ga-2018")
   val vizDir = DefaultDirectories(workDir.resolve("viz").toString)
-  implicit val creator: VizCreator[Viz.XY] = VizCreatorGnuplot[Viz.XY](scriptDir= vizDir.scriptDir, imageDir = vizDir.imageDir)
+  implicit val creator: VizCreator[Viz.XY] = VizCreatorGnuplot[Viz.XY](scriptDir = vizDir.scriptDir, imageDir = vizDir.imageDir)
 
-  def prjDir = workDir.resolve(Paths.get(id, nr))
-  def filePath = homeDir.resolve(prjDir.resolve(Paths.get(s"data-basic.csv")))
 
-  val data = BeanBasicReader.read(filePath)
-    .map(b => Viz.XY(b.iterations, b.score))
+  def run(dataGa: DataGa): Unit = dataGa match {
+    case DataGa_One(id, nr) => oneDia(id, nr)
+    case DataGa_Multi(id, title, dataList) => multiDataDia(id, title, dataList)
+  }
 
-  val dataRow = Viz.DataRow(
-    style = Viz.Style_LINES,
-    data = data,
-  )
+  private def oneDia(id: String, nr: String): Unit = {
 
-  val dia = Viz.Diagram[Viz.XY](
-    id = s"${id}_$nr",
-    title = s"$id $nr",
-    //yRange = Some(Viz.Range(Some(0), Some(2))),
-    dataRows = Seq(dataRow)
-  )
+    def prjDir = workDir.resolve(Paths.get(id, nr))
+    def filePath = homeDir.resolve(prjDir.resolve(Paths.get(s"$id-$nr-data.csv")))
 
-  Viz.createDiagram(dia)
+    log info s"Reading data from $filePath"
 
+    val data = BeanBasicReader.read(filePath)
+      .map(b => Viz.XY(b.iterations, b.score))
+
+    require(data.nonEmpty, "data must not be empty")
+
+    val dataRow = Viz.DataRow(
+      style = Viz.Style_LINES,
+      data = data
+    )
+
+    val dia = Viz.Diagram[Viz.XY](
+      id = s"${id}_$nr",
+      title = s"$id $nr",
+      //yRange = Some(Viz.Range(Some(0), Some(2))),
+      dataRows = Seq(dataRow)
+    )
+
+    Viz.createDiagram(dia)
+  }
+  private def multiDataDia(idDia: String, titleDia: String, ds: Seq[(String, String)]): Unit = {
+
+    val dataRows = for ((id, nr) <- ds ) yield {
+      def prjDir = workDir.resolve(Paths.get(id, nr))
+
+      def filePath = homeDir.resolve(prjDir.resolve(Paths.get(s"$id-$nr-data.csv")))
+
+      val data = BeanBasicReader.read(filePath)
+        .map(b => Viz.XY(b.iterations, b.score))
+
+      Viz.DataRow(
+        name = Some(nr),
+        style = Viz.Style_LINES,
+        data = data
+      )
+
+    }
+    val dia = Viz.Diagram[Viz.XY](
+      id = idDia,
+      title = titleDia,
+      //yRange = Some(Viz.Range(Some(0), Some(2))),
+      dataRows = dataRows
+    )
+
+    Viz.createDiagram(dia)
+  }
 }

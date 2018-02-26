@@ -25,7 +25,7 @@ object BeanBasicReader {
   }
 
   def notHeadline(line: String): Boolean = {
-    val re = line.startsWith("trainGaKicks01")
+    val re = line.indexOf("iterations") < 0
     re
   }
 

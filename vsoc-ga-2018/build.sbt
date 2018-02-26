@@ -1,3 +1,5 @@
+import sbt.Keys.libraryDependencies
+
 lazy val userHome = System.getProperty("user.home")
 
 lazy val commonSettings = Seq(
@@ -57,8 +59,6 @@ lazy val analyse = (project in file("analyse"))
     commonSettings,
     // Checkout https://github.com/wwagner4/viz.git
     // and call sbt publishLocal in the root directory
-    libraryDependencies += "net.entelijan" %% "viz" % "0.1-SNAPSHOT"
+    libraryDependencies += "net.entelijan" %% "viz" % "0.1-SNAPSHOT",
+    libraryDependencies += "org.slf4j" % "slf4j-simple" % "1.7.25"
   ).dependsOn(common)
-
-
-
