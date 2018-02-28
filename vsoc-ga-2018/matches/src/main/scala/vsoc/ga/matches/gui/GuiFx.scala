@@ -1,20 +1,10 @@
 package vsoc.ga.matches.gui
 
-import javafx.application.Platform
-import javafx.embed.swing.SwingNode
-import javafx.scene.Scene
-import javafx.scene.control.Label
-import javafx.scene.image.Image
-import javafx.scene.input.{KeyCode, KeyEvent}
-import javafx.scene.layout._
-import javafx.scene.paint.Color
-import javafx.stage.Stage
-
+/*
 import vsoc.ga.matches.{Match, MatchResults}
 import vsoc.server.gui.{FieldPanel, Paintable, SimulationChangeListener}
 
 import scala.concurrent.Future
-
 class GuiFx(val stage: Stage, val _match: Match) extends SimulationChangeListener {
 
   import scala.concurrent.ExecutionContext.Implicits.global
@@ -134,5 +124,5 @@ class GuiFx(val stage: Stage, val _match: Match) extends SimulationChangeListene
   override def simulationChangePerformed(s: Paintable): Unit = {
     Platform.runLater(() => updateInfoText())
   }
-
 }
+*/

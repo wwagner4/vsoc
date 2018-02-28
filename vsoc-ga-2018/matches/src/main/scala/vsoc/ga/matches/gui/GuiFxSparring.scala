@@ -1,5 +1,6 @@
 package vsoc.ga.matches.gui
 
+/*
 import javafx.application.Application
 import javafx.stage.Stage
 
@@ -17,3 +18,4 @@ class GuiFxSparring extends Application {
   }
 
 }
+*/
