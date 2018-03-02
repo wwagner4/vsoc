@@ -19,7 +19,9 @@ public class GGVectorToPlayer implements VectorToPlayer {
 	}
 
 	private double distBall(Sensors sens) {
-		return sens.getBall().getDistance();
+		return sens.getBall()
+				.map(DistDirVision::getDistance)
+				.orElseThrow(() -> new IllegalStateException("did not see ball"));
 	}
 
 	private void addKickCommandFromOutputLayer(double[] out, Player player) {

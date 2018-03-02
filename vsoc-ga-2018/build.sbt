@@ -25,9 +25,7 @@ lazy val matches = (project in file("matches"))
     commonSettings,
     // Must be installed in your local repository using maven.
     // Is a module of https://github.com/wwagner4/vsoc.git
-    // Module names :
-    // vsoc/vsoc-2007/vsoc-core
-    // vsoc/vsoc-2007/atan-2007 (transitive dependency)
+    // cd vsoc/vsoc-2007 && mvn install
     libraryDependencies += "net.entelijan" % "vsoc-core" % "0.0.1-SNAPSHOT",
   )
 
@@ -48,8 +46,8 @@ lazy val trainga = (project in file("trainga"))
   .settings(
     name := "trainga",
     commonSettings,
-    libraryDependencies += "org.deeplearning4j" % "deeplearning4j-nn" % "0.9.1",
-    libraryDependencies += "org.nd4j" % "nd4j-native-platform" % "0.9.1",
+    libraryDependencies += "org.deeplearning4j" % "deeplearning4j-nn" % "0.9.1" exclude("com.github.stephenc.findbugs", "findbugs-annotations"),
+    libraryDependencies += "org.nd4j" % "nd4j-native-platform" % "0.9.1" exclude("com.github.stephenc.findbugs", "findbugs-annotations"),
     libraryDependencies += "org.slf4j" % "slf4j-simple" % "1.7.25",
   ).dependsOn(matches, genetic, common)
 
