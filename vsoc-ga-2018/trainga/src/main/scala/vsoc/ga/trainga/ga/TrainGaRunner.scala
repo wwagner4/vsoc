@@ -13,6 +13,9 @@ object TrainGaRunner {
   private val log = LoggerFactory.getLogger(TrainGaRunner.getClass)
 
   def run (trainGaId: String, trainGaNr: String): Unit = {
+
+    log.info(s"STARING $trainGaId $trainGaNr")
+
     def p: Persistor = Persistors.workDir
     val workDir = Paths.get(trainGaId, trainGaNr)
     val workDirAbs = p.dir(workDir)
