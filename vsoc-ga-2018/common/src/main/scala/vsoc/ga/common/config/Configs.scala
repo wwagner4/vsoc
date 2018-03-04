@@ -6,6 +6,8 @@ object Configs {
 
   def bobKicks001: Config = new Config {
 
+    override def id: String = "bobKicks001"
+
     override def workDirBase: Path = ConfigHelper.defaultWorkDir
 
     override def trainings: Seq[ConfigTrainGa] = Seq(
@@ -17,11 +19,11 @@ object Configs {
 
   def walKicks001: Config = new Config {
 
+    override def id: String = "walKicks001"
+
     override def workDirBase: Path = ConfigHelper.defaultWorkDir
 
     override def trainings: Seq[ConfigTrainGa] = Seq(
-      ConfigTrainGa("trainGaKicks01", "001"),
-      ConfigTrainGa("trainGaKicks01", "002"),
       ConfigTrainGa("trainGaKicks01", "004"),
       ConfigTrainGa("trainGaKicks01", "005"),
       ConfigTrainGa("trainGaKicks01", "006"),
@@ -29,4 +31,13 @@ object Configs {
     )
   }
 
+
+  def allKicks001: Config = new Config {
+
+    override def workDirBase: Path = ConfigHelper.defaultWorkDir
+
+    override def trainings: Seq[ConfigTrainGa] = Seq(walKicks001, bobKicks001).flatMap(_.trainings)
+
+    override def id: String = "allKicks001"
+  }
 }

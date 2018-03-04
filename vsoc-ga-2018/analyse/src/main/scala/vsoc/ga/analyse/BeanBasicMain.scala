@@ -1,37 +1,34 @@
 package vsoc.ga.analyse
 
-import java.nio.file.Paths
+import vsoc.ga.common.UtilReflection
+import vsoc.ga.common.config.{Config, Configs}
 
 sealed trait DataGa
 
 case class DataGa_One(id: String, nr: String) extends DataGa
+
 case class DataGa_Multi(id: String, title: String, datas: Seq[(String, String)]) extends DataGa
 
 object BeanBasicMain extends App {
 
-  // e.g. ("trainGaKicks01", "w002"), ("trainGaKicks01", "w001"), ("trainGa01", "w001"), ...
+  if (args.length != 1) {
+    println(usage)
+  } else {
+    val id = args(0)
+    try {
+      val cfg = UtilReflection.call(Configs, id, classOf[Config])
+      BeanBasicDia.run(cfg)
+    } catch {
+      case e: ScalaReflectionException =>
+        println(s"Invalid configuration '$id'")
+        println(usage)
+    }
+  }
 
-  val dataGa_w001 = DataGa_Multi("multi_0001", "Train Kicks 01", Seq(
-    ("trainGaKicks01", "w001"),
-    ("trainGaKicks01", "w002"),
-  ))
+  private def usage =
+    """usage ...BeanBasicMain <configId>
+      | - id: Configuration ID. One of the method defined in Configurations. E.g. 'walKicks001', 'bobKicks001', ...
+    """.stripMargin
 
-  val dataGa_w002 = DataGa_Multi("multi_w002", "Train All 01", Seq(
-    ("trainGa01", "w001"),
-    ("trainGa01", "w002"),
-  ))
-
-  val dataGa_002 = DataGa_One("trainGaKicks01", "w001")
-  val dataGa_003 = DataGa_One("trainGaKicks01", "w002")
-  val dataGa_004 = DataGa_One("trainGa01", "w001")
-
-  val dataGa_005 = DataGa_Multi("trainGaKicks01_001", "trainGaKicks01", Seq(
-    ("trainGaKicks01", "004"),
-    ("trainGaKicks01", "006"),
-    ("trainGaKicks01", "007"),
-  ))
-
-  val workDirBase = Paths.get(System.getProperty("user.home"), "work", "work-vsoc-ga-2018")
-  new BeanBasicDia(workDirBase).run(dataGa_005)
 
 }

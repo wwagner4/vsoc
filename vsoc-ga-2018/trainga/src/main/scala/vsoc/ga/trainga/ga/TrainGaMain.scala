@@ -26,8 +26,6 @@ object TrainGaMain extends App {
     }
   }
 
-  private def pause(): Unit = Thread.sleep(200)
-
   private def usage =
     """usage ...TrainGaMain <configId>
       | - id: Configuration ID. One of the method defined in Configurations. E.g. 'walKicks001', 'bobKicks001', ...

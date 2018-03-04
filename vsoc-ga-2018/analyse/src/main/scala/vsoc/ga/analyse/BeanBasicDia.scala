@@ -1,71 +1,44 @@
 package vsoc.ga.analyse
 
-import java.nio.file.{Path, Paths}
+import java.nio.file.{Files, Paths}
 
-import entelijan.viz.{DefaultDirectories, Viz, VizCreator, VizCreatorGnuplot}
+import entelijan.viz.{Viz, VizCreator, VizCreatorGnuplot}
 import org.slf4j.LoggerFactory
+import vsoc.ga.common.config.{Config, ConfigTrainGa}
 
 
-class BeanBasicDia(val homeDir: Path) {
+object BeanBasicDia {
 
-  private val log = LoggerFactory.getLogger(classOf[BeanBasicDia])
+  private val log = LoggerFactory.getLogger(BeanBasicDia.getClass)
 
-  private def workDir = Paths.get("work", "work-vsoc-ga-2018")
-  val vizDir = DefaultDirectories(workDir.resolve("viz").toString)
-  implicit val creator: VizCreator[Viz.XY] = VizCreatorGnuplot[Viz.XY](scriptDir = vizDir.scriptDir, imageDir = vizDir.imageDir)
+  def run(cfg: Config): Unit = {
 
-
-  def run(dataGa: DataGa): Unit = dataGa match {
-    case DataGa_One(id, nr) => oneDia(id, nr)
-    case DataGa_Multi(id, title, dataList) => multiDataDia(id, title, dataList)
-  }
-
-  private def oneDia(id: String, nr: String): Unit = {
-
-    def prjDir = workDir.resolve(Paths.get(id, nr))
-    def filePath = homeDir.resolve(prjDir.resolve(Paths.get(s"$id-$nr-data.csv")))
-
-    log info s"Reading data from $filePath"
-
-    val data = BeanBasicReader.read(filePath)
-      .map(b => Viz.XY(b.iterations, b.score))
-
-    require(data.nonEmpty, "data must not be empty")
-
-    val dataRow = Viz.DataRow(
-      style = Viz.Style_LINES,
-      data = data
-    )
-
-    val dia = Viz.Diagram[Viz.XY](
-      id = s"${id}_$nr",
-      title = s"$id $nr",
-      //yRange = Some(Viz.Range(Some(0), Some(2))),
-      dataRows = Seq(dataRow)
-    )
-
-    Viz.createDiagram(dia)
-  }
-  private def multiDataDia(idDia: String, titleDia: String, ds: Seq[(String, String)]): Unit = {
-
-    val dataRows = for ((id, nr) <- ds ) yield {
+    val workDir = cfg.workDirBase
+    val sd = workDir.resolve(".script")
+    Files.createDirectories(sd)
+    val id = workDir.resolve("viz_img")
+    Files.createDirectories(id)
+    log.info(s"Writing image to '$id'")
+    implicit val creator: VizCreator[Viz.XY] = VizCreatorGnuplot[Viz.XY](scriptDir = sd.toFile, imageDir = id.toFile)
+    val ds = cfg.trainings
+    val dataRows = for (ConfigTrainGa(id, nr) <- ds) yield {
       def prjDir = workDir.resolve(Paths.get(id, nr))
 
-      def filePath = homeDir.resolve(prjDir.resolve(Paths.get(s"$id-$nr-data.csv")))
+      def filePath = workDir.resolve(prjDir.resolve(Paths.get(s"$id-$nr-data.csv")))
 
       val data = BeanBasicReader.read(filePath)
         .map(b => Viz.XY(b.iterations, b.score))
 
       Viz.DataRow(
-        name = Some(nr),
+        name = Some(s"$id-$nr"),
         style = Viz.Style_LINES,
         data = data
       )
 
     }
     val dia = Viz.Diagram[Viz.XY](
-      id = idDia,
-      title = titleDia,
+      id = cfg.id,
+      title = s"Configuration ${cfg.id}",
       //yRange = Some(Viz.Range(Some(0), Some(2))),
       dataRows = dataRows
     )

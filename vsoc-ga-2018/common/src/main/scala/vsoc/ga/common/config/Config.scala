@@ -14,4 +14,9 @@ trait Config {
     */
   def trainings: Seq[ConfigTrainGa]
 
+  /**
+    * @return Must be the same as the method name in Cinfigs
+    */
+  def id: String
+
 }
