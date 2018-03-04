@@ -1,5 +1,7 @@
 package vsoc.ga.analyse
 
+import java.nio.file.Paths
+
 sealed trait DataGa
 
 case class DataGa_One(id: String, nr: String) extends DataGa
@@ -29,6 +31,7 @@ object BeanBasicMain extends App {
     ("trainGaKicks01", "007"),
   ))
 
-  BeanBasicDia.run(dataGa_005)
+  val workDirBase = Paths.get(System.getProperty("user.home"), "work", "work-vsoc-ga-2018")
+  new BeanBasicDia(workDirBase).run(dataGa_005)
 
 }

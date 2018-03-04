@@ -5,33 +5,16 @@ sbt ";project trainga;runMain vsoc.ga.trainga.ga.TrainGaMain"
 java -cp /Users/wwagner4/prj/vsoc/vsoc-ga-2018/trainga/target/scala-2.12/trainga-assembly-0.0.1-SNAPSHOT.jar vsoc.ga.trainga.ga.TrainGaMain traiaKicks01 007
 
 
+start "trainGaKicks01 w001" java -Xmx4g
+  -cp C:\ta30\entw1\vsoc\vsoc-ga-2018\trainga\target\scala-2.12\trainga-assembly-0.0.1-SNAPSHOT.jar ^
+  vsoc.ga.trainga.ga.TrainGaMain workKicksGa001
 
 
-nohup java -Xmx6g \
+nohup java -Xmx4g \
  -cp $HOME/prj/vsoc/vsoc-ga-2018/trainga/target/scala-2.12/trainga-assembly-0.0.1-SNAPSHOT.jar \
- vsoc.ga.trainga.ga.TrainGaBobMain &
+ vsoc.ga.trainga.ga.TrainGaMain bobTrainGaKicks001 &
 
-
-nohup java -Xmx6g \
+nohup java -Xmx4g \
  -cp $HOME/prj/vsoc/vsoc-ga-2018/trainga/target/scala-2.12/trainga-assembly-0.0.1-SNAPSHOT.jar \
- vsoc.ga.trainga.ga.TrainGaWallaceMain &
-
-
-
-start "trainGaKicks01 w001" java -Xmx4g ^
-  -cp C:\ta30\entw1\vsoc\vsoc-ga-2018\trainga\target\scala-2.12\trainga-assembly-0.0.1-SNAPSHOT.jar ^
-  vsoc.ga.trainga.ga.TrainGaMain trainGaKicks01 w001
-
-start "trainGaKicks01 w002" java -Xmx4g ^
-  -cp C:\ta30\entw1\vsoc\vsoc-ga-2018\trainga\target\scala-2.12\trainga-assembly-0.0.1-SNAPSHOT.jar ^
-  vsoc.ga.trainga.ga.TrainGaMain trainGaKicks01 w002
-
-start "trainGa01 w001" java -Xmx4g ^
-  -cp C:\ta30\entw1\vsoc\vsoc-ga-2018\trainga\target\scala-2.12\trainga-assembly-0.0.1-SNAPSHOT.jar ^
-  vsoc.ga.trainga.ga.TrainGaMain trainGa01 w001
-
-start "trainGa01 w002" java -Xmx4g ^
-  -cp C:\ta30\entw1\vsoc\vsoc-ga-2018\trainga\target\scala-2.12\trainga-assembly-0.0.1-SNAPSHOT.jar ^
-  vsoc.ga.trainga.ga.TrainGaMain trainGa01 w002
-
+ vsoc.ga.trainga.ga.TrainGaMain walTrainGaKicks001 &
 

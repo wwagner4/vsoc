@@ -16,6 +16,8 @@ import scala.util.Random
 
 class TrainGaSuite extends FunSuite with MustMatchers {
 
+  private val workDirBaseTest = Paths.get(System.getProperty("java.io.tmpdir"))
+
   test("Wrapper get param") {
     val nn = NeuralNets.test
     val p = nn.getParam
@@ -67,7 +69,7 @@ class TrainGaSuite extends FunSuite with MustMatchers {
     nn.setParam(params)
 
     val file = Paths.get(".test", "nn", "01.nn")
-    val p = Persistors.workDir
+    val p = Persistors.nio(workDirBaseTest)
 
     p.save(file)(oos => NeuralNetPersist.save(nn, oos))
 

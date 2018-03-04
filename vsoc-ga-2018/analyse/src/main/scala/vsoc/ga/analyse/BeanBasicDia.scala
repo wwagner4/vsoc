@@ -1,16 +1,15 @@
 package vsoc.ga.analyse
 
-import java.nio.file.Paths
+import java.nio.file.{Path, Paths}
 
 import entelijan.viz.{DefaultDirectories, Viz, VizCreator, VizCreatorGnuplot}
 import org.slf4j.LoggerFactory
 
 
-object BeanBasicDia extends {
+class BeanBasicDia(val homeDir: Path) {
 
-  private val log = LoggerFactory.getLogger(BeanBasicDia.getClass)
+  private val log = LoggerFactory.getLogger(classOf[BeanBasicDia])
 
-  private def homeDir = Paths.get(System.getProperty("user.home"))
   private def workDir = Paths.get("work", "work-vsoc-ga-2018")
   val vizDir = DefaultDirectories(workDir.resolve("viz").toString)
   implicit val creator: VizCreator[Viz.XY] = VizCreatorGnuplot[Viz.XY](scriptDir = vizDir.scriptDir, imageDir = vizDir.imageDir)

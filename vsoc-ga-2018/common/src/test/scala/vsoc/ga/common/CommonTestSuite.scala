@@ -7,9 +7,11 @@ import vsoc.ga.common.persist.Persistors
 
 class CommonTestSuite extends FunSuite with MustMatchers {
 
+  private val testDir = Paths.get(System.getProperty("user.home"), ".test")
+
   test("persist") {
 
-    val p  = Persistors.workDir
+    val p  = Persistors.nio(testDir)
     val a = ToBePersisted("hello", List(0.0, 0.2, -0.5))
 
     p.save(Paths.get(".test", "01.ser")) {
@@ -76,7 +78,7 @@ class CommonTestSuite extends FunSuite with MustMatchers {
   test("persist seq of double") {
     import UtilTransform._
 
-    val p  = Persistors.workDir
+    val p  = Persistors.nio(testDir)
 
     val s = Seq(Seq(1.0, 2.0, -3.0), Seq(5.0), Seq())
     val a = asArray(s)

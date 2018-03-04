@@ -1,29 +1,42 @@
 package vsoc.ga.trainga.ga
 
-import java.nio.file.{Files, Paths}
+import java.nio.file.{Files, Path}
+
+import vsoc.ga.common.UtilReflection
+import vsoc.ga.common.config.{Config, Configs}
 
 object TrainGaMain extends App {
 
-  if (args.length != 2) {
+
+  if (args.length != 1) {
     println(usage)
   } else {
     val id = args(0)
-    val nr = args(1)
-    configureLogfile(id, nr)
-    TrainGaRunner.run(trainGaId = id, trainGaNr = nr)
+    try {
+      val cfg = UtilReflection.call(Configs, id, classOf[Config])
+      val wdBase = cfg.workDirBase
+      configureLogfile(wdBase)
+      for(c <- cfg.trainings.par) {
+        TrainGaRunner.run(wdBase, c)
+      }
+    } catch {
+      case e: ScalaReflectionException =>
+        println(s"Invalid configuration '$id'")
+        println(usage)
+    }
   }
 
+  private def pause(): Unit = Thread.sleep(200)
 
   private def usage =
-    """usage ...TrainGaMain <id> <nr>
-      | - id: Training ID. One of the method defined in TrainGas. E.g. 'trainGaKicks01', 'trainGa01', ...
-      | - nr: Run ID. A unique number for the run. E.g. 'bob001', 'wallace001', 'wallace002'...
+    """usage ...TrainGaMain <configId>
+      | - id: Configuration ID. One of the method defined in Configurations. E.g. 'walKicks001', 'bobKicks001', ...
     """.stripMargin
 
-  private def configureLogfile(id: String, nr: String): Unit = {
-    val p = Paths.get(System.getProperty("user.home"), "work", "work-vsoc-ga-2018", id, nr)
+  private def configureLogfile(workDirBase: Path): Unit = {
+    val p = workDirBase.resolve("logs")
     Files.createDirectories(p)
-    val f = p.resolve(s"vsoc-ga-2018-$id-$nr.log")
+    val f = p.resolve(s"vsoc-ga-2018.log")
     System.setProperty("logfile.name", f.toString)
     println(s"Writing log to $f")
   }

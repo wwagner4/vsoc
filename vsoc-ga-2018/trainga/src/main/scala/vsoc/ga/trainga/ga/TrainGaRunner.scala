@@ -4,6 +4,7 @@ import java.nio.file.{Files, Path, Paths}
 import java.util.{Comparator, Optional}
 
 import org.slf4j.LoggerFactory
+import vsoc.ga.common.config.ConfigTrainGa
 import vsoc.ga.common.data.DataHandler
 import vsoc.ga.common.persist.{Persistor, Persistors}
 import vsoc.ga.common.{UtilReflection, UtilTransform}
@@ -12,15 +13,20 @@ object TrainGaRunner {
 
   private val log = LoggerFactory.getLogger(TrainGaRunner.getClass)
 
-  def run (trainGaId: String, trainGaNr: String): Unit = {
+  def run (workDirBase: Path, cfg: ConfigTrainGa): Unit = {
 
-    log.info(s"STARING $trainGaId $trainGaNr")
-
-    def p: Persistor = Persistors.workDir
-    val workDir = Paths.get(trainGaId, trainGaNr)
+    val id = cfg.id
+    val nr = cfg.nr
+    require(!id.isEmpty)
+    require(!nr.isEmpty)
+    def p: Persistor = Persistors.nio(workDirBase)
+    val workDir = Paths.get(id, nr)
     val workDirAbs = p.dir(workDir)
+    log.info(s"STARING $id $nr - '$workDirAbs'")
 
-    val dh = new DataHandler(workDirAbs.resolve(s"$trainGaId-$trainGaNr-data.csv"))
+    val dataFile = workDirAbs.resolve(s"$id-$nr-data.csv")
+
+    val dh = new DataHandler(dataFile)
 
     val fileNameOpt: Optional[Path] = Files.list(workDirAbs)
       .filter(p => p.getFileName.toString.endsWith("ser"))
@@ -36,13 +42,13 @@ object TrainGaRunner {
       }
       .getOrElse {
         log.info(s"could not population from $workDir. creating a new one")
-        UtilReflection.call(TrainGas, trainGaId, classOf[TrainGa[Double]])
+        UtilReflection.call(TrainGas, cfg.id, classOf[TrainGa[Double]])
       }
 
     tga.listeners = tga.listeners :+ persListener :+ dataListener
 
     log.info(s"starting " + tga.id + " at iteration " + tga.iterations.getOrElse(0))
-    tga.run(trainGaId, trainGaNr)
+    tga.run(cfg.id, cfg.nr)
 
     def persListener: TrainGaListener[Double] = (iteration: Int, _: Option[Double], _: Seq[(String, Any)]) => {
       val nr = f"$iteration%03d"

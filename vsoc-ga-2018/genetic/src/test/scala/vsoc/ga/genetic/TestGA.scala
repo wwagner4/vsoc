@@ -151,15 +151,13 @@ class TestGA extends FunSuite with MustMatchers {
 
     val r = Random.javaRandomToRandom(new java.util.Random(293847L))
 
-    def ra = (r: Random) => 0
+    def ra = (_: Random) => 0
 
     val strat = SelectionStrategies.crossover(0.0, ra, r)
 
     val tested = for (i <- 0 to 19) yield {
       (i.toDouble, Seq.fill(15)(i))
     }
-
-    def fmt(i: Int): String = "%3d" format i
 
     val sel: Seq[Seq[Int]] = strat.select(tested)
     val dist = sel.map(s => s.toSet)
@@ -223,15 +221,13 @@ class TestGA extends FunSuite with MustMatchers {
 
     val r = Random.javaRandomToRandom(new java.util.Random(293847L))
 
-    def ra = (r: Random) => 111
+    def ra = (_: Random) => 111
 
     val strat = SelectionStrategies.mutationOnly(0.5, ra, r)
 
     val tested = for (i <- 0 to 7) yield {
       (i.toDouble, Seq.fill(15)(i))
     }
-
-    def fmt(i: Int): String = "%3d" format i
 
     val sel: Seq[Seq[Int]] = strat.select(tested)
     val dist = sel.map(s => s.distinct.sorted)

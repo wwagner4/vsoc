@@ -27,7 +27,6 @@ class GA[A, P, S](
 
   def nextPopulation(pop: Seq[Seq[A]]): GAResult[A, S] = {
 
-    val popSize = pop.size
     val phenos: Seq[P] = pop.map(transformer.toPheno)
     val testResult = tester.test(phenos)
     val testedGenos: Seq[(Double, Seq[A])] = testResult.testedPhenos.map { case (r, g) => (r, transformer.toGeno(g)) }
