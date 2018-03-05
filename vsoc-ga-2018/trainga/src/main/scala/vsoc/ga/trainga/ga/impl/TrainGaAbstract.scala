@@ -59,6 +59,8 @@ abstract class TrainGaAbstract extends TrainGa[Double] {
     println("*** REDUCED: " + red)
   }
 
+  private def pause(ms: Int): Unit = Thread.sleep(ms)
+
   override def run(trainGaId: String, trainGaNr: String): Unit = {
     val initialPop: Seq[Seq[Double]] = population.getOrElse(createRandomPopGeno)
     var gar: GAResult[Double, Double] = GAR(None, initialPop)
@@ -78,6 +80,7 @@ abstract class TrainGaAbstract extends TrainGa[Double] {
         ("score", gar.score.getOrElse(0.0))
       )
       listeners.foreach(l => l.onIterationFinished(i, gar.score, data))
+      pause(10)
     }
   }
 }
