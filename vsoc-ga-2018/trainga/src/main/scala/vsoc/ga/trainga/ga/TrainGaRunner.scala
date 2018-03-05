@@ -52,8 +52,8 @@ object TrainGaRunner {
     tga.run(cfg.id, cfg.nr)
 
     def persListener: TrainGaListener[Double] = (iteration: Int, _: Option[Double], _: Seq[(String, Any)]) => {
-      val nr = f"$iteration%03d"
-      val filename = s"pop$nr.ser"
+      val popnr = f"$iteration%03d"
+      val filename = s"pop$popnr.ser"
       val filePath = workDir.resolve(filename)
       log.info(s"saving population to $filePath")
       p.save(filePath)(oos => TrainGaPersist.save(tga, oos))

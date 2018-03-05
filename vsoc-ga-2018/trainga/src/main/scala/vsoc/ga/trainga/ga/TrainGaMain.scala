@@ -1,5 +1,7 @@
 package vsoc.ga.trainga.ga
 
+import java.util.concurrent.Executors
+
 import vsoc.ga.common.UtilReflection
 import vsoc.ga.common.config.{Config, Configs}
 import vsoc.ga.trainga.util.UtilTrainGa
@@ -15,8 +17,9 @@ object TrainGaMain extends App {
       val cfg = UtilReflection.call(Configs, id, classOf[Config])
       val wdBase = cfg.workDirBase
       UtilTrainGa.configureLogfile(wdBase)
-      for(c <- cfg.trainings.par) {
-        TrainGaRunner.run(wdBase, c)
+      val ec = Executors.newFixedThreadPool(cfg.trainings.size)
+      for(c <- cfg.trainings) {
+        ec.execute(() => TrainGaRunner.run(wdBase, c))
       }
     } catch {
       case e: ScalaReflectionException =>
