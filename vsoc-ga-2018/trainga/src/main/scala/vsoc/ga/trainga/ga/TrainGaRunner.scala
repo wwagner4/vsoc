@@ -8,6 +8,7 @@ import vsoc.ga.common.config.ConfigTrainGa
 import vsoc.ga.common.data.DataHandler
 import vsoc.ga.common.persist.{Persistor, Persistors}
 import vsoc.ga.common.{UtilReflection, UtilTransform}
+import vsoc.ga.trainga.thinner.Thinner
 
 object TrainGaRunner {
 
@@ -56,6 +57,7 @@ object TrainGaRunner {
       val filePath = workDir.resolve(filename)
       log.info(s"saving population to $filePath")
       p.save(filePath)(oos => TrainGaPersist.save(tga, oos))
+      Thinner.thinFromTrainGaId(workDirBase, id, nr)
     }
     def dataListener: TrainGaListener[Double] = (_: Int, _: Option[Double], data: Seq[(String, Any)]) => {
       dh.writeLine(data)

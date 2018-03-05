@@ -60,9 +60,6 @@ abstract class TrainGaAbstract extends TrainGa[Double] {
   }
 
   override def run(trainGaId: String, trainGaNr: String): Unit = {
-
-
-
     val initialPop: Seq[Seq[Double]] = population.getOrElse(createRandomPopGeno)
     var gar: GAResult[Double, Double] = GAR(None, initialPop)
     var i = iterations.getOrElse(0)
