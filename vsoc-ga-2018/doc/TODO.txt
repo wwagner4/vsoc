@@ -1,2 +1,3 @@
 - Thinner equaly distributed
 - GUI back to swing
+- Describable interface
