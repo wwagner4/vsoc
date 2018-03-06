@@ -62,25 +62,30 @@ abstract class TrainGaAbstract extends TrainGa[Double] {
   private def pause(ms: Int): Unit = Thread.sleep(ms)
 
   override def run(trainGaId: String, trainGaNr: String): Unit = {
-    val initialPop: Seq[Seq[Double]] = population.getOrElse(createRandomPopGeno)
-    var gar: GAResult[Double, Double] = GAR(None, initialPop)
-    var i = iterations.getOrElse(0)
-    while (true) {
-      i += 1
-      //debug(gar.newPopulation)
-      gar = ga.nextPopulation(gar.newPopulation)
-      val s = gar.score.map(s => f"$s%.2f").getOrElse("-")
-      log.info(f"finished iteration $i. score: $s")
-      iterations = Some(i)
-      population = Some(gar.newPopulation)
-      val data: Seq[(String, Any)] = Seq(
-        ("trainGaId", trainGaId),
-        ("trainGaNr", trainGaNr),
-        ("iterations", i),
-        ("score", gar.score.getOrElse(0.0))
-      )
-      listeners.foreach(l => l.onIterationFinished(i, gar.score, data))
-      pause(10)
+    try {
+      val initialPop: Seq[Seq[Double]] = population.getOrElse(createRandomPopGeno)
+      var gar: GAResult[Double, Double] = GAR(None, initialPop)
+      var i = iterations.getOrElse(0)
+      while (true) {
+        i += 1
+        //debug(gar.newPopulation)
+        gar = ga.nextPopulation(gar.newPopulation)
+        val s = gar.score.map(s => f"$s%.2f").getOrElse("-")
+        log.info(f"finished iteration $i. score: $s")
+        iterations = Some(i)
+        population = Some(gar.newPopulation)
+        val data: Seq[(String, Any)] = Seq(
+          ("trainGaId", trainGaId),
+          ("trainGaNr", trainGaNr),
+          ("iterations", i),
+          ("score", gar.score.getOrElse(0.0))
+        )
+        listeners.foreach(l => l.onIterationFinished(i, gar.score, data))
+      }
+    } catch {
+      case e: Exception =>
+        val msg = s"Error running $trainGaId $trainGaNr ${e.getMessage}"
+        log.error(msg, e)
     }
   }
 }
