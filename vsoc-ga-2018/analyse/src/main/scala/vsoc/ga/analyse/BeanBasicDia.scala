@@ -11,7 +11,7 @@ object BeanBasicDia {
 
   private val log = LoggerFactory.getLogger(BeanBasicDia.getClass)
 
-  def run(cfg: Config): Unit = {
+  def run(cfg: Config, yRange: Option[Viz.Range] = None): Unit = {
 
     val workDir = cfg.workDirBase
     val sd = workDir.resolve(".script")
@@ -39,7 +39,7 @@ object BeanBasicDia {
     val dia = Viz.Diagram[Viz.XY](
       id = cfg.id,
       title = s"Configuration ${cfg.id}",
-      //yRange = Some(Viz.Range(Some(0), Some(2))),
+      yRange = yRange,
       dataRows = dataRows
     )
 
