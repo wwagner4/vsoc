@@ -45,12 +45,23 @@ object Configs {
   }
 
 
-  def allKicks001: Config = new Config {
+  def allKicks: Config = new Config {
+
+    override def id: String = "allKicks001"
 
     override def workDirBase: Path = ConfigHelper.defaultWorkDir
 
-    override def trainings: Seq[ConfigTrainGa] = Seq(walKicks001, bobKicks001).flatMap(_.trainings)
+    override def trainings: Seq[ConfigTrainGa] = Seq(walKicks001, bobKicks001, bobKicks002).flatMap(_.trainings)
 
-    override def id: String = "allKicks001"
+  }
+
+  def allBobKicks: Config = new Config {
+
+    override def id: String = "allBobKicks001"
+
+    override def workDirBase: Path = ConfigHelper.defaultWorkDir
+
+    override def trainings: Seq[ConfigTrainGa] = Seq(bobKicks001, bobKicks002).flatMap(_.trainings)
+
   }
 }
