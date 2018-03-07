@@ -1,14 +1,23 @@
 package vsoc.ga.trainga.thinner.impl
 
-import scala.util.Random
-
 object ThinnerIndex {
 
   def thin(currentIndexes: Seq[Int]): Seq[Int] = {
-    val maxIndex = currentIndexes.max
-    val minIndex = currentIndexes.min
-    val inner1 = currentIndexes.filter(e => e != maxIndex && e != minIndex)
-    val inner = Random.shuffle(inner1).take(8)
-    Seq(minIndex) ++ inner ++ Seq(maxIndex)
+    val max = currentIndexes.max
+    val keep = idxToBeKept(max, 1)
+    currentIndexes.filter(i => keep.contains(i))
+  }
+
+  def nextMax(max: Int, step: Int): Int = {
+    if (max % step == 0) max
+    else nextMax(max - 1, step)
+  }
+
+  def idxToBeKept(max: Int, step: Int): Seq[Int] = {
+    val max1 = nextMax(max, step)
+    val idx = Stream.iterate(max1)(i => i - step).take(5).filter(_ >= 0)
+    val min1 = idx.min
+    if (min1 <= 0) idx
+    else idx ++ idxToBeKept(min1, step * 10)
   }
 }
