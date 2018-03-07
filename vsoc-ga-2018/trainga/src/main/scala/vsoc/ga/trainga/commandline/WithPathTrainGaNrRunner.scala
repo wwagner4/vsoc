@@ -9,35 +9,43 @@ trait WithPathTrainGaNrRunner {
 
   /**
     *
-    * @param _args Arguments from the commandline
-    * @param f The method to be called
+    * @param args  Arguments from the commandline
+    * @param f     The method to be called
     * @param clazz Name of the class calling this. Needed to create meaningful error messages
     */
-  def runWithArgs(_args: Array[String], f: (Path, TrainGa[Double], String) => Unit, clazz: String): Unit = {
-    if (_args.length != 3) {
-      println(usage(clazz))
-    } else {
-      val pathString = _args(0)
-      val trainGaId = _args(1)
-      val nr = _args(2)
+  def runWithArgs(args: Array[String], f: (Path, TrainGa[Double], String, Option[String]) => Unit, clazz: String): Unit = {
+
+    def usage: String = {
+      s"""usage ...$clazz <configId>
+         | - baseWorkDir: Base directory where all the populations are stored
+         | - configId: TrainGa ID. One of the method defined in TrainGas.
+         | - nr: One of the Numbers defined for the id
+         |""".stripMargin
+    }
+
+    def call(
+              workDirString: String,
+              trainGaId: String,
+              trainGaNr: String,
+              popNr: Option[String]): Unit = {
       try {
         val trainGa = UtilReflection.call(TrainGas, trainGaId, classOf[TrainGa[Double]])
-        f(Paths.get(pathString), trainGa, nr)
+        val workDirPath = Paths.get(workDirString)
+        f(workDirPath, trainGa, trainGaNr, popNr)
       } catch {
         case e: ScalaReflectionException =>
           println(s"Invalid configuration '$trainGaId'")
-          println(usage(clazz))
+          println(usage)
       }
     }
-  }
 
-  private def usage(clazz: String): String = {
-    s"""usage ...$clazz <configId>
-       | - baseWorkDir: Base directory where all the populations are stored
-       | - configId: TrainGa ID. One of the method defined in TrainGas.
-       | - nr: One of the Numbers defined for the id
-       |""".stripMargin
+    if (args.length == 3) {
+      call(args(0), args(1), args(2), None)
+    } else if (args.length == 4) {
+      call(args(0), args(1), args(2), Some(args(3)))
+    } else {
+      println(usage)
+    }
   }
-
 
 }
