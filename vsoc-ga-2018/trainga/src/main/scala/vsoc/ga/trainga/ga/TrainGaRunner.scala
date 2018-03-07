@@ -20,9 +20,9 @@ object TrainGaRunner {
     val nr = cfg.nr
     require(!id.isEmpty)
     require(!nr.isEmpty)
-    def p: Persistor = Persistors.nio(workDirBase)
+    def persistor: Persistor = Persistors.nio(workDirBase)
     val workDir = Paths.get(id, nr)
-    val workDirAbs = p.dir(workDir)
+    val workDirAbs = persistor.dir(workDir)
     log.info(s"STARING $id $nr - '$workDirAbs'")
 
     val dataFile = workDirAbs.resolve(s"$id-$nr-data.csv")
@@ -39,7 +39,7 @@ object TrainGaRunner {
       .flatMap { file: String =>
         val path = workDir.resolve(file)
         log.info(s"loading population from $path")
-        p.load(path)(ois => TrainGaPersist.load(ois))
+        persistor.load(path)(ois => TrainGaPersist.load(ois))
       }
       .getOrElse {
         log.info(s"could not population from $workDir. creating a new one")
@@ -56,7 +56,7 @@ object TrainGaRunner {
       val filename = s"pop$popnr.ser"
       val filePath = workDir.resolve(filename)
       log.info(s"saving population to $filePath")
-      p.save(filePath)(oos => TrainGaPersist.save(tga, oos))
+      persistor.save(filePath)(oos => TrainGaPersist.save(tga, oos))
       Thinner.thinFromTrainGaId(workDirBase, id, nr)
     }
     def dataListener: TrainGaListener[Double] = (_: Int, _: Option[Double], data: Seq[(String, Any)]) => {
