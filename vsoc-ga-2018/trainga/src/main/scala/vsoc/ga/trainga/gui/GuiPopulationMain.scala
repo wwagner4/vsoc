@@ -18,20 +18,27 @@ object GuiPopulationMain extends App with WithPathTrainGaNrRunner {
 
   def run(workDirBase: Path, trainGa: TrainGa[Double], trainGaNr: String, popNr: Option[String]): Unit = {
 
-    val m: Match = createMatch(workDirBase, trainGa, trainGaNr)
+    val m: Match = createMatch(workDirBase, trainGa, trainGaNr, popNr)
     new VsocMatchFrame(m).setVisible(true)
 
   }
 
 
-  def createMatch(workBasic: Path, trainGa: TrainGa[Double], trainGaNr: String): Match = {
+  def createMatch(workBasic: Path, trainGa: TrainGa[Double], trainGaNr: String, popNr: Option[String]): Match = {
 
-    def findLatestPop(dir: Path): Path = {
-      Files.list(dir)
-        .filter(p => p.getFileName.toString.endsWith("ser"))
-        .sorted(Comparator.reverseOrder())
-        .findFirst()
-        .orElseThrow(() => new IllegalStateException("Could not find latest population"))
+    def findPop(absPath: Path): Path = {
+      if (popNr.isDefined) {
+        Files.list(absPath)
+          .filter(p => p.getFileName.toString.endsWith(s"${popNr.get}.ser"))
+          .findFirst()
+          .orElseThrow(() => new IllegalStateException(s"Could not find population with nr '${popNr.get}'"))
+      } else {
+        Files.list(absPath)
+          .filter(p => p.getFileName.toString.endsWith("ser"))
+          .sorted(Comparator.reverseOrder())
+          .findFirst()
+          .orElseThrow(() => new IllegalStateException("Could not find latest population"))
+      }
     }
 
     def loadLatestGenotype(workBasic: Path, id: String, nr: String): Seq[Seq[Double]] = {
@@ -41,7 +48,7 @@ object GuiPopulationMain extends App with WithPathTrainGaNrRunner {
       val dir = workBasic.resolve(Paths.get(id, nr))
       require(Files.exists(dir), s"Directory must exist '$dir'")
       require(Files.isDirectory(dir))
-      val latestPop: Path = findLatestPop(dir)
+      val latestPop: Path = findPop(dir)
       val persistor = Persistors.nio(workBasic)
       val latestPopRel = Paths.get(id, nr, latestPop.getFileName.toString)
       persistor.load(latestPopRel) { ois =>
@@ -53,7 +60,7 @@ object GuiPopulationMain extends App with WithPathTrainGaNrRunner {
     val geno: Seq[Seq[Double]] = loadLatestGenotype(workBasic, trainGa.id, trainGaNr)
     val teams = for ((t, i) <- trainGa.teamsFromGeno(geno).zipWithIndex) yield {
       new Team {
-        private val _name = s"$trainGaNr-$i"
+        private val _name = popNr.map(nr => s"$trainGaNr-$nr-$i").getOrElse(s"$trainGaNr-latest-$i")
         private val _inner = t
 
         override def name: String = _name

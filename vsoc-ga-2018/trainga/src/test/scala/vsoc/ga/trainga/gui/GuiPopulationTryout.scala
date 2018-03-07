@@ -6,6 +6,6 @@ object GuiPopulationTryout extends App {
 
   val wb = ConfigHelper.defaultWorkDir
 
-  GuiPopulationMain.main(Array(wb.toString, "trainGaKicks01", "bob006", "622"))
+  GuiPopulationMain.main(Array(wb.toString, "trainGaKicks01", "bob006"))
 
 }
