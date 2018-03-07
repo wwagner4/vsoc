@@ -1,6 +1,9 @@
 package vsoc.ga.trainga.ga.impl
 
+import java.nio.file.Path
+
 import org.slf4j.LoggerFactory
+import vsoc.behaviour.Behaviour
 import vsoc.ga.genetic.{GA, GAResult, SelectionStrategies}
 import vsoc.ga.matches.TeamResult
 import vsoc.ga.trainga.ga.TrainGa
@@ -18,9 +21,9 @@ abstract class TrainGaAbstract extends TrainGa[Double] {
 
   protected def fitness: TeamResult => Double
 
-  private val populationSize = 20
-
   private val playerCount = 3
+
+  private val populationSize = 20
 
   private val playerParamSize: Int = createNeuralNet().getParam.length
 
@@ -88,6 +91,11 @@ abstract class TrainGaAbstract extends TrainGa[Double] {
         log.error(msg, e)
     }
   }
+
+  def createBehaviours(workBasic: Path, nr: String): Seq[Seq[Behaviour]] = {
+    ???
+  }
+
 }
 
 

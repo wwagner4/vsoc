@@ -1,4 +1,3 @@
 - Thinner equaly distributed
-- GUI back to swing
 - Describable interface
 - fence controlling linux

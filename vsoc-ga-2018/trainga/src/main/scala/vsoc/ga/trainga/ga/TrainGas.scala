@@ -18,6 +18,7 @@ object TrainGas {
     override def ran: Random = Random.javaRandomToRandom(new java.util.Random())
 
     override def createNeuralNet: () => NeuralNet = () => NeuralNets.team01
+
   }
 
   def trainGaKicks01: TrainGa[Double] =  new TrainGaAbstract {
