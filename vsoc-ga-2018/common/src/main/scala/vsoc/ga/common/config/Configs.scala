@@ -30,6 +30,20 @@ object Configs {
     )
   }
 
+  def bob001: Config = new Config {
+
+    override def id: String = "bobKicks001"
+
+    override def workDirBase: Path = ConfigHelper.defaultWorkDir
+
+    override def trainings: Seq[ConfigTrainGa] = Seq(
+      ConfigTrainGa("trainGa01", "bob001"),
+      ConfigTrainGa("trainGa01", "bob002"),
+      ConfigTrainGa("trainGa01", "bob003"),
+      ConfigTrainGa("trainGa01", "bob004"),
+    )
+  }
+
   def walKicks001: Config = new Config {
 
     override def id: String = "walKicks001"
