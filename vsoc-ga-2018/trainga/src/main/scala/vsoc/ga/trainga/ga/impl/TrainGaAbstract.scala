@@ -1,11 +1,8 @@
 package vsoc.ga.trainga.ga.impl
 
-import java.nio.file.Path
-
 import org.slf4j.LoggerFactory
-import vsoc.behaviour.Behaviour
 import vsoc.ga.genetic.{GA, GAResult, SelectionStrategies}
-import vsoc.ga.matches.TeamResult
+import vsoc.ga.matches.{Team, TeamResult}
 import vsoc.ga.trainga.ga.TrainGa
 import vsoc.ga.trainga.nn.NeuralNet
 
@@ -27,8 +24,6 @@ abstract class TrainGaAbstract extends TrainGa[Double] {
 
   private val playerParamSize: Int = createNeuralNet().getParam.length
 
-  log.info(s"start GA populationSize: $populationSize playerCount: $playerCount playerParamSize:$playerParamSize")
-
   private case class GAR(
                           score: Option[Double],
                           newPopulation: Seq[Seq[Double]]
@@ -36,10 +31,12 @@ abstract class TrainGaAbstract extends TrainGa[Double] {
 
   def randomAllele(_ran: Random): Double = 2.0 * _ran.nextDouble() - 1.0
 
+  lazy val transformer = new TransformerTeam(playerCount, createNeuralNet)
+
   val ga: GA[Double, TeamGa, Double] = new GA(
     new PhenoTesterTeam(ran, fitness),
     SelectionStrategies.crossover(0.001, randomAllele, ran),
-    new TransformerTeam(playerCount, createNeuralNet))
+    transformer)
 
   def createRandomPopGeno: Seq[Seq[Double]] = {
     def ranSeq(size: Int): Seq[Double] =
@@ -65,6 +62,7 @@ abstract class TrainGaAbstract extends TrainGa[Double] {
   private def pause(ms: Int): Unit = Thread.sleep(ms)
 
   override def run(trainGaId: String, trainGaNr: String): Unit = {
+    log.info(s"start GA populationSize: $populationSize playerCount: $playerCount playerParamSize:$playerParamSize")
     try {
       val initialPop: Seq[Seq[Double]] = population.getOrElse(createRandomPopGeno)
       var gar: GAResult[Double, Double] = GAR(None, initialPop)
@@ -92,9 +90,10 @@ abstract class TrainGaAbstract extends TrainGa[Double] {
     }
   }
 
-  def createBehaviours(workBasic: Path, nr: String): Seq[Seq[Behaviour]] = {
-    ???
+  def teamsFromGeno(geno: Seq[Seq[Double]]): Seq[Team] = {
+    geno.map(transformer.toPheno(_).vsocTeam)
   }
+
 
 }
 

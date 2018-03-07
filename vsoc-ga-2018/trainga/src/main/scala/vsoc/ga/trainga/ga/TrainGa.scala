@@ -1,8 +1,6 @@
 package vsoc.ga.trainga.ga
 
-import java.nio.file.Path
-
-import vsoc.behaviour.Behaviour
+import vsoc.ga.matches.Team
 
 /**
   * Trainer for Teams
@@ -19,7 +17,7 @@ trait TrainGa[S] {
 
   def id: String
 
-  def createBehaviours(workBasic: Path, nr: String): Seq[Seq[Behaviour]]
+  def teamsFromGeno(geno: Seq[Seq[Double]]): Seq[Team]
 
   def run(trainGaId: String, trainGaNr: String): Unit
 
