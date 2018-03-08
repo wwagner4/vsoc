@@ -32,7 +32,7 @@ object Configs {
 
   def bob001: Config = new Config {
 
-    override def id: String = "bobKicks001"
+    override def id: String = "bob001"
 
     override def workDirBase: Path = ConfigHelper.defaultWorkDir
 
