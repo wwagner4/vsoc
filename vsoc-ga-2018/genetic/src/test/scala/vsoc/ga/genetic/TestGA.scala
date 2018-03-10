@@ -49,6 +49,9 @@ class TestGA extends FunSuite with MustMatchers {
       }
     }
 
+    override def shortDesc: String = "test"
+
+    override def fullDesc: String = "test"
   }
 
   class TransformerT extends Transformer[Int, String] {

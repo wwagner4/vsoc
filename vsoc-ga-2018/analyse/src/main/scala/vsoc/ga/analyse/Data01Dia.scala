@@ -1,17 +1,19 @@
 package vsoc.ga.analyse
 
 import java.nio.file.{Files, Paths}
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 import entelijan.viz.{Viz, VizCreator, VizCreatorGnuplot}
 import org.slf4j.LoggerFactory
 import vsoc.ga.common.config.{Config, ConfigTrainGa}
 
 
-object BeanBasicDia {
+object Data01Dia {
 
-  private val log = LoggerFactory.getLogger(BeanBasicDia.getClass)
+  private val log = LoggerFactory.getLogger(Data01Dia.getClass)
 
-  def run(cfg: Config, yRange: Option[Viz.Range] = None): Unit = {
+  def run(cfg: Config, yRange: Option[Viz.Range] = None, filterFactor: Int = 1): Unit = {
 
     val workDir = cfg.workDirBase
     val sd = workDir.resolve(".script")
@@ -26,7 +28,8 @@ object BeanBasicDia {
 
       def filePath = workDir.resolve(prjDir.resolve(Paths.get(s"$id-$nr-data.csv")))
 
-      val data = BeanBasicReader.read(filePath)
+      val data = Data01CsvReader.read(filePath)
+        .filter(b => b.iterations % filterFactor == 0)
         .map(b => Viz.XY(b.iterations, b.score))
 
       Viz.DataRow(
@@ -36,8 +39,11 @@ object BeanBasicDia {
       )
 
     }
+    val tsfmt = DateTimeFormatter.ofPattern("yyyyMMddhhmmss")
+    val ts = tsfmt.format(LocalDateTime.now)
+
     val dia = Viz.Diagram[Viz.XY](
-      id = cfg.id,
+      id = s"${cfg.id}_$ts",
       title = s"Configuration ${cfg.id}",
       yRange = yRange,
       dataRows = dataRows

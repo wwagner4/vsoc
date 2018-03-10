@@ -5,17 +5,20 @@ import java.util.concurrent.Executors
 import vsoc.ga.common.commandline.WithConfigRunner
 import vsoc.ga.common.config.Config
 
-object TrainGaMain extends App with WithConfigRunner {
+object TrainGaMain extends  WithConfigRunner {
 
-  runWithConfig(args, trainGa, TrainGaMain.getClass.getSimpleName)
+  def main(args: Array[String]): Unit = {
+    runWithConfig(args, trainGa, TrainGaMain.getClass.getSimpleName)
 
-  def trainGa(cfg: Config): Unit = {
-    val ec = Executors.newFixedThreadPool(cfg.trainings.size)
-    val wdBase = cfg.workDirBase
-    for (c <- cfg.trainings) {
-      ec.execute(() => TrainGaRunner.run(wdBase, c))
+    def trainGa(cfg: Config): Unit = {
+      val ec = Executors.newFixedThreadPool(cfg.trainings.size)
+      val wdBase = cfg.workDirBase
+      for (c <- cfg.trainings) {
+        ec.execute(() => TrainGaRunner.run(wdBase, c))
+      }
     }
   }
+
 
 
 }

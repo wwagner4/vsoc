@@ -1,6 +1,7 @@
 package vsoc.ga.trainga.ga.impl
 
 import org.slf4j.LoggerFactory
+import vsoc.ga.common.describe.PropertiesProvider
 import vsoc.ga.genetic.{PhenoTester, PhenoTesterResult}
 import vsoc.ga.matches.{Matches, Team, TeamResult}
 
@@ -8,7 +9,7 @@ import scala.util.Random
 
 case class Result(nr: Int, team: TeamGa, matchCount: Int, fitnessSum: Double)
 
-class PhenoTesterTeam(val ran: Random, fitness: (TeamResult) => Double) extends PhenoTester[TeamGa, Double] {
+class PhenoTesterTeam(val ran: Random, fitness: (TeamResult) => Double) extends PhenoTester[TeamGa, Double] with PropertiesProvider {
 
   private val log = LoggerFactory.getLogger(classOf[PhenoTesterTeam])
 
@@ -49,6 +50,8 @@ class PhenoTesterTeam(val ran: Random, fitness: (TeamResult) => Double) extends 
     val teamCnt = phenos.size
     log.info(s"testing $teamCnt teams")
 
+    val matchMaxCnt = matchFactor * teamCnt
+
     def updateResults(old: List[Result], fitness: Double, nr: Int): List[Result] = {
       old match {
         case Nil => Nil
@@ -59,10 +62,9 @@ class PhenoTesterTeam(val ran: Random, fitness: (TeamResult) => Double) extends 
     }
 
     var results: List[Result] = phenos.toList.zipWithIndex.map { case (t, i) => Result(i, t, 0, 0.0) }
-    val maxnr = matchFactor * phenos.size
-    for (nr <- 1 to maxnr) {
+    for (nr <- 1 to matchMaxCnt) {
       val (r1, r2) = RandomElemsPicker.pick(results, ran)
-      val (f1, f2) = playMatch(r1.team.vsocTeam, r2.team.vsocTeam, nr, maxnr)
+      val (f1, f2) = playMatch(r1.team.vsocTeam, r2.team.vsocTeam, nr, matchMaxCnt)
       synchronized {
         results = updateResults(results, f1, r1.nr)
         results = updateResults(results, f2, r2.nr)
@@ -80,9 +82,11 @@ class PhenoTesterTeam(val ran: Random, fitness: (TeamResult) => Double) extends 
     }
   }
 
+  def matchSteps: Int = 20000
+
   def playMatch(t1: Team, t2: Team, nr: Int, maxNr: Int): (Double, Double) = {
     val m = Matches.of(t1, t2)
-    for (_ <- 1 to 20000) m.takeStep()
+    for (_ <- 1 to matchSteps) m.takeStep()
     val result = m.state
     val t1Fit: Double = fitness(result.teamEastResult)
     val t2Fit: Double = fitness(result.teamWestResult)
@@ -91,4 +95,16 @@ class PhenoTesterTeam(val ran: Random, fitness: (TeamResult) => Double) extends 
     (t1Fit, t2Fit)
   }
 
+  override def properties: Seq[(String, Any)] = Seq(
+    ("matchsteps", matchSteps),
+    ("matchfact", matchFactor),
+  )
+
+  override def shortDesc: String = "match playing"
+
+  override def fullDesc: String =
+    s"""Phenotester playing matches
+       |$propsFmt
+       | matchfact - defines the amount of matches played. amount of matches = matchfact * population size
+    """.stripMargin
 }

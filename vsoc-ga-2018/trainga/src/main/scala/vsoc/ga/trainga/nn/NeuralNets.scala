@@ -5,6 +5,7 @@ import org.deeplearning4j.nn.conf.{MultiLayerConfiguration, NeuralNetConfigurati
 import org.deeplearning4j.nn.weights.WeightInit
 import org.nd4j.linalg.activations.Activation
 import org.nd4j.linalg.lossfunctions.LossFunctions
+import vsoc.ga.common.describe.{DescribableFormatter, PropertiesProvider}
 import vsoc.ga.trainga.nn.impl.NnWrapperAbstract
 
 object NeuralNets {
@@ -39,6 +40,10 @@ object NeuralNets {
           .build)
         .build
     }
+
+    override def shortDesc: String = "default"
+
+    override def fullDesc: String = "Default Neural Net. Used for testing purposes"
   }
 
   /**
@@ -77,12 +82,35 @@ object NeuralNets {
         .build
     }
 
+    override def shortDesc: String = "test"
+
+    override def fullDesc: String = "Standard Neural Net. Used for testing purposes"
+
+
   }
 
-  def team01: NeuralNet = new NnWrapperAbstract {
+  def team01: NeuralNet = new NnWrapperAbstract with PropertiesProvider {
 
     // id must be the name of the method creating the neural net
     def id = "team01"
+
+    override def shortDesc: String = id
+
+    override def fullDesc: String = {
+      val props = DescribableFormatter.format(properties, 0)
+      s"""Feedforward NN with one hidden layers
+         |$props
+         |""".stripMargin
+
+    }
+
+    override def properties: Seq[(String, Any)] = Seq(
+      ("id", id),
+      ("num in", numInputNodes),
+      ("num hidden", numHiddenNodes),
+      ("num out", numOutputNodes),
+      ("activation", "TANH"),
+    )
 
     override val numInputNodes: Int = 140
 
@@ -111,6 +139,7 @@ object NeuralNets {
           .build)
         .build
     }
+
   }
 
 }

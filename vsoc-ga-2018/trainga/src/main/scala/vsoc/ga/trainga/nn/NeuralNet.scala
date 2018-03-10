@@ -1,6 +1,8 @@
 package vsoc.ga.trainga.nn
 
-trait NeuralNet {
+import vsoc.ga.common.describe.Describable
+
+trait NeuralNet extends Describable {
 
   def id: String
 

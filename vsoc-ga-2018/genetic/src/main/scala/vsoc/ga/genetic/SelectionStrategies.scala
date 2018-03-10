@@ -1,5 +1,7 @@
 package vsoc.ga.genetic
 
+import vsoc.ga.common.describe.PropertiesProvider
+
 import scala.util.Random
 
 object SelectionStrategies {
@@ -12,7 +14,7 @@ object SelectionStrategies {
     * @tparam A Class of alleles
     */
   def crossover[A](mutationRate: Double, randomAllele: Random => A, _ran: Random): SelectionStrategy[A] = {
-    new SelectionStrategy[A] with GeneticOps[A] {
+    new SelectionStrategy[A] with GeneticOps[A] with PropertiesProvider {
 
       def minSize = 3
 
@@ -33,6 +35,18 @@ object SelectionStrategies {
         all.map(g => mutation(g, mutationRate, randomAllele))
       }
 
+      override def properties: Seq[(String, Any)] = Seq(
+        ("mut rat", mutationRate),
+        ("co strat", "take unchanged 0 1 2 & crossver 0-1 0-2 0-3 1-2 2-3 ? the rest sored")
+      )
+
+      override def shortDesc: String = "crossover"
+
+      override def fullDesc: String =
+        s"""Selection strategy using crossover and mutation
+          |$propsFmt
+        """.stripMargin
+
     }
   }
 
@@ -44,7 +58,7 @@ object SelectionStrategies {
     * @tparam A Class of alleles
     */
   def mutationOnly[A](mutationRate: Double, randomAllele: Random => A, _ran: Random): SelectionStrategy[A] = {
-    new SelectionStrategy[A] with GeneticOps[A] {
+    new SelectionStrategy[A] with GeneticOps[A] with PropertiesProvider {
 
       def minSize = 4
 
@@ -61,6 +75,19 @@ object SelectionStrategies {
         ) ::: sorted).take(tested.size)
         all.map(t => mutation(t, mutationRate, randomAllele))
       }
+
+      override def properties: Seq[(String, Any)] = Seq(
+        ("mut rat", mutationRate)
+      )
+
+      override def shortDesc: String = "mutation only"
+
+      override def fullDesc: String =
+        s"""Selection strategy using no crossover
+           |$propsFmt
+        """.stripMargin
+
+
     }
   }
 }

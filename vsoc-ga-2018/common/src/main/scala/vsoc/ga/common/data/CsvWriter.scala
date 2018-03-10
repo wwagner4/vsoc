@@ -5,7 +5,7 @@ import java.nio.charset.Charset
 import java.nio.file.{Files, OpenOption, Path, StandardOpenOption}
 import java.util.Locale
 
-class DataHandler(filePath: Path) {
+class CsvWriter(filePath: Path) {
   require(filePath.isAbsolute, s"$filePath must be absolute")
   if (Files.notExists(filePath.getParent)) Files.createDirectories(filePath.getParent)
   else if (Files.exists(filePath)) require(Files.isWritable(filePath), s"$filePath must be writable")
@@ -47,6 +47,6 @@ class DataHandler(filePath: Path) {
       write(StandardOpenOption.APPEND) { br => writeData(br, line) }
   }
 
-  override def toString: String = s"DataHandler[$filePath]"
+  override def toString: String = s"CsvWriter[$filePath]"
 
 }

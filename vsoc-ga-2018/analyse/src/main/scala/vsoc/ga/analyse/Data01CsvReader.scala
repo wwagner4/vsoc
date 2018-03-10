@@ -6,7 +6,7 @@ import java.util.Locale
 
 import scala.collection.JavaConverters._
 
-object BeanBasicReader {
+object Data01CsvReader {
 
   def toInt(str: String): Int = str.toInt
 
@@ -14,9 +14,9 @@ object BeanBasicReader {
     NumberFormat.getInstance(Locale.ENGLISH).parse(str).doubleValue()
   }
 
-  def toBean(line: String): BeanBasic = {
+  def toBean(line: String): Data01 = {
     val a = line.split(";")
-    BeanBasic(
+    Data01(
       a(0),
       a(1),
       toInt(a(2)),
@@ -29,7 +29,7 @@ object BeanBasicReader {
     re
   }
 
-  def read(path: Path): Seq[BeanBasic] = {
+  def read(path: Path): Seq[Data01] = {
     Files.lines(path)
       .iterator()
       .asScala

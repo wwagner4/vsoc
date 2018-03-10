@@ -8,9 +8,9 @@ case class DataGa_One(id: String, nr: String) extends DataGa
 
 case class DataGa_Multi(id: String, title: String, datas: Seq[(String, String)]) extends DataGa
 
-object BeanBasicMain extends App {
+object Data01Main extends App {
 
-  val cfg = Configs.allBobKicks
-  BeanBasicDia.run(cfg)
+  val cfg = Configs.bob001
+  Data01Dia.run(cfg=cfg, filterFactor = 10)
 
 }

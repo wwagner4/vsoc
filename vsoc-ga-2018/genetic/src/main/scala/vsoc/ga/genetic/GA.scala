@@ -1,5 +1,7 @@
 package vsoc.ga.genetic
 
+import vsoc.ga.common.describe.Describable
+
 /**
   * A complete genetic algorithm for arbitrary pheno- and genotype
   * Phenotype: Any Class that can be somehow tested for fitness
@@ -54,11 +56,11 @@ trait PhenoTesterResult[P, S] {
   def score: Option[S]
 }
 
-trait PhenoTester[P, S] {
+trait PhenoTester[P, S] extends Describable {
   def test(phenos: Seq[P]): PhenoTesterResult[P, S]
 }
 
-trait SelectionStrategy[A] {
+trait SelectionStrategy[A] extends Describable {
   def select(tested: Seq[(Double, Seq[A])]): Seq[Seq[A]]
 }
 

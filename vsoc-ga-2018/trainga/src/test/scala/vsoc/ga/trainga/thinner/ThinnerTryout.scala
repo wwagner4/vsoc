@@ -4,10 +4,11 @@ import vsoc.ga.common.config.Configs
 
 object ThinnerTryout extends App {
 
-  val cfg = Configs.bobKicks001
+  val cfg = Configs.allBob
 
-  val train = cfg.trainings(2)
+  cfg.trainings.foreach{t =>
+    Thinner.thinFromTrainGaId(cfg.workDirBase, t.id, t.nr)
+  }
 
-  Thinner.thinFromTrainGaId(cfg.workDirBase, train.id, train.nr)
 
 }

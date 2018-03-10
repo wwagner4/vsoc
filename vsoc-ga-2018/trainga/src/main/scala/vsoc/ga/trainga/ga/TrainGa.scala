@@ -1,5 +1,6 @@
 package vsoc.ga.trainga.ga
 
+import vsoc.ga.common.describe.Describable
 import vsoc.ga.matches.Team
 
 /**
@@ -7,7 +8,7 @@ import vsoc.ga.matches.Team
   *
   * @tparam S type of score
   */
-trait TrainGa[S] {
+trait TrainGa[S] extends Describable {
 
   var iterations: Option[Int] = Option.empty
 

@@ -15,11 +15,17 @@ object Configs {
       ConfigTrainGa("trainGaKicks01", "bob002"),
       ConfigTrainGa("trainGaKicks01", "bob003"),
     )
+
+    override def shortDesc: String = "kicks bob"
+    override def fullDesc: String =
+      """Kicks for the host 'bob'
+        |bob001 - bob003
+        |""".stripMargin
   }
 
   def bobKicks002: Config = new Config {
 
-    override def id: String = "bobKicks001"
+    override def id: String = "bobKicks002"
 
     override def workDirBase: Path = ConfigHelper.defaultWorkDir
 
@@ -28,6 +34,12 @@ object Configs {
       ConfigTrainGa("trainGaKicks01", "bob005"),
       ConfigTrainGa("trainGaKicks01", "bob006"),
     )
+
+    override def shortDesc: String = "kicks bob"
+    override def fullDesc: String =
+      """Kicks for the host 'bob'
+        |004 - 006
+      """.stripMargin
   }
 
   def bob001: Config = new Config {
@@ -42,6 +54,12 @@ object Configs {
       ConfigTrainGa("trainGa01", "bob003"),
       ConfigTrainGa("trainGa01", "bob004"),
     )
+
+    override def shortDesc: String = "full fitness bob"
+    override def fullDesc: String =
+      """Full fitness for the host 'bob'
+        |001 - 004
+      """.stripMargin
   }
 
   def wal001: Config = new Config {
@@ -56,6 +74,11 @@ object Configs {
       ConfigTrainGa("trainGa01", "wal003"),
       ConfigTrainGa("trainGa01", "wal004"),
     )
+    override def shortDesc: String = "full fitness wallace"
+    override def fullDesc: String =
+      """Full fitness for the host 'wallace'
+        |001 - 004
+      """.stripMargin
   }
 
   def walKicks001: Config = new Config {
@@ -65,31 +88,59 @@ object Configs {
     override def workDirBase: Path = ConfigHelper.defaultWorkDir
 
     override def trainings: Seq[ConfigTrainGa] = Seq(
-      ConfigTrainGa("trainGaKicks01", "004"),
+      ConfigTrainGa("trainGaKicks01", "004"), // Naming convention was not established then
       ConfigTrainGa("trainGaKicks01", "005"),
       ConfigTrainGa("trainGaKicks01", "006"),
       ConfigTrainGa("trainGaKicks01", "007"),
     )
+
+    override def shortDesc: String = "kicks wallace"
+    override def fullDesc: String =
+      """kicks from the host 'wallace'
+        |004 - 007
+      """.stripMargin
   }
 
 
   def allKicks: Config = new Config {
 
+    private lazy val sub = Seq(walKicks001, allBobKicks)
+
     override def id: String = "allKicks001"
 
     override def workDirBase: Path = ConfigHelper.defaultWorkDir
 
-    override def trainings: Seq[ConfigTrainGa] = Seq(walKicks001, bobKicks001, bobKicks002).flatMap(_.trainings)
+    override def trainings: Seq[ConfigTrainGa] = sub.flatMap(_.trainings)
 
+    override def shortDesc: String = "kicks multi host"
+    override def fullDesc: String = "Kicks from all hosts"
   }
 
   def allBobKicks: Config = new Config {
+
+    private lazy val sub = Seq(bobKicks001, bobKicks002)
 
     override def id: String = "allBobKicks001"
 
     override def workDirBase: Path = ConfigHelper.defaultWorkDir
 
-    override def trainings: Seq[ConfigTrainGa] = Seq(bobKicks001, bobKicks002).flatMap(_.trainings)
+    override def trainings: Seq[ConfigTrainGa] = sub.flatMap(_.trainings)
 
+    override def shortDesc: String = "all kicks bob"
+    override def fullDesc: String = " All kicking configurations for the host 'bob'"
+  }
+
+  def allBob: Config = new Config {
+
+    private lazy val sub = Seq(allBobKicks, bob001)
+
+    override def id: String = "allBob"
+
+    override def workDirBase: Path = ConfigHelper.defaultWorkDir
+
+    override def trainings: Seq[ConfigTrainGa] = sub.flatMap(_.trainings)
+
+    override def shortDesc: String = "all bob"
+    override def fullDesc: String = "All configurations for the host 'bob'"
   }
 }

@@ -10,6 +10,7 @@ lazy val commonSettings = Seq(
   resolvers += "Local Maven Repository" at s"file://$userHome/.m2/repository",
   //resolvers += "Local Maven Repository" at "file:///C:/ta30/nutzb/_m2_repo/",
   libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.2" % "test",
+  libraryDependencies += "org.slf4j" % "slf4j-log4j12" % "1.7.25",
 )
 
 lazy val root = (project in file("."))
@@ -40,7 +41,7 @@ lazy val genetic = (project in file("genetic"))
   .settings(
     name := "genetic",
     commonSettings,
-  )
+  ).dependsOn(common)
 
 lazy val trainga = (project in file("trainga"))
   .settings(
@@ -48,7 +49,6 @@ lazy val trainga = (project in file("trainga"))
     commonSettings,
     libraryDependencies += "org.deeplearning4j" % "deeplearning4j-nn" % "0.9.1" exclude("com.github.stephenc.findbugs", "findbugs-annotations"),
     libraryDependencies += "org.nd4j" % "nd4j-native-platform" % "0.9.1" exclude("com.github.stephenc.findbugs", "findbugs-annotations"),
-    libraryDependencies += "org.slf4j" % "slf4j-log4j12" % "1.7.25",
   ).dependsOn(matches, genetic, common)
 
 lazy val analyse = (project in file("analyse"))
@@ -58,5 +58,4 @@ lazy val analyse = (project in file("analyse"))
     // Checkout https://github.com/wwagner4/viz.git
     // and call sbt publishLocal in the root directory
     libraryDependencies += "net.entelijan" %% "viz" % "0.1-SNAPSHOT",
-    libraryDependencies += "org.slf4j" % "slf4j-log4j12" % "1.7.25",
   ).dependsOn(common)

@@ -2,7 +2,9 @@ package vsoc.ga.common.config
 
 import java.nio.file.Path
 
-trait Config {
+import vsoc.ga.common.describe.Describable
+
+trait Config extends Describable {
 
   /**
     * @return The directory where all the results are stored

@@ -5,7 +5,8 @@ import java.util.{Comparator, Optional}
 
 import org.slf4j.LoggerFactory
 import vsoc.ga.common.config.ConfigTrainGa
-import vsoc.ga.common.data.DataHandler
+import vsoc.ga.common.data.CsvWriter
+import vsoc.ga.common.describe.DescribableFormatter
 import vsoc.ga.common.persist.{Persistor, Persistors}
 import vsoc.ga.common.{UtilReflection, UtilTransform}
 import vsoc.ga.trainga.thinner.Thinner
@@ -23,11 +24,10 @@ object TrainGaRunner {
     def persistor: Persistor = Persistors.nio(workDirBase)
     val workDir = Paths.get(id, nr)
     val workDirAbs = persistor.dir(workDir)
-    log.info(s"STARING $id $nr - '$workDirAbs'")
 
     val dataFile = workDirAbs.resolve(s"$id-$nr-data.csv")
 
-    val dh = new DataHandler(dataFile)
+    val dh = new CsvWriter(dataFile)
 
     val fileNameOpt: Optional[Path] = Files.list(workDirAbs)
       .filter(p => p.getFileName.toString.endsWith("ser"))
@@ -46,9 +46,9 @@ object TrainGaRunner {
         UtilReflection.call(TrainGas, cfg.id, classOf[TrainGa[Double]])
       }
 
+    val desc = DescribableFormatter.format(tga, 0)
     tga.listeners = tga.listeners :+ persListener :+ dataListener
-
-    log.info(s"starting " + tga.id + " at iteration " + tga.iterations.getOrElse(0))
+    log.info(s"start ${tga.id}-${cfg.nr} at iteration ${tga.iterations.getOrElse(0)}\n\n--------------------------------------------------------\n$desc")
     tga.run(cfg.id, cfg.nr)
 
     def persListener: TrainGaListener[Double] = (iteration: Int, _: Option[Double], _: Seq[(String, Any)]) => {

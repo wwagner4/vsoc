@@ -1,14 +1,15 @@
 package vsoc.ga.trainga.ga.impl
 
 import org.slf4j.LoggerFactory
-import vsoc.ga.genetic.{GA, GAResult, SelectionStrategies}
+import vsoc.ga.common.describe.{DescribableFormatter, PropertiesProvider}
+import vsoc.ga.genetic._
 import vsoc.ga.matches.{Team, TeamResult}
 import vsoc.ga.trainga.ga.TrainGa
 import vsoc.ga.trainga.nn.NeuralNet
 
 import scala.util.Random
 
-abstract class TrainGaAbstract extends TrainGa[Double] {
+abstract class TrainGaAbstract extends TrainGa[Double] with PropertiesProvider {
 
   private val log = LoggerFactory.getLogger(classOf[TrainGaAbstract])
 
@@ -18,11 +19,29 @@ abstract class TrainGaAbstract extends TrainGa[Double] {
 
   protected def fitness: TeamResult => Double
 
-  private val playerCount = 3
+  protected def fitnessDesc: String
 
-  private val populationSize = 20
+  protected val playerCount = 3
 
-  private val playerParamSize: Int = createNeuralNet().getParam.length
+  protected val populationSize = 20
+
+  protected val mutationRate = 0.001
+
+  private lazy val nnTempl = createNeuralNet()
+
+  private val playerParamSize: Int = nnTempl.getParam.length
+
+  override def properties: Seq[(String, Any)] = Seq(
+    ("player cnt", playerCount),
+    ("pop size", populationSize),
+    ("fit func", fitnessDesc),
+    ("mut rate", mutationRate),
+    ("nn", nnTempl),
+  )
+
+  protected def propertiesFmt: String = {
+    DescribableFormatter.format(properties, 0)
+  }
 
   private case class GAR(
                           score: Option[Double],
@@ -31,12 +50,11 @@ abstract class TrainGaAbstract extends TrainGa[Double] {
 
   def randomAllele(_ran: Random): Double = 2.0 * _ran.nextDouble() - 1.0
 
-  lazy val transformer = new TransformerTeam(playerCount, createNeuralNet)
+  protected lazy val tester: PhenoTester[TeamGa, Double] = new PhenoTesterTeam(ran, fitness)
+  protected lazy val selStrat: SelectionStrategy[Double] = SelectionStrategies.crossover(mutationRate, randomAllele, ran)
+  protected lazy val transformer: Transformer[Double, TeamGa] = new TransformerTeam(playerCount, createNeuralNet)
 
-  val ga: GA[Double, TeamGa, Double] = new GA(
-    new PhenoTesterTeam(ran, fitness),
-    SelectionStrategies.crossover(0.001, randomAllele, ran),
-    transformer)
+  val ga: GA[Double, TeamGa, Double] = new GA(tester, selStrat, transformer)
 
   def createRandomPopGeno: Seq[Seq[Double]] = {
     def ranSeq(size: Int): Seq[Double] =
