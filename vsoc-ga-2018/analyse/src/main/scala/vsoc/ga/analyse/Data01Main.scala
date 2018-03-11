@@ -11,6 +11,6 @@ case class DataGa_Multi(id: String, title: String, datas: Seq[(String, String)])
 object Data01Main extends App {
 
   val cfg = Configs.bob002
-  Data01Dia.run(cfg=cfg, filterFactor = 5, minIter = 850)
+  Data01Dia.run(cfg=cfg, filterFactor = 2, minIter = 950)
 
 }
