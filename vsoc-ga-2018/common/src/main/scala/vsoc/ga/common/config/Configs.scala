@@ -62,6 +62,27 @@ object Configs {
       """.stripMargin
   }
 
+  def bob002: Config = new Config {
+
+    override def id: String = "bob001"
+
+    override def workDirBase: Path = ConfigHelper.defaultWorkDir
+
+    override def trainings: Seq[ConfigTrainGa] = Seq(
+      ConfigTrainGa("trainGa01", "bob001"),
+      ConfigTrainGa("trainGa01", "bob003"),
+      ConfigTrainGa("trainGa01", "bob003a"),
+      ConfigTrainGa("trainGa01", "bob004"),
+    )
+
+    override def shortDesc: String = "full fitness bob"
+    override def fullDesc: String =
+      """based on bob001. The least successfull population (bob002) is removed
+        |and the most scessfull (bob003) is duplicated to bob003a
+        |001 003 003a 004
+      """.stripMargin
+  }
+
   def wal001: Config = new Config {
 
     override def id: String = "wal001"
