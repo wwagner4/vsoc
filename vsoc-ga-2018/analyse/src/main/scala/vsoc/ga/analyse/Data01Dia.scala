@@ -13,7 +13,7 @@ object Data01Dia {
 
   private val log = LoggerFactory.getLogger(Data01Dia.getClass)
 
-  def run(cfg: Config, yRange: Option[Viz.Range] = None, filterFactor: Int = 1): Unit = {
+  def run(cfg: Config, yRange: Option[Viz.Range] = None, filterFactor: Int = 1, minIter: Int = 0): Unit = {
 
     val workDir = cfg.workDirBase
     val sd = workDir.resolve(".script")
@@ -29,7 +29,7 @@ object Data01Dia {
       def filePath = workDir.resolve(prjDir.resolve(Paths.get(s"$id-$nr-data.csv")))
 
       val data = Data01CsvReader.read(filePath)
-        .filter(b => b.iterations % filterFactor == 0)
+        .filter(b => b.iterations % filterFactor == 0 && b.iterations >= minIter)
         .map(b => Viz.XY(b.iterations, b.score))
 
       Viz.DataRow(
