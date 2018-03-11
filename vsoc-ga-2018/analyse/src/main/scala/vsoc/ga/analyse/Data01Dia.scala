@@ -39,7 +39,7 @@ object Data01Dia {
       )
 
     }
-    val tsfmt = DateTimeFormatter.ofPattern("yyyyMMddhhmmss")
+    val tsfmt = DateTimeFormatter.ofPattern("yyyyMMddHHmmss")
     val ts = tsfmt.format(LocalDateTime.now)
 
     val dia = Viz.Diagram[Viz.XY](
