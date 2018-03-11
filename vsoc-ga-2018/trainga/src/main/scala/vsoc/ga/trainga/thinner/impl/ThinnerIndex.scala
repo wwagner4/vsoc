@@ -3,10 +3,13 @@ package vsoc.ga.trainga.thinner.impl
 object ThinnerIndex {
 
   def thin(currentIndexes: Seq[Int]): Seq[Int] = {
-    val max = currentIndexes.max
-    val min = currentIndexes.min
-    val keep = idxToBeKept(max, min, 1)
-    currentIndexes.filter(i => keep.contains(i))
+    if (currentIndexes.isEmpty) Seq.empty[Int]
+    else {
+      val max = currentIndexes.max
+      val min = currentIndexes.min
+      val keep = idxToBeKept(max, min, 1)
+      currentIndexes.filter(i => keep.contains(i))
+    }
   }
 
   def nextMax(max: Int, step: Int): Int = {
