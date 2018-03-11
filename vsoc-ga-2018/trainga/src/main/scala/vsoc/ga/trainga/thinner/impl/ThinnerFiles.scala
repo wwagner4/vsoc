@@ -18,11 +18,11 @@ object ThinnerFiles {
 
   def isPopFile(file: Path): Boolean = {
     val fileName = file.getFileName.toString
-    fileName.matches("pop[0-9]{3}\\.ser")
+    fileName.matches("pop[0-9]{4}\\.ser")
   }
 
   def toIndexed(file: Path): (Int, Path) = {
-    val R: Regex = """pop([0-9]{3})\.ser""".r
+    val R: Regex = """pop([0-9]{4})\.ser""".r
     val fileName: String = file.getFileName.toString
     val i = fileName match {
       case R(nr) => nr.toInt
