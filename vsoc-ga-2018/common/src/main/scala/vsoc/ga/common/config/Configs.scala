@@ -1,6 +1,6 @@
 package vsoc.ga.common.config
 
-import java.nio.file.Path
+import java.nio.file.{Path, Paths}
 
 object Configs {
 
@@ -97,6 +97,23 @@ object Configs {
     override def fullDesc: String =
       """Full fitness for the host 'wallace'
         |001 - 004
+      """.stripMargin
+  }
+
+  def work001: Config = new Config {
+
+    override def id: String = "work001"
+
+    override def workDirBase: Path = Paths.get("C:\\ta30\\entw1\\work")
+
+    override def trainings: Seq[ConfigTrainGa] = Seq(
+      ConfigTrainGa("trainGa01", "w001"),
+      ConfigTrainGa("trainGa01", "w002"),
+    )
+    override def shortDesc: String = "full fitness work"
+    override def fullDesc: String =
+      """Full fitness for work
+        |w001 - w002
       """.stripMargin
   }
 
