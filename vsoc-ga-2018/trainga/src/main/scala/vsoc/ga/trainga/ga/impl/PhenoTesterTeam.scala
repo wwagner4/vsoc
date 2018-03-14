@@ -9,11 +9,9 @@ import scala.util.Random
 
 case class Result(nr: Int, team: TeamGa, matchCount: Int, fitnessSum: Double)
 
-class PhenoTesterTeam(val ran: Random, fitness: (TeamResult) => Double) extends PhenoTester[TeamGa, Double] with PropertiesProvider {
+class PhenoTesterTeam(val ran: Random, fitness: (TeamResult) => Double, popMultiplicationFactor: Int) extends PhenoTester[TeamGa, Double] with PropertiesProvider {
 
   private val log = LoggerFactory.getLogger(classOf[PhenoTesterTeam])
-
-  val matchFactor = 3
 
   def meanTeamFitness(results: List[Result], cnt: Int, sum: Double): Double = {
     results match {
@@ -50,7 +48,7 @@ class PhenoTesterTeam(val ran: Random, fitness: (TeamResult) => Double) extends 
     val teamCnt = phenos.size
     log.info(s"testing $teamCnt teams")
 
-    val matchMaxCnt = matchFactor * teamCnt
+    val matchMaxCnt = popMultiplicationFactor * teamCnt
 
     def updateResults(old: List[Result], fitness: Double, nr: Int): List[Result] = {
       old match {
@@ -97,7 +95,7 @@ class PhenoTesterTeam(val ran: Random, fitness: (TeamResult) => Double) extends 
 
   override def properties: Seq[(String, Any)] = Seq(
     ("matchsteps", matchSteps),
-    ("matchfact", matchFactor),
+    ("matchfact", popMultiplicationFactor),
   )
 
   override def shortDesc: String = "match playing"

@@ -119,6 +119,24 @@ object Configs {
       """.stripMargin
   }
 
+  def work002: Config = new Config {
+
+    override def id: String = "work001"
+
+    override def workDirBase: Path = Paths.get("C:\\ta30\\entw1\\work")
+
+    override def trainings: Seq[ConfigTrainGa] = Seq(
+      ConfigTrainGa("trainGa02", "w001"),
+      ConfigTrainGa("trainGa02", "w002"),
+      ConfigTrainGa("trainGa02", "w003"),
+      ConfigTrainGa("trainGa02", "w004"),
+    )
+    override def shortDesc: String = "Multiple trainGa02"
+    override def fullDesc: String =
+      """Multiple trainGa02
+      """.stripMargin
+  }
+
   def walKicks001: Config = new Config {
 
     override def id: String = "walKicks001"
