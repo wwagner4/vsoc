@@ -10,7 +10,7 @@ case class DataGa_Multi(id: String, title: String, datas: Seq[(String, String)])
 
 object Data01Main extends App {
 
-  val cfg = Configs.work001
-  Data01Dia.run(cfg=cfg, filterFactor = 10, minIter = 0)
+  val cfg = Configs.bob002
+  Data01Dia.run(cfg=cfg, filterFactor = 50, minIter = 20)
 
 }
