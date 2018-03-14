@@ -109,11 +109,13 @@ object Configs {
     override def trainings: Seq[ConfigTrainGa] = Seq(
       ConfigTrainGa("trainGa01", "w001"),
       ConfigTrainGa("trainGa01", "w002"),
+      ConfigTrainGa("trainGa01", "w003"),
+      ConfigTrainGa("trainGa01", "w004"),
     )
     override def shortDesc: String = "full fitness work"
     override def fullDesc: String =
       """Full fitness for work
-        |w001 - w002
+        |w001 - w004
       """.stripMargin
   }
 
