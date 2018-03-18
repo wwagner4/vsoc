@@ -27,10 +27,128 @@ object TrainGas {
 
     override def populationSize: Int = 20
 
+    override def mutationRate: Double = 0.001
+
     override def fullDesc: String =
       s"""Consider all match parameters. '$id'
          |
         |$propertiesFmt
+      """.stripMargin
+
+  }
+
+  def trainGa01_m1: TrainGa[Double] = new TrainGaAbstract {
+
+    // Must be equal to the constructing method to ensure correct persistence
+    override def id: String = "trainGa01"
+
+    override def fitness: TeamResult => Double = FitnessFunctions.fitnessConsiderAll01
+
+    override protected def fitnessDesc: String = "consider all"
+
+    override def ran: Random = Random.javaRandomToRandom(new java.util.Random())
+
+    override def createNeuralNet: () => NeuralNet = () => NeuralNets.team01
+
+    override def shortDesc: String = "fitness consider all"
+
+    override def popMultiplicationTestFactor: Int = 3
+
+    override def populationSize: Int = 20
+
+    override def mutationRate: Double = 0.001
+
+    override def fullDesc: String =
+      s"""Consider all match parameters. '$id'
+         |mutation rate S
+         |$propertiesFmt
+      """.stripMargin
+
+  }
+
+  def trainGa01_mS: TrainGa[Double] = new TrainGaAbstract {
+
+    // Must be equal to the constructing method to ensure correct persistence
+    override def id: String = "trainGa01_mS"
+
+    override def fitness: TeamResult => Double = FitnessFunctions.fitnessConsiderAll01
+
+    override protected def fitnessDesc: String = "consider all"
+
+    override def ran: Random = Random.javaRandomToRandom(new java.util.Random())
+
+    override def createNeuralNet: () => NeuralNet = () => NeuralNets.team01
+
+    override def shortDesc: String = "fitness consider all"
+
+    override def popMultiplicationTestFactor: Int = 3
+
+    override def populationSize: Int = 20
+
+    override def mutationRate: Double = 0.0001
+
+    override def fullDesc: String =
+      s"""Consider all match parameters. '$id'
+         |mutation rate S 0.0001
+         |$propertiesFmt
+      """.stripMargin
+
+  }
+
+  def trainGa01_mM: TrainGa[Double] = new TrainGaAbstract {
+
+    // Must be equal to the constructing method to ensure correct persistence
+    override def id: String = "trainGa01_mM"
+
+    override def fitness: TeamResult => Double = FitnessFunctions.fitnessConsiderAll01
+
+    override protected def fitnessDesc: String = "consider all"
+
+    override def ran: Random = Random.javaRandomToRandom(new java.util.Random())
+
+    override def createNeuralNet: () => NeuralNet = () => NeuralNets.team01
+
+    override def shortDesc: String = "fitness consider all"
+
+    override def popMultiplicationTestFactor: Int = 3
+
+    override def populationSize: Int = 20
+
+    override def mutationRate: Double = 0.001
+
+    override def fullDesc: String =
+      s"""Consider all match parameters. '$id'
+         |mutation rate M 0.001
+         |$propertiesFmt
+      """.stripMargin
+
+  }
+
+  def trainGa01_mL: TrainGa[Double] = new TrainGaAbstract {
+
+    // Must be equal to the constructing method to ensure correct persistence
+    override def id: String = "trainGa01_mL"
+
+    override def fitness: TeamResult => Double = FitnessFunctions.fitnessConsiderAll01
+
+    override protected def fitnessDesc: String = "consider all"
+
+    override def ran: Random = Random.javaRandomToRandom(new java.util.Random())
+
+    override def createNeuralNet: () => NeuralNet = () => NeuralNets.team01
+
+    override def shortDesc: String = "fitness consider all"
+
+    override def popMultiplicationTestFactor: Int = 3
+
+    override def populationSize: Int = 20
+
+    override def mutationRate: Double = 0.01
+
+    override def fullDesc: String =
+      s"""Consider all match parameters. '$id'
+         |mutation rate L 0.01
+         |$propertiesFmt
       """.stripMargin
 
   }
@@ -53,6 +171,8 @@ object TrainGas {
     override def popMultiplicationTestFactor: Int = 6
 
     override def populationSize: Int = 10
+
+    override def mutationRate: Double = 0.001
 
     override def fullDesc: String =
       s"""Consider all match parameters. '$id'
@@ -82,6 +202,8 @@ object TrainGas {
 
     override def populationSize: Int = 10
 
+    override def mutationRate: Double = 0.001
+
     override def fullDesc: String =
       s"""Consider all match parameters. '$id'
          |Smaller population size and more test matches
@@ -109,6 +231,8 @@ object TrainGas {
     override def popMultiplicationTestFactor: Int = 3
 
     override def populationSize: Int = 20
+
+    override def mutationRate: Double = 0.001
 
     override def fullDesc: String =
       s"""Optimize Ball Kicks. $id

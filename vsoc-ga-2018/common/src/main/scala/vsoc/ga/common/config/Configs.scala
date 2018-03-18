@@ -82,6 +82,25 @@ object Configs {
       """.stripMargin
   }
 
+  def bob003: Config = new Config {
+
+    override def id: String = "bob003"
+
+    override def workDirBase: Path = ConfigHelper.defaultWorkDir
+
+    override def trainings: Seq[ConfigTrainGa] = Seq(
+      ConfigTrainGa("trainGa01_mS", "bob001"),
+      ConfigTrainGa("trainGa01_mS", "bob002"),
+      ConfigTrainGa("trainGa01_mM", "bob001"),
+      ConfigTrainGa("trainGa01_mM", "bob002"),
+    )
+
+    override def shortDesc: String = "full fitness bob"
+    override def fullDesc: String =
+      """Small and large mutation rate
+      """.stripMargin
+  }
+
   def wal001: Config = new Config {
 
     override def id: String = "wal001"

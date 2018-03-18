@@ -25,7 +25,7 @@ abstract class TrainGaAbstract extends TrainGa[Double] with PropertiesProvider {
 
   protected def populationSize: Int
 
-  protected val mutationRate = 0.001
+  protected def mutationRate: Double
 
   protected val playerCount = 3
 
