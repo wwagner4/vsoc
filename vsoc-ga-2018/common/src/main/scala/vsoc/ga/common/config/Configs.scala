@@ -157,6 +157,27 @@ object Configs {
       """.stripMargin
   }
 
+  def work003: Config = new Config {
+
+    override def id: String = "work003"
+
+    override def workDirBase: Path = ConfigHelper.defaultWorkDir
+
+    override def trainings: Seq[ConfigTrainGa] = Seq(
+      ConfigTrainGa("trainGa01_mS", "w001"),
+      ConfigTrainGa("trainGa01_mS", "w002"),
+      ConfigTrainGa("trainGa01_mM", "w001"),
+      ConfigTrainGa("trainGa01_mM", "w002"),
+      ConfigTrainGa("trainGa01_mL", "w001"),
+      ConfigTrainGa("trainGa01_mL", "w002"),
+    )
+
+    override def shortDesc: String = ""
+    override def fullDesc: String =
+      """small medium large mutation rate
+      """.stripMargin
+  }
+
   def walKicks001: Config = new Config {
 
     override def id: String = "walKicks001"
