@@ -91,8 +91,8 @@ object Configs {
     override def trainings: Seq[ConfigTrainGa] = Seq(
       ConfigTrainGa("trainGa01_mS", "bob001"),
       ConfigTrainGa("trainGa01_mS", "bob002"),
-      ConfigTrainGa("trainGa01_mM", "bob001"),
-      ConfigTrainGa("trainGa01_mM", "bob002"),
+      ConfigTrainGa("trainGa01_mL", "bob001"),
+      ConfigTrainGa("trainGa01_mL", "bob002"),
     )
 
     override def shortDesc: String = "full fitness bob"
