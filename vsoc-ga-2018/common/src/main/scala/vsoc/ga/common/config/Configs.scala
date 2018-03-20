@@ -161,7 +161,7 @@ object Configs {
 
     override def id: String = "work003"
 
-    override def workDirBase: Path = ConfigHelper.defaultWorkDir
+    override def workDirBase: Path = Paths.get("C:\\ta30\\entw1\\work")
 
     override def trainings: Seq[ConfigTrainGa] = Seq(
       ConfigTrainGa("trainGa01_mS", "w001"),
