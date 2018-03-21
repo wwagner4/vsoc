@@ -141,7 +141,7 @@ object Configs {
 
   def work002: Config = new Config {
 
-    override def id: String = "work001"
+    override def id: String = "work002"
 
     override def workDirBase: Path = Paths.get("C:\\ta30\\entw1\\work")
 
