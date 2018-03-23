@@ -15,7 +15,21 @@ scp bob:~/work/work-vsoc-ga-2018/trainGa03/bob003/*.csv ~/work/work-vsoc-ga-2018
 scp bob:~/work/work-vsoc-ga-2018/trainGa03/bob004/*.csv ~/work/work-vsoc-ga-2018/trainGa03/bob004
 scp bob:~/work/work-vsoc-ga-2018/trainGa03/bob005/*.csv ~/work/work-vsoc-ga-2018/trainGa03/bob005
 
+
+
+mkdir ~/work/work-vsoc-ga-2018/trainGa01_mS
+mkdir ~/work/work-vsoc-ga-2018/trainGa01_mM
+mkdir ~/work/work-vsoc-ga-2018/trainGa01_mL
+mkdir ~/work/work-vsoc-ga-2018/trainGa01_mS/bob001
+mkdir ~/work/work-vsoc-ga-2018/trainGa01_mS/bob002
+mkdir ~/work/work-vsoc-ga-2018/trainGa01_mM/bob001
+mkdir ~/work/work-vsoc-ga-2018/trainGa01_mM/bob002
+mkdir ~/work/work-vsoc-ga-2018/trainGa01_mL/bob001
+mkdir ~/work/work-vsoc-ga-2018/trainGa01_mL/bob002
+
 scp bob:~/work/work-vsoc-ga-2018/trainGa01_mS/bob001/*.csv ~/work/work-vsoc-ga-2018/trainGa01_mS/bob001
-scp bob:~/work/work-vsoc-ga-2018/trainGa01_mS/bob002/*.csv ~/work/work-vsoc-ga-2018/trainGa02_mS/bob002
-scp bob:~/work/work-vsoc-ga-2018/trainGa01_mL/bob001/*.csv ~/work/work-vsoc-ga-2018/trainGa03_mL/bob001
-scp bob:~/work/work-vsoc-ga-2018/trainGa02_mL/bob002/*.csv ~/work/work-vsoc-ga-2018/trainGa04_mL/bob002
+scp bob:~/work/work-vsoc-ga-2018/trainGa01_mS/bob002/*.csv ~/work/work-vsoc-ga-2018/trainGa01_mS/bob002
+scp bob:~/work/work-vsoc-ga-2018/trainGa01_mM/bob001/*.csv ~/work/work-vsoc-ga-2018/trainGa01_mM/bob001
+scp bob:~/work/work-vsoc-ga-2018/trainGa01_mM/bob002/*.csv ~/work/work-vsoc-ga-2018/trainGa01_mM/bob002
+scp bob:~/work/work-vsoc-ga-2018/trainGa01_mL/bob001/*.csv ~/work/work-vsoc-ga-2018/trainGa01_mL/bob001
+scp bob:~/work/work-vsoc-ga-2018/trainGa01_mL/bob002/*.csv ~/work/work-vsoc-ga-2018/trainGa01_mL/bob002

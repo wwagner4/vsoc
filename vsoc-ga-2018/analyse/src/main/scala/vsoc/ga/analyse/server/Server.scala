@@ -3,7 +3,7 @@ package vsoc.ga.analyse.server
 import java.nio.file.{Path, Paths}
 import java.util.concurrent.{Executors, TimeUnit}
 
-import vsoc.ga.analyse.Data01Dia
+import vsoc.ga.analyse.{Data01Dia, DiaConf_SUPRESS_TIMESTAMP}
 import vsoc.ga.common.UtilReflection
 import vsoc.ga.common.config.{Config, Configs}
 
@@ -38,7 +38,7 @@ object ServerImpl {
 
     def run(): Unit = {
       cfgs.foreach{c =>
-        Data01Dia.run(c)
+        Data01Dia.run(c, diaConfs = Seq(DiaConf_SUPRESS_TIMESTAMP), diaDir = Some(httpPath))
         println(s"created data for configuration '${c.id}'")
       }
     }

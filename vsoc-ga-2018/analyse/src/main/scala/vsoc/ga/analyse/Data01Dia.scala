@@ -1,6 +1,6 @@
 package vsoc.ga.analyse
 
-import java.nio.file.{Files, Paths}
+import java.nio.file.{Files, Path, Paths}
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -9,19 +9,30 @@ import org.slf4j.LoggerFactory
 import vsoc.ga.common.config.{Config, ConfigTrainGa}
 
 
+sealed trait DiaConf
+
+case object DiaConf_SUPRESS_TIMESTAMP extends DiaConf
+
 object Data01Dia {
 
   private val log = LoggerFactory.getLogger(Data01Dia.getClass)
 
-  def run(cfg: Config, yRange: Option[Viz.Range] = None, filterFactor: Int = 1, minIter: Int = 0): Unit = {
+  def run(
+           cfg: Config,
+           yRange: Option[Viz.Range] = None,
+           filterFactor: Int = 1,
+           minIter: Int = 0,
+           diaConfs: Seq[DiaConf] = Seq.empty[DiaConf],
+           diaDir: Option[Path] = None,
+         ): Unit = {
 
     val workDir = cfg.workDirBase
-    val sd = workDir.resolve(".script")
-    Files.createDirectories(sd)
-    val id = workDir.resolve("viz_img")
-    Files.createDirectories(id)
-    log.info(s"Writing image to '$id'")
-    implicit val creator: VizCreator[Viz.XY] = VizCreatorGnuplot[Viz.XY](scriptDir = sd.toFile, imageDir = id.toFile)
+    val scriptDir = workDir.resolve(".script")
+    Files.createDirectories(scriptDir)
+    val imgDir = diaDir.getOrElse(workDir.resolve("viz_img"))
+    Files.createDirectories(imgDir)
+    log.info(s"Writing image to '$imgDir'")
+    implicit val creator: VizCreator[Viz.XY] = VizCreatorGnuplot[Viz.XY](scriptDir = scriptDir.toFile, imageDir = imgDir.toFile)
     val ds = cfg.trainings
     val dataRows = for (ConfigTrainGa(id, nr) <- ds) yield {
       def prjDir = workDir.resolve(Paths.get(id, nr))
@@ -39,11 +50,16 @@ object Data01Dia {
       )
 
     }
-    val tsfmt = DateTimeFormatter.ofPattern("yyyyMMddHHmmss")
-    val ts = tsfmt.format(LocalDateTime.now)
+    val _id = if (diaConfs.contains(DiaConf_SUPRESS_TIMESTAMP)) {
+      s"${cfg.id}"
+    } else {
+      val tsfmt = DateTimeFormatter.ofPattern("yyyyMMddHHmmss")
+      val ts = tsfmt.format(LocalDateTime.now)
+      s"${cfg.id}_$ts"
+    }
 
     val dia = Viz.Diagram[Viz.XY](
-      id = s"${cfg.id}_$ts",
+      id = _id,
       title = s"Configuration ${cfg.id}",
       yRange = yRange,
       dataRows = dataRows
