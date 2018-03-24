@@ -49,7 +49,7 @@ lazy val trainga = (project in file("trainga"))
     commonSettings,
     libraryDependencies += "org.deeplearning4j" % "deeplearning4j-nn" % "0.9.1" exclude("com.github.stephenc.findbugs", "findbugs-annotations"),
     libraryDependencies += "org.nd4j" % "nd4j-native-platform" % "0.9.1" exclude("com.github.stephenc.findbugs", "findbugs-annotations"),
-  ).dependsOn(matches, genetic, common)
+  ).dependsOn(matches, genetic)
 
 lazy val analyse = (project in file("analyse"))
   .settings(
