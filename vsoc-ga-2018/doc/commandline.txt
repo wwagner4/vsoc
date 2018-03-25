@@ -14,7 +14,7 @@ nohup java -Xmx2g \
  vsoc.ga.analyse.server.Server \
  ~/work/work-vsoc-ga-2018 \
  /var/www/html \
- bob003 &
+ bob004 &
 
 
 scp bob:~/work/work-vsoc-ga-2018/trainGa03/bob001/*.csv ~/work/work-vsoc-ga-2018/trainGa03/bob001
