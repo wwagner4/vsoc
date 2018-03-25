@@ -2,8 +2,6 @@ package vsoc.ga.common.describe
 
 case class DA(a: String, b: Double) extends Describable with PropertiesProvider {
 
-  override def shortDesc: String = "DA"
-
   override def fullDesc: String = {
     val props: String = DescribableFormatter.format(properties, 0)
     s"""The class DA for testing
@@ -23,8 +21,6 @@ case class DA(a: String, b: Double) extends Describable with PropertiesProvider 
 }
 
 case class DB(b: Double) extends Describable with PropertiesProvider {
-
-  override def shortDesc: String = "DA"
 
   override def fullDesc: String = {
     val props: String = DescribableFormatter.format(properties, 0)

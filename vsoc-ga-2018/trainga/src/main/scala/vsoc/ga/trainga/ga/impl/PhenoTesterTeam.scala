@@ -98,8 +98,6 @@ class PhenoTesterTeam(val ran: Random, fitness: (TeamResult) => Double, popMulti
     ("matchfact", popMultiplicationFactor),
   )
 
-  override def shortDesc: String = "match playing"
-
   override def fullDesc: String =
     s"""Phenotester playing matches
        |$propsFmt

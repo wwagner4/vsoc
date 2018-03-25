@@ -40,8 +40,6 @@ object SelectionStrategies {
         ("co strat", "take unchanged 0 1 2 & crossver 0-1 0-2 0-3 1-2 2-3 ? the rest sored")
       )
 
-      override def shortDesc: String = "crossover"
-
       override def fullDesc: String =
         s"""Selection strategy using crossover and mutation
           |$propsFmt
@@ -79,8 +77,6 @@ object SelectionStrategies {
       override def properties: Seq[(String, Any)] = Seq(
         ("mut rat", mutationRate)
       )
-
-      override def shortDesc: String = "mutation only"
 
       override def fullDesc: String =
         s"""Selection strategy using no crossover

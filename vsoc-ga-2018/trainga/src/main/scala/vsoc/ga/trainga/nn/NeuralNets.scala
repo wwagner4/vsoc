@@ -41,8 +41,6 @@ object NeuralNets {
         .build
     }
 
-    override def shortDesc: String = "default"
-
     override def fullDesc: String = "Default Neural Net. Used for testing purposes"
   }
 
@@ -82,8 +80,6 @@ object NeuralNets {
         .build
     }
 
-    override def shortDesc: String = "test"
-
     override def fullDesc: String = "Standard Neural Net. Used for testing purposes"
 
 
@@ -93,8 +89,6 @@ object NeuralNets {
 
     // id must be the name of the method creating the neural net
     def id = "team01"
-
-    override def shortDesc: String = id
 
     override def fullDesc: String = {
       val props = DescribableFormatter.format(properties, 0)

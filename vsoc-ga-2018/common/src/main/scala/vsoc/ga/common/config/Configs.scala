@@ -16,7 +16,6 @@ object Configs {
       ConfigTrainGa("trainGaKicks01", "bob003"),
     )
 
-    override def shortDesc: String = "kicks bob"
     override def fullDesc: String =
       """Kicks for the host 'bob'
         |bob001 - bob003
@@ -35,7 +34,6 @@ object Configs {
       ConfigTrainGa("trainGaKicks01", "bob006"),
     )
 
-    override def shortDesc: String = "kicks bob"
     override def fullDesc: String =
       """Kicks for the host 'bob'
         |004 - 006
@@ -55,7 +53,6 @@ object Configs {
       ConfigTrainGa("trainGa01", "bob004"),
     )
 
-    override def shortDesc: String = "full fitness bob"
     override def fullDesc: String =
       """Full fitness for the host 'bob'
         |001 - 004
@@ -76,7 +73,6 @@ object Configs {
       ConfigTrainGa("trainGa03", "bob005"),
     )
 
-    override def shortDesc: String = "full fitness bob"
     override def fullDesc: String =
       """5 times trainGa03
       """.stripMargin
@@ -95,9 +91,26 @@ object Configs {
       ConfigTrainGa("trainGa01_mL", "bob002"),
     )
 
-    override def shortDesc: String = "full fitness bob"
     override def fullDesc: String =
       """Small and large mutation rate
+      """.stripMargin
+  }
+
+  def bob004: Config = new Config {
+
+    override def id: String = "bob004"
+
+    override def workDirBase: Path = ConfigHelper.defaultWorkDir
+
+    override def trainings: Seq[ConfigTrainGa] = Seq(
+      ConfigTrainGa("trainGa01m05", "bob001"),
+      ConfigTrainGa("trainGa01m10", "bob001"),
+      ConfigTrainGa("trainGa01m50", "bob001"),
+    )
+
+    override def fullDesc: String =
+      """Mutation rates
+         |0.005 0.001 0.0005
       """.stripMargin
   }
 
@@ -113,7 +126,6 @@ object Configs {
       ConfigTrainGa("trainGa01", "wal003"),
       ConfigTrainGa("trainGa01", "wal004"),
     )
-    override def shortDesc: String = "full fitness wallace"
     override def fullDesc: String =
       """Full fitness for the host 'wallace'
         |001 - 004
@@ -132,7 +144,6 @@ object Configs {
       ConfigTrainGa("trainGa01", "w003"),
       ConfigTrainGa("trainGa01", "w004"),
     )
-    override def shortDesc: String = "full fitness work"
     override def fullDesc: String =
       """Full fitness for work
         |w001 - w004
@@ -151,7 +162,6 @@ object Configs {
       ConfigTrainGa("trainGa02", "w003"),
       ConfigTrainGa("trainGa02", "w004"),
     )
-    override def shortDesc: String = "Multiple trainGa02"
     override def fullDesc: String =
       """Multiple trainGa02
       """.stripMargin
@@ -172,7 +182,6 @@ object Configs {
       ConfigTrainGa("trainGa01_mL", "w002"),
     )
 
-    override def shortDesc: String = ""
     override def fullDesc: String =
       """small medium large mutation rate
       """.stripMargin
@@ -191,7 +200,6 @@ object Configs {
       ConfigTrainGa("trainGaKicks01", "007"),
     )
 
-    override def shortDesc: String = "kicks wallace"
     override def fullDesc: String =
       """kicks from the host 'wallace'
         |004 - 007
