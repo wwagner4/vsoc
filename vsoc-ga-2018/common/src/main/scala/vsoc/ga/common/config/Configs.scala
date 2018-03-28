@@ -205,6 +205,25 @@ object Configs {
       """.stripMargin
   }
 
+  def work005: Config = new Config {
+
+    override def id: String = "work005"
+
+    override def workDirBase: Path = Paths.get("C:\\ta30\\entw1\\work")
+
+    override def trainings: Seq[ConfigTrainGa] = Seq(
+      ConfigTrainGa("trainGa01", "w005"),
+      ConfigTrainGa("trainGa01", "w006"),
+      ConfigTrainGa("trainGa01", "w007"),
+      ConfigTrainGa("trainGa01", "w008"),
+    )
+    override def fullDesc: String =
+      """Full fitness standard values
+        |vsoc kickoutCount fixed
+        |w005 - w008
+      """.stripMargin
+  }
+
   def walKicks001: Config = new Config {
 
     override def id: String = "walKicks001"
