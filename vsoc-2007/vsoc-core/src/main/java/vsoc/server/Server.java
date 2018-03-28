@@ -17,7 +17,7 @@ import java.util.List;
 
 /**
  * Performs soccer specific actions.
- * 
+ *
  */
 public class Server implements Serializable, Simulation, Paintable {
 
@@ -50,7 +50,7 @@ public class Server implements Serializable, Simulation, Paintable {
 	private int goalWestCount = 0;
 
 	private int goalEastCount = 0;
-	
+
 	private boolean informListeners = true;
 
 	private String name = "Vsoc Server";
@@ -127,7 +127,7 @@ public class Server implements Serializable, Simulation, Paintable {
 	public void takeStep() {
 		this.time++;
 		if (informListeners) {
-			for(SimulationChangeListener listener: this.listeners) {	
+			for(SimulationChangeListener listener: this.listeners) {
 				listener.simulationChangePerformed(this);
 			}
 		}
@@ -187,6 +187,7 @@ public class Server implements Serializable, Simulation, Paintable {
 			this.ball.setPosition(new Vec2D(-WIDTH / 2, HEIGHT / 2));
 		else
 			this.ball.setPosition(new Vec2D(this.ball.getPosition().getX(), HEIGHT / 2));
+		this.ball.getKicker().increaseKickOutCount();
 		this.ball.setVelo(0);
 	}
 
@@ -197,6 +198,7 @@ public class Server implements Serializable, Simulation, Paintable {
 			this.ball.setPosition(new Vec2D(-WIDTH / 2, -HEIGHT / 2));
 		else
 			this.ball.setPosition(new Vec2D(this.ball.getPosition().getX(), -HEIGHT / 2));
+        this.ball.getKicker().increaseKickOutCount();
 		this.ball.setVelo(0);
 	}
 
@@ -217,8 +219,10 @@ public class Server implements Serializable, Simulation, Paintable {
 			this.ball.setPosition(new Vec2D(0, 0));
 			this.goalWestCount++;
 			this.ball.getKicker().increaseWestGoalCount();
-		} else
-			this.ball.setPosition(new Vec2D(-WIDTH / 2, this.ball.getPosition().getY()));
+		} else {
+            this.ball.setPosition(new Vec2D(-WIDTH / 2, this.ball.getPosition().getY()));
+            this.ball.getKicker().increaseKickOutCount();
+        }
 		this.ball.setVelo(0);
 	}
 
