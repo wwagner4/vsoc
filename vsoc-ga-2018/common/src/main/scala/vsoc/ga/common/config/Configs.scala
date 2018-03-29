@@ -110,7 +110,26 @@ object Configs {
 
     override def fullDesc: String =
       """Mutation rates
-         |0.005 0.001 0.0005
+        |0.005 0.001 0.0005
+      """.stripMargin
+  }
+
+  def bob005: Config = new Config {
+
+    override def id: String = "bob005"
+
+    override def workDirBase: Path = ConfigHelper.defaultWorkDir
+
+    override def trainings: Seq[ConfigTrainGa] = Seq(
+      ConfigTrainGa("trainGa01m05", "bob002"),
+      ConfigTrainGa("trainGa01m10", "bob002"),
+      ConfigTrainGa("trainGa01m50", "bob002"),
+    )
+
+    override def fullDesc: String =
+      """Mutation rates
+        |kick out fixed
+        |0.005 0.001 0.0005
       """.stripMargin
   }
 
