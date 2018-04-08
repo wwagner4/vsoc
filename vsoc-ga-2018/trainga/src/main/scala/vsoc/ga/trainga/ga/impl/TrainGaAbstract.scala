@@ -27,6 +27,8 @@ abstract class TrainGaAbstract extends TrainGa[Double] with PropertiesProvider {
 
   protected def mutationRate: Double
 
+  protected def outputFactors: OutputFactors = OutputFactors()
+
   protected val playerCount = 3
 
   private lazy val nnTempl = createNeuralNet()
@@ -54,7 +56,7 @@ abstract class TrainGaAbstract extends TrainGa[Double] with PropertiesProvider {
 
   protected lazy val tester: PhenoTester[TeamGa, Double] = new PhenoTesterTeam(ran, fitness, popMultiplicationTestFactor)
   protected lazy val selStrat: SelectionStrategy[Double] = SelectionStrategies.crossover(mutationRate, randomAllele, ran)
-  protected lazy val transformer: Transformer[Double, TeamGa] = new TransformerTeam(playerCount, createNeuralNet)
+  protected lazy val transformer: Transformer[Double, TeamGa] = new TransformerTeam(playerCount, createNeuralNet, outputFactors)
 
   val ga: GA[Double, TeamGa, Double] = new GA(tester, selStrat, transformer)
 

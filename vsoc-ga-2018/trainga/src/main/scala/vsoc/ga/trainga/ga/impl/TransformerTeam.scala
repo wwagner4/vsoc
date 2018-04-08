@@ -8,13 +8,13 @@ import vsoc.ga.matches.{Behaviours, Team, Teams}
 import vsoc.ga.trainga.behav.{BehaviourNeuralNet, InputMapperNn, OutputMapperNn}
 import vsoc.ga.trainga.nn.NeuralNet
 
-class TransformerTeam(playerCount: Int, createNeuralNet: () => NeuralNet) extends Transformer[Double, TeamGa] {
+class TransformerTeam(playerCount: Int, createNeuralNet: () => NeuralNet, outputFactors: OutputFactors) extends Transformer[Double, TeamGa] {
 
   override def toPheno(geno: Seq[Double]): TeamGa = {
 
     def behav(nn: NeuralNet): Behaviour = {
       val in: InputMapperNn = new InputMapperNnTeam(1.0)
-      val out: OutputMapperNn = new OutputMapperNnTeam
+      val out: OutputMapperNn = new OutputMapperNnTeam(outputFactors)
 
       new BehaviourNeuralNet(nn, Optional.of(Behaviours.remainOnField), in, out)
     }
