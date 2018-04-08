@@ -72,15 +72,6 @@ abstract class TrainGaAbstract extends TrainGa[Double] with PropertiesProvider {
     }
   }
 
-  def debug(pop: Seq[Seq[Double]]): Unit = {
-    val len = pop(0).size
-    val ids = Random.shuffle((0 until len).toList.take(20))
-    val red = pop.map(s => ids.map(i => "%.2f" format s(i)))
-    println("*** REDUCED: " + red)
-  }
-
-  private def pause(ms: Int): Unit = Thread.sleep(ms)
-
   override def run(trainGaId: String, trainGaNr: String): Unit = {
     log.info(s"start GA populationSize: $populationSize playerCount: $playerCount playerParamSize:$playerParamSize")
     try {
@@ -89,7 +80,6 @@ abstract class TrainGaAbstract extends TrainGa[Double] with PropertiesProvider {
       var i = iterations.getOrElse(0)
       while (true) {
         i += 1
-        //debug(gar.newPopulation)
         gar = ga.nextPopulation(gar.newPopulation)
         val s = gar.score.map(s => f"$s%.2f").getOrElse("-")
         log.info(f"finished iteration $i. score: $s")
