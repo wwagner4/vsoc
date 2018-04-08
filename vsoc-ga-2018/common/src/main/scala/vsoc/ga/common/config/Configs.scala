@@ -1,14 +1,10 @@
 package vsoc.ga.common.config
 
-import java.nio.file.{Path, Paths}
-
 object Configs {
 
   def bobKicks001: Config = new Config {
 
     override def id: String = "bobKicks001"
-
-    override def workDirBase: Path = ConfigHelper.defaultWorkDir
 
     override def trainings: Seq[ConfigTrainGa] = Seq(
       ConfigTrainGa("trainGaKicks01", "bob001"),
@@ -26,8 +22,6 @@ object Configs {
 
     override def id: String = "bobKicks002"
 
-    override def workDirBase: Path = ConfigHelper.defaultWorkDir
-
     override def trainings: Seq[ConfigTrainGa] = Seq(
       ConfigTrainGa("trainGaKicks01", "bob004"),
       ConfigTrainGa("trainGaKicks01", "bob005"),
@@ -43,8 +37,6 @@ object Configs {
   def bob001: Config = new Config {
 
     override def id: String = "bob001"
-
-    override def workDirBase: Path = ConfigHelper.defaultWorkDir
 
     override def trainings: Seq[ConfigTrainGa] = Seq(
       ConfigTrainGa("trainGa01", "bob001"),
@@ -63,8 +55,6 @@ object Configs {
 
     override def id: String = "bob002"
 
-    override def workDirBase: Path = ConfigHelper.defaultWorkDir
-
     override def trainings: Seq[ConfigTrainGa] = Seq(
       ConfigTrainGa("trainGa03", "bob001"),
       ConfigTrainGa("trainGa03", "bob002"),
@@ -82,8 +72,6 @@ object Configs {
 
     override def id: String = "bob003"
 
-    override def workDirBase: Path = ConfigHelper.defaultWorkDir
-
     override def trainings: Seq[ConfigTrainGa] = Seq(
       ConfigTrainGa("trainGa01_mS", "bob001"),
       ConfigTrainGa("trainGa01_mS", "bob002"),
@@ -99,8 +87,6 @@ object Configs {
   def bob004: Config = new Config {
 
     override def id: String = "bob004"
-
-    override def workDirBase: Path = ConfigHelper.defaultWorkDir
 
     override def trainings: Seq[ConfigTrainGa] = Seq(
       ConfigTrainGa("trainGa01m05", "bob001"),
@@ -118,8 +104,6 @@ object Configs {
 
     override def id: String = "bob005"
 
-    override def workDirBase: Path = ConfigHelper.defaultWorkDir
-
     override def trainings: Seq[ConfigTrainGa] = Seq(
       ConfigTrainGa("trainGa01m05", "bob002"),
       ConfigTrainGa("trainGa01m10", "bob002"),
@@ -136,8 +120,6 @@ object Configs {
   def bob006: Config = new Config {
 
     override def id: String = "bob006"
-
-    override def workDirBase: Path = ConfigHelper.defaultWorkDir
 
     override def trainings: Seq[ConfigTrainGa] = Seq(
       ConfigTrainGa("trainGa01ofS", "bob001"),
@@ -157,8 +139,6 @@ object Configs {
 
     override def id: String = "wal001"
 
-    override def workDirBase: Path = ConfigHelper.defaultWorkDir
-
     override def trainings: Seq[ConfigTrainGa] = Seq(
       ConfigTrainGa("trainGa01", "wal001"),
       ConfigTrainGa("trainGa01", "wal002"),
@@ -174,8 +154,6 @@ object Configs {
   def work001: Config = new Config {
 
     override def id: String = "work001"
-
-    override def workDirBase: Path = Paths.get("C:\\ta30\\entw1\\work")
 
     override def trainings: Seq[ConfigTrainGa] = Seq(
       ConfigTrainGa("trainGa01", "w001"),
@@ -193,8 +171,6 @@ object Configs {
 
     override def id: String = "work002"
 
-    override def workDirBase: Path = Paths.get("C:\\ta30\\entw1\\work")
-
     override def trainings: Seq[ConfigTrainGa] = Seq(
       ConfigTrainGa("trainGa02", "w001"),
       ConfigTrainGa("trainGa02", "w002"),
@@ -209,8 +185,6 @@ object Configs {
   def work003: Config = new Config {
 
     override def id: String = "work003"
-
-    override def workDirBase: Path = Paths.get("C:\\ta30\\entw1\\work")
 
     override def trainings: Seq[ConfigTrainGa] = Seq(
       ConfigTrainGa("trainGa01_mS", "w001"),
@@ -230,8 +204,6 @@ object Configs {
 
     override def id: String = "work004"
 
-    override def workDirBase: Path = ConfigHelper.defaultWorkDir
-
     override def trainings: Seq[ConfigTrainGa] = Seq(
       ConfigTrainGa("trainGa01m05", "w001"),
       ConfigTrainGa("trainGa01m10", "w001"),
@@ -247,8 +219,6 @@ object Configs {
   def work005: Config = new Config {
 
     override def id: String = "work005"
-
-    override def workDirBase: Path = Paths.get("C:\\ta30\\entw1\\work")
 
     override def trainings: Seq[ConfigTrainGa] = Seq(
       ConfigTrainGa("trainGa01", "w005"),
@@ -266,8 +236,6 @@ object Configs {
   def walKicks001: Config = new Config {
 
     override def id: String = "walKicks001"
-
-    override def workDirBase: Path = ConfigHelper.defaultWorkDir
 
     override def trainings: Seq[ConfigTrainGa] = Seq(
       ConfigTrainGa("trainGaKicks01", "004"), // Naming convention was not established then

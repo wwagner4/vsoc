@@ -1,5 +1,7 @@
 package vsoc.ga.analyse
 
+import java.nio.file.Paths
+
 import entelijan.viz.Viz
 import vsoc.ga.common.config.Configs
 
@@ -11,11 +13,13 @@ object Data01MainWork extends App {
     Configs.work003,
   )
 
+  val _wd: String = ???
+
   configs.foreach{c =>
     Data01Dia.run(
       cfg = c,
+      workDir = Paths.get(_wd),
       filterFactor = 10,
-      minIter = 0,
       yRange = Some(Viz.Range(None, Some(100)))
     )
   }

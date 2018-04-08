@@ -1,15 +1,8 @@
 package vsoc.ga.common.config
 
-import java.nio.file.Path
-
 import vsoc.ga.common.describe.Describable
 
 trait Config extends Describable {
-
-  /**
-    * @return The directory where all the results are stored
-    */
-  def workDirBase: Path
 
   /**
     * @return List of training configurations

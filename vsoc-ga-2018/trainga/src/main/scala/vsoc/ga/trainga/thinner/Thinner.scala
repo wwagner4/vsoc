@@ -3,7 +3,6 @@ package vsoc.ga.trainga.thinner
 import java.nio.file.{Files, Path, Paths}
 
 import org.slf4j.LoggerFactory
-import vsoc.ga.common.config.Config
 import vsoc.ga.trainga.thinner.impl.ThinnerFiles
 
 import scala.collection.JavaConverters._
@@ -11,14 +10,6 @@ import scala.collection.JavaConverters._
 object Thinner {
 
   private val log = LoggerFactory.getLogger(Thinner.getClass)
-
-  def thinFromConfig(cfg: Config): Unit = {
-    val cnt = cfg.trainings.map { c =>
-      val dir = cfg.workDirBase.resolve(Paths.get(c.id, c.nr))
-      thinFromDir(dir)
-    }.sum
-    log.info(s"deleted $cnt files from configuration ${cfg.id}")
-  }
 
   def thinFromTrainGaId(workDirBase: Path, id: String, nr: String): Unit = {
     val baseDir = workDirBase.resolve(Paths.get(id, nr))

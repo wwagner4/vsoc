@@ -19,6 +19,7 @@ object Data01Dia {
 
   def run(
            cfg: Config,
+           workDir: Path,
            yRange: Option[Viz.Range] = None,
            filterFactor: Int = 1,
            minIter: Int = 0,
@@ -26,7 +27,6 @@ object Data01Dia {
            diaDir: Option[Path] = None,
          ): Unit = {
 
-    val workDir = cfg.workDirBase
     val scriptDir = workDir.resolve(".script")
     Files.createDirectories(scriptDir)
     val imgDir = diaDir.getOrElse(workDir.resolve("viz_img"))
