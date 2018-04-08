@@ -25,7 +25,7 @@ abstract class TrainGaAbstract extends TrainGa[Double] with PropertiesProvider {
 
   protected def populationSize: Int
 
-  protected def mutationRate: Double
+  protected def mutationRate: Double = 0.001
 
   protected def outputFactors: OutputFactors = OutputFactors()
 

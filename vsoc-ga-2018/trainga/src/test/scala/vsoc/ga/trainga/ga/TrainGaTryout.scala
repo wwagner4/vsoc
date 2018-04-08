@@ -2,6 +2,6 @@ package vsoc.ga.trainga.ga
 
 object TrainGaTryout extends App {
 
-  TrainGaMain.main(Array("bob004"))
+  TrainGaMain.main(Array("bob006"))
 
 }

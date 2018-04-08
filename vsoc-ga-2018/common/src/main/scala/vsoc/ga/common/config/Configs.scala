@@ -133,6 +133,26 @@ object Configs {
       """.stripMargin
   }
 
+  def bob006: Config = new Config {
+
+    override def id: String = "bob006"
+
+    override def workDirBase: Path = ConfigHelper.defaultWorkDir
+
+    override def trainings: Seq[ConfigTrainGa] = Seq(
+      ConfigTrainGa("trainGa01ofS", "bob001"),
+      ConfigTrainGa("trainGa01ofS", "bob002"),
+      ConfigTrainGa("trainGa01ofM", "bob001"),
+      ConfigTrainGa("trainGa01ofM", "bob002"),
+    )
+
+    override def fullDesc: String =
+      """Output Factors
+        |medium 50 50 5
+        |small  10 10 1
+      """.stripMargin
+  }
+
   def wal001: Config = new Config {
 
     override def id: String = "wal001"
