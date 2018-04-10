@@ -21,5 +21,8 @@ nohup java -Xmx512k -Xmx512m \
  vsoc.ga.analyse.server.Server \
  ~/work/work-vsoc-ga-2018 \
  /var/www/html \
- bob006 &
+ bob007 &
+
+----- bob sync -----
+rsync -arv bob:~/work/work-vsoc-ga-2018/ ~/work/work-vsoc-ga-2018
 
