@@ -6,10 +6,13 @@ import java.time.format.DateTimeFormatter
 import java.time.{Instant, LocalDateTime, ZoneId}
 import java.util.concurrent.{Executors, TimeUnit}
 
+import org.slf4j.LoggerFactory
 import vsoc.ga.analyse.{Data01Dia, DiaConf_SUPRESS_TIMESTAMP}
 import vsoc.ga.common.config.Config
 
 object ServerImpl {
+
+  private val log = LoggerFactory.getLogger(ServerImpl.getClass)
 
   import collection.JavaConverters._
 
@@ -59,19 +62,20 @@ object ServerImpl {
     pw.write(content)
     pw.close()
 
-    println(s"Wrote to $file")
+    log.info(s"Wrote to $file")
 
   }
 
   def start(workPath: Path, httpPath: Path, cfgs: Seq[Config]): Unit = {
+    val cfgsStr = cfgs.map(_.id).mkString(", ")
     val exe = Executors.newScheduledThreadPool(10)
     exe.scheduleAtFixedRate(() => run(), 0, 60, TimeUnit.MINUTES)
-    println("started server")
+    log.info(s"started server for configurations '$cfgsStr'")
 
     def run(): Unit = {
       cfgs.foreach{c =>
+        log.info(s"creating data for configuration '${c.id}'")
         Data01Dia.run(c, workPath, filterFactor=20, diaConfs = Seq(DiaConf_SUPRESS_TIMESTAMP), diaDir = Some(httpPath))
-        println(s"created data for configuration '${c.id}'")
       }
       createIndexHtml(httpPath)
     }
