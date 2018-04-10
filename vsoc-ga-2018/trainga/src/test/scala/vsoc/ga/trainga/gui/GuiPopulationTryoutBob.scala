@@ -6,6 +6,6 @@ object GuiPopulationTryoutBob extends App {
 
   val wdir = Paths.get(System.getProperty("user.home"), "work", "work-vsoc-ga-2018")
 
-  GuiPopulationMain.main(Array(wdir.toString, "trainGa01m05", "bob002"))
+  GuiPopulationMain.main(Array(wdir.toString, "trainGa01ofS", "bob002"))
 
 }

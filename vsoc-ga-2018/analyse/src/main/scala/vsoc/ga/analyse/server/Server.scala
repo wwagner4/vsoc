@@ -20,6 +20,7 @@ object Server extends App {
   require(httpPath.isAbsolute, s"'$httpPath' must be an absolute path")
 
   val configs: Seq[Config] = configsList.split(",").toSeq.map(getConfig)
+  require(configs.nonEmpty, "at least one configuration must be defined")
 
   ServerImpl.start(workPath, httpPath, configs)
 

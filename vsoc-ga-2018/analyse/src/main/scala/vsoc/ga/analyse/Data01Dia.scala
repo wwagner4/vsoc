@@ -50,21 +50,26 @@ object Data01Dia {
       )
 
     }
-    val _id = if (diaConfs.contains(DiaConf_SUPRESS_TIMESTAMP)) {
-      s"${cfg.id}"
+
+    if (dataRows.map(r => r.data.isEmpty).forall(_ == true)) {
+      log.info("No data yet")
     } else {
-      val tsfmt = DateTimeFormatter.ofPattern("yyyyMMddHHmmss")
-      val ts = tsfmt.format(LocalDateTime.now)
-      s"${cfg.id}_$ts"
+      val _id = if (diaConfs.contains(DiaConf_SUPRESS_TIMESTAMP)) {
+        s"${cfg.id}"
+      } else {
+        val tsfmt = DateTimeFormatter.ofPattern("yyyyMMddHHmmss")
+        val ts = tsfmt.format(LocalDateTime.now)
+        s"${cfg.id}_$ts"
+      }
+
+      val dia = Viz.Diagram[Viz.XY](
+        id = _id,
+        title = s"Configuration ${cfg.id}",
+        yRange = yRange,
+        dataRows = dataRows
+      )
+
+      Viz.createDiagram(dia)
     }
-
-    val dia = Viz.Diagram[Viz.XY](
-      id = _id,
-      title = s"Configuration ${cfg.id}",
-      yRange = yRange,
-      dataRows = dataRows
-    )
-
-    Viz.createDiagram(dia)
   }
 }
