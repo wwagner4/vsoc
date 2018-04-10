@@ -233,6 +233,24 @@ object Configs {
       """.stripMargin
   }
 
+  def work006: Config = new Config {
+
+    override def id: String = "work006"
+
+    override def trainings: Seq[ConfigTrainGa] = Seq(
+      ConfigTrainGa("trainGa01ofS", "w001"),
+      ConfigTrainGa("trainGa01ofS", "w002"),
+      ConfigTrainGa("trainGa01ofM", "w001"),
+      ConfigTrainGa("trainGa01ofM", "w002"),
+    )
+
+    override def fullDesc: String =
+      """Output Factors
+        |medium 50 50 5
+        |small  10 10 1
+      """.stripMargin
+  }
+
   def walKicks001: Config = new Config {
 
     override def id: String = "walKicks001"
