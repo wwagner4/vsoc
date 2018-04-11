@@ -109,6 +109,22 @@ object TrainGas {
 
   }
 
+  def trainGa01ofM1: TrainGa[Double] = new TrainGa01Abstract {
+
+    // Must be equal to the constructing method to ensure correct persistence
+    override def id: String = "trainGa01ofM1"
+
+    override def fullDesc: String =
+      s"""Consider all match parameters. '$id'
+         |output factors medium
+         |kick factor reduced
+         |$propertiesFmt
+      """.stripMargin
+
+    override def outputFactors: OutputFactors = OutputFactors(50.0, 50.0, 2.5)
+
+  }
+
   def trainGa01ofS: TrainGa[Double] = new TrainGa01Abstract {
 
     // Must be equal to the constructing method to ensure correct persistence
