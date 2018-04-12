@@ -128,7 +128,7 @@ object TrainGas {
   def trainGa01ofM2: TrainGa[Double] = new TrainGa01Abstract {
 
     // Must be equal to the constructing method to ensure correct persistence
-    override def id: String = "trainGa01ofM"
+    override def id: String = "trainGa01ofM2"
 
     override def fullDesc: String =
       s"""Consider all match parameters. '$id'

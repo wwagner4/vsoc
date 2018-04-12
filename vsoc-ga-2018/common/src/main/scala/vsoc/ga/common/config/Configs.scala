@@ -152,6 +152,9 @@ object Configs {
       """.stripMargin
   }
 
+  /**
+    * Does not work at all
+    */
   def bob008: Config = new Config {
 
     override def id: String = "bob008"
@@ -166,6 +169,23 @@ object Configs {
     override def fullDesc: String =
       """Output Factors
         |medium 50 50 2.5
+      """.stripMargin
+  }
+
+  def bob009: Config = new Config {
+
+    override def id: String = "bob009"
+
+    override def trainings: Seq[ConfigTrainGa] = Seq(
+      ConfigTrainGa("trainGa01ofM2", "bob001"),
+      ConfigTrainGa("trainGa01ofM2", "bob002"),
+      ConfigTrainGa("trainGa01ofM2", "bob003"),
+      ConfigTrainGa("trainGa01ofM2", "bob004"),
+    )
+
+    override def fullDesc: String =
+      """Output Factors
+        |medium 50 20 5
       """.stripMargin
   }
 

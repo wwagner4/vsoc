@@ -41,6 +41,7 @@ abstract class TrainGaAbstract extends TrainGa[Double] with PropertiesProvider {
     ("fit func", fitnessDesc),
     ("mut rate", mutationRate),
     ("nn", nnTempl),
+    ("outputFactors", outputFactors),
   )
 
   protected def propertiesFmt: String = {
