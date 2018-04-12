@@ -30,12 +30,14 @@ object Data01CsvReader {
   }
 
   def read(path: Path): Seq[Data01] = {
-    Files.lines(path)
-      .iterator()
-      .asScala
-      .filter(notHeadline)
-      .map(toBean)
-      .toSeq
+    if (Files.notExists(path)) Seq.empty[Data01]
+    else
+      Files.lines(path)
+        .iterator()
+        .asScala
+        .filter(notHeadline)
+        .map(toBean)
+        .toSeq
   }
 
 }

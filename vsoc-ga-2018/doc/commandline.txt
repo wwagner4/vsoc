@@ -5,9 +5,9 @@ sbt ";project trainga;runMain vsoc.ga.trainga.ga.TrainGaMain"
 java -cp /Users/wwagner4/prj/vsoc/vsoc-ga-2018/trainga/target/scala-2.12/trainga-assembly-0.0.1-SNAPSHOT.jar vsoc.ga.trainga.ga.TrainGaMain traiaKicks01 007
 
 ------ Windows ------
-start "work006" java -Xmx8g ^
+start "work008" java -Xmx8g ^
   -cp C:\ta30\entw1\vsoc\vsoc-ga-2018\trainga\target\scala-2.12\trainga-assembly-0.0.1-SNAPSHOT.jar ^
-  vsoc.ga.trainga.ga.TrainGaMain work006 C:\ta30\entw1\work
+  vsoc.ga.trainga.ga.TrainGaMain work008 C:\ta30\entw1\work
 
 ------ bob training -----
 nohup java -Xmx7g \

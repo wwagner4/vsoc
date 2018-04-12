@@ -281,25 +281,27 @@ object Configs {
 
     override def fullDesc: String =
       """Output Factors
-        |medium 50 50 2.5
+        |medium M   50 50 5
+        |medium M1  50 50 2.5
         |Kickfactor reduced
       """.stripMargin
   }
 
-  def walKicks001: Config = new Config {
+  def work008: Config = new Config {
 
-    override def id: String = "walKicks001"
+    override def id: String = "work008"
 
     override def trainings: Seq[ConfigTrainGa] = Seq(
-      ConfigTrainGa("trainGaKicks01", "004"), // Naming convention was not established then
-      ConfigTrainGa("trainGaKicks01", "005"),
-      ConfigTrainGa("trainGaKicks01", "006"),
-      ConfigTrainGa("trainGaKicks01", "007"),
+      ConfigTrainGa("trainGa01ofM2", "w001"),
+      ConfigTrainGa("trainGa01ofM2", "w002"),
+      ConfigTrainGa("trainGa01ofM2", "w003"),
+      ConfigTrainGa("trainGa01ofM2", "w004"),
     )
 
     override def fullDesc: String =
-      """kicks from the host 'wallace'
-        |004 - 007
+      """Output Factors
+        |medium 50 50 2.5
+        |Kickfactor reduced
       """.stripMargin
   }
 

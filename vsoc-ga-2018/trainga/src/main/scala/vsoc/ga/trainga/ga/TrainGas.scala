@@ -117,11 +117,27 @@ object TrainGas {
     override def fullDesc: String =
       s"""Consider all match parameters. '$id'
          |output factors medium
+         |turn factor reduced
+         |$propertiesFmt
+      """.stripMargin
+
+    override def outputFactors: OutputFactors = OutputFactors(50.0, 50.0, 5.0)
+
+  }
+
+  def trainGa01ofM2: TrainGa[Double] = new TrainGa01Abstract {
+
+    // Must be equal to the constructing method to ensure correct persistence
+    override def id: String = "trainGa01ofM"
+
+    override def fullDesc: String =
+      s"""Consider all match parameters. '$id'
+         |output factors medium
          |kick factor reduced
          |$propertiesFmt
       """.stripMargin
 
-    override def outputFactors: OutputFactors = OutputFactors(50.0, 50.0, 2.5)
+    override def outputFactors: OutputFactors = OutputFactors(50.0, 20.0, 5.0)
 
   }
 

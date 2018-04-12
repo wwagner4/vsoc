@@ -34,7 +34,7 @@ object Data01Dia {
     log.info(s"Writing image to '$imgDir'")
     implicit val creator: VizCreator[Viz.XY] = VizCreatorGnuplot[Viz.XY](scriptDir = scriptDir.toFile, imageDir = imgDir.toFile)
     val ds = cfg.trainings
-    val dataRows = for (ConfigTrainGa(id, nr) <- ds) yield {
+    val dataRows: Seq[Option[Viz.DataRow[Viz.XY]]] = for (ConfigTrainGa(id, nr) <- ds) yield {
       def prjDir = workDir.resolve(Paths.get(id, nr))
 
       def filePath = workDir.resolve(prjDir.resolve(Paths.get(s"$id-$nr-data.csv")))
@@ -43,33 +43,30 @@ object Data01Dia {
         .filter(b => b.iterations % filterFactor == 0 && b.iterations >= minIter)
         .map(b => Viz.XY(b.iterations, b.score))
 
-      Viz.DataRow(
-        name = Some(s"$id-$nr"),
-        style = Viz.Style_LINES,
-        data = data
-      )
-
+      if (data.isEmpty) None
+      else Some(
+        Viz.DataRow(
+          name = Some(s"$id-$nr"),
+          style = Viz.Style_LINES,
+          data = data
+        ))
     }
 
-    if (dataRows.map(r => r.data.isEmpty).forall(_ == true)) {
-      log.info("No data yet")
+    val _id = if (diaConfs.contains(DiaConf_SUPRESS_TIMESTAMP)) {
+      s"${cfg.id}"
     } else {
-      val _id = if (diaConfs.contains(DiaConf_SUPRESS_TIMESTAMP)) {
-        s"${cfg.id}"
-      } else {
-        val tsfmt = DateTimeFormatter.ofPattern("yyyyMMddHHmmss")
-        val ts = tsfmt.format(LocalDateTime.now)
-        s"${cfg.id}_$ts"
-      }
-
-      val dia = Viz.Diagram[Viz.XY](
-        id = _id,
-        title = s"Configuration ${cfg.id}",
-        yRange = yRange,
-        dataRows = dataRows
-      )
-
-      Viz.createDiagram(dia)
+      val tsfmt = DateTimeFormatter.ofPattern("yyyyMMddHHmmss")
+      val ts = tsfmt.format(LocalDateTime.now)
+      s"${cfg.id}_$ts"
     }
+
+    val dia = Viz.Diagram[Viz.XY](
+      id = _id,
+      title = s"Configuration ${cfg.id}",
+      yRange = yRange,
+      dataRows = dataRows.flatMap(identity(_))
+    )
+
+    Viz.createDiagram(dia)
   }
 }

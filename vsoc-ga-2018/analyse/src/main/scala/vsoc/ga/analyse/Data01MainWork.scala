@@ -7,7 +7,7 @@ import vsoc.ga.common.config.Configs
 object Data01MainWork extends App {
 
   val configs = Seq(
-    Configs.work006,
+    Configs.work007,
   )
 
   val _wd: String = "C:\\ta30\\entw1\\work"
