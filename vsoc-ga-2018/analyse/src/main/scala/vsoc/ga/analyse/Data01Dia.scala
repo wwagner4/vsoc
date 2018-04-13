@@ -6,6 +6,7 @@ import java.time.format.DateTimeFormatter
 
 import entelijan.viz.{Viz, VizCreator, VizCreatorGnuplot}
 import org.slf4j.LoggerFactory
+import vsoc.ga.analyse.group.Grouping
 import vsoc.ga.common.config.{Config, ConfigTrainGa}
 
 
@@ -21,8 +22,6 @@ object Data01Dia {
            cfg: Config,
            workDir: Path,
            yRange: Option[Viz.Range] = None,
-           filterFactor: Int = 1,
-           minIter: Int = 0,
            diaConfs: Seq[DiaConf] = Seq.empty[DiaConf],
            diaDir: Option[Path] = None,
          ): Unit = {
@@ -39,16 +38,19 @@ object Data01Dia {
 
       def filePath = workDir.resolve(prjDir.resolve(Paths.get(s"$id-$nr-data.csv")))
 
-      val data = Data01CsvReader.read(filePath)
-        .filter(b => b.iterations % filterFactor == 0 && b.iterations >= minIter)
-        .map(b => Viz.XY(b.iterations, b.score))
+      val raw = Data01(id, nr, 0, 0) :: Data01CsvReader.read(filePath).toList
+      val data = raw.map(b => Viz.XY(b.iterations, b.score))
+
+      val grpSize = math.ceil(data.size.toDouble / 50).toInt
+      val dataGrouped = Grouping.group(data, grpSize)
+
 
       if (data.isEmpty) None
       else Some(
         Viz.DataRow(
           name = Some(s"$id-$nr"),
           style = Viz.Style_LINES,
-          data = data
+          data = dataGrouped
         ))
     }
 

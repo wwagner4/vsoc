@@ -75,7 +75,7 @@ object ServerImpl {
     def run(): Unit = {
       cfgs.foreach{c =>
         log.info(s"creating data for configuration '${c.id}'")
-        Data01Dia.run(c, workPath, filterFactor=20, diaConfs = Seq(DiaConf_SUPRESS_TIMESTAMP), diaDir = Some(httpPath))
+        Data01Dia.run(c, workPath, diaConfs = Seq(DiaConf_SUPRESS_TIMESTAMP), diaDir = Some(httpPath))
       }
       createIndexHtml(httpPath)
     }
