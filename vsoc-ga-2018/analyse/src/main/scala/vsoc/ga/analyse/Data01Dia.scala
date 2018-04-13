@@ -24,6 +24,7 @@ object Data01Dia {
            yRange: Option[Viz.Range] = None,
            diaConfs: Seq[DiaConf] = Seq.empty[DiaConf],
            diaDir: Option[Path] = None,
+           dataPoints: Option[Int] = None,
          ): Unit = {
 
     val scriptDir = workDir.resolve(".script")
@@ -41,7 +42,9 @@ object Data01Dia {
       val raw = Data01(id, nr, 0, 0) :: Data01CsvReader.read(filePath).toList
       val data = raw.map(b => Viz.XY(b.iterations, b.score))
 
-      val grpSize = math.ceil(data.size.toDouble / 50).toInt
+      val _dataPoints = dataPoints.getOrElse(50)
+      require(_dataPoints > 2, "You must define at least 3 data points")
+      val grpSize = math.ceil(data.size.toDouble / _dataPoints).toInt
       val dataGrouped = Grouping.group(data, grpSize)
 
 

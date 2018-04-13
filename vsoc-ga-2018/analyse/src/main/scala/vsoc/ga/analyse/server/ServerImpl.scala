@@ -19,9 +19,6 @@ object ServerImpl {
   def createIndexHtml(httpPath: Path): Unit = {
     require(Files.exists(httpPath))
 
-    val x = Files.list(httpPath).iterator().asScala.toList.map(_.getFileName)
-
-
     val imgFiles = Files.list(httpPath).iterator().asScala.toList
       .filter(p => p.getFileName.toString.endsWith("png"))
       .map{p =>
@@ -66,6 +63,12 @@ object ServerImpl {
 
   }
 
+  def clearDir(base: Path):Unit = {
+    require(Files.exists(base))
+    require(Files.isDirectory(base))
+    val imgFiles = Files.list(base).iterator().asScala.foreach{p => Files.delete(p)}
+  }
+
   def start(workPath: Path, httpPath: Path, cfgs: Seq[Config]): Unit = {
     val cfgsStr = cfgs.map(_.id).mkString(", ")
     val exe = Executors.newScheduledThreadPool(10)
@@ -75,6 +78,7 @@ object ServerImpl {
     def run(): Unit = {
       cfgs.foreach{c =>
         log.info(s"creating data for configuration '${c.id}'")
+        clearDir(httpPath)
         Data01Dia.run(c, workPath, diaConfs = Seq(DiaConf_SUPRESS_TIMESTAMP), diaDir = Some(httpPath))
       }
       createIndexHtml(httpPath)
