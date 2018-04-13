@@ -10,7 +10,7 @@ start "work008" java -Xmx8g ^
   vsoc.ga.trainga.ga.TrainGaMain work008 C:\ta30\entw1\work
 
 ------ bob training -----
-nohup java -Xmx7g \
+nohup java -Xmx6g \
  -cp $HOME/prj/vsoc/vsoc-ga-2018/trainga/target/scala-2.12/trainga-assembly-0.0.1-SNAPSHOT.jar \
  vsoc.ga.trainga.ga.TrainGaMain bob009 ~/work/work-vsoc-ga-2018 &
 
