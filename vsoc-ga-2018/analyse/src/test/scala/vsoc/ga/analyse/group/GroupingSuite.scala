@@ -33,7 +33,8 @@ class GroupingSuite extends FunSuite with MustMatchers {
       ),
       Seq(
         XY(1, 1),
-        XY(2.5, 3.5),
+        XY(2, 3),
+        XY(3, 4),
       ),
       2
     ),
@@ -48,7 +49,8 @@ class GroupingSuite extends FunSuite with MustMatchers {
       Seq(
         XY(1, 1),
         XY(2.5, 3.5),
-        XY(4.5, 5.0),
+        XY(4, 6),
+        XY(5, 4),
       ),
       2
     ),
@@ -68,6 +70,21 @@ class GroupingSuite extends FunSuite with MustMatchers {
         XY(6, 1.0),
       ),
       2
+    ),
+    (
+      Seq(
+        XY(1, 1),
+        XY(2, 3),
+        XY(3, 4),
+        XY(4, 6),
+        XY(5, 4),
+      ),
+      Seq(
+        XY(1, 1),
+        XY(3, 4.3333),
+        XY(5, 4),
+      ),
+      20
     ),
   )
 

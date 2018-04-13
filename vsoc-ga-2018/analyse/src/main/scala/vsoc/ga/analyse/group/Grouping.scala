@@ -6,14 +6,16 @@ object Grouping {
 
   def group(in: Seq[Viz.XY], grpSize: Int): Seq[Viz.XY] = {
 
-    def grp(inGrp: Seq[Viz.XY]): Seq[Viz.XY] = {
+    def grp(inGrp: Seq[Viz.XY], grpSizeAdj: Int): Seq[Viz.XY] = {
       val head = inGrp.head
-      val tail = inGrp.tail
-      head :: grpTail(tail)
+      val rtail = inGrp.tail.reverse
+      val last = rtail.head
+      val tail = rtail.tail.reverse
+      head :: grpTail(tail, grpSizeAdj) ::: List(last)
     }
 
-    def grpTail(inTail: Seq[Viz.XY]): List[Viz.XY] = {
-      val grps = inTail.grouped(grpSize)
+    def grpTail(inTail: Seq[Viz.XY], grpSizeAdj: Int): List[Viz.XY] = {
+      val grps = inTail.grouped(grpSizeAdj)
       grps.toList.map(means)
     }
 
@@ -24,8 +26,13 @@ object Grouping {
       Viz.XY(xs / inGrp.size, ys / inGrp.size)
     }
 
-    if (in.size < 3 || grpSize == 1) in
-    else grp(in)
+    def adjGrpSize(s: Int, dataSize: Int): Int = {
+      require(s >= 1)
+      if (s > dataSize) dataSize else s
+    }
+
+    if (in.size <= 3 || grpSize == 1) in
+    else grp(in, adjGrpSize(grpSize, in.size))
   }
 
 }
