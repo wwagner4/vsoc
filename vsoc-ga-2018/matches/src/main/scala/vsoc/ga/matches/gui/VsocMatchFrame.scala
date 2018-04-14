@@ -2,24 +2,27 @@ package vsoc.ga.matches.gui
 
 import java.awt._
 import java.awt.event.{KeyEvent, KeyListener}
+
 import javax.swing._
 import javax.swing.border.EmptyBorder
-
 import vsoc.ga.matches.{Match, MatchResults}
 import vsoc.server.gui.{FieldPanel, Paintable, SimulationChangeListener}
 
 import scala.concurrent.Future
 
-class VsocMatchFrame(_match: Match) extends JFrame with SimulationChangeListener with KeyListener {
+class VsocMatchFrame(matchFactory: () => Match) extends JFrame with SimulationChangeListener with KeyListener {
 
   import concurrent.ExecutionContext.Implicits.global
+
+  var _match = Option.empty[Match]
+  val fieldPanel = new FieldPanel()
 
   setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE)
   setSize(1200, 600)
   setLocationByPlatform(true)
 
-  var running = false
-  var delay = 10
+  private var running = false
+  private var delay = SpeedManager.DEFAULT_DELAY
 
   val txt = new JTextArea()
   txt.setEditable(false)
@@ -35,8 +38,8 @@ class VsocMatchFrame(_match: Match) extends JFrame with SimulationChangeListener
       running = true
       Future {
         while (running) {
-          _match.takeStep()
-          Thread.sleep(delay)
+          _match.get.takeStep()
+          pause(delay)
         }
       }
     }
@@ -44,37 +47,29 @@ class VsocMatchFrame(_match: Match) extends JFrame with SimulationChangeListener
   }
 
 
+  def pause(millis: Int):Unit = Thread.sleep(millis)
+
+  def restartMatch(): Unit = {
+    running = false
+    pause(delay + 200)
+    createNewMatch()
+  }
+
   override def keyReleased(e: KeyEvent): Unit = {
     e.getExtendedKeyCode match {
       case KeyCode.SPACE =>
         startStop()
-        updateInfoText()
-      case KeyCode.N if delay < 20 =>
-        delay += 1
-        updateInfoText()
-      case KeyCode.N if delay < 50 =>
-        delay += 5
-        updateInfoText()
-      case KeyCode.N if delay < 100 =>
-        delay += 10
-        updateInfoText()
-      case KeyCode.N if delay < 500 =>
-        delay += 20
-        updateInfoText()
-      case KeyCode.M if delay >= 500 =>
-        delay -= 20
-        updateInfoText()
-      case KeyCode.M if delay >= 100 =>
-        delay -= 10
-        updateInfoText()
-      case KeyCode.M if delay >= 50 =>
-        delay -= 5
-        updateInfoText()
-      case KeyCode.M if delay >= 2 =>
-        delay -= 1
-        updateInfoText()
+      case KeyCode.N =>
+        SpeedManager.slowDown()
+      case KeyCode.M =>
+        SpeedManager.speedUp()
+      case KeyCode.B =>
+        SpeedManager.resetSpeed()
+      case KeyCode.R =>
+        restartMatch()
       case _ => // Ignore
     }
+    updateInfoText()
   }
 
   override def keyPressed(e: KeyEvent): Unit = ()
@@ -94,11 +89,16 @@ class VsocMatchFrame(_match: Match) extends JFrame with SimulationChangeListener
   }
 
   def vsocCenterPane: Component = {
-    val fieldPanel = new FieldPanel()
     fieldPanel.setFocusable(false)
-    _match.addSimListener(fieldPanel)
-    _match.addSimListener(this)
+    createNewMatch()
     fieldPanel
+  }
+
+  def createNewMatch(): Unit = {
+    _match = Some(matchFactory())
+    _match.get.addSimListener(fieldPanel)
+    _match.get.addSimListener(this)
+
   }
 
 
@@ -113,20 +113,22 @@ class VsocMatchFrame(_match: Match) extends JFrame with SimulationChangeListener
 
   def updateInfoText(): Unit = {
 
-    val stateStr = MatchResults.formatDefault(_match.state)
+    val stateStr = MatchResults.formatDefault(_match.get.state)
 
     txt.setText(
       s"""INFO
-         |Team '${_match.teamWestName}'
+         |Team '${_match.get.teamWestName}'
          | yellow west (w) ->
          |
-         |Team '${_match.teamEastName}'
+         |Team '${_match.get.teamEastName}'
          | red east (e) <-
          |
          |COMMANDS
          | space - start/stop
          | m - speed up
          | n - slow down
+         | b - reset speed
+         | r - restart match
          |
          |STATUS
          |running : $running
@@ -146,6 +148,35 @@ class VsocMatchFrame(_match: Match) extends JFrame with SimulationChangeListener
     val SPACE = 32
     val N = 78
     val M = 77
+    val R = 82
+    val B = 66
+
+  }
+
+  object SpeedManager {
+
+    val DEFAULT_DELAY = 10
+
+    def resetSpeed(): Unit = {
+      delay = DEFAULT_DELAY
+    }
+
+
+    def speedUp(): Unit = {
+      if (delay >= 500) delay -= 20
+      else if (delay >= 100) delay -= 10
+      else if (delay >= 50) delay -= 5
+      else if (delay >= 1) delay -= 1
+      // else nothing to do
+    }
+
+    def slowDown(): Unit = {
+      if (delay < 20) delay += 1
+      else if (delay < 50) delay += 5
+      else if (delay < 100) delay += 10
+      else if (delay < 500) delay += 20
+      // else nothing to do
+    }
 
   }
 

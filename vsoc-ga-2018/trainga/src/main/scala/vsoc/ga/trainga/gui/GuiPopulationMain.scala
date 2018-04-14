@@ -18,8 +18,8 @@ object GuiPopulationMain extends App with WithPathTrainGaNrRunner {
 
   def run(workDirBase: Path, trainGa: TrainGa[Double], trainGaNr: String, popNr: Option[String]): Unit = {
 
-    val m: Match = createMatch(workDirBase, trainGa, trainGaNr, popNr)
-    val f = new VsocMatchFrame(m)
+    val mf: () => Match = () => createMatch(workDirBase, trainGa, trainGaNr, popNr)
+    val f = new VsocMatchFrame(mf)
     f.setSize(800, 700)
     f.setVisible(true)
 

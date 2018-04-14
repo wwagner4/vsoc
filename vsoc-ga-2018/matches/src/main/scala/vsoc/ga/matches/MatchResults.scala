@@ -58,6 +58,12 @@ object MatchResults {
       s"$west/$east"
     }
 
+    def formatOtherGoals: String = {
+      val east = mr.teamEastResult.otherGoalCount
+      val west = mr.teamWestResult.otherGoalCount
+      s"$west/$east"
+    }
+
     def chapters: Seq[Chapter] = Seq(
       Chapter(
         title = "TEAMS w/e",
@@ -66,6 +72,7 @@ object MatchResults {
           ("score", formatScore),
           ("kicks", formatKicks),
           ("kick outs", formatKickOuts),
+          ("other goals", formatOtherGoals),
           ("own goals", formatOwnGoals)
         )
       )

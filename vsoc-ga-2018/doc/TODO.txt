@@ -7,3 +7,5 @@ LEARNING
 - adapt fitness weights
 -- less for a goal
 -- less for kickout in relation to kick
+- check if there is a ne version of dl4j
+- make the crossover per player and not per team
