@@ -1,0 +1,6 @@
+vsoc.workdir=/Users/wwagner4/work/work-vsoc-ga-2018
+# vsoc.workdir=C:/ta30/entw1/work
+
+vsoc.hostname=wallace
+# vsoc.hostname=work
+# vsoc.hostname=bob

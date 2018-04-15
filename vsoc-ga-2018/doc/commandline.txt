@@ -7,22 +7,25 @@ java -cp /Users/wwagner4/prj/vsoc/vsoc-ga-2018/trainga/target/scala-2.12/trainga
 ------ Windows ------
 start "work008" java -Xmx8g ^
   -cp C:\ta30\entw1\vsoc\vsoc-ga-2018\trainga\target\scala-2.12\trainga-assembly-0.0.1-SNAPSHOT.jar ^
-  vsoc.ga.trainga.ga.TrainGaMain work008 C:\ta30\entw1\work
+  vsoc.ga.trainga.ga.TrainGaMain work008
 
 ------ bob training -----
 nohup java -Xmx6g \
  -cp $HOME/prj/vsoc/vsoc-ga-2018/trainga/target/scala-2.12/trainga-assembly-0.0.1-SNAPSHOT.jar \
- vsoc.ga.trainga.ga.TrainGaMain bob009 ~/work/work-vsoc-ga-2018 &
+ vsoc.ga.trainga.ga.TrainGaMain bob009 &
 
 
 ------ bob server -----
 nohup java -Xmx512k -Xmx512m \
  -cp ~/prj/vsoc/vsoc-ga-2018/analyse/target/scala-2.12/analyse-assembly-0.0.1-SNAPSHOT.jar \
  vsoc.ga.analyse.server.Server \
- ~/work/work-vsoc-ga-2018 \
  /var/www/html \
  bob009 &
 
 ----- bob sync -----
-rsync -arv bob:~/work/work-vsoc-ga-2018/ ~/work/work-vsoc-ga-2018
+nohup rsync -arv bob:~/work/work-vsoc-ga-2018/ ~/work/work-vsoc-ga-2018 &
 
+---- thinner ----
+java \
+ -cp $HOME/prj/vsoc/vsoc-ga-2018/trainga/target/scala-2.12/trainga-assembly-0.0.1-SNAPSHOT.jar \
+ vsoc.ga.trainga.thinner.ThinnerMain

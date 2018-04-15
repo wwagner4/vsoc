@@ -7,14 +7,10 @@ import vsoc.ga.common.config.{Config, Configs}
 
 object Server extends App {
 
-  require(args.length == 3, "Three parameters required")
+  require(args.length == 2, "Three parameters required")
 
-  val workDir = args(0)
-  val httpDir = args(1)
-  val configsList = args(2)
-
-  val workPath = Paths.get(workDir)
-  require(workPath.isAbsolute, s"'$workPath' must be an absolute path")
+  val httpDir = args(0)
+  val configsList = args(1)
 
   val httpPath = Paths.get(httpDir)
   require(httpPath.isAbsolute, s"'$httpPath' must be an absolute path")
@@ -22,7 +18,7 @@ object Server extends App {
   val configs: Seq[Config] = configsList.split(",").toSeq.map(getConfig)
   require(configs.nonEmpty, "at least one configuration must be defined")
 
-  ServerImpl.start(workPath, httpPath, configs)
+  ServerImpl.start(httpPath, configs)
 
   def getConfig(name: String): Config = UtilReflection.call(Configs, name, classOf[Config])
 

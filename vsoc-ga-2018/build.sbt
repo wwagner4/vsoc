@@ -7,10 +7,11 @@ lazy val commonSettings = Seq(
   scalaVersion := "2.12.4",
   version := "0.0.1-SNAPSHOT",
   fork := true,
+  // If your maven repository is located at another file location define this in $HOME/.sbt/<version>/local.sbt
   resolvers += "Local Maven Repository" at s"file://$userHome/.m2/repository",
-  //resolvers += "Local Maven Repository" at "file:///C:/ta30/nutzb/_m2_repo/",
   libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.2" % "test",
   libraryDependencies += "org.slf4j" % "slf4j-log4j12" % "1.7.25",
+  libraryDependencies += "com.typesafe" % "config" % "1.3.3",
 )
 
 lazy val root = (project in file("."))

@@ -4,6 +4,7 @@ import java.nio.file.{Files, Path, Paths}
 import java.util.Comparator
 
 import atan.model.Controller
+import vsoc.ga.common.config.ConfigHelper
 import vsoc.ga.common.persist.Persistors
 import vsoc.ga.matches.gui.VsocMatchFrame
 import vsoc.ga.matches.{Match, Matches, Team}
@@ -14,11 +15,13 @@ import scala.util.Random
 
 object GuiPopulationMain extends App with WithPathTrainGaNrRunner {
 
+  private val workBasic = ConfigHelper.workDir
+
   runWithArgs(args, run, GuiPopulationMain.getClass.getSimpleName)
 
-  def run(workDirBase: Path, trainGa: TrainGa[Double], trainGaNr: String, popNr: Option[String]): Unit = {
+  def run(trainGa: TrainGa[Double], trainGaNr: String, popNr: Option[String]): Unit = {
 
-    val mf: () => Match = () => createMatch(workDirBase, trainGa, trainGaNr, popNr)
+    val mf: () => Match = () => createMatch(trainGa, trainGaNr, popNr)
     val f = new VsocMatchFrame(mf)
     f.setSize(800, 700)
     f.setVisible(true)
@@ -26,7 +29,7 @@ object GuiPopulationMain extends App with WithPathTrainGaNrRunner {
   }
 
 
-  def createMatch(workBasic: Path, trainGa: TrainGa[Double], trainGaNr: String, popNr: Option[String]): Match = {
+  def createMatch(trainGa: TrainGa[Double], trainGaNr: String, popNr: Option[String]): Match = {
 
     def findPop(absPath: Path): Path = {
       if (popNr.isDefined) {
@@ -43,7 +46,7 @@ object GuiPopulationMain extends App with WithPathTrainGaNrRunner {
       }
     }
 
-    def loadLatestGenotype(workBasic: Path, id: String, nr: String): Seq[Seq[Double]] = {
+    def loadLatestGenotype(id: String, nr: String): Seq[Seq[Double]] = {
 
       import vsoc.ga.common.UtilTransform._
 
@@ -59,7 +62,7 @@ object GuiPopulationMain extends App with WithPathTrainGaNrRunner {
       }.getOrElse(throw new IllegalStateException(s"Error loading genotype from $latestPop"))
     }
 
-    val geno: Seq[Seq[Double]] = loadLatestGenotype(workBasic, trainGa.id, trainGaNr)
+    val geno: Seq[Seq[Double]] = loadLatestGenotype(trainGa.id, trainGaNr)
     val teams = for ((t, i) <- trainGa.teamsFromGeno(geno).zipWithIndex) yield {
       new Team {
         private val _name = popNr.map(nr => s"$trainGaNr-$nr-$i").getOrElse(s"$trainGaNr-latest-$i")

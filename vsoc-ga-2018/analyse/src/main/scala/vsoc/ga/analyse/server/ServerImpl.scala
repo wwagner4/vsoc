@@ -69,7 +69,7 @@ object ServerImpl {
     Files.list(base).iterator().asScala.foreach{p => Files.delete(p)}
   }
 
-  def start(workPath: Path, httpPath: Path, cfgs: Seq[Config]): Unit = {
+  def start(httpPath: Path, cfgs: Seq[Config]): Unit = {
     val cfgsStr = cfgs.map(_.id).mkString(", ")
     val exe = Executors.newScheduledThreadPool(10)
     exe.scheduleAtFixedRate(() => run(), 0, 60, TimeUnit.MINUTES)
@@ -79,7 +79,7 @@ object ServerImpl {
       cfgs.foreach{c =>
         log.info(s"creating data for configuration '${c.id}'")
         clearDir(httpPath)
-        Data01Dia.createDiaConfig(c, workPath, diaConfs = Seq(DiaConf_SUPRESS_TIMESTAMP), diaDir = Some(httpPath))
+        Data01Dia.createDiaConfig(c, diaConfs = Seq(DiaConf_SUPRESS_TIMESTAMP), diaDir = Some(httpPath))
       }
       createIndexHtml(httpPath)
     }

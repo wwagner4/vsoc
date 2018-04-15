@@ -22,3 +22,5 @@ machinelearning-2017/common/.cache-main
 *.cache-tests
 machinelearning-2017/create-data/.cache-main
 *.cache-main
+
+vsoc-ga-2018/common/src/main/resources/application.properties
