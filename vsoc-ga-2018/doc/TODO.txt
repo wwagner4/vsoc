@@ -1,11 +1,6 @@
-GUI
-- restart a match
-- shoe other goals
-
 LEARNING
-- try a multilayer net
-- adapt fitness weights
+- try a multilayer net: M0
+- adapt fitness weights: W0
 -- less for a goal
 -- less for kickout in relation to kick
-- check if there is a ne version of dl4j
-- make the crossover per player and not per team
+- make the crossover per player and not per team: C0
