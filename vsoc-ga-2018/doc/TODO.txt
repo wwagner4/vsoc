@@ -1,6 +1,9 @@
 LEARNING
 - try a multilayer net: M0
-- adapt fitness weights: W0
--- less for a goal
--- less for kickout in relation to kick
+- adapt fitness weights:
+-- less for a goal: G0
+-- less for kickout in relation to kick K0
 - make the crossover per player and not per team: C0
+
+ANALYSE
+- Anayse the normal outputvalues to find out how to adjust input/output values

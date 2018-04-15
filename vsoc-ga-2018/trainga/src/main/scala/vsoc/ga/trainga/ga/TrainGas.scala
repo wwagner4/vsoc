@@ -1,7 +1,7 @@
 package vsoc.ga.trainga.ga
 
 import vsoc.ga.matches.TeamResult
-import vsoc.ga.trainga.ga.impl.{OutputFactors, TrainGa01Abstract, TrainGaAbstract}
+import vsoc.ga.trainga.ga.impl.{OutputFactors, TrainGa01Abstract, TrainGa04Abstract, TrainGaAbstract}
 import vsoc.ga.trainga.nn.{NeuralNet, NeuralNets}
 
 import scala.util.Random
@@ -283,6 +283,36 @@ object TrainGas {
          |
          |$propertiesFmt
       """.stripMargin
+  }
+
+  def trainGa04K0: TrainGa[Double] = new TrainGa04Abstract {
+
+    override def fitness: TeamResult => Double = FitnessFunctions.fitnessConsiderAll01K0
+
+    override def fitnessDesc: String = "consider all kickOut penalty 5"
+
+    override def id: String = "trainGa04K0"
+
+    override def fullDesc: String =
+      """Relation between kick- and kickoutfactor changed
+        |10 / 2 -> 10 / 5 (FitnessFunctions.fitnessConsiderAll02)
+      """.stripMargin
+
+  }
+
+  def trainGa04G0: TrainGa[Double] = new TrainGa04Abstract {
+
+    override def fitness: TeamResult => Double = FitnessFunctions.fitnessConsiderAll01G0
+
+    override def fitnessDesc: String = "consider all goal-reard/penalty 100 -> 10"
+
+    override def id: String = "trainGa04G0"
+
+    override def fullDesc: String =
+      """reward/penalty for goal/ownGoal changed
+        |100 -> 10  (FitnessFunctions.fitnessConsiderAll03)
+      """.stripMargin
+
   }
 
 }

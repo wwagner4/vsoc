@@ -7,12 +7,12 @@ java -cp /Users/wwagner4/prj/vsoc/vsoc-ga-2018/trainga/target/scala-2.12/trainga
 ------ Windows ------
 start "work008" java -Xmx8g ^
   -cp C:\ta30\entw1\vsoc\vsoc-ga-2018\trainga\target\scala-2.12\trainga-assembly-0.0.1-SNAPSHOT.jar ^
-  vsoc.ga.trainga.ga.TrainGaMain work008
+  vsoc.ga.trainga.ga.TrainGaMain work010
 
 ------ bob training -----
 nohup java -Xmx6g \
  -cp $HOME/prj/vsoc/vsoc-ga-2018/trainga/target/scala-2.12/trainga-assembly-0.0.1-SNAPSHOT.jar \
- vsoc.ga.trainga.ga.TrainGaMain bob009 &
+ vsoc.ga.trainga.ga.TrainGaMain bob010 &
 
 
 ------ bob server -----
@@ -20,7 +20,7 @@ nohup java -Xmx512k -Xmx512m \
  -cp ~/prj/vsoc/vsoc-ga-2018/analyse/target/scala-2.12/analyse-assembly-0.0.1-SNAPSHOT.jar \
  vsoc.ga.analyse.server.Server \
  /var/www/html \
- bob009 &
+ bob010 &
 
 ----- bob sync -----
 nohup rsync -arv bob:~/work/work-vsoc-ga-2018/ ~/work/work-vsoc-ga-2018 &
