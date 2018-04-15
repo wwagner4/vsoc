@@ -12,4 +12,6 @@ object ConfigHelper {
 
   def defaultWorkDir: Path = homeDir.resolve(defaultWorkDirRel)
 
+  def defaultWorkDirWinows: Path = homeDir.resolve(defaultWorkDirRel)
+
 }

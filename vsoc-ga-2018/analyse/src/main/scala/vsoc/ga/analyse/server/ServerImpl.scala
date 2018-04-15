@@ -66,7 +66,7 @@ object ServerImpl {
   def clearDir(base: Path):Unit = {
     require(Files.exists(base))
     require(Files.isDirectory(base))
-    val imgFiles = Files.list(base).iterator().asScala.foreach{p => Files.delete(p)}
+    Files.list(base).iterator().asScala.foreach{p => Files.delete(p)}
   }
 
   def start(workPath: Path, httpPath: Path, cfgs: Seq[Config]): Unit = {
@@ -79,7 +79,7 @@ object ServerImpl {
       cfgs.foreach{c =>
         log.info(s"creating data for configuration '${c.id}'")
         clearDir(httpPath)
-        Data01Dia.run(c, workPath, diaConfs = Seq(DiaConf_SUPRESS_TIMESTAMP), diaDir = Some(httpPath))
+        Data01Dia.createDiaConfig(c, workPath, diaConfs = Seq(DiaConf_SUPRESS_TIMESTAMP), diaDir = Some(httpPath))
       }
       createIndexHtml(httpPath)
     }

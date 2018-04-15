@@ -11,7 +11,7 @@ object Data01MainWork extends App {
   )
 
   configs.foreach { c =>
-    Data01Dia.run(
+    Data01Dia.createDiaConfig(
       cfg = c,
       workDir = Paths.get("C:/ta30/entw1/work")
       //yRange = Some(Viz.Range(None, Some(100)))
