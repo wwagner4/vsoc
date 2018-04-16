@@ -76,10 +76,10 @@ object Data01Dia {
 
     val dia = Viz.MultiDiagram[Viz.XY](
       id = "all",
-      columns = 4,
+      columns = 5,
       diagrams = dias,
-      imgWidth = 2000,
-      imgHeight = 1500
+      imgWidth = 4000,
+      imgHeight = 2500
     )
 
     Viz.createDiagram(dia)
