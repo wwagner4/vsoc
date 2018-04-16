@@ -4,9 +4,9 @@ import java.nio.file._
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-import vsoc.ga.common.config.{ConfigHelper, ConfigTrainGa}
+import vsoc.ga.common.config.ConfigHelper
 
-import collection.JavaConverters._
+import scala.collection.JavaConverters._
 
 object ExportCsv extends App {
 
@@ -28,7 +28,6 @@ object ExportCsv extends App {
 
 
   def processPop(popDir: Path): Unit = {
-    println("###### " + popDir)
     if (Files.isDirectory(popDir)) {
       val files = Files.list(popDir).iterator().asScala.filter(f => f.getFileName.toString.endsWith("csv"))
       files.foreach { f =>
@@ -44,13 +43,11 @@ object ExportCsv extends App {
   }
 
   def processTrainGa(trainGa: Path): Unit = {
-    println("### " + trainGa)
     if (trainGa.getFileName.toString.startsWith("train")) {
       Files.list(trainGa).iterator().asScala.foreach(p => processPop(p))
     }
   }
 
   Files.list(wd).iterator().asScala.foreach(p => processTrainGa(p))
-
 
 }

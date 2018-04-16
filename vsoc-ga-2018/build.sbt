@@ -11,7 +11,6 @@ lazy val commonSettings = Seq(
   resolvers += "Local Maven Repository" at s"file://$userHome/.m2/repository",
   libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.2" % "test",
   libraryDependencies += "org.slf4j" % "slf4j-log4j12" % "1.7.25",
-  libraryDependencies += "com.typesafe" % "config" % "1.3.3",
 )
 
 lazy val root = (project in file("."))
