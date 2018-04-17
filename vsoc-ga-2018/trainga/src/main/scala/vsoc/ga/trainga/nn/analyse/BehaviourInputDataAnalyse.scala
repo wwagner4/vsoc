@@ -13,14 +13,14 @@ class BehaviourInputDataAnalyse(
                           val inputMapper: InputMapperNn) extends Behaviour {
 
   override def shouldBeApplied(sens: Sensors): Boolean = {
-    val in: Option[Array[Double]] = inputMapper.mapSensors(sens)
-    in.foreach(a => println(a.toList))
-    false
-  }
+  val in: Option[Array[Double]] = inputMapper.mapSensors(sens)
+  in.foreach(a => println(a.toList))
+  false
+}
 
   override def apply(sens: Sensors, player: Player): Unit = {
-    throw new IllegalStateException("should never be called")
-  }
+  throw new IllegalStateException("should never be called")
+}
 
   override def getChild: Optional[Behaviour] = Optional.of(child)
 }
