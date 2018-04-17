@@ -395,6 +395,8 @@ object Configs {
     override def trainings: Seq[ConfigTrainGa] = Seq(
       ConfigTrainGa("trainGa04M0", "w001"),
       ConfigTrainGa("trainGa04M0", "w002"),
+      ConfigTrainGa("trainGa04M0", "w003"),
+      ConfigTrainGa("trainGa04M0", "w004"),
     )
 
     override def fullDesc: String =
