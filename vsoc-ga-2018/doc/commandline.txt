@@ -12,7 +12,7 @@ start "work011" java -Xmx8g ^
 ------ bob training -----
 nohup java -Xmx6g \
  -cp $HOME/prj/vsoc/vsoc-ga-2018/trainga/target/scala-2.12/trainga-assembly-0.0.1-SNAPSHOT.jar \
- vsoc.ga.trainga.ga.TrainGaMain bob010 &
+ vsoc.ga.trainga.ga.TrainGaMain bob011 &
 
 
 ------ bob server -----
@@ -20,10 +20,14 @@ nohup java -Xmx512k -Xmx512m \
  -cp ~/prj/vsoc/vsoc-ga-2018/analyse/target/scala-2.12/analyse-assembly-0.0.1-SNAPSHOT.jar \
  vsoc.ga.analyse.server.Server \
  /var/www/html \
- bob010 &
+ bob011 &
 
 ----- bob sync -----
 nohup rsync -arv bob:~/work/work-vsoc-ga-2018/ ~/work/work-vsoc-ga-2018 &
+
+rsync -arv ~/prj/vsoc/vsoc-ga-2018/doc/results/trainga-work-18mmdd/ ~/work/work-vsoc-ga-2018
+
+
 
 ---- thinner ----
 java \
