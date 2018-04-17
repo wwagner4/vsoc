@@ -3,7 +3,6 @@ package vsoc.ga.trainga.nn.analyse
 import vsoc.behaviour.Behaviour
 import vsoc.ga.matches.{Behaviours, Matches, Teams}
 import vsoc.ga.trainga.ga.impl.InputMapperNnTeam
-import vsoc.ga.trainga.nn.NeuralNets
 
 object InputDataModelMain extends App {
 
@@ -23,11 +22,16 @@ object InputDataModelMain extends App {
 
   private def testBehav: Behaviour = {
     val child: Behaviour = Behaviours.randomHelix(Behaviours.remainOnField)
-    val nn = NeuralNets.team01
     val inMapper = new InputMapperNnTeam(1.0)
-    new BehaviourInputDataAnalyse(nn, child, inMapper)
+    new BehaviourInputDataAnalyse(new InputDataHandlerStdOut, child, inMapper)
   }
 
   private def sleep(ms: Int): Unit = Thread.sleep(ms)
+
+  class InputDataHandlerStdOut extends InputDataHandler {
+
+    override def handle(in: Array[Double]): Unit = println(in.toList.mkString(", "))
+
+  }
 
 }
