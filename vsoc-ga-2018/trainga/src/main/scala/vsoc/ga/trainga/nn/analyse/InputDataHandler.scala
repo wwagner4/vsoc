@@ -4,4 +4,6 @@ trait InputDataHandler {
 
   def handle(in: Array[Double]): Unit
 
+  def close(): Unit
+
 }

@@ -11,6 +11,9 @@ lazy val commonSettings = Seq(
   resolvers += "Local Maven Repository" at s"file://$userHome/.m2/repository",
   libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.2" % "test",
   libraryDependencies += "org.slf4j" % "slf4j-log4j12" % "1.7.25",
+  // Checkout https://github.com/wwagner4/viz.git
+  // and call sbt publishLocal in the root directory
+  libraryDependencies += "net.entelijan" %% "viz" % "0.1-SNAPSHOT",
 )
 
 lazy val root = (project in file("."))
@@ -55,7 +58,4 @@ lazy val analyse = (project in file("analyse"))
   .settings(
     name := "analyse",
     commonSettings,
-    // Checkout https://github.com/wwagner4/viz.git
-    // and call sbt publishLocal in the root directory
-    libraryDependencies += "net.entelijan" %% "viz" % "0.1-SNAPSHOT",
   ).dependsOn(common)

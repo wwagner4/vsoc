@@ -14,8 +14,6 @@ class InputDataModel {
       new BehaviourInputDataAnalyse(handler, child, inMapper)
     }
 
-    def sleep(ms: Int): Unit = Thread.sleep(ms)
-
     println("STARTED")
 
     val behavsa: Seq[Behaviour] = Seq(testBehav, testBehav, testBehav)
@@ -26,8 +24,8 @@ class InputDataModel {
 
     for (_ <- 1 to numTests) {
       _match.takeStep()
-      sleep(100)
     }
+    handler.close()
     println("FINISHED")
   }
 
