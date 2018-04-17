@@ -294,7 +294,8 @@ object TrainGas {
     override def id: String = "trainGa04K0"
 
     override def fullDesc: String =
-      """Relation between kick- and kickoutfactor changed
+      s"""${super.fullDesc}
+        |Relation between kick- and kickoutfactor changed
         |10 / 2 -> 10 / 5 (FitnessFunctions.fitnessConsiderAll02)
       """.stripMargin
 
@@ -309,8 +310,23 @@ object TrainGas {
     override def id: String = "trainGa04G0"
 
     override def fullDesc: String =
-      """reward/penalty for goal/ownGoal changed
+      s"""${super.fullDesc}
+        |reward/penalty for goal/ownGoal changed
         |100 -> 10  (FitnessFunctions.fitnessConsiderAll03)
+      """.stripMargin
+
+  }
+
+  def trainGa04M0: TrainGa[Double] = new TrainGa04Abstract {
+
+    override def createNeuralNet: () => NeuralNet = () => NeuralNets.team02
+
+    override def id: String = "trainGa04M0"
+
+    override def fullDesc: String =
+      s"""${super.fullDesc}
+        |use a network with two intermedate layers
+        |NeuralNets.team02
       """.stripMargin
 
   }

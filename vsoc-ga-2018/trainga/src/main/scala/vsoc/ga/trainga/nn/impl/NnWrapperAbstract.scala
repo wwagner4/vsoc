@@ -30,9 +30,6 @@ abstract class NnWrapperAbstract extends NeuralNet {
 
   def numOutputNodes: Int
 
-  def numHiddenNodes: Int
-
-
   lazy val nn: MultiLayerNetwork = {
     val nnConf = nnConfiguration()
     val re: MultiLayerNetwork = new MultiLayerNetwork(nnConf)

@@ -374,4 +374,32 @@ object Configs {
       """.stripMargin
   }
 
+  def bob011: Config = new Config {
+
+    override def id: String = "bob011"
+
+    override def trainings: Seq[ConfigTrainGa] = Seq(
+      ConfigTrainGa("trainGa04M0", "w001"),
+      ConfigTrainGa("trainGa04M0", "w002"),
+    )
+
+    override def fullDesc: String =
+      """Network with two intermediate layers
+      """.stripMargin
+  }
+
+  def work011: Config = new Config {
+
+    override def id: String = "work011"
+
+    override def trainings: Seq[ConfigTrainGa] = Seq(
+      ConfigTrainGa("trainGa04M0", "w001"),
+      ConfigTrainGa("trainGa04M0", "w002"),
+    )
+
+    override def fullDesc: String =
+      """Network with two intermediate layers
+      """.stripMargin
+  }
+
 }
