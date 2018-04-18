@@ -4,6 +4,7 @@ import org.slf4j.LoggerFactory
 import vsoc.ga.common.describe.{DescribableFormatter, PropertiesProvider}
 import vsoc.ga.genetic._
 import vsoc.ga.matches.{Team, TeamResult}
+import vsoc.ga.trainga.behav.{InputMapperNn, OutputMapperNn}
 import vsoc.ga.trainga.ga.TrainGa
 import vsoc.ga.trainga.nn.NeuralNet
 
@@ -15,25 +16,27 @@ abstract class TrainGaAbstract extends TrainGa[Double] with PropertiesProvider {
 
   protected def createNeuralNet: () => NeuralNet
 
-  protected def ran: Random
-
   protected def fitness: TeamResult => Double
 
   protected def fitnessDesc: String
 
-  protected def popMultiplicationTestFactor: Int
+  protected def popMultiplicationTestFactor: Int = 3
 
-  protected def populationSize: Int
+  protected def populationSize: Int = 20
 
   protected def mutationRate: Double = 0.001
 
-  protected def outputFactors: OutputFactors = OutputFactors()
-
   protected val playerCount = 3
+
+  protected def inMapper: InputMapperNn
+
+  protected def outMapper: OutputMapperNn
 
   private lazy val nnTempl = createNeuralNet()
 
   private val playerParamSize: Int = nnTempl.getParam.length
+
+  def ran: Random = Random.javaRandomToRandom(new java.util.Random())
 
   override def properties: Seq[(String, Any)] = Seq(
     ("player cnt", playerCount),
@@ -41,7 +44,6 @@ abstract class TrainGaAbstract extends TrainGa[Double] with PropertiesProvider {
     ("fit func", fitnessDesc),
     ("mut rate", mutationRate),
     ("nn", nnTempl),
-    ("outputFactors", outputFactors),
   )
 
   protected def propertiesFmt: String = {
@@ -57,9 +59,9 @@ abstract class TrainGaAbstract extends TrainGa[Double] with PropertiesProvider {
 
   protected lazy val tester: PhenoTester[TeamGa, Double] = new PhenoTesterTeam(ran, fitness, popMultiplicationTestFactor)
   protected lazy val selStrat: SelectionStrategy[Double] = SelectionStrategies.crossover(mutationRate, randomAllele, ran)
-  protected lazy val transformer: Transformer[Double, TeamGa] = new TransformerTeam(playerCount, createNeuralNet, outputFactors)
+  protected lazy val transformer: Transformer[Double, TeamGa] = new TransformerTeam(playerCount, createNeuralNet, inMapper, outMapper)
 
-  val ga: GA[Double, TeamGa, Double] = new GA(tester, selStrat, transformer)
+  lazy val ga: GA[Double, TeamGa, Double] = new GA(tester, selStrat, transformer)
 
   def createRandomPopGeno: Seq[Seq[Double]] = {
     def ranSeq(size: Int): Seq[Double] =

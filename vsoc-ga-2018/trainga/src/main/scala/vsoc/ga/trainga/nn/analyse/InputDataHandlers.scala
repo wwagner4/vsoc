@@ -1,9 +1,12 @@
 package vsoc.ga.trainga.nn.analyse
 
-import java.nio.file.{Files, Path}
+import java.nio.file.Files
 
+import atan.model.{Player, ViewAngle, ViewQuality}
 import entelijan.viz.{Viz, VizCreator, VizCreatorGnuplot}
 import vsoc.ga.common.config.ConfigHelper
+import vsoc.ga.trainga.behav.OutputMapperNn
+import vsoc.ga.trainga.ga.impl.OutputMapperNnTeam01
 import vsoc.ga.trainga.nn.{NeuralNet, NeuralNets}
 
 object InputDataHandlers {
@@ -53,18 +56,14 @@ abstract class InputHandlerNNBoxPlots extends InputDataHandler {
 
   private val nn = createNn
 
-  private var dashPower = List.empty[Viz.X]
-  private var kickPower = List.empty[Viz.X]
-  private var kickDirection = List.empty[Viz.X]
-  private var turn = List.empty[Viz.X]
   private var cnt = 0
+
+  val outMapper: OutputMapperNn = new OutputMapperNnTeam01
+  val player: CollectingPlayer = new CollectingPlayer
 
   override def handle(in: Array[Double]): Unit = {
     val out = nn.output(in)
-    dashPower ::= Viz.X(out(0))
-    kickPower ::= Viz.X(out(1))
-    kickDirection ::= Viz.X(out(2))
-    turn ::= Viz.X(out(3))
+    outMapper.applyOutput(player, out)
     cnt += 1
   }
 
@@ -83,33 +82,76 @@ abstract class InputHandlerNNBoxPlots extends InputDataHandler {
       Viz.DataRow(
         name = Some("dash power"),
         style = Viz.Style_BOXPLOT,
-        data = dashPower
+        data = player.dashPower
       ),
       Viz.DataRow(
         name = Some("kick power"),
         style = Viz.Style_BOXPLOT,
-        data = kickPower
+        data = player.kickPower
       ),
       Viz.DataRow(
         name = Some("kick dir"),
         style = Viz.Style_BOXPLOT,
-        data = kickDirection
+        data = player.kickDirection
       ),
       Viz.DataRow(
         name = Some("turn"),
         style = Viz.Style_BOXPLOT,
-        data = turn
+        data = player.turn
       )
     )
     val dia = Viz.Diagram[Viz.X](
       id = s"nnBoxPlots$id$cnt",
       title = s"Output Data NN id:$id n:$cnt",
-      yRange = Some(Viz.Range(Some(-1.5), Some(1.5))),
+      yRange = Some(Viz.Range(Some(-100), Some(100))),
       dataRows = dataRows
     )
 
     Viz.createDiagram(dia)
 
   }
+}
+
+class CollectingPlayer extends Player {
+
+  var dashPower = List.empty[Viz.X]
+  var kickPower = List.empty[Viz.X]
+  var kickDirection = List.empty[Viz.X]
+  var turn = List.empty[Viz.X]
+
+  override def dash(power: Int): Unit = dashPower ::= Viz.X(power)
+
+  override def move(x: Int, y: Int): Unit = throw new IllegalStateException("should never be called")
+
+  override def kick(power: Int, direction: Double): Unit = {
+    kickPower ::= Viz.X(power)
+    kickDirection ::= Viz.X(direction)
+  }
+
+  override def say(message: String): Unit = throw new IllegalStateException("should never be called")
+
+  override def senseBody(): Unit = throw new IllegalStateException("should never be called")
+
+  override def turn(angle: Double): Unit = turn ::= Viz.X(angle)
+
+  override def turnNeck(angle: Double): Unit = throw new IllegalStateException("should never be called")
+
+  override def catchBall(direction: Double): Unit = throw new IllegalStateException("should never be called")
+
+  override def changeViewMode(quality: ViewQuality, angle: ViewAngle): Unit = throw new IllegalStateException("should never be called")
+
+  override def bye(): Unit = throw new IllegalStateException("should never be called")
+
+  override def handleError(error: String): Unit = throw new IllegalStateException("should never be called")
+
+  override def getTeamName: String = throw new IllegalStateException("should never be called")
+
+  override def isTeamEast: Boolean = throw new IllegalStateException("should never be called")
+
+  override def setTeamEast(is: Boolean): Unit = throw new IllegalStateException("should never be called")
+
+  override def setNumber(num: Int): Unit = throw new IllegalStateException("should never be called")
+
+  override def getNumber: Int = throw new IllegalStateException("should never be called")
 }
 

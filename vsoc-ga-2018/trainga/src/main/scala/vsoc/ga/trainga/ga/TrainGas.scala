@@ -1,7 +1,8 @@
 package vsoc.ga.trainga.ga
 
 import vsoc.ga.matches.TeamResult
-import vsoc.ga.trainga.ga.impl.{OutputFactors, TrainGa01Abstract, TrainGa04Abstract, TrainGaAbstract}
+import vsoc.ga.trainga.behav.{InputMapperNn, OutputMapperNn}
+import vsoc.ga.trainga.ga.impl._
 import vsoc.ga.trainga.nn.{NeuralNet, NeuralNets}
 
 import scala.util.Random
@@ -22,14 +23,14 @@ object TrainGas {
 
   }
 
-  def trainGa01_m1: TrainGa[Double] = new TrainGaAbstract {
+  def trainGa01_m1: TrainGa[Double] = new TrainGa01Abstract {
 
     // Must be equal to the constructing method to ensure correct persistence
     override def id: String = "trainGa01"
 
     override def fitness: TeamResult => Double = FitnessFunctions.fitnessConsiderAll01
 
-    override protected def fitnessDesc: String = "consider all"
+    override def fitnessDesc: String = "consider all"
 
     override def ran: Random = Random.javaRandomToRandom(new java.util.Random())
 
@@ -171,8 +172,6 @@ object TrainGas {
   }
 
 
-
-
   def trainGa01_mM: TrainGa[Double] = new TrainGa01Abstract {
 
     // Must be equal to the constructing method to ensure correct persistence
@@ -203,18 +202,10 @@ object TrainGas {
 
   }
 
-  def trainGa02: TrainGa[Double] = new TrainGaAbstract {
+  def trainGa02: TrainGa[Double] = new TrainGa01Abstract {
 
     // Must be equal to the constructing method to ensure correct persistence
     override def id: String = "trainGa02"
-
-    override def fitness: TeamResult => Double = FitnessFunctions.fitnessConsiderAll01
-
-    override protected def fitnessDesc: String = "consider all"
-
-    override def ran: Random = Random.javaRandomToRandom(new java.util.Random())
-
-    override def createNeuralNet: () => NeuralNet = () => NeuralNets.team01
 
     override def popMultiplicationTestFactor: Int = 6
 
@@ -230,18 +221,10 @@ object TrainGas {
 
   }
 
-  def trainGa03: TrainGa[Double] = new TrainGaAbstract {
+  def trainGa03: TrainGa[Double] = new TrainGa01Abstract {
 
     // Must be equal to the constructing method to ensure correct persistence
     override def id: String = "trainGa02"
-
-    override def fitness: TeamResult => Double = FitnessFunctions.fitnessConsiderAll01
-
-    override protected def fitnessDesc: String = "consider all"
-
-    override def ran: Random = Random.javaRandomToRandom(new java.util.Random())
-
-    override def createNeuralNet: () => NeuralNet = () => NeuralNets.team01
 
     override def popMultiplicationTestFactor: Int = 12
 
@@ -257,14 +240,14 @@ object TrainGas {
 
   }
 
-  def trainGaKicks01: TrainGa[Double] = new TrainGaAbstract {
+  def trainGaKicks01: TrainGa[Double] = new TrainGa01Abstract {
 
     // Must be equal to the constructing method to ensure correct persistence
     override def id: String = "trainGaKicks01"
 
     override def fitness: TeamResult => Double = FitnessFunctions.fitnessKicks01
 
-    override protected def fitnessDesc: String = "consider kicks"
+    override def fitnessDesc: String = "consider kicks"
 
     override def ran: Random = Random.javaRandomToRandom(new java.util.Random())
 
@@ -295,8 +278,8 @@ object TrainGas {
 
     override def fullDesc: String =
       s"""${super.fullDesc}
-        |Relation between kick- and kickoutfactor changed
-        |10 / 2 -> 10 / 5 (FitnessFunctions.fitnessConsiderAll02)
+         |Relation between kick- and kickoutfactor changed
+         |10 / 2 -> 10 / 5 (FitnessFunctions.fitnessConsiderAll02)
       """.stripMargin
 
   }
@@ -311,8 +294,8 @@ object TrainGas {
 
     override def fullDesc: String =
       s"""${super.fullDesc}
-        |reward/penalty for goal/ownGoal changed
-        |100 -> 10  (FitnessFunctions.fitnessConsiderAll03)
+         |reward/penalty for goal/ownGoal changed
+         |100 -> 10  (FitnessFunctions.fitnessConsiderAll03)
       """.stripMargin
 
   }
@@ -325,8 +308,31 @@ object TrainGas {
 
     override def fullDesc: String =
       s"""${super.fullDesc}
-        |use a network with two intermedate layers
-        |NeuralNets.team02
+         |use a network with two intermedate layers
+         |NeuralNets.team02
+      """.stripMargin
+
+  }
+
+  /**
+    * Uses output mapper based on the results of NN analyse
+    */
+  def trainGa05: TrainGa[Double] = new TrainGaAbstract {
+
+    override def outMapper: OutputMapperNn = new OutputMapperNnTeam01
+
+    override def fitness: TeamResult => Double = FitnessFunctions.fitnessConsiderAll01
+
+    override protected def fitnessDesc: String = "consider all"
+
+    override def createNeuralNet: () => NeuralNet = () => NeuralNets.team01
+
+    override def inMapper: InputMapperNn = new InputMapperNnTeam(1.0)
+
+    override def id: String = "trainGa05"
+
+    override def fullDesc: String =
+      s"""use output mapper based on the results of NN analyse
       """.stripMargin
 
   }

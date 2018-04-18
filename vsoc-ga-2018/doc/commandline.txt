@@ -5,14 +5,14 @@ sbt ";project trainga;runMain vsoc.ga.trainga.ga.TrainGaMain"
 java -cp /Users/wwagner4/prj/vsoc/vsoc-ga-2018/trainga/target/scala-2.12/trainga-assembly-0.0.1-SNAPSHOT.jar vsoc.ga.trainga.ga.TrainGaMain traiaKicks01 007
 
 ------ Windows ------
-start "work011" java -Xmx8g ^
+start "work012" java -Xmx8g ^
   -cp C:\ta30\entw1\vsoc\vsoc-ga-2018\trainga\target\scala-2.12\trainga-assembly-0.0.1-SNAPSHOT.jar ^
-  vsoc.ga.trainga.ga.TrainGaMain work011
+  vsoc.ga.trainga.ga.TrainGaMain work012
 
 ------ bob training -----
 nohup java -Xmx6g \
  -cp $HOME/prj/vsoc/vsoc-ga-2018/trainga/target/scala-2.12/trainga-assembly-0.0.1-SNAPSHOT.jar \
- vsoc.ga.trainga.ga.TrainGaMain bob011 &
+ vsoc.ga.trainga.ga.TrainGaMain bob012 &
 
 
 ------ bob server -----
@@ -20,7 +20,7 @@ nohup java -Xmx512k -Xmx512m \
  -cp ~/prj/vsoc/vsoc-ga-2018/analyse/target/scala-2.12/analyse-assembly-0.0.1-SNAPSHOT.jar \
  vsoc.ga.analyse.server.Server \
  /var/www/html \
- bob011 &
+ bob012 &
 
 ----- sync -----
 nohup rsync -arv bob:~/work/work-vsoc-ga-2018/ ~/work/work-vsoc-ga-2018 &
