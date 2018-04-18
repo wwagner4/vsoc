@@ -41,6 +41,7 @@ object Data01Dia {
                         diaConfs: Seq[DiaConf] = Seq.empty[DiaConf],
                         diaDir: Option[Path] = None,
                         dataPoints: Option[Int] = None,
+                        excludes: Seq[String] = Seq.empty[String]
                       ): Unit = {
 
     def extractTrainings: Seq[Seq[ConfigTrainGa]] = {
@@ -58,7 +59,14 @@ object Data01Dia {
       }
 
       Files.list(workDir1).iterator().asScala.toSeq.map { file =>
-        if (Files.isDirectory(file) && file.getFileName.toString.startsWith("train")) extractConfigs(file)
+
+        def excluded: Boolean = {
+          val dirName = file.getFileName.toString
+          println(s"##### dirName: $dirName")
+          excludes.contains(dirName)
+        }
+
+        if (Files.isDirectory(file) && file.getFileName.toString.startsWith("train") && !excluded) extractConfigs(file)
         else Seq.empty[ConfigTrainGa]
       }.filter(s => s.nonEmpty).sortBy(f => f(0).id)
     }
