@@ -438,4 +438,20 @@ object Configs {
       """.stripMargin
   }
 
+  def work013: Config = new Config {
+
+    override def id: String = "bob13"
+
+    override def trainings: Seq[ConfigTrainGa] = Seq(
+      ConfigTrainGa("trainGa04M0om02", "w001"),
+      ConfigTrainGa("trainGa04M0om02", "w002"),
+      ConfigTrainGa("trainGa04M0om02", "w003"),
+      ConfigTrainGa("trainGa04M0om02", "w004"),
+    )
+
+    override def fullDesc: String =
+      """New output mapper
+      """.stripMargin
+  }
+
 }

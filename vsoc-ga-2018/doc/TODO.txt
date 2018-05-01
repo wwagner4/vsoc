@@ -7,4 +7,4 @@ LEARNING
 - make the crossover per player and not per team: C0
 
 ANALYSE
-- Anayse the normal outputvalues to find out how to adjust input/output values
+- OK Anayse the normal outputvalues to find out how to adjust input/output values
