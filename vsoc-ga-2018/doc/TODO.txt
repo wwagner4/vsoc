@@ -1,5 +1,6 @@
 LEARNING
 - try a multilayer net: M0
+- use sigmoid instead of tanh M1
 - adapt fitness weights:
 -- less for a goal: G0
 -- less for kickout in relation to kick K0
