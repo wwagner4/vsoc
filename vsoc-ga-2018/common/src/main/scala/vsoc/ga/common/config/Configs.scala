@@ -427,14 +427,14 @@ object Configs {
     override def id: String = "bob12"
 
     override def trainings: Seq[ConfigTrainGa] = Seq(
-      ConfigTrainGa("trainGa05", "w001"),
-      ConfigTrainGa("trainGa05", "w002"),
-      ConfigTrainGa("trainGa05", "w003"),
-      ConfigTrainGa("trainGa05", "w004"),
+      ConfigTrainGa("trainGa04M0om02", "bob001"),
+      ConfigTrainGa("trainGa04M0om02", "bob002"),
+      ConfigTrainGa("trainGa04M0om02", "bob003"),
+      ConfigTrainGa("trainGa04M0om02", "bob004"),
     )
 
     override def fullDesc: String =
-      """New output weights based on NN analyse
+      """New output mapper
       """.stripMargin
   }
 

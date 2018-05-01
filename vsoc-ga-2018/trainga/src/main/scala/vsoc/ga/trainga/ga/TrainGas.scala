@@ -1,6 +1,7 @@
 package vsoc.ga.trainga.ga
 
 import vsoc.ga.matches.TeamResult
+import vsoc.ga.trainga.behav.OutputMapperNn
 import vsoc.ga.trainga.ga.impl._
 import vsoc.ga.trainga.nn.{NeuralNet, NeuralNets}
 
@@ -309,6 +310,23 @@ object TrainGas {
       s"""${super.fullDesc}
          |use a network with two intermedate layers
          |NeuralNets.team02
+      """.stripMargin
+
+  }
+
+  def trainGa04M0om02: TrainGa[Double] = new TrainGa04Abstract {
+
+    override def createNeuralNet: () => NeuralNet = () => NeuralNets.team02
+
+    override def outMapper: OutputMapperNn = OutputMappers.om02
+
+    override def id: String = "trainGa04M0"
+
+    override def fullDesc: String =
+      s"""${super.fullDesc}
+         |use a network with two intermedate layers
+         |NeuralNets.team02
+         |OutputMapper 0m02
       """.stripMargin
 
   }
