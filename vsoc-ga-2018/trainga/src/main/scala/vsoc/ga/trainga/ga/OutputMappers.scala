@@ -1,6 +1,7 @@
 package vsoc.ga.trainga.ga
 
 import atan.model.Player
+import vsoc.ga.common.act.Activation
 import vsoc.ga.trainga.behav.OutputMapperNn
 
 object OutputMappers {
@@ -17,6 +18,22 @@ object OutputMappers {
   def om01FSmall: OutputMapperNn = {
     val of = OutputFactors(50, 20, 5) // smaller than orig
     new OutputMapperNnTeam(of)
+  }
+
+  def omRaw: OutputMapperNn = (player: Player, out: Array[Double]) => {
+    player.dash((out(0) * 100).intValue())
+    player.kick((out(1) * 100).intValue(), out(2) * 100)
+    player.turn(out(3) * 100)
+  }
+
+  def om02: OutputMapperNn = (player: Player, out: Array[Double]) => {
+    val d = Activation.sigmoid(0.002)(out(0) * 1000) * 30
+    val k = Activation.sigmoid(0.002)(out(1) * 1000) * 30
+    val kd = Activation.tanh(0.002)(out(2) * 1000) * 30
+    val t = Activation.tanh(0.002)(out(3) * 1000) * 30
+    player.dash(d.intValue())
+    player.kick(k.intValue(), kd)
+    player.turn(t)
   }
 
   class OutputMapperNnTeam(factors: OutputFactors) extends OutputMapperNn {
@@ -40,8 +57,5 @@ object OutputMappers {
       }
     }
   }
-
-
-
 
 }
