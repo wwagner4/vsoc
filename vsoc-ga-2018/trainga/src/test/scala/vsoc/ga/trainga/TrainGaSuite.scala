@@ -8,7 +8,8 @@ import org.scalatest.{FunSuite, MustMatchers}
 import vsoc.behaviour.{DistDirVision, Sensors}
 import vsoc.ga.common.UtilReflection
 import vsoc.ga.common.persist.Persistors
-import vsoc.ga.trainga.ga.impl.{InputMapperNnTeam, OutputFactors, OutputMapperNnTeam, RandomElemsPicker}
+import vsoc.ga.trainga.ga.OutputMappers
+import vsoc.ga.trainga.ga.impl.{InputMapperNnTeam, RandomElemsPicker}
 import vsoc.ga.trainga.nn.{NeuralNet, NeuralNetPersist, NeuralNets}
 
 import scala.collection.JavaConverters._
@@ -17,8 +18,6 @@ import scala.util.Random
 class TrainGaSuite extends FunSuite with MustMatchers {
 
   private val workDirBaseTest = Paths.get(System.getProperty("java.io.tmpdir"))
-
-  private val outputFactorsDefault = OutputFactors()
 
   test("Wrapper get param") {
     val nn = NeuralNets.test
@@ -183,7 +182,7 @@ class TrainGaSuite extends FunSuite with MustMatchers {
   test("OutputMapperNnTeam no activation") {
     val p = PlayerTest(0)
     val out: Array[Double] = Array(0.0, 0.0, 0.0, 0.0)
-    val m = new OutputMapperNnTeam(outputFactorsDefault)
+    val m = OutputMappers.om01FDefault
     m.applyOutput(p, out)
     p.result mustBe ""
   }
@@ -191,7 +190,7 @@ class TrainGaSuite extends FunSuite with MustMatchers {
   test("OutputMapperNnTeam dash 1.0") {
     val p = PlayerTest(0)
     val out: Array[Double] = Array(1.0, 0.0, 0.0, 0.0)
-    val m = new OutputMapperNnTeam(outputFactorsDefault)
+    val m = OutputMappers.om01FDefault
     m.applyOutput(p, out)
     p.result mustBe "dash[100]"
   }
@@ -199,7 +198,7 @@ class TrainGaSuite extends FunSuite with MustMatchers {
   test("OutputMapperNnTeam dash 2.3 + kick") {
     val p = PlayerTest(0)
     val out: Array[Double] = Array(2.29, 4.1, 0.0, 0.0)
-    val m = new OutputMapperNnTeam(outputFactorsDefault)
+    val m = OutputMappers.om01FDefault
     m.applyOutput(p, out)
     p.result mustBe "dash[229]kick[410,0.00]"
   }
@@ -207,7 +206,7 @@ class TrainGaSuite extends FunSuite with MustMatchers {
   test("OutputMapperNnTeam dash 2.71 + kick + turn") {
     val p = PlayerTest(0)
     val out: Array[Double] = Array(2.716, 4.1, 1.0, 0.01)
-    val m = new OutputMapperNnTeam(outputFactorsDefault)
+    val m = OutputMappers.om01FDefault
     m.applyOutput(p, out)
     p.result mustBe "dash[272]kick[410,10.00]turn[0.10]"
   }
@@ -215,7 +214,7 @@ class TrainGaSuite extends FunSuite with MustMatchers {
   test("OutputMapperNnTeam kick 4.1 + turn") {
     val p = PlayerTest(0)
     val out: Array[Double] = Array(0.00499, 4.1, 1.0, 3.0)
-    val m = new OutputMapperNnTeam(outputFactorsDefault)
+    val m = OutputMappers.om01FDefault
     m.applyOutput(p, out)
     p.result mustBe "kick[410,10.00]turn[30.00]"
   }
@@ -223,7 +222,7 @@ class TrainGaSuite extends FunSuite with MustMatchers {
   test("OutputMapperNnTeam kick 4.2 + turn") {
     val p = PlayerTest(0)
     val out: Array[Double] = Array(-2, 4.2, 1.0, -3.1111)
-    val m = new OutputMapperNnTeam(outputFactorsDefault)
+    val m = OutputMappers.om01FDefault
     m.applyOutput(p, out)
     p.result mustBe "kick[420,10.00]turn[-31.11]"
   }

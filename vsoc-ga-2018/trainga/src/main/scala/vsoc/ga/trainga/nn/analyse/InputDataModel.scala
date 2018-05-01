@@ -14,8 +14,6 @@ class InputDataModel {
       new BehaviourInputDataAnalyse(handler, child, inMapper)
     }
 
-    println("STARTED")
-
     val behavsa: Seq[Behaviour] = Seq(testBehav, testBehav, testBehav)
     val behavsb: Seq[Behaviour] = Seq(testBehav, testBehav, testBehav)
     val teama = Teams.behaviours(behavsa, "A")
@@ -26,7 +24,6 @@ class InputDataModel {
       _match.takeStep()
     }
     handler.close()
-    println("FINISHED")
   }
 
 }

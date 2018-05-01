@@ -2,7 +2,7 @@ package vsoc.ga.trainga.ga.impl
 
 import vsoc.ga.matches.TeamResult
 import vsoc.ga.trainga.behav.{InputMapperNn, OutputMapperNn}
-import vsoc.ga.trainga.ga.FitnessFunctions
+import vsoc.ga.trainga.ga.{FitnessFunctions, OutputFactors, OutputMappers}
 import vsoc.ga.trainga.nn.{NeuralNet, NeuralNets}
 
 abstract class TrainGa01Abstract extends TrainGaAbstract {
@@ -17,7 +17,7 @@ abstract class TrainGa01Abstract extends TrainGaAbstract {
 
   override def inMapper: InputMapperNn = new InputMapperNnTeam(1.0)
 
-  override def outMapper: OutputMapperNn = new OutputMapperNnTeam(outputFactors)
+  override def outMapper: OutputMapperNn = OutputMappers.om01F(outputFactors)
 
   override def fullDesc: String =
     """configurable output mapper

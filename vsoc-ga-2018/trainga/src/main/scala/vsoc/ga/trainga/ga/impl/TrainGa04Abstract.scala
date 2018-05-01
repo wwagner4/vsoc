@@ -1,5 +1,7 @@
 package vsoc.ga.trainga.ga.impl
 
+import vsoc.ga.trainga.ga.OutputFactors
+
 /**
   * Base for ne tests.
   * The parameters of this class are equal to trainGa01ofM2

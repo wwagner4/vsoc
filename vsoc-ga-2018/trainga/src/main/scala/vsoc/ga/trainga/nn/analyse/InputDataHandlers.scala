@@ -6,8 +6,8 @@ import atan.model.{Player, ViewAngle, ViewQuality}
 import entelijan.viz.{Viz, VizCreator, VizCreatorGnuplot}
 import vsoc.ga.common.config.ConfigHelper
 import vsoc.ga.trainga.behav.OutputMapperNn
-import vsoc.ga.trainga.ga.impl.OutputMapperNnTeam01
-import vsoc.ga.trainga.nn.{NeuralNet, NeuralNets}
+import vsoc.ga.trainga.ga.OutputFactors
+import vsoc.ga.trainga.nn.NeuralNet
 
 object InputDataHandlers {
 
@@ -21,31 +21,16 @@ object InputDataHandlers {
   }
 
 
-  def nnTeam01: InputDataHandler = new InputDataHandler {
-    private val nn = NeuralNets.team01
+  def boxPlots(_id: String, _nn: NeuralNet, _outputMapperNn: OutputMapperNn): InputDataHandler =
+    new InputHandlerNNBoxPlots {
 
-    override def handle(in: Array[Double]): Unit = {
-      println(nn.output(in).toList.mkString(", "))
+      override def createNn: NeuralNet = _nn
+
+      override def id: String = _id
+
+      override def outMapper: OutputMapperNn = _outputMapperNn
+
     }
-
-    override def close(): Unit = () // Nothing to do
-  }
-
-  def nnTeam01BoxPlots(_id: String): InputDataHandler = new InputHandlerNNBoxPlots {
-
-    override def createNn: NeuralNet = NeuralNets.team01
-
-    override def id: String = s"Team01${_id}"
-
-  }
-
-  def nnTeam02BoxPlots(_id: String): InputDataHandler = new InputHandlerNNBoxPlots {
-
-    override def createNn: NeuralNet = NeuralNets.team02
-
-    override def id: String = s"Team02${_id}"
-
-  }
 }
 
 abstract class InputHandlerNNBoxPlots extends InputDataHandler {
@@ -56,15 +41,15 @@ abstract class InputHandlerNNBoxPlots extends InputDataHandler {
 
   private val nn = createNn
 
-  private var cnt = 0
+  val of = OutputFactors(50, 20, 5)
 
-  val outMapper: OutputMapperNn = new OutputMapperNnTeam01
+  def outMapper: OutputMapperNn
+
   val player: CollectingPlayer = new CollectingPlayer
 
   override def handle(in: Array[Double]): Unit = {
     val out = nn.output(in)
     outMapper.applyOutput(player, out)
-    cnt += 1
   }
 
   override def close(): Unit = {
@@ -101,9 +86,9 @@ abstract class InputHandlerNNBoxPlots extends InputDataHandler {
       )
     )
     val dia = Viz.Diagram[Viz.X](
-      id = s"nnBoxPlots$id$cnt",
-      title = s"Output Data NN id:$id n:$cnt",
-      yRange = Some(Viz.Range(Some(-100), Some(100))),
+      id = s"$id",
+      title = s"$id",
+      yRange = Some(Viz.Range(Some(-200), Some(200))),
       dataRows = dataRows
     )
 

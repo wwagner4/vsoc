@@ -1,7 +1,6 @@
 package vsoc.ga.trainga.ga
 
 import vsoc.ga.matches.TeamResult
-import vsoc.ga.trainga.behav.{InputMapperNn, OutputMapperNn}
 import vsoc.ga.trainga.ga.impl._
 import vsoc.ga.trainga.nn.{NeuralNet, NeuralNets}
 
@@ -310,29 +309,6 @@ object TrainGas {
       s"""${super.fullDesc}
          |use a network with two intermedate layers
          |NeuralNets.team02
-      """.stripMargin
-
-  }
-
-  /**
-    * Uses output mapper based on the results of NN analyse
-    */
-  def trainGa05: TrainGa[Double] = new TrainGaAbstract {
-
-    override def outMapper: OutputMapperNn = new OutputMapperNnTeam01
-
-    override def fitness: TeamResult => Double = FitnessFunctions.fitnessConsiderAll01
-
-    override protected def fitnessDesc: String = "consider all"
-
-    override def createNeuralNet: () => NeuralNet = () => NeuralNets.team01
-
-    override def inMapper: InputMapperNn = new InputMapperNnTeam(1.0)
-
-    override def id: String = "trainGa05"
-
-    override def fullDesc: String =
-      s"""use output mapper based on the results of NN analyse
       """.stripMargin
 
   }
