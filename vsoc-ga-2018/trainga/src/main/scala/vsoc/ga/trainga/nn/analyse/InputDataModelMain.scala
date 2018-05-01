@@ -5,7 +5,7 @@ import vsoc.ga.trainga.nn.NeuralNets
 
 object InputDataModelMain extends App {
 
-  val num = 5000
+  val num = 15000
 
   val handlers = Seq(
     //InputDataHandlers.boxPlots("team01om01FOrig", NeuralNets.team01, OutputMappers.om01FDefault, 200),

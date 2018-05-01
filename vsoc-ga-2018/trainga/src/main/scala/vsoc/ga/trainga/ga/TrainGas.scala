@@ -320,7 +320,7 @@ object TrainGas {
 
     override def outMapper: OutputMapperNn = OutputMappers.om02
 
-    override def id: String = "trainGa04M0"
+    override def id: String = "trainGa04M0om02"
 
     override def fullDesc: String =
       s"""${super.fullDesc}
