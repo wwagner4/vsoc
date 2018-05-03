@@ -276,9 +276,10 @@ object TrainGas {
 
     override def id: String = "trainGa04K0"
 
+    override def outMapper: OutputMapperNn = OutputMappers.om01FDefault
+
     override def fullDesc: String =
-      s"""${super.fullDesc}
-         |Relation between kick- and kickoutfactor changed
+      s"""Relation between kick- and kickoutfactor changed
          |10 / 2 -> 10 / 5 (FitnessFunctions.fitnessConsiderAll02)
       """.stripMargin
 
@@ -292,9 +293,10 @@ object TrainGas {
 
     override def id: String = "trainGa04G0"
 
+    override def outMapper: OutputMapperNn = OutputMappers.om01FDefault
+
     override def fullDesc: String =
-      s"""${super.fullDesc}
-         |reward/penalty for goal/ownGoal changed
+      s"""reward/penalty for goal/ownGoal changed
          |100 -> 10  (FitnessFunctions.fitnessConsiderAll03)
       """.stripMargin
 
@@ -306,9 +308,10 @@ object TrainGas {
 
     override def id: String = "trainGa04M0"
 
+    override def outMapper: OutputMapperNn = OutputMappers.om01FDefault
+
     override def fullDesc: String =
-      s"""${super.fullDesc}
-         |use a network with two intermedate layers
+      s"""use a network with two intermedate layers
          |NeuralNets.team02
       """.stripMargin
 
@@ -323,8 +326,7 @@ object TrainGas {
     override def id: String = "trainGa04M0om02"
 
     override def fullDesc: String =
-      s"""${super.fullDesc}
-         |use a network with two intermedate layers
+      s"""use a network with two intermedate layers
          |NeuralNets.team02
          |OutputMapper 0m02
       """.stripMargin
@@ -340,8 +342,7 @@ object TrainGas {
     override def id: String = "trainGa04M0om02varL"
 
     override def fullDesc: String =
-      s"""${super.fullDesc}
-         |use a network with intermedate layers. team02
+      s"""use a network with intermedate layers. team02
          |OutputMapper with greater variance varL
       """.stripMargin
 

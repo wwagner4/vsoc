@@ -1,17 +1,23 @@
 package vsoc.ga.trainga.ga.impl
 
-import vsoc.ga.trainga.ga.OutputFactors
+import vsoc.ga.matches.TeamResult
+import vsoc.ga.trainga.behav.InputMapperNn
+import vsoc.ga.trainga.ga.FitnessFunctions
+import vsoc.ga.trainga.nn.{NeuralNet, NeuralNets}
 
 /**
   * Base for ne tests.
   * The parameters of this class are equal to trainGa01ofM2
   */
-abstract class TrainGa04Abstract extends TrainGa01Abstract {
+abstract class TrainGa04Abstract extends TrainGaAbstract {
 
-  override def outputFactors: OutputFactors = OutputFactors(50.0, 20.0, 5.0)
 
-  override def fullDesc: String =
-    """Output factors 50 20 5
-    """.stripMargin
+  override def fitness: TeamResult => Double = FitnessFunctions.fitnessConsiderAll01
+
+  override def fitnessDesc: String = "consider all"
+
+  override def createNeuralNet: () => NeuralNet = () => NeuralNets.team01
+
+  override def inMapper: InputMapperNn = new InputMapperNnTeam(1.0)
 
 }
