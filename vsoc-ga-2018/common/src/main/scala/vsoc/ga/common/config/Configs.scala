@@ -454,4 +454,36 @@ object Configs {
       """.stripMargin
   }
 
+  def bob015: Config = new Config {
+
+    override def id: String = "bob015"
+
+    override def trainings: Seq[ConfigTrainGa] = Seq(
+      ConfigTrainGa("trainGa04M0om02varL", "bob001"),
+      ConfigTrainGa("trainGa04M0om02varL", "bob002"),
+      ConfigTrainGa("trainGa04M0om02varL", "bob003"),
+      ConfigTrainGa("trainGa04M0om02varL", "bob004"),
+    )
+
+    override def fullDesc: String =
+      """Output mapper with greater variance
+      """.stripMargin
+  }
+
+  def work015: Config = new Config {
+
+    override def id: String = "work015"
+
+    override def trainings: Seq[ConfigTrainGa] = Seq(
+      ConfigTrainGa("trainGa04M0om02varL", "w001"),
+      ConfigTrainGa("trainGa04M0om02varL", "w002"),
+      ConfigTrainGa("trainGa04M0om02varL", "w003"),
+      ConfigTrainGa("trainGa04M0om02varL", "w004"),
+    )
+
+    override def fullDesc: String =
+      """Output mapper with greater variance
+      """.stripMargin
+  }
+
 }

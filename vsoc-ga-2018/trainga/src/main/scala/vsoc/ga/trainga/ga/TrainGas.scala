@@ -331,4 +331,20 @@ object TrainGas {
 
   }
 
+  def trainGa04M0om02varL: TrainGa[Double] = new TrainGa04Abstract {
+
+    override def createNeuralNet: () => NeuralNet = () => NeuralNets.team02
+
+    override def outMapper: OutputMapperNn = OutputMappers.om02varL
+
+    override def id: String = "trainGa04M0om02varL"
+
+    override def fullDesc: String =
+      s"""${super.fullDesc}
+         |use a network with intermedate layers. team02
+         |OutputMapper with greater variance varL
+      """.stripMargin
+
+  }
+
 }

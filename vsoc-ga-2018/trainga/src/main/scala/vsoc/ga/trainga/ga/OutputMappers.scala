@@ -36,6 +36,16 @@ object OutputMappers {
     player.turn(t)
   }
 
+  def om02varL: OutputMapperNn = (player: Player, out: Array[Double]) => {
+    val d = Activation.sigmoid(0.002)(out(0) * 1000) * 60
+    val k = Activation.sigmoid(0.002)(out(1) * 1000) * 60
+    val kd = Activation.tanh(0.002)(out(2) * 1000) * 50
+    val t = Activation.tanh(0.002)(out(3) * 1000) * 50
+    player.dash(d.intValue())
+    player.kick(k.intValue(), kd)
+    player.turn(t)
+  }
+
   class OutputMapperNnTeam(factors: OutputFactors) extends OutputMapperNn {
 
     override def applyOutput(player: Player, out: Array[Double]): Unit = {
