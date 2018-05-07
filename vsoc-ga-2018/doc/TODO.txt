@@ -6,5 +6,11 @@ LEARNING
 -- less for kickout in relation to kick K0
 - make the crossover per player and not per team: C0
 
+- fitness function
+-- hitting the ball with zero kick power must not be rewarded
+-- if more than one player hits the ball must be rewarded. Avoid breeding teams with only one 'real' player
+-- goal must be rewarded relative to number of kicks. E.g. any goal doubles the fitness of the kicks
+
+
 ANALYSE
 - OK Anayse the normal outputvalues to find out how to adjust input/output values
