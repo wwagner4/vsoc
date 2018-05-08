@@ -1,20 +1,26 @@
-package vsoc.ga.analyse.group
+package vsoc.ga.analyse.smooth
 
 import entelijan.viz.Viz
 
-object Grouping {
+/**
+  * Converts a time series of data into another series where groups of values are
+  * treated as one value.
+  *
+  * Should be moved to the viz
+  */
+object Smoothing {
 
-  def group(in: Seq[Viz.XY], grpSize: Int): Seq[Viz.XY] = {
+  def smooth(in: Seq[Viz.XY], grpSize: Int): Seq[Viz.XY] = {
 
-    def grp(inGrp: Seq[Viz.XY], grpSizeAdj: Int): Seq[Viz.XY] = {
+    def smoothInternal(inGrp: Seq[Viz.XY], grpSizeAdj: Int): Seq[Viz.XY] = {
       val head = inGrp.head
       val rtail = inGrp.tail.reverse
       val last = rtail.head
       val tail = rtail.tail.reverse
-      head :: grpTail(tail, grpSizeAdj) ::: List(last)
+      head :: smoothTail(tail, grpSizeAdj) ::: List(last)
     }
 
-    def grpTail(inTail: Seq[Viz.XY], grpSizeAdj: Int): List[Viz.XY] = {
+    def smoothTail(inTail: Seq[Viz.XY], grpSizeAdj: Int): List[Viz.XY] = {
       val grps = inTail.grouped(grpSizeAdj)
       grps.toList.map(means)
     }
@@ -32,7 +38,7 @@ object Grouping {
     }
 
     if (in.size <= 3 || grpSize == 1) in
-    else grp(in, adjGrpSize(grpSize, in.size))
+    else smoothInternal(in, adjGrpSize(grpSize, in.size))
   }
 
 }

@@ -1,9 +1,9 @@
-package vsoc.ga.analyse.group
+package vsoc.ga.analyse.smooth
 
 import entelijan.viz.Viz.XY
 import org.scalatest.{FunSuite, MustMatchers}
 
-class GroupingSuite extends FunSuite with MustMatchers {
+class SmoothingSuite extends FunSuite with MustMatchers {
 
   val data = Seq(
     (Seq.empty[XY], Seq.empty[XY], 22),
@@ -103,7 +103,7 @@ class GroupingSuite extends FunSuite with MustMatchers {
   for ((in, should, grpSize) <- data) {
     val str = in.mkString("")
     test(s"Grouping $in $grpSize") {
-      mustEqual(Grouping.group(in, grpSize), should)
+      mustEqual(Smoothing.smooth(in, grpSize), should)
     }
   }
 

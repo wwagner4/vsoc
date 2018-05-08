@@ -1,4 +1,4 @@
-package vsoc.ga.analyse.group
+package vsoc.ga.analyse.smooth
 
 import java.nio.file.{Files, Paths}
 
@@ -8,9 +8,9 @@ import org.slf4j.LoggerFactory
 
 import scala.util.Random
 
-object GroupingTryout extends App {
+object SmoothingTryout extends App {
 
-  private val log = LoggerFactory.getLogger(GroupingTryout.getClass)
+  private val log = LoggerFactory.getLogger(SmoothingTryout.getClass)
 
   val workDir = Paths.get("C:/ta30/tmp")
 
@@ -26,7 +26,7 @@ object GroupingTryout extends App {
   val dataOrig = for ((x, y) <- data) yield Viz.XY(x, y)
 
   val _dataRows = Seq(1, 5, 20, 100).map { grpSize =>
-    val grped = Grouping.group(dataOrig, grpSize)
+    val grped = Smoothing.smooth(dataOrig, grpSize)
     DataRow[XY](
       name = Some(grpSize.toString),
       data = grped
