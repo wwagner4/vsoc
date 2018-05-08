@@ -6,7 +6,7 @@ import java.time.format.DateTimeFormatter
 
 import entelijan.viz.{Viz, VizCreator, VizCreatorGnuplot}
 import org.slf4j.LoggerFactory
-import vsoc.ga.analyse.group.Grouping
+import vsoc.ga.analyse.smooth.Smoothing
 import vsoc.ga.common.config.{Config, ConfigHelper, ConfigTrainGa}
 
 import scala.collection.JavaConverters._
@@ -122,7 +122,7 @@ object Data01Dia {
       val _dataPoints = dataPoints.getOrElse(50)
       require(_dataPoints > 2, "You must define at least 3 data points")
       val grpSize = math.ceil(data.size.toDouble / _dataPoints).toInt
-      val dataGrouped = Grouping.group(data, grpSize)
+      val dataGrouped = Smoothing.smooth(data, grpSize)
 
       if (data.isEmpty) None
       else Some(
