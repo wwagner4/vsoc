@@ -13,10 +13,10 @@ object ExportCsv extends App {
   val wd = ConfigHelper.workDir
 
   val includeSerPopulations = Seq(
-    ("trainGa04M0om02varL", "w005"),
-    ("trainGa04M0om02varL", "w006"),
-    ("trainGa04M0om02varL", "w007"),
-    ("trainGa04M0om02varL", "w008"),
+    ("trainGa04M0om02varL", "w001"),
+    ("trainGa04M0om02varL", "w002"),
+    ("trainGa04M0om02varL", "w003"),
+    ("trainGa04M0om02varL", "w004"),
   )
 
   def timestamp = {
