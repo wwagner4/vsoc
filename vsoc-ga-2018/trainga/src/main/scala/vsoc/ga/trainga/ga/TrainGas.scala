@@ -348,4 +348,32 @@ object TrainGas {
 
   }
 
+  def trainGa05fitFac01: TrainGa[Double] = new TrainGa05Abstract {
+
+    override def id: String = "trainGa05fitFac01"
+
+    override protected def fitness: TeamResult => Double = FitnessFunctions.fitnessFactor01
+
+    override protected def fitnessDesc: String = "Goals are rewarded by a relative to kicks"
+
+    override def fullDesc: String =
+      s"""Rewarded goals relative
+         |${propsFmt}
+      """.stripMargin
+  }
+
+  def trainGa05fitFac02: TrainGa[Double] = new TrainGa05Abstract {
+
+    override def id: String = "trainGa05fitFac02"
+
+    override protected def fitness: TeamResult => Double = FitnessFunctions.fitnessFactor02
+
+    override protected def fitnessDesc: String = "Kicking of multiple players is rewarded relative"
+
+    override def fullDesc: String =
+      s"""Reward multiple players
+        |${propsFmt}
+      """.stripMargin
+  }
+
 }
