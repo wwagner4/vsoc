@@ -16,11 +16,7 @@ object TrainGas {
 
     override def mutationRate: Double = 0.001
 
-    override def fullDesc: String =
-      s"""Consider all match parameters. '$id'
-         |$propertiesFmt
-      """.stripMargin
-
+    override def fullDescHeading: String = "First try"
   }
 
   def trainGa01_m1: TrainGa[Double] = new TrainGa01Abstract {
@@ -42,12 +38,7 @@ object TrainGas {
 
     override def mutationRate: Double = 0.001
 
-    override def fullDesc: String =
-      s"""Consider all match parameters. '$id'
-         |mutation rate S
-         |$propertiesFmt
-      """.stripMargin
-
+    override def fullDescHeading: String = "Test mutation rate"
   }
 
   def trainGa01_mS: TrainGa[Double] = new TrainGa01Abstract {
@@ -57,12 +48,7 @@ object TrainGas {
 
     override def mutationRate: Double = 0.0001
 
-    override def fullDesc: String =
-      s"""Consider all match parameters. '$id'
-         |mutation rate S 0.0001
-         |$propertiesFmt
-      """.stripMargin
-
+    override def fullDescHeading: String = "Test mutation rate"
   }
 
   def trainGa01m50: TrainGa[Double] = new TrainGa01Abstract {
@@ -72,12 +58,7 @@ object TrainGas {
 
     override def mutationRate: Double = 0.005
 
-    override def fullDesc: String =
-      s"""Consider all match parameters. '$id'
-         |mutation rate M 0.005
-         |$propertiesFmt
-      """.stripMargin
-
+    override def fullDescHeading: String = "Test mutation rate"
   }
 
   def trainGa01m10: TrainGa[Double] = new TrainGa01Abstract {
@@ -87,12 +68,7 @@ object TrainGas {
 
     override def mutationRate: Double = 0.001
 
-    override def fullDesc: String =
-      s"""Consider all match parameters. '$id'
-         |mutation rate M 0.005
-         |$propertiesFmt
-      """.stripMargin
-
+    override def fullDescHeading: String = "Test mutation rate"
   }
 
   def trainGa01ofM: TrainGa[Double] = new TrainGa01Abstract {
@@ -100,14 +76,9 @@ object TrainGas {
     // Must be equal to the constructing method to ensure correct persistence
     override def id: String = "trainGa01ofM"
 
-    override def fullDesc: String =
-      s"""Consider all match parameters. '$id'
-         |output factors medium
-         |$propertiesFmt
-      """.stripMargin
-
     override def outputFactors: OutputFactors = OutputFactors(50.0, 50.0, 5.0)
 
+    override def fullDescHeading: String = "Test mutation rate"
   }
 
   def trainGa01ofM1: TrainGa[Double] = new TrainGa01Abstract {
@@ -115,14 +86,9 @@ object TrainGas {
     // Must be equal to the constructing method to ensure correct persistence
     override def id: String = "trainGa01ofM1"
 
-    override def fullDesc: String =
-      s"""Consider all match parameters. '$id'
-         |output factors medium
-         |turn factor reduced
-         |$propertiesFmt
-      """.stripMargin
-
     override def outputFactors: OutputFactors = OutputFactors(50.0, 50.0, 5.0)
+
+    override def fullDescHeading: String = "Test output factors"
 
   }
 
@@ -131,14 +97,9 @@ object TrainGas {
     // Must be equal to the constructing method to ensure correct persistence
     override def id: String = "trainGa01ofM2"
 
-    override def fullDesc: String =
-      s"""Consider all match parameters. '$id'
-         |output factors medium
-         |kick factor reduced
-         |$propertiesFmt
-      """.stripMargin
-
     override def outputFactors: OutputFactors = OutputFactors(50.0, 20.0, 5.0)
+
+    override def fullDescHeading: String = "Test output factors"
 
   }
 
@@ -147,13 +108,9 @@ object TrainGas {
     // Must be equal to the constructing method to ensure correct persistence
     override def id: String = "trainGa01ofS"
 
-    override def fullDesc: String =
-      s"""Consider all match parameters. '$id'
-         |output factors small
-         |$propertiesFmt
-      """.stripMargin
-
     override def outputFactors: OutputFactors = OutputFactors(10.0, 10.0, 1.0)
+
+    override def fullDescHeading: String = "Test output factors"
 
   }
 
@@ -164,11 +121,8 @@ object TrainGas {
 
     override def mutationRate: Double = 0.0005
 
-    override def fullDesc: String =
-      s"""Consider all match parameters. '$id'
-         |mutation rate M 0.005
-         |$propertiesFmt
-      """.stripMargin
+    override def fullDescHeading: String = "Test mutation rate"
+
   }
 
 
@@ -179,11 +133,7 @@ object TrainGas {
 
     override def mutationRate: Double = 0.001
 
-    override def fullDesc: String =
-      s"""Consider all match parameters. '$id'
-         |mutation rate M 0.001
-         |$propertiesFmt
-      """.stripMargin
+    override def fullDescHeading: String = "Test mutation rate"
 
   }
 
@@ -194,11 +144,7 @@ object TrainGas {
 
     override def mutationRate: Double = 0.01
 
-    override def fullDesc: String =
-      s"""Consider all match parameters. '$id'
-         |mutation rate L 0.01
-         |$propertiesFmt
-      """.stripMargin
+    override def fullDescHeading: String = "Test mutation rate"
 
   }
 
@@ -213,12 +159,7 @@ object TrainGas {
 
     override def mutationRate: Double = 0.001
 
-    override def fullDesc: String =
-      s"""Consider all match parameters. '$id'
-         |Smaller population size and more test matches
-         |$propertiesFmt
-      """.stripMargin
-
+    override def fullDescHeading: String = "Small population size"
   }
 
   def trainGa03: TrainGa[Double] = new TrainGa01Abstract {
@@ -232,11 +173,7 @@ object TrainGas {
 
     override def mutationRate: Double = 0.001
 
-    override def fullDesc: String =
-      s"""Consider all match parameters. '$id'
-         |Smaller population size and more test matches
-         |$propertiesFmt
-      """.stripMargin
+    override def fullDescHeading: String = "Small population size and more testing"
 
   }
 
@@ -259,13 +196,8 @@ object TrainGas {
 
     override def mutationRate: Double = 0.001
 
-    override def fullDesc: String =
-      s"""Optimize Ball Kicks. $id
-         |
-         |Fitnessfunction takes only the number of ball kicks to calculate the fitness of a team.
-         |
-         |$propertiesFmt
-      """.stripMargin
+    override def fullDescHeading: String = "Consider only kicking"
+
   }
 
   def trainGa04K0: TrainGa[Double] = new TrainGa04Abstract {
@@ -278,10 +210,7 @@ object TrainGas {
 
     override def outMapper: OutputMapperNn = OutputMappers.om01FDefault
 
-    override def fullDesc: String =
-      s"""Relation between kick- and kickoutfactor changed
-         |10 / 2 -> 10 / 5 (FitnessFunctions.fitnessConsiderAll02)
-      """.stripMargin
+    override def fullDescHeading: String = "Consider only kicking. Kick out penalty small"
 
   }
 
@@ -289,16 +218,13 @@ object TrainGas {
 
     override def fitness: TeamResult => Double = FitnessFunctions.fitnessConsiderAll01G0
 
-    override def fitnessDesc: String = "consider all goal-reard/penalty 100 -> 10"
+    override def fitnessDesc: String = "consider all goal-reward/penalty 100 -> 10"
 
     override def id: String = "trainGa04G0"
 
     override def outMapper: OutputMapperNn = OutputMappers.om01FDefault
 
-    override def fullDesc: String =
-      s"""reward/penalty for goal/ownGoal changed
-         |100 -> 10  (FitnessFunctions.fitnessConsiderAll03)
-      """.stripMargin
+    override def fullDescHeading: String = "Consider mostly goals"
 
   }
 
@@ -310,26 +236,18 @@ object TrainGas {
 
     override def outMapper: OutputMapperNn = OutputMappers.om01FDefault
 
-    override def fullDesc: String =
-      s"""use a network with two intermedate layers
-         |NeuralNets.team02
-      """.stripMargin
-
+    override def fullDescHeading: String = "Deeper neural net. 2 layers"
   }
 
   def trainGa04M0om02: TrainGa[Double] = new TrainGa04Abstract {
+
+    override def id: String = "trainGa04M0om02"
 
     override def createNeuralNet: () => NeuralNet = () => NeuralNets.team02
 
     override def outMapper: OutputMapperNn = OutputMappers.om02
 
-    override def id: String = "trainGa04M0om02"
-
-    override def fullDesc: String =
-      s"""use a network with two intermedate layers
-         |NeuralNets.team02
-         |OutputMapper 0m02
-      """.stripMargin
+    override def fullDescHeading: String = "Deeper neural net. 2 layers and advanced output mapping"
 
   }
 
@@ -341,10 +259,7 @@ object TrainGas {
 
     override def id: String = "trainGa04M0om02varL"
 
-    override def fullDesc: String =
-      s"""use a network with intermedate layers. team02
-         |OutputMapper with greater variance varL
-      """.stripMargin
+    override def fullDescHeading: String = "Deeper neural net. 2 layers and advanced output mapping with greater variance"
 
   }
 
@@ -356,10 +271,7 @@ object TrainGas {
 
     override protected def fitnessDesc: String = "Goals are rewarded by a relative to kicks"
 
-    override def fullDesc: String =
-      s"""Rewarded goals relative
-         |${propsFmt}
-      """.stripMargin
+    override def fullDescHeading: String = "Test fitness function"
   }
 
   def trainGa05fitFac02: TrainGa[Double] = new TrainGa05Abstract {
@@ -370,10 +282,7 @@ object TrainGas {
 
     override protected def fitnessDesc: String = "Kicking of multiple players is rewarded relative"
 
-    override def fullDesc: String =
-      s"""Reward multiple players
-        |${propsFmt}
-      """.stripMargin
+    override def fullDescHeading: String = "Test fitness function"
   }
 
 }

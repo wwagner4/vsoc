@@ -21,7 +21,7 @@ object DescribableFormatter {
   private val propSepa = " : "
 
   private def formatProp(prop: (String, Any), depth: Int): String = prop match {
-    case (k: String, v: Describable) => formatKey(k) + propSepa + "\n" + format(v, depth + 1)
+    case (k: String, v: Describable) => formatKey(k) + propSepa + format(v, depth + 1).substring(13)
     case (k: String, v: String) => formatKey(k) + propSepa + formatStringValue(v)
     case (k: String, v: Double) => formatKey(k) + propSepa + formatDoubleValue(v)
     case (k: String, v: Any) => formatKey(k) + propSepa + formatAnyValue(v)
@@ -31,7 +31,7 @@ object DescribableFormatter {
     "%10s" formatLocal(Locale.ENGLISH, trim(v, 100))
 
   private def formatDoubleValue(v: Double) =
-    "%f" formatLocal(Locale.ENGLISH, v)
+    "%10.4f" formatLocal(Locale.ENGLISH, v)
 
   private def formatAnyValue(v: Any) =
     "%10s" formatLocal(Locale.ENGLISH, trim(v.toString, 100))

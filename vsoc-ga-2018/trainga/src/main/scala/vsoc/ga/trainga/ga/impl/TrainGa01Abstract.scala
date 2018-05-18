@@ -19,11 +19,8 @@ abstract class TrainGa01Abstract extends TrainGaAbstract {
 
   override def outMapper: OutputMapperNn = OutputMappers.om01F(outputFactors)
 
-  override def fullDesc: String =
-    """configurable output mapper
-    """.stripMargin
-
-  override def properties: Seq[(String, Any)] = Seq(
+  override def properties: Seq[(String, Any)] = super.properties ++ Seq(
+    ("output mapper", "'om01F' primitive first trial"),
     ("output factors", outputFactors.toString)
   )
 

@@ -41,13 +41,18 @@ abstract class TrainGaAbstract extends TrainGa[Double] with PropertiesProvider {
   override def properties: Seq[(String, Any)] = Seq(
     ("player cnt", playerCount),
     ("pop size", populationSize),
-    ("fit func", fitnessDesc),
     ("mut rate", mutationRate),
+    ("test len", popMultiplicationTestFactor),
     ("nn", nnTempl),
+    ("fit func", fitnessDesc),
   )
 
-  protected def propertiesFmt: String = {
-    DescribableFormatter.format(properties, 0)
+  def fullDescHeading: String
+
+  override def fullDesc: String = {
+    s"""'$id' - ${fullDescHeading}
+      |${DescribableFormatter.format(properties, 0)}
+    """.stripMargin
   }
 
   private case class GAR(
