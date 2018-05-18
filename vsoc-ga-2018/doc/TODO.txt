@@ -1,16 +1,33 @@
-LEARNING
-- try a multilayer net: M0
-- use sigmoid instead of tanh M1
-- adapt fitness weights:
--- less for a goal: G0
--- less for kickout in relation to kick K0
+OPEN
+
+- D Make some documentation. README.md
+- Better description of TrainingConfigurations (TrainGa)
+- F fitness function
+-- Combination of FA and FB
+- Neural Net
+-- T use other topologies
+--- A 3 intermediate layers
+--- B Known deep learning nets
+--- C Recurrent nets
+
+OBSOLETE ??
 - make the crossover per player and not per team: C0
-
-- fitness function
--- hitting the ball with zero kick power must not be rewarded
--- if more than one player hits the ball must be rewarded. Avoid breeding teams with only one 'real' player
--- goal must be rewarded relative to number of kicks. E.g. any goal doubles the fitness of the kicks
+- F fitness function
+-- C hitting the ball with zero kick power must not be rewarded.
+     Is avoided by other fitness functions.
 
 
-ANALYSE
-- OK Anayse the normal outputvalues to find out how to adjust input/output values
+DONE
+- M0 try a multilayer net
+     SUCCESS
+- M1 use sigmoid instead of tanh
+     SUCCESS
+- adapt fitness weights:
+-- G0 less for a goal:
+      NO CHANGE replaced by FB
+-- K0 less for kickout in relation to kick
+      NO CHANGE seems to be not relevant
+- F fitness function
+-- A if more than one player hits the ball must be rewarded. Avoid breeding teams with only one 'real' player
+-- B goal must be rewarded relative to number of kicks. E.g. any goal doubles the fitness of the kicks
+- Anayse the normal outputvalues to find out how to adjust input/output values
