@@ -1,8 +1,7 @@
 package vsoc.ga.trainga.ga.impl
 
-import vsoc.ga.matches.TeamResult
 import vsoc.ga.trainga.behav.InputMapperNn
-import vsoc.ga.trainga.ga.FitnessFunctions
+import vsoc.ga.trainga.ga.{FitnessFunction, FitnessFunctions}
 import vsoc.ga.trainga.nn.{NeuralNet, NeuralNets}
 
 /**
@@ -12,9 +11,7 @@ import vsoc.ga.trainga.nn.{NeuralNet, NeuralNets}
 abstract class TrainGa04Abstract extends TrainGaAbstract {
 
 
-  override def fitness: TeamResult => Double = FitnessFunctions.fitnessConsiderAll01
-
-  override def fitnessDesc: String = "consider all"
+  override def fitness: FitnessFunction = FitnessFunctions.fitnessConsiderAll01
 
   override def createNeuralNet: () => NeuralNet = () => NeuralNets.team01
 

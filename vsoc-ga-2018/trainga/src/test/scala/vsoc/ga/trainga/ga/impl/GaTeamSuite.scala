@@ -25,7 +25,7 @@ class GaTeamSuite extends FunSuite with MustMatchers {
       override def kickOutCount: Int = 0
     }
 
-    val fit = FitnessFunctions.fitnessConsiderAll01(mr)
+    val fit = FitnessFunctions.fitnessConsiderAll01.fitness(mr)
 
     fit mustBe 100.0 +- 0.0001
   }
@@ -44,7 +44,7 @@ class GaTeamSuite extends FunSuite with MustMatchers {
       override def kickOutCount: Int = 0
     }
 
-    val fit = FitnessFunctions.fitnessConsiderAll01(mr)
+    val fit = FitnessFunctions.fitnessConsiderAll01.fitness(mr)
 
     fit mustBe 500.0 +- 0.0001
   }
@@ -63,7 +63,7 @@ class GaTeamSuite extends FunSuite with MustMatchers {
       override def kickOutCount: Int = 0
     }
 
-    val fit = FitnessFunctions.fitnessConsiderAll01(mr)
+    val fit = FitnessFunctions.fitnessConsiderAll01.fitness(mr)
 
     fit mustBe -300.0 +- 0.0001
   }

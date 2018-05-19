@@ -3,13 +3,14 @@ package vsoc.ga.trainga.ga.impl
 import org.slf4j.LoggerFactory
 import vsoc.ga.common.describe.PropertiesProvider
 import vsoc.ga.genetic.{PhenoTester, PhenoTesterResult}
-import vsoc.ga.matches.{Matches, Team, TeamResult}
+import vsoc.ga.matches.{Matches, Team}
+import vsoc.ga.trainga.ga.FitnessFunction
 
 import scala.util.Random
 
 case class Result(nr: Int, team: TeamGa, matchCount: Int, fitnessSum: Double)
 
-class PhenoTesterTeam(val ran: Random, fitness: (TeamResult) => Double, popMultiplicationFactor: Int) extends PhenoTester[TeamGa, Double] with PropertiesProvider {
+class PhenoTesterTeam(val ran: Random, fitness: FitnessFunction, popMultiplicationFactor: Int) extends PhenoTester[TeamGa, Double] with PropertiesProvider {
 
   private val log = LoggerFactory.getLogger(classOf[PhenoTesterTeam])
 
@@ -86,8 +87,8 @@ class PhenoTesterTeam(val ran: Random, fitness: (TeamResult) => Double, popMulti
     val m = Matches.of(t1, t2)
     for (_ <- 1 to matchSteps) m.takeStep()
     val result = m.state
-    val t1Fit: Double = fitness(result.teamEastResult)
-    val t2Fit: Double = fitness(result.teamWestResult)
+    val t1Fit: Double = fitness.fitness(result.teamEastResult)
+    val t2Fit: Double = fitness.fitness(result.teamWestResult)
     val prog = f"$nr / $maxNr"
     log.info(f"finished match $prog%10s [$t1Fit%10.2f <==> $t2Fit%10.2f]")
     (t1Fit, t2Fit)

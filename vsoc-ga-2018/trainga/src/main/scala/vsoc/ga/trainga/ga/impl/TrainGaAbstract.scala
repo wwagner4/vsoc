@@ -3,9 +3,9 @@ package vsoc.ga.trainga.ga.impl
 import org.slf4j.LoggerFactory
 import vsoc.ga.common.describe.{DescribableFormatter, PropertiesProvider}
 import vsoc.ga.genetic._
-import vsoc.ga.matches.{Team, TeamResult}
+import vsoc.ga.matches.Team
 import vsoc.ga.trainga.behav.{InputMapperNn, OutputMapperNn}
-import vsoc.ga.trainga.ga.TrainGa
+import vsoc.ga.trainga.ga.{FitnessFunction, TrainGa}
 import vsoc.ga.trainga.nn.NeuralNet
 
 import scala.util.Random
@@ -16,9 +16,7 @@ abstract class TrainGaAbstract extends TrainGa[Double] with PropertiesProvider {
 
   protected def createNeuralNet: () => NeuralNet
 
-  protected def fitness: TeamResult => Double
-
-  protected def fitnessDesc: String
+  protected def fitness: FitnessFunction
 
   protected def popMultiplicationTestFactor: Int = 3
 
@@ -44,14 +42,14 @@ abstract class TrainGaAbstract extends TrainGa[Double] with PropertiesProvider {
     ("mut rate", mutationRate),
     ("test len", popMultiplicationTestFactor),
     ("nn", nnTempl),
-    ("fit func", fitnessDesc),
+    ("fit func", fitness),
   )
 
   def fullDescHeading: String
 
   override def fullDesc: String = {
-    s"""'$id' - ${fullDescHeading}
-      |${DescribableFormatter.format(properties, 0)}
+    s"""'$id' - $fullDescHeading
+       |${DescribableFormatter.format(properties, 0)}
     """.stripMargin
   }
 

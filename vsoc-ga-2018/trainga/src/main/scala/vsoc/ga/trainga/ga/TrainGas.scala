@@ -1,6 +1,5 @@
 package vsoc.ga.trainga.ga
 
-import vsoc.ga.matches.TeamResult
 import vsoc.ga.trainga.behav.OutputMapperNn
 import vsoc.ga.trainga.ga.impl._
 import vsoc.ga.trainga.nn.{NeuralNet, NeuralNets}
@@ -24,9 +23,7 @@ object TrainGas {
     // Must be equal to the constructing method to ensure correct persistence
     override def id: String = "trainGa01"
 
-    override def fitness: TeamResult => Double = FitnessFunctions.fitnessConsiderAll01
-
-    override def fitnessDesc: String = "consider all"
+    override def fitness: FitnessFunction = FitnessFunctions.fitnessConsiderAll01
 
     override def ran: Random = Random.javaRandomToRandom(new java.util.Random())
 
@@ -182,9 +179,7 @@ object TrainGas {
     // Must be equal to the constructing method to ensure correct persistence
     override def id: String = "trainGaKicks01"
 
-    override def fitness: TeamResult => Double = FitnessFunctions.fitnessKicks01
-
-    override def fitnessDesc: String = "consider kicks"
+    override def fitness: FitnessFunction = FitnessFunctions.fitnessKicks01
 
     override def ran: Random = Random.javaRandomToRandom(new java.util.Random())
 
@@ -202,9 +197,7 @@ object TrainGas {
 
   def trainGa04K0: TrainGa[Double] = new TrainGa04Abstract {
 
-    override def fitness: TeamResult => Double = FitnessFunctions.fitnessConsiderAll01K0
-
-    override def fitnessDesc: String = "consider all kickOut penalty 5"
+    override def fitness: FitnessFunction = FitnessFunctions.fitnessConsiderAll01K0
 
     override def id: String = "trainGa04K0"
 
@@ -216,9 +209,7 @@ object TrainGas {
 
   def trainGa04G0: TrainGa[Double] = new TrainGa04Abstract {
 
-    override def fitness: TeamResult => Double = FitnessFunctions.fitnessConsiderAll01G0
-
-    override def fitnessDesc: String = "consider all goal-reward/penalty 100 -> 10"
+    override def fitness: FitnessFunction = FitnessFunctions.fitnessConsiderAll01G0
 
     override def id: String = "trainGa04G0"
 
@@ -267,9 +258,7 @@ object TrainGas {
 
     override def id: String = "trainGa05fitFac01"
 
-    override protected def fitness: TeamResult => Double = FitnessFunctions.fitnessFactor01
-
-    override protected def fitnessDesc: String = "Goals are rewarded by a relative to kicks"
+    override protected def fitness: FitnessFunction = FitnessFunctions.fitnessFactor01
 
     override def fullDescHeading: String = "Test fitness function"
   }
@@ -278,9 +267,7 @@ object TrainGas {
 
     override def id: String = "trainGa05fitFac02"
 
-    override protected def fitness: TeamResult => Double = FitnessFunctions.fitnessFactor02
-
-    override protected def fitnessDesc: String = "Kicking of multiple players is rewarded relative"
+    override protected def fitness: FitnessFunction = FitnessFunctions.fitnessFactor02
 
     override def fullDescHeading: String = "Test fitness function"
   }

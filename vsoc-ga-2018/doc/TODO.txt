@@ -1,10 +1,15 @@
 OPEN
 
 - D Make some documentation. README.md
+-- Find a way to present matches in documentation
+--- Videos
+--- jars
+---- with parameters
+---- parameterless
 - Better description of TrainingConfigurations (TrainGa)
 - F fitness function
--- Combination of FA and FB
-- Neural Net
+-- C Combination of FA and FB
+- N Neural Net
 -- T use other topologies
 --- A 3 intermediate layers
 --- B Known deep learning nets
