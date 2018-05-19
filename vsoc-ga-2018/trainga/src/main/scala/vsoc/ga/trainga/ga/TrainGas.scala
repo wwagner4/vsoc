@@ -272,4 +272,13 @@ object TrainGas {
     override def fullDescHeading: String = "Test fitness function"
   }
 
+  def trainGa05fitFac03: TrainGa[Double] = new TrainGa05Abstract {
+
+    override def id: String = "trainGa05fitFac03"
+
+    override protected def fitness: FitnessFunction = FitnessFunctions.fitnessFactor03
+
+    override def fullDescHeading: String = "Test fitness function"
+  }
+
 }
