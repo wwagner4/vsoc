@@ -24,7 +24,7 @@ nohup java -Xmx512k -Xmx512m \
 ----- sync -----
 nohup rsync -arv bob:~/work/work-vsoc-ga-2018/ ~/work/work-vsoc-ga-2018 &
 
-rsync -arv ~/prj/vsoc/vsoc-ga-2018/doc/results/trainga-work-18mmdd/ ~/work/work-vsoc-ga-2018
+rsync -arv ~/prj/vsoc/vsoc-ga-2018/doc/training-results/trainga-work-18mmdd/ ~/work/work-vsoc-ga-2018
 
 ---- thinner ----
 java \
