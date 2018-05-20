@@ -18,7 +18,10 @@ case object DiaConf_SUPRESS_TIMESTAMP extends DiaConf
 
 object Data01Dia {
 
-  private val workDir1 = ConfigHelper.workDir
+  private val _workDir = ConfigHelper.workDir
+  private val _imgWidth = 4000
+  private val _imgHeight = 2500
+
 
   private val log = LoggerFactory.getLogger(Data01Dia.getClass)
 
@@ -41,39 +44,37 @@ object Data01Dia {
                         diaConfs: Seq[DiaConf] = Seq.empty[DiaConf],
                         diaDir: Option[Path] = None,
                         dataPoints: Option[Int] = None,
-                        excludes: Seq[String] = Seq.empty[String]
+                        excludes: Seq[String] = Seq.empty[String],
+                        includes: Option[Seq[String]] = None
                       ): Unit = {
 
-    def extractTrainings: Seq[Seq[ConfigTrainGa]] = {
-
-      def extractConfigs(trainGaDir: Path): Seq[ConfigTrainGa] = {
-        require(Files.isDirectory(trainGaDir))
-        val cfgs = Files.list(trainGaDir).iterator().asScala.toSeq.map { nrDir =>
-          if (Files.isDirectory(nrDir) && !nrDir.getFileName.toString.startsWith(".")) {
-            val cfgName = trainGaDir.getFileName.toString
-            val nrName = nrDir.getFileName.toString
-            Some(ConfigTrainGa(cfgName, nrName))
-          } else None
-        }
-        cfgs.flatten
-      }
-
-      Files.list(workDir1).iterator().asScala.toSeq.map { file =>
-
+    def resultDirsDia: Seq[Path] = {
+      resultDirs.filter { file =>
         def excluded: Boolean = {
           val dirName = file.getFileName.toString
-          println(s"##### dirName: $dirName")
           excludes.contains(dirName)
         }
 
-        if (Files.isDirectory(file) && file.getFileName.toString.startsWith("train") && !excluded) extractConfigs(file)
-        else Seq.empty[ConfigTrainGa]
-      }.filter(s => s.nonEmpty).sortBy(f => f(0).id)
+        def included: Boolean = {
+          val dirName = file.getFileName.toString
+          includes.forall(is => is.contains(dirName))
+        }
+
+        included && !excluded
+      }
+    }
+
+
+    def extractTrainings: Seq[Seq[ConfigTrainGa]] = {
+      resultDirsDia
+        .map(file => extractConfigs(file))
+        .filter(s => s.nonEmpty)
+        .sortBy(f => f(0).id)
     }
 
     implicit val creator: VizCreator[Viz.XY] = createCreator(diaDir)
 
-    val trainings = extractTrainings
+    val trainings: Seq[Seq[ConfigTrainGa]] = extractTrainings
 
     val dias: Seq[Viz.Diagram[Viz.XY]] = trainings.zipWithIndex.map {
       case (tr, i) =>
@@ -86,17 +87,36 @@ object Data01Dia {
       id = "all",
       columns = 5,
       diagrams = dias,
-      imgWidth = 4000,
-      imgHeight = 2500
+      imgWidth = _imgWidth,
+      imgHeight = _imgHeight
     )
 
     Viz.createDiagram(dia)
   }
 
+  private def extractConfigs(trainGaDir: Path): Seq[ConfigTrainGa] = {
+    require(Files.isDirectory(trainGaDir))
+    val cfgs = Files.list(trainGaDir).iterator().asScala.toSeq.map { nrDir =>
+      if (Files.isDirectory(nrDir) && !nrDir.getFileName.toString.startsWith(".")) {
+        val cfgName = trainGaDir.getFileName.toString
+        val nrName = nrDir.getFileName.toString
+        Some(ConfigTrainGa(cfgName, nrName))
+      } else None
+    }
+    cfgs.flatten
+  }
+
+  private def resultDirs: Seq[Path] = {
+    Files.list(_workDir).iterator().asScala
+      .toSeq
+      .filter(Files.isDirectory(_))
+      .filter(_.getFileName.toString.startsWith("train"))
+  }
+
   private def createCreator(diaDir: Option[Path]): VizCreator[Viz.XY] = {
-    val scriptDir = workDir1.resolve(".script")
+    val scriptDir = _workDir.resolve(".script")
     Files.createDirectories(scriptDir)
-    val imgDir = diaDir.getOrElse(workDir1.resolve("viz_img"))
+    val imgDir = diaDir.getOrElse(_workDir.resolve("viz_img"))
     Files.createDirectories(imgDir)
     log.info(s"image directory $imgDir")
     log.info(s"script directory $scriptDir")
@@ -112,9 +132,9 @@ object Data01Dia {
                          yRange: Option[Viz.Range],
                          title: Option[String]): Viz.Diagram[Viz.XY] = {
     val dataRows = for (ConfigTrainGa(id, nr) <- trainGas) yield {
-      def prjDir = workDir1.resolve(Paths.get(id, nr))
+      def prjDir = _workDir.resolve(Paths.get(id, nr))
 
-      def filePath = workDir1.resolve(prjDir.resolve(Paths.get(s"$id-$nr-data.csv")))
+      def filePath = _workDir.resolve(prjDir.resolve(Paths.get(s"$id-$nr-data.csv")))
 
       val raw = Data01(id, nr, 0, 0) :: Data01CsvReader.read(filePath).toList
 
@@ -127,7 +147,7 @@ object Data01Dia {
       if (data.isEmpty) None
       else Some(
         Viz.DataRow(
-          name = Some(s"$id-$nr"),
+          name = Some("%7s".format(nr)),
           style = Viz.Style_LINES,
           data = dataGrouped
         ))
@@ -143,10 +163,10 @@ object Data01Dia {
 
     Viz.Diagram[Viz.XY](
       id = _id,
-      title =  title.getOrElse(s"Configuration $diaId"),
+      title = title.getOrElse(s"Configuration $diaId"),
       xRange = xRange,
       yRange = yRange,
-      dataRows = dataRows.flatten
+      dataRows = dataRows.flatten.sortBy(dr => dr.name.get)
     )
   }
 }
