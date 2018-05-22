@@ -570,4 +570,38 @@ object Configs {
       """.stripMargin
   }
 
+  def bob017a: Config = new Config {
+
+    override def id: String = "bob017a"
+
+    override def trainings: Seq[ConfigTrainGa] = Seq(
+      ConfigTrainGa("trainGa05fitFac03a", "b001"),
+      ConfigTrainGa("trainGa05fitFac03a", "b002"),
+      ConfigTrainGa("trainGa05fitFac03a", "b003"),
+      ConfigTrainGa("trainGa05fitFac03a", "b004"),
+    )
+
+    override def fullDesc: String =
+      """Kicking of multiple players and goals are rewarded relative
+      """.stripMargin
+  }
+
+  def work017a: Config = new Config {
+
+    override def id: String = "work017a"
+
+    override def trainings: Seq[ConfigTrainGa] = Seq(
+      ConfigTrainGa("trainGa05fitFac03a", "w001"),
+      ConfigTrainGa("trainGa05fitFac03a", "w002"),
+      ConfigTrainGa("trainGa05fitFac03a", "w003"),
+      ConfigTrainGa("trainGa05fitFac03a", "w004"),
+      ConfigTrainGa("trainGa05fitFac03a", "w005"),
+      ConfigTrainGa("trainGa05fitFac03a", "w006"),
+    )
+
+    override def fullDesc: String =
+      """Kicking of multiple players and goals are rewarded relative
+      """.stripMargin
+  }
+
 }
