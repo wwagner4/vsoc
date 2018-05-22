@@ -14,20 +14,20 @@ trait WithPathTrainGaNrRunner {
   def runWithArgs(args: Array[String], f: (TrainGa[Double], String, Option[String]) => Unit, clazz: String): Unit = {
 
     def usage: String = {
-      s"""usage ...$clazz <trainGa> <trainGaNumber> [<popNr>]
+      s"""usage ...$clazz <trainGa> <populationNr> [<generationNr>]
          | - trainGa: TrainGa ID. One of the method defined in TrainGas. E.g. trainGa01, ...
-         | - trainGaNr: TrainGa Nr. One of the simulation runs. E.g. bob001, w001, ...
-         | - popNr: One of the populations. If no popNr is defined the latest is selcted
+         | - populationNr: Population Nr. E.g. bob001, w001, ...
+         | - generationNr: Generation Number. If no <generationNr> is defined the latest is selcted
          |""".stripMargin
     }
 
     def call(
               trainGaId: String,
-              trainGaNr: String,
-              popNr: Option[String]): Unit = {
+              popNr: String,
+              generationNr: Option[String]): Unit = {
       try {
         val trainGa = UtilReflection.call(TrainGas, trainGaId, classOf[TrainGa[Double]])
-        f(trainGa, trainGaNr, popNr)
+        f(trainGa, popNr, generationNr)
       } catch {
         case e: ScalaReflectionException =>
           println(s"Invalid configuration '$trainGaId'")

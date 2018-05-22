@@ -32,7 +32,7 @@ object MatchResults {
 
   }
 
-  def formatDefault(mr: MatchResult): String = {
+  def formatDefault(mr: MatchResult, colorWest: String, colorEast: String): String = {
 
     def formatScore: String = {
       val east = mr.teamEastResult.otherGoalCount + mr.teamWestResult.ownGoalCount
@@ -66,7 +66,7 @@ object MatchResults {
 
     def chapters: Seq[Chapter] = Seq(
       Chapter(
-        title = "TEAMS w/e",
+        title = s"TEAMS $colorWest/$colorEast",
         properties = Seq(
           ("steps", mr.matchSteps),
           ("score", formatScore),

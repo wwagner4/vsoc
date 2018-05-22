@@ -14,7 +14,7 @@ object MainMatch extends App {
 
     synchronized {
       println(s"Finished match '$teamB' (w) against '$teamA' (e)")
-      println(MatchResults.formatDefault(result))
+      println(MatchResults.formatDefault(result, "w", "e"))
     }
   }
 

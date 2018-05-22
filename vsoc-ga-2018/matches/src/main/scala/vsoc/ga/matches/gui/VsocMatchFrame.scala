@@ -10,7 +10,7 @@ import vsoc.server.gui.{FieldPanel, Paintable, SimulationChangeListener}
 
 import scala.concurrent.Future
 
-class VsocMatchFrame(matchFactory: () => Match) extends JFrame with SimulationChangeListener with KeyListener {
+class VsocMatchFrame(title: String, subtitle: String, matchFactory: () => Match) extends JFrame with SimulationChangeListener with KeyListener {
 
   import concurrent.ExecutionContext.Implicits.global
 
@@ -113,15 +113,14 @@ class VsocMatchFrame(matchFactory: () => Match) extends JFrame with SimulationCh
 
   def updateInfoText(): Unit = {
 
-    val stateStr = MatchResults.formatDefault(_match.get.state)
+    val stateStr = MatchResults.formatDefault(_match.get.state, colorEast = "red", colorWest = "yellow")
 
     txt.setText(
-      s"""INFO
-         |Team '${_match.get.teamWestName}'
-         | yellow west (w) ->
+      s"""$title
+         |$subtitle
          |
-         |Team '${_match.get.teamEastName}'
-         | red east (e) <-
+         |Team '${_match.get.teamWestName}' yellow
+         |Team '${_match.get.teamEastName}' red
          |
          |COMMANDS
          | space - start/stop

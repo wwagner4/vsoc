@@ -95,7 +95,7 @@ abstract class TrainGaAbstract extends TrainGa[Double] with PropertiesProvider {
         population = Some(gar.newPopulation)
         val data: Seq[(String, Any)] = Seq(
           ("trainGaId", trainGaId),
-          ("trainGaNr", trainGaNr),
+          ("populationNr", trainGaNr),
           ("iterations", i),
           ("score", gar.score.getOrElse(0.0))
         )
