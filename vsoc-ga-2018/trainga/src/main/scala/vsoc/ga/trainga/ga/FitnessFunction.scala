@@ -5,6 +5,8 @@ import vsoc.ga.matches.TeamResult
 
 trait FitnessFunction extends Describable {
 
+  def id: String
+
   def fitness(result: TeamResult): Double
 
 }

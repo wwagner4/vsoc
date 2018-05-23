@@ -19,8 +19,6 @@ case object DiaConf_SUPRESS_TIMESTAMP extends DiaConf
 object Data01Dia {
 
   private val _workDir = ConfigHelper.workDir
-  private val _imgWidth = 4000
-  private val _imgHeight = 2500
 
 
   private val log = LoggerFactory.getLogger(Data01Dia.getClass)
@@ -39,6 +37,8 @@ object Data01Dia {
   }
 
   def createDiaWorkDir(
+                        id: String,
+                        columns: Int = 4,
                         xRange: Option[Viz.Range] = None,
                         yRange: Option[Viz.Range] = None,
                         diaConfs: Seq[DiaConf] = Seq.empty[DiaConf],
@@ -47,6 +47,9 @@ object Data01Dia {
                         excludes: Seq[String] = Seq.empty[String],
                         includes: Option[Seq[String]] = None
                       ): Unit = {
+
+    val _imgWidth = 3000
+    val _imgHeight = 1500
 
     def resultDirsDia: Seq[Path] = {
       resultDirs.filter { file =>
@@ -84,8 +87,8 @@ object Data01Dia {
     }
 
     val dia = Viz.MultiDiagram[Viz.XY](
-      id = "all",
-      columns = 5,
+      id = s"all_$id",
+      columns = columns,
       diagrams = dias,
       imgWidth = _imgWidth,
       imgHeight = _imgHeight
@@ -145,13 +148,17 @@ object Data01Dia {
       val dataGrouped = Smoothing.smooth(data, grpSize)
 
       if (data.isEmpty) None
-      else Some(
-        Viz.DataRow(
-          name = Some("%7s".format(nr)),
-          style = Viz.Style_LINES,
-          data = dataGrouped
-        ))
+      else {
+        val name = s"$id-$nr"
+        Some(
+          Viz.DataRow(
+            name = Some("%s".format(name)),
+            style = Viz.Style_LINES,
+            data = dataGrouped
+          ))
+      }
     }
+
 
     val _id = if (diaConfs.contains(DiaConf_SUPRESS_TIMESTAMP)) {
       s"$diaId"
@@ -169,4 +176,5 @@ object Data01Dia {
       dataRows = dataRows.flatten.sortBy(dr => dr.name.get)
     )
   }
+
 }

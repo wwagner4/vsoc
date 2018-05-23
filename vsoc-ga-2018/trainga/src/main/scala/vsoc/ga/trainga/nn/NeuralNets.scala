@@ -5,7 +5,6 @@ import org.deeplearning4j.nn.conf.{MultiLayerConfiguration, NeuralNetConfigurati
 import org.deeplearning4j.nn.weights.WeightInit
 import org.nd4j.linalg.activations.Activation
 import org.nd4j.linalg.lossfunctions.LossFunctions
-import vsoc.ga.common.describe.{DescribableFormatter, PropertiesProvider}
 import vsoc.ga.trainga.nn.impl.NnWrapperAbstract
 
 object NeuralNets {
@@ -41,7 +40,7 @@ object NeuralNets {
         .build
     }
 
-    override def fullDesc: String = "Default Neural Net. Used for testing purposes"
+    override def fullDesc: String = s"'$id' - Default Neural Net. Used for testing purposes"
   }
 
   /**
@@ -80,32 +79,15 @@ object NeuralNets {
         .build
     }
 
-    override def fullDesc: String = "Standard Neural Net. Used for testing purposes"
+    override def fullDesc: String = s"'$id' - Standard Neural Net. Used for testing purposes"
 
 
   }
 
-  def team01: NeuralNet = new NnWrapperAbstract with PropertiesProvider {
+  def team01: NeuralNet = new NnWrapperAbstract {
 
     // id must be the name of the method creating the neural net
     def id = "team01"
-
-    override def fullDesc: String = {
-      val props = DescribableFormatter.format(properties, 0)
-      s"""Feedforward NN with one hidden layers
-         |140 (in) 100 (1) 100 (out) 4
-         |$props
-         |""".stripMargin
-
-    }
-
-    override def properties: Seq[(String, Any)] = Seq(
-      ("id", id),
-      ("num in", numInputNodes),
-      ("num hidden", numHiddenNodes),
-      ("num out", numOutputNodes),
-      ("activation", "TANH"),
-    )
 
     override val numInputNodes: Int = 140
 
@@ -135,31 +117,19 @@ object NeuralNets {
         .build
     }
 
-  }
-
-  def team02: NeuralNet = new NnWrapperAbstract with PropertiesProvider {
-
-    // id must be the name of the method creating the neural net
-    def id = "team02"
-
     override def fullDesc: String = {
-      val props = DescribableFormatter.format(properties, 0)
-      s"""Feedforward NN with two hidden layers
-         |140 (in) 100 (1) 50 (2) 10 (out) 4
-         |$props
+      s"""'$id' - Feedforward NN with one hidden layers
+         |140 (in) 100 (1) 100 (out) 4 TANH
          |""".stripMargin
 
     }
 
-    override def properties: Seq[(String, Any)] = Seq(
-      ("id", id),
-      ("num in", numInputNodes),
-      ("num hidden1", numHiddenNodes1),
-      ("num hidden2", numHiddenNodes2),
-      ("num hidden3", numHiddenNodes3),
-      ("num out", numOutputNodes),
-      ("activation", "TANH"),
-    )
+  }
+
+  def team02: NeuralNet = new NnWrapperAbstract {
+
+    // id must be the name of the method creating the neural net
+    def id = "team02"
 
     override val numInputNodes: Int = 140
 
@@ -195,6 +165,13 @@ object NeuralNets {
           .nOut(numOutputNodes)
           .build)
         .build
+    }
+
+    override def fullDesc: String = {
+      s"""'$id' - Feedforward NN with two hidden layers
+         |140 (in) 100 (1) 50 (2) 10 (out) 4 TANH
+         |""".stripMargin
+
     }
 
   }

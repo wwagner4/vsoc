@@ -39,8 +39,8 @@ abstract class TrainGaAbstract extends TrainGa[Double] with PropertiesProvider {
   override def properties: Seq[(String, Any)] = Seq(
     ("player cnt", playerCount),
     ("pop size", populationSize),
+    ("matches", populationSize * popMultiplicationTestFactor),
     ("mut rate", mutationRate),
-    ("test len", popMultiplicationTestFactor),
     ("nn", nnTempl),
     ("fit func", fitness),
   )
