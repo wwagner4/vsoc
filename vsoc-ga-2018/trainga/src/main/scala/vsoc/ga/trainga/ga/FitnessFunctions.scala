@@ -93,7 +93,36 @@ object FitnessFunctions {
 
     override def fullDesc: String =
       s"""'$id' - Sum of kicks are rewarded relative to the number of kicking players and the number of goals goals.
-        |No Goals result in a factor of 1.""".stripMargin
+         |No Goals result in a factor of 1.""".stripMargin
+  }
+
+  def fitnessFactor03b: FitnessFunction = new FitnessFunction {
+
+    override def id: String = "fitnessFactor03a"
+
+    def kickOutFunction(n: Int): Double = 10000 * (1.0 - math.exp(n * -0.003))
+
+    override def fitness(tr: TeamResult): Double = {
+      val kp = kickingPlayers(tr)
+
+      val other =
+        if (tr.otherGoalCount <= 0) 1.0
+        else tr.otherGoalCount * 2.0
+
+      val own =
+        if (tr.ownGoalCount <= 0) 1.0
+        else tr.ownGoalCount * 0.5
+
+      val kc = kickOutFunction(tr.kickCount)
+      val ko = tr.kickOutCount * 2
+
+      (kc - ko) * kp * other * own
+    }
+
+    override def fullDesc: String =
+      s"""'$id' - Sum of kicks are rewarded relative to the number of kicking players and the number of goals goals.
+         |No Goals result in a factor of 1.
+         |Kickout function exp. 1.0 - math.exp(n)""".stripMargin
   }
 
   def fitnessConsiderAll01K0: FitnessFunction = new FitnessFunction {

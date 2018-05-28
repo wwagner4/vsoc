@@ -604,4 +604,40 @@ object Configs {
       """.stripMargin
   }
 
+  def work017b: Config = new Config {
+
+    override def id: String = "work017b"
+
+    override def trainings: Seq[ConfigTrainGa] = Seq(
+      ConfigTrainGa("trainGa05fitFac03b", "w001"),
+      ConfigTrainGa("trainGa05fitFac03b", "w002"),
+      ConfigTrainGa("trainGa05fitFac03b", "w003"),
+      ConfigTrainGa("trainGa05fitFac03b", "w004"),
+      ConfigTrainGa("trainGa05fitFac03b", "w005"),
+      ConfigTrainGa("trainGa05fitFac03b", "w006"),
+    )
+
+    override def fullDesc: String =
+      """Optimize fitness function
+      """.stripMargin
+  }
+
+  def bob017b: Config = new Config {
+
+    override def id: String = "bob017b"
+
+    override def trainings: Seq[ConfigTrainGa] = Seq(
+      ConfigTrainGa("trainGa05fitFac03b", "b001"),
+      ConfigTrainGa("trainGa05fitFac03b", "b002"),
+      ConfigTrainGa("trainGa05fitFac03b", "b003"),
+      ConfigTrainGa("trainGa05fitFac03b", "b004"),
+      ConfigTrainGa("trainGa05fitFac03b", "b005"),
+      ConfigTrainGa("trainGa05fitFac03b", "b006"),
+    )
+
+    override def fullDesc: String =
+      """Optimize fitness function
+      """.stripMargin
+  }
+
 }
