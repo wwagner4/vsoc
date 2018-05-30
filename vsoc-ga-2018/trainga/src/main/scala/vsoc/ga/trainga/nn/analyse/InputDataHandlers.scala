@@ -3,7 +3,7 @@ package vsoc.ga.trainga.nn.analyse
 import java.nio.file.Files
 
 import atan.model.{Player, ViewAngle, ViewQuality}
-import entelijan.viz.{Viz, VizCreator, VizCreatorGnuplot}
+import entelijan.viz.{Viz, VizCreator, VizCreators}
 import vsoc.ga.common.config.ConfigHelper
 import vsoc.ga.trainga.behav.OutputMapperNn
 import vsoc.ga.trainga.nn.NeuralNet
@@ -38,7 +38,7 @@ object InputDataHandlers {
           Files.createDirectories(scriptDir)
           val imgDir = wd.resolve("viz_img")
           Files.createDirectories(imgDir)
-          VizCreatorGnuplot[Viz.X](scriptDir = scriptDir.toFile, imageDir = imgDir.toFile)
+          VizCreators.gnuplot(scriptDir.toFile, imgDir.toFile, true, classOf[Viz.X])
         }
 
         val dataRows = Seq(

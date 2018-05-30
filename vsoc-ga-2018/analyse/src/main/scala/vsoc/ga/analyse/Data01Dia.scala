@@ -4,7 +4,7 @@ import java.nio.file.{Files, Path, Paths}
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-import entelijan.viz.{Viz, VizCreator, VizCreatorGnuplot}
+import entelijan.viz.{Viz, VizCreator, VizCreators}
 import org.slf4j.LoggerFactory
 import vsoc.ga.analyse.smooth.Smoothing
 import vsoc.ga.common.config.{Config, ConfigHelper, ConfigTrainGa}
@@ -123,7 +123,7 @@ object Data01Dia {
     Files.createDirectories(imgDir)
     log.info(s"image directory $imgDir")
     log.info(s"script directory $scriptDir")
-    VizCreatorGnuplot[Viz.XY](scriptDir = scriptDir.toFile, imageDir = imgDir.toFile)
+    VizCreators.gnuplot(scriptDir = scriptDir.toFile, imageDir = imgDir.toFile, clazz = classOf[Viz.XY])
   }
 
   private def createDia(

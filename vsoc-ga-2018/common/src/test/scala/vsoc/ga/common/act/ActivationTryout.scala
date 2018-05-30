@@ -2,7 +2,7 @@ package vsoc.ga.common.act
 
 import java.nio.file.Files
 
-import entelijan.viz.{Viz, VizCreator, VizCreatorGnuplot}
+import entelijan.viz.{Viz, VizCreator, VizCreators}
 import vsoc.ga.common.config.ConfigHelper
 
 object ActivationTryout extends App {
@@ -13,7 +13,7 @@ object ActivationTryout extends App {
     Files.createDirectories(scriptDir)
     val imgDir = wd.resolve("viz_img")
     Files.createDirectories(imgDir)
-    VizCreatorGnuplot[Viz.XY](scriptDir = scriptDir.toFile, imageDir = imgDir.toFile)
+    VizCreators.gnuplot(scriptDir = scriptDir.toFile, imageDir = imgDir.toFile, clazz = classOf[Viz.XY])
   }
 
   val ks = Seq(0.1, 0.2, 0.5, 0.8, 1.0)

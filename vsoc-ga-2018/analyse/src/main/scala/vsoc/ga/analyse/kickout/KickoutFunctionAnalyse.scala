@@ -1,13 +1,13 @@
 package vsoc.ga.analyse.kickout
 
-import entelijan.viz.{Viz, VizCreator, VizCreatorGnuplot}
+import entelijan.viz.{Viz, VizCreators}
 import vsoc.ga.common.config.ConfigHelper
 
 object KickoutFunctionAnalyse extends App {
 
   val wd = ConfigHelper.workDir.toFile
 
-  implicit val creator: VizCreator[Viz.XY] = VizCreatorGnuplot(wd, wd, true)
+  implicit val creator = VizCreators.gnuplot(wd, wd, true, classOf[Viz.XY])
 
   def now(n: Int): Double = n.toDouble * 10
 
