@@ -73,23 +73,23 @@ public class GeneticTest extends TestCase {
 		assertTrue(minLen <= 50);
 	}
 
-	public void testMutatorMR0() throws Exception {
+	public void testMutatorMR0() {
 		Mutator m = new DefaultMutator(0);
 
 		for (int i = 0; i < 100000; i++) {
-			assertTrue(m.isMutation() == false);
+			assertTrue(!m.isMutation());
 		}
 	}
 
-	public void testMutatorMR1() throws Exception {
+	public void testMutatorMR1() {
 		Mutator m = new DefaultMutator(1000000);
 
 		for (int i = 0; i < 100000; i++) {
-			assertTrue(m.isMutation() == true);
+			assertTrue(m.isMutation());
 		}
 	}
 
-	public void testMutatorMR05() throws Exception {
+	public void testMutatorMR05() {
 		Mutator m = new DefaultMutator(500000);
 		int trueCount = 0;
 		int falseCount = 0;
@@ -104,7 +104,7 @@ public class GeneticTest extends TestCase {
 		assertTrue((falseCount > 50000 - 500) && (falseCount < 50000 + 500));
 	}
 
-	public void testMutatorMR01() throws Exception {
+	public void testMutatorMR01() {
 		Mutator m = new DefaultMutator(100000);
 		int trueCount = 0;
 		int falseCount = 0;
@@ -119,7 +119,7 @@ public class GeneticTest extends TestCase {
 		assertTrue((falseCount > 90000 - 500) && (falseCount < 90000 + 500));
 	}
 
-	public void testMutatorMR09() throws Exception {
+	public void testMutatorMR09() {
 		Mutator m = new DefaultMutator(900000);
 		int trueCount = 0;
 		int falseCount = 0;

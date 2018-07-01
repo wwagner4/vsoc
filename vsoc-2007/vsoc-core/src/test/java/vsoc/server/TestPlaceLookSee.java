@@ -158,7 +158,7 @@ public class TestPlaceLookSee {
     }
 
     private void assertContains(List<FlagDesc> flags, String name) {
-        assertTrue("Found no flag named " + name, flags.stream().map(d -> d.getName()).anyMatch(n -> n.endsWith(name)));
+        assertTrue("Found no flag named " + name, flags.stream().map(FlagDesc::getName).anyMatch(n -> n.endsWith(name)));
     }
 
 }

@@ -1,11 +1,13 @@
 package vsoc.server;
 
 import java.util.*;
+
 import vsoc.util.*;
 
 import java.awt.*;
 import java.awt.geom.*;
 import java.io.*;
+
 import atan.model.*;
 
 /**
@@ -14,8 +16,8 @@ import atan.model.*;
 
 public abstract class VsocPlayer extends MoveObject implements Player {
 
-	private static final long serialVersionUID = 1L;
-	
+    private static final long serialVersionUID = 1L;
+
     private Controller control;
 
     private int ownGoalCount = 0;
@@ -27,7 +29,7 @@ public abstract class VsocPlayer extends MoveObject implements Player {
     private int kickCount = 0;
 
     private int number = -1;
-    
+
     protected final double shapeWidth = 3.5;
     protected final double sw = shapeWidth;
     protected final double swh = shapeWidth / 2.0;
@@ -69,10 +71,8 @@ public abstract class VsocPlayer extends MoveObject implements Player {
 
     public Collection<Vision> see() {
         Collection<Vision> coll = new ArrayList<>();
-        Iterator<SimObject> simObjects = getServer().getSimObjects().iterator();
 
-        while (simObjects.hasNext()) {
-            SimObject o = (SimObject) simObjects.next();
+        for (SimObject o : getServer().getSimObjects()) {
             if (!o.equals(this)) {
                 Vec2D pos = o.getPosition()
                         .trans(getPosition(), getDirection());
@@ -86,23 +86,21 @@ public abstract class VsocPlayer extends MoveObject implements Player {
         return coll;
     }
 
-	public void paint(Graphics2D g) {
-		double x = getPosition().getX();
-		double y = getPosition().getY();
-		double w = this.sw;
-		double h = this.sw;
-		Shape s = new Ellipse2D.Double(x - this.swh, y - this.swh, w, h);
-		g.setColor(color());
-		g.fill(s);
-		g.setColor(Color.black);
-		g.draw(s);
-		double a = this.swh * Math.cos(getDirection());
-		double b = this.swh * Math.sin(getDirection());
-		Line2D l = new Line2D.Double(x, y, x + a, y + b);
-		g.draw(l);
-	}
+    public void paint(Graphics2D g) {
+        double x = getPosition().getX();
+        double y = getPosition().getY();
+        Shape s = new Ellipse2D.Double(x - this.swh, y - this.swh, this.sw, this.sw);
+        g.setColor(color());
+        g.fill(s);
+        g.setColor(Color.black);
+        g.draw(s);
+        double a = this.swh * Math.cos(getDirection());
+        double b = this.swh * Math.sin(getDirection());
+        Line2D l = new Line2D.Double(x, y, x + a, y + b);
+        g.draw(l);
+    }
 
-	abstract protected Color color();
+    abstract protected Color color();
 
     abstract void increaseWestGoalCount();
 

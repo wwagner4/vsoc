@@ -7,7 +7,7 @@ import java.util.List;
 
 /**
  * Places all players in a vertical line inside the own half
- * looking in the direction of the enimy goal
+ * looking in the direction of the enemy goal
  */
 public class InitialPlacementLineup implements InitialPlacement {
 

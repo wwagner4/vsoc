@@ -3,7 +3,7 @@ package vsoc.server.initial;
 import vsoc.server.InitialPlacement;
 
 /**
- * Places all Players in the center looking in the direction of the enimy goal.
+ * Places all Players in the center looking in the direction of the enemy goal.
  */
 public class InitialPlacementAllInCenter implements InitialPlacement {
 
@@ -20,7 +20,6 @@ public class InitialPlacementAllInCenter implements InitialPlacement {
 
     @Override
     public Values placementValuesWest(int number) {
-        Values values = new Values(0.0, 0.0, 0.0);
-        return values;
+        return new Values(0.0, 0.0, 0.0);
     }
 }

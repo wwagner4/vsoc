@@ -32,8 +32,7 @@ public class RandomIndexSelector {
     }
 
     public int next() {
-        Integer val = (Integer) this.iter.next();
-        return val.intValue();
+        return this.iter.next();
     }
 
     private void initSet(int totalSize, int subsetSize) {
@@ -43,6 +42,6 @@ public class RandomIndexSelector {
     }
 
     private Integer randomInteger(int totalSize) {
-        return Integer.valueOf(ran.nextInt(totalSize) + this.baseIndex);
+        return ran.nextInt(totalSize) + this.baseIndex;
     }
 }

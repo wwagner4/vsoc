@@ -11,13 +11,12 @@ import vsoc.server.VsocPlayer;
 import vsoc.server.initial.InitialPlacementNone;
 import vsoc.server.initial.InitialPlacementOnePlayerFull;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
-import java.util.stream.Collectors;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tests for behaviour and sensors

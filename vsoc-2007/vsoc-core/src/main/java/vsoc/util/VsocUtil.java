@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.text.NumberFormat;
-import java.util.Iterator;
 import java.util.Properties;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -46,9 +45,8 @@ public class VsocUtil {
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw);
         SortedSet<Object> keys = keysSorted(properties);
-        Iterator<Object> iter = keys.iterator();
-        while (iter.hasNext()) {
-            String key  =(String) iter.next();
+        for (Object key1 : keys) {
+            String key = (String) key1;
             pw.print(key);
             pw.print("=");
             pw.print(properties.getProperty(key));
@@ -59,12 +57,7 @@ public class VsocUtil {
     }
 
     private SortedSet<Object> keysSorted(Properties properties) {
-        SortedSet<Object> keys = new TreeSet<>();
-        Iterator<Object> iter = properties.keySet().iterator();
-        while (iter.hasNext()) {
-            keys.add(iter.next());
-        }
-        return keys;
+        return new TreeSet<>(properties.keySet());
     }
 
 

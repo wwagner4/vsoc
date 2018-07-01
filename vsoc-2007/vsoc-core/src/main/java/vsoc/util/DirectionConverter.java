@@ -2,7 +2,7 @@ package vsoc.util;
 
 import java.io.PrintWriter;
 
-public class DirectionConverter extends Object {
+public class DirectionConverter {
 
     private int maxVal;
 

@@ -1,7 +1,7 @@
 package vsoc.util;
 
 /**
- * Testcases for Persistance
+ * Testcases for Persistence
  */
 
 public class TestPersistor extends AbstractTest {
@@ -47,7 +47,6 @@ public class TestPersistor extends AbstractTest {
         b.doubleValue = doubleVal;
         b.intValue = intVal;
         this.ser.serialize(b, TestUtil.tmp("test.object"));
-        b = null;
         b = (PersB) this.ser.deserialize(TestUtil.tmp("test.object"));
         assertEquals(str, b.stringValue);
         assertEquals(doubleVal, b.doubleValue, 0.00001);
@@ -57,8 +56,7 @@ public class TestPersistor extends AbstractTest {
         PersA a = new PersA();
         a.persB = null;
         this.ser.serialize(a, TestUtil.tmp("test.object"));
-        a = null;
         a = (PersA) this.ser.deserialize(TestUtil.tmp("test.object"));
-        assertTrue("b is null", a.persB == null);
+        assertNull("b is null", a.persB);
     }
 }

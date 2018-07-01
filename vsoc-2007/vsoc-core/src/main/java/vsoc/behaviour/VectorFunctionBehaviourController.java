@@ -10,7 +10,7 @@ public class VectorFunctionBehaviourController<V extends VectorFunction> extends
 
 	private static final long serialVersionUID = 0L;
 
-	private VectorFunctionBehaviour<V> behaviour = null;
+	private VectorFunctionBehaviour<V> behaviour;
 
 	public VectorFunctionBehaviourController(Behaviour behaviour) {
 		super(behaviour);

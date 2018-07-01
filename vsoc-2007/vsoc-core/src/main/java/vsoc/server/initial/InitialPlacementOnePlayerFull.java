@@ -3,7 +3,7 @@ package vsoc.server.initial;
 import vsoc.server.InitialPlacement;
 
 /**
- * Places all Players in the center looking in the direction of the enimy goal.
+ * Places all Players in the center looking in the direction of the enemy goal.
  */
 public class InitialPlacementOnePlayerFull implements InitialPlacement {
 

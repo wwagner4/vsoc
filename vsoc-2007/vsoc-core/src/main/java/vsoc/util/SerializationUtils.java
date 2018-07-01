@@ -46,7 +46,6 @@ import java.io.Serializable;
  * @author Jeff Varszegi
  * @author Gary Gregory
  * @since 1.0
- * @version $Id: SerializationUtils.java 1056988 2011-01-09 17:58:53Z niallp $
  */
 public class SerializationUtils {
     
@@ -100,23 +99,14 @@ public class SerializationUtils {
         if (outputStream == null) {
             throw new IllegalArgumentException("The OutputStream must not be null");
         }
-        ObjectOutputStream out = null;
-        try {
+        try (ObjectOutputStream out = new ObjectOutputStream(outputStream)) {
             // stream closed in the finally
-            out = new ObjectOutputStream(outputStream);
             out.writeObject(obj);
-            
+
         } catch (IOException ex) {
             throw new IllegalStateException(ex);
-        } finally {
-            try {
-                if (out != null) {
-                    out.close();
-                }
-            } catch (IOException ex) {
-                // ignore close exception
-            }
         }
+        // ignore close exception
     }
 
     /**
@@ -152,25 +142,14 @@ public class SerializationUtils {
         if (inputStream == null) {
             throw new IllegalArgumentException("The InputStream must not be null");
         }
-        ObjectInputStream in = null;
-        try {
+        try (ObjectInputStream in = new ObjectInputStream(inputStream)) {
             // stream closed in the finally
-            in = new ObjectInputStream(inputStream);
             return in.readObject();
-            
-        } catch (ClassNotFoundException ex) {
+
+        } catch (ClassNotFoundException | IOException ex) {
             throw new IllegalStateException(ex);
-        } catch (IOException ex) {
-            throw new IllegalStateException(ex);
-        } finally {
-            try {
-                if (in != null) {
-                    in.close();
-                }
-            } catch (IOException ex) {
-                // ignore close exception
-            }
         }
+        // ignore close exception
     }
 
     /**

@@ -12,7 +12,6 @@ import java.awt.geom.Rectangle2D;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -52,8 +51,6 @@ public class Server implements Serializable, Simulation, Paintable {
 	private int goalEastCount = 0;
 
 	private boolean informListeners = true;
-
-	private String name = "Vsoc Server";
 
 	private static Stroke stroke = new BasicStroke((float) 0.1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND);
 
@@ -116,7 +113,7 @@ public class Server implements Serializable, Simulation, Paintable {
 	}
 
 	public String getName() {
-		return this.name;
+		return "Vsoc Server";
 	}
 
 	@Override
@@ -137,31 +134,25 @@ public class Server implements Serializable, Simulation, Paintable {
 	}
 
 	private void takeStepOfAllControlSystems() {
-		Iterator<VsocPlayer> ip = this.players.iterator();
-		while (ip.hasNext()) {
-			VsocPlayer p = ip.next();
-			informController(p, p.getController());
-		}
+        for (VsocPlayer p : this.players) {
+            informController(p, p.getController());
+        }
 	}
 
 	void informController(VsocPlayer p, Controller c) {
 		c.preInfo();
-		Iterator<Vision> i = p.see().iterator();
-		while (i.hasNext()) {
-			Vision v = i.next();
-			v.informControlSystem(c);
-		}
+        for (Vision v : p.see()) {
+            v.informControlSystem(c);
+        }
 
 		c.postInfo();
 
 	}
 
 	private void moveAll() {
-		Iterator<MoveObject> i = this.playersAndBall.iterator();
-		while (i.hasNext()) {
-			MoveObject o = i.next();
-			o.moveFromVelo();
-		}
+        for (MoveObject o : this.playersAndBall) {
+            o.moveFromVelo();
+        }
 	}
 
 	private void correctBall() {
@@ -246,23 +237,19 @@ public class Server implements Serializable, Simulation, Paintable {
 
 	public List<VsocPlayer> getPlayersWest() {
 		ArrayList<VsocPlayer> c = new ArrayList<>();
-		Iterator<VsocPlayer> pi = Server.this.players.iterator();
-		while (pi.hasNext()) {
-			VsocPlayer o = pi.next();
-			if (o instanceof VsocPlayerWest)
-				c.add((VsocPlayer) o);
-		}
+        for (VsocPlayer o : Server.this.players) {
+            if (o instanceof VsocPlayerWest)
+                c.add(o);
+        }
 		return c;
 	}
 
 	public List<VsocPlayer> getPlayersEast() {
 		ArrayList<VsocPlayer> c = new ArrayList<>();
-		Iterator<VsocPlayer> pi = Server.this.players.iterator();
-		while (pi.hasNext()) {
-			VsocPlayer o = pi.next();
-			if (o instanceof VsocPlayerEast)
-				c.add((VsocPlayerEast) o);
-		}
+        for (VsocPlayer o : Server.this.players) {
+            if (o instanceof VsocPlayerEast)
+                c.add(o);
+        }
 		return c;
 	}
 
@@ -276,16 +263,12 @@ public class Server implements Serializable, Simulation, Paintable {
 		g.fill(new Rectangle2D.Double(-100, -100, 200, 200));
 		double x = -WIDTH / 2.0;
 		double y = -HEIGHT / 2.0;
-		double w = WIDTH;
-		double h = HEIGHT;
-		Rectangle2D rect = new Rectangle2D.Double(x, y, w, h);
+		Rectangle2D rect = new Rectangle2D.Double(x, y, WIDTH, HEIGHT);
 		g.setColor(FIELD_BACKGROUND);
 		g.fill(rect);
 		g.setColor(Color.black);
 		g.draw(rect);
-		Iterator<SimObject> i = this.simObjects.iterator();
-		while (i.hasNext()) {
-			SimObject so = (SimObject) i.next();
+		for (SimObject so : this.simObjects) {
 			so.paint(g);
 		}
 	}
@@ -312,31 +295,27 @@ public class Server implements Serializable, Simulation, Paintable {
 
 	public int getActualPlayerWestCount() {
 		int count = 0;
-		Iterator<MoveObject> iter = this.playersAndBall.iterator();
-		while (iter.hasNext()) {
-			MoveObject mo = iter.next();
-			if (mo instanceof Player) {
-				Player p = (Player) mo;
-				if (!p.isTeamEast()) {
-					count++;
-				}
-			}
-		}
+        for (MoveObject mo : this.playersAndBall) {
+            if (mo instanceof Player) {
+                Player p = (Player) mo;
+                if (!p.isTeamEast()) {
+                    count++;
+                }
+            }
+        }
 		return count;
 	}
 
 	public int getActualPlayerEastCount() {
 		int count = 0;
-		Iterator<MoveObject> iter = this.playersAndBall.iterator();
-		while (iter.hasNext()) {
-			MoveObject mo = iter.next();
-			if (mo instanceof Player) {
-				Player p = (Player) mo;
-				if (p.isTeamEast()) {
-					count++;
-				}
-			}
-		}
+        for (MoveObject mo : this.playersAndBall) {
+            if (mo instanceof Player) {
+                Player p = (Player) mo;
+                if (p.isTeamEast()) {
+                    count++;
+                }
+            }
+        }
 		return count;
 	}
 
@@ -364,25 +343,21 @@ public class Server implements Serializable, Simulation, Paintable {
 
 	public int getPlayersEastCount() {
 		int re = 0;
-		Iterator<VsocPlayer> iter = this.players.iterator();
-		while (iter.hasNext()) {
-			VsocPlayer player = iter.next();
-			if (player.isTeamEast()) {
-				re++;
-			}
-		}
+        for (VsocPlayer player : this.players) {
+            if (player.isTeamEast()) {
+                re++;
+            }
+        }
 		return re;
 	}
 
 	public int getPlayersWestCount() {
 		int re = 0;
-		Iterator<VsocPlayer> iter = this.players.iterator();
-		while (iter.hasNext()) {
-			VsocPlayer player = iter.next();
-			if (!player.isTeamEast()) {
-				re++;
-			}
-		}
+        for (VsocPlayer player : this.players) {
+            if (!player.isTeamEast()) {
+                re++;
+            }
+        }
 		return re;
 	}
 

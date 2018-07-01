@@ -101,7 +101,7 @@ public class Vec2D implements Serializable {
     }
 
     /**
-     * Transforms a vector to a new koordinate system. ori vector defines the
+     * Transforms a vector to a new coordinate system. ori vector defines the
      * new origin.
      */
     public Vec2D trans(Vec2D ori, double angle) {

@@ -8,7 +8,7 @@ class FlagEast extends SimObject {
     
 	private static final long serialVersionUID = 1L;
 	
-    private ServerFlag type = null;
+    private ServerFlag type;
 
     FlagEast(ServerFlag type, double x, double y) {
         super(x, y);

@@ -4,7 +4,7 @@ import java.io.*;
 import java.util.Random;
 
 /**
-* Generates a serie of booleans. The probability of true is the mutation rate.
+* Generates a series of booleans. The probability of true is the mutation rate.
 */
 public class DefaultMutator implements Mutator {
 
@@ -12,8 +12,8 @@ public class DefaultMutator implements Mutator {
 	int mutationRate;
 
 	/**
-	* Generates a mutator that gives a serie of booleans where
-	* the probabillity of true is the mutation rate.
+	* Generates a mutator that gives a series of booleans where
+	* the probability of true is the mutation rate.
 	*
 	* @param mutRate	The mutation rate in per million. Values must be
 	*			between 0 and 1000000.

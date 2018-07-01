@@ -42,7 +42,7 @@ public enum ServerFlag {
 
 	private String name;
 
-	private ServerFlag(String name) {
+	ServerFlag(String name) {
 		this.name = name;
 	}
 

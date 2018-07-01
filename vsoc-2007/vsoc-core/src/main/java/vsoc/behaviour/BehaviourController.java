@@ -46,7 +46,7 @@ public class BehaviourController implements Controller, Serializable {
 		if (behaviour.shouldBeApplied(this.sensors)) {
 			behaviour.apply(this.sensors, this.player);
 		} else {
-			behaviour.getChild().ifPresent(b -> behave(b));
+			behaviour.getChild().ifPresent(this::behave);
 		}
 	}
 

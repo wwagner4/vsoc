@@ -35,16 +35,19 @@ public class Serializer {
 				return null;
 			}
 			String[] list = sDir.list();
+			if (list == null) {
+				return null;
+			}
 			SortedSet<String> names = new TreeSet<>();
-			for (int i = 0; i < list.length; i++) {
-				if (list[i].startsWith(prefix)) {
-					names.add(list[i]);
+			for (String aList : list) {
+				if (aList.startsWith(prefix)) {
+					names.add(aList);
 				}
 			}
 			if (names.isEmpty()) {
 				return null;
 			}
-			String name = (String) names.last();
+			String name = names.last();
 			return deserialize(new File(sDir, name));
 		} catch (Exception e) {
 			throw new IllegalStateException(e);
@@ -52,7 +55,7 @@ public class Serializer {
 	}
 
 	public Object deserialize(File file) throws IOException {
-		Object re = null;
+		Object re;
 		if (file.exists()) {
 			InputStream in = new FileInputStream(file);
 			re = deserialize(in);
@@ -97,16 +100,22 @@ public class Serializer {
 
 		public void run() {
 			int errorCount = 0;
-			while (errorCount < 10) {
+			boolean hasError = true;
+			String msg = "unknown";
+			while (errorCount < 10 && hasError) {
 				pause();
 				try {
 					File file = createFile();
 					Serializer.this.serialize(this.obj, file);
 					this.id++;
+					hasError = false;
 				} catch (Exception e) {
+					msg = e.getMessage();
 					errorCount++;
-					throw new IllegalStateException("Could not serialize " + this.obj + ". Reason: " + e.getMessage(), e);
 				}
+			}
+			if (hasError) {
+				throw new IllegalStateException("Could not serialize " + this.obj + ". Reason: " + msg);
 			}
 		}
 
@@ -119,8 +128,11 @@ public class Serializer {
 		private File createFile() {
 			File sDir = getSchedulerDir();
 			if (!sDir.exists()) {
-				sDir.mkdirs();
-			}
+                boolean re = sDir.mkdirs();
+                if (!re) {
+                    throw new IllegalStateException("Could not create " + sDir);
+                }
+            }
 			String fName = this.prefix + "_" + this.tstamp + "_" + this.id + ".ser";
 			return new File(sDir, fName);
 		}

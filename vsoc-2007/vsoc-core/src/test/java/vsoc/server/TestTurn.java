@@ -30,14 +30,14 @@ public class TestTurn extends AbstractServerTest {
         s.informController((VsocPlayer) lp.getPlayer(), lp);
         assertEquals("ball", new Vec2D(2 * S2, -2 * S2), lp.ball);
         assertEquals("otherFlags[0]", new Vec2D(3 * S2, -S2), lp.otherFlags[0]);
-        assertTrue("otherFlags[1]", lp.otherFlags[1] == null);
+        assertNull("otherFlags[1]", lp.otherFlags[1]);
         lp.getPlayer().turn(-45);
         s.takeStep();
         lp.init();
         s.informController((VsocPlayer) lp.getPlayer(), lp);
         assertEquals("otherFlags[0]", new Vec2D(4, 1), lp.otherFlags[0]);
-        assertTrue("otherFlags[0]", lp.otherFlags[1] == null);
-        assertTrue("ball", lp.ball == null);
+        assertNull("otherFlags[0]", lp.otherFlags[1]);
+        assertNull("ball", lp.ball);
     }
 
     public void testTurn01() {
@@ -52,8 +52,8 @@ public class TestTurn extends AbstractServerTest {
         lp.init();
         s.informController((VsocPlayer) lp.getPlayer(), lp);
         assertEquals("otherFlag", new Vec2D(4, 1), lp.otherFlags[0]);
-        assertTrue("otherFlag", lp.otherFlags[1] == null);
-        assertTrue("otherFlag", lp.ball == null);
+        assertNull("otherFlag", lp.otherFlags[1]);
+        assertNull("otherFlag", lp.ball);
     }
 
     public static void main(String[] args) {

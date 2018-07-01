@@ -14,7 +14,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 /**
- * Playes one demo match
+ * Players one demo match
  */
 public class DemoMatchGui {
 
@@ -37,12 +37,9 @@ public class DemoMatchGui {
 
 class StepwiseGui {
 
-    private Server srv;
-
     private JFrame frame = new JFrame("Demo Match VSOC");
 
     public StepwiseGui(Server srv) {
-        this.srv = srv;
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().setLayout(new BorderLayout());
         frame.setSize(new Dimension(800, 600));

@@ -8,7 +8,7 @@ public class VectorFunctionBehaviour<V extends VectorFunction> implements Behavi
 
 	private static final long serialVersionUID = 1L;
 
-	private V vectorFunction = null;
+	private V vectorFunction;
 
 	private SensorsToVector sensorsToVector;
 
