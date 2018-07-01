@@ -33,71 +33,72 @@ public class DemoMatchGui {
         StepwiseGui.open(srv);
     }
 
-}
+    static class StepwiseGui {
 
-class StepwiseGui {
+        private JFrame frame = new JFrame("Demo Match VSOC");
 
-    private JFrame frame = new JFrame("Demo Match VSOC");
+        public StepwiseGui(Server srv) {
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.getContentPane().setLayout(new BorderLayout());
+            frame.setSize(new Dimension(800, 600));
+            FieldCanvas field = new FieldCanvas();
+            field.setSim(srv);
+            srv.addListener(field);
+            frame.getContentPane().add(field, BorderLayout.CENTER);
+            frame.addKeyListener(new VsocListener(srv));
+        }
 
-    public StepwiseGui(Server srv) {
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.getContentPane().setLayout(new BorderLayout());
-        frame.setSize(new Dimension(800, 600));
-        FieldCanvas field = new FieldCanvas();
-        field.setSim(srv);
-        srv.addListener(field);
-        frame.getContentPane().add(field, BorderLayout.CENTER);
-        frame.addKeyListener(new VsocListener(srv));
+        static void open(Server srv) {
+            new StepwiseGui(srv).openGui();
+        }
+
+        private void openGui() {
+            frame.setVisible(true);
+        }
+
     }
 
-    static void open(Server srv) {
-        new StepwiseGui(srv).openGui();
-    }
+    static class VsocListener implements KeyListener {
+        private Server srv;
 
-    private void openGui() {
-        frame.setVisible(true);
-    }
+        public VsocListener(Server srv) {
+            this.srv = srv;
+        }
 
-}
+        @Override
+        public void keyTyped(KeyEvent e) {
+            int keyCode = e.getKeyChar();
+            if (keyCode == 32) {
+                srv.takeStep();
+            }
+        }
 
-class VsocListener implements KeyListener {
-    private Server srv;
+        @Override
+        public void keyPressed(KeyEvent e) {
+            // Nothing to do
+        }
 
-    public VsocListener(Server srv) {
-        this.srv = srv;
-    }
-
-    @Override
-    public void keyTyped(KeyEvent e) {
-        int keyCode = e.getKeyChar();
-        if (keyCode == 32) {
-            srv.takeStep();
+        @Override
+        public void keyReleased(KeyEvent e) {
+            // Nothing to do
         }
     }
 
-    @Override
-    public void keyPressed(KeyEvent e) {
-        // Nothing to do
-    }
+    static class InitialPlacementDemo implements InitialPlacement {
 
-    @Override
-    public void keyReleased(KeyEvent e) {
-        // Nothing to do
+        @Override
+        public int numberOfPlayers() {
+            return 4;
+        }
+
+        @Override
+        public Values placementValuesWest(int number) {
+            if (number == 0) return new Values(-10, 20, 20);
+            if (number == 1) return new Values(-10, 10, 0);
+            if (number == 2) return new Values(-10, 0, -20);
+            if (number == 3) return new Values(0, -10, -90);
+            else throw new IllegalArgumentException();
+        }
     }
 }
-class InitialPlacementDemo implements InitialPlacement {
 
-    @Override
-    public int numberOfPlayers() {
-        return 4;
-    }
-
-    @Override
-    public Values placementValuesWest(int number) {
-        if (number == 0) return new Values(-10, 20, 20);
-        if (number == 1) return new Values(-10, 10, 0);
-        if (number == 2) return new Values(-10, 0, -20);
-        if (number == 3) return new Values(0, -10, -90);
-        else throw new IllegalArgumentException();
-    }
-}
