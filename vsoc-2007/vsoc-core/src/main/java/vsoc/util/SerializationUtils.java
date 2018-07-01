@@ -75,7 +75,6 @@ public class SerializationUtils {
      * 
      * @param object  the <code>Serializable</code> object to clone
      * @return the cloned object
-     * @throws SerializationException (runtime) if the serialization fails
      */
     public static Object clone(Serializable object) {
         return deserialize(serialize(object));
@@ -96,7 +95,6 @@ public class SerializationUtils {
      * @param obj  the object to serialize to bytes, may be null
      * @param outputStream  the stream to write to, must not be null
      * @throws IllegalArgumentException if <code>outputStream</code> is <code>null</code>
-     * @throws SerializationException (runtime) if the serialization fails
      */
     public static void serialize(Serializable obj, OutputStream outputStream) {
         if (outputStream == null) {
@@ -127,7 +125,6 @@ public class SerializationUtils {
      *
      * @param obj  the object to serialize to bytes
      * @return a byte[] with the converted Serializable
-     * @throws SerializationException (runtime) if the serialization fails
      */
     public static byte[] serialize(Serializable obj) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream(512);
@@ -150,7 +147,6 @@ public class SerializationUtils {
      * @param inputStream  the serialized object input stream, must not be null
      * @return the deserialized object
      * @throws IllegalArgumentException if <code>inputStream</code> is <code>null</code>
-     * @throws SerializationException (runtime) if the serialization fails
      */
     public static Object deserialize(InputStream inputStream) {
         if (inputStream == null) {
@@ -183,7 +179,6 @@ public class SerializationUtils {
      * @param objectData  the serialized object, must not be null
      * @return the deserialized object
      * @throws IllegalArgumentException if <code>objectData</code> is <code>null</code>
-     * @throws SerializationException (runtime) if the serialization fails
      */
     public static Object deserialize(byte[] objectData) {
         if (objectData == null) {

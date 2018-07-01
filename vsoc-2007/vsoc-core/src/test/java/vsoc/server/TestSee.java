@@ -28,15 +28,15 @@ public class TestSee extends AbstractServerTest {
         assertEquals("LeftFlag:4", new Vec2D(6.5 * S2, -0.5 * S2),
                 a.leftFlags[1]);
         assertEquals("LeftFlag:5", new Vec2D(3 * S2, -S2), a.leftFlags[2]);
-        assertTrue("LeftFlag", a.leftFlags[3] == null);
-        assertTrue("LeftFlag", a.leftFlags[4] == null);
-        assertTrue("LeftFlag", a.leftFlags[5] == null);
-        assertTrue("LeftFlag", a.leftFlags[6] == null);
-        assertTrue("LeftFlag", a.leftFlags[7] == null);
-        assertTrue("LeftFlag", a.leftFlags[8] == null);
-        assertTrue("LeftFlag", a.leftFlags[9] == null);
-        assertTrue("LeftFlag", a.leftFlags[10] == null);
-        assertTrue("LeftFlag", a.leftFlags[11] == null);
+        assertNull("LeftFlag", a.leftFlags[3]);
+        assertNull("LeftFlag", a.leftFlags[4]);
+        assertNull("LeftFlag", a.leftFlags[5]);
+        assertNull("LeftFlag", a.leftFlags[6]);
+        assertNull("LeftFlag", a.leftFlags[7]);
+        assertNull("LeftFlag", a.leftFlags[8]);
+        assertNull("LeftFlag", a.leftFlags[9]);
+        assertNull("LeftFlag", a.leftFlags[10]);
+        assertNull("LeftFlag", a.leftFlags[11]);
     }
 
     public void testSee01r1() {
@@ -100,8 +100,8 @@ public class TestSee extends AbstractServerTest {
 
     private void initServer01(Server s, Controller r1, Controller r2,
             Controller l1, Controller l2) {
-        addPlayerEast(s, r1, -4, -1, 0 + 180);
-        addPlayerEast(s, r2, 5, -1, 0 + 180);
+        addPlayerEast(s, r1, -4, -1, 180);
+        addPlayerEast(s, r2, 5, -1, 180);
         addPlayerWest(s, l1, -7, 1, 0);
         addPlayerWest(s, l2, -5, -4, 180);
         ServerUtil u = ServerUtil.current();

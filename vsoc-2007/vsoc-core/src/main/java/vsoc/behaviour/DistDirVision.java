@@ -40,9 +40,7 @@ public class DistDirVision {
     public String toString() {
         String dist = format.format(this.distance);
         String dir = format.format(this.direction);
-        StringBuilder msg = new StringBuilder("DistDirVision[").append(dist)
-                .append("|").append(dir).append("]");
-        return msg.toString();
+        return "DistDirVision[" + dist + "|" + dir + "]";
     }
 
     private static NumberFormat initNumberFormat() {

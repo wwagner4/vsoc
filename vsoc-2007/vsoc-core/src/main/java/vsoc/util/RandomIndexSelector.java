@@ -43,6 +43,6 @@ public class RandomIndexSelector {
     }
 
     private Integer randomInteger(int totalSize) {
-        return new Integer(ran.nextInt(totalSize) + this.baseIndex);
+        return Integer.valueOf(ran.nextInt(totalSize) + this.baseIndex);
     }
 }

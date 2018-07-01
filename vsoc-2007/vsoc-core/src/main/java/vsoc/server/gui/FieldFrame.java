@@ -25,6 +25,9 @@ public class FieldFrame extends JFrame implements WindowListener {
         setSize(1200, 900);
         setLocation(0, 0);
         URL iconUrl = getClass().getClassLoader().getResource("logo.jpg");
+        if (iconUrl == null) {
+            throw new IllegalStateException("missing resource 'logo.jpg'");
+        }
         ImageIcon ii = new ImageIcon(iconUrl);
         setIconImage(ii.getImage());
     }

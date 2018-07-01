@@ -1,8 +1,5 @@
 package vsoc.util;
 
-/**
- * Static Methods to be used for Serializable Objects.
- */
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -10,8 +7,6 @@ import java.util.*;
 public class Serializer {
 
 	private static Serializer current = null;
-
-	private static int schedulerCount = 0;
 
 	private Serializer() {
 		super();
@@ -73,7 +68,7 @@ public class Serializer {
 
 	public void startScheduledSerialization(String prefix, int seconds, Serializable obj) {
 		Scheduler sched = new Scheduler(prefix, seconds, obj);
-		Thread thread = new Thread(sched, "Scheduler-" + schedulerCount);
+		Thread thread = new Thread(sched, "VsocScheduler");
 		thread.start();
 	}
 

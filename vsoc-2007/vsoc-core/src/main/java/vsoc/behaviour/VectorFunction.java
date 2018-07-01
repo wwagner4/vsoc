@@ -1,7 +1,3 @@
-/**
- * $Revision: 1.9 $ $Author: wwan $ $Date: 2005/09/30 15:40:10 $ 
- */
-
 package vsoc.behaviour;
 
 import java.io.Serializable;
