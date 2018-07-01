@@ -101,7 +101,6 @@ class SmoothingSuite extends FunSuite with MustMatchers {
   }
 
   for ((in, should, grpSize) <- data) {
-    val str = in.mkString("")
     test(s"Grouping $in $grpSize") {
       mustEqual(Smoothing.smooth(in, grpSize), should)
     }

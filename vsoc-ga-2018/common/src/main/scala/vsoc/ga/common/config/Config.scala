@@ -10,7 +10,7 @@ trait Config extends Describable {
   def trainings: Seq[ConfigTrainGa]
 
   /**
-    * @return Must be the same as the method name in Cinfigs
+    * @return Must be the same as the method name in Configs
     */
   def id: String
 

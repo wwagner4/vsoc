@@ -38,7 +38,7 @@ object InputDataHandlers {
           Files.createDirectories(scriptDir)
           val imgDir = wd.resolve("viz_img")
           Files.createDirectories(imgDir)
-          VizCreators.gnuplot(scriptDir.toFile, imgDir.toFile, true, classOf[Viz.X])
+          VizCreators.gnuplot(scriptDir.toFile, imgDir.toFile, execute=true, classOf[Viz.X])
         }
 
         val dataRows = Seq(

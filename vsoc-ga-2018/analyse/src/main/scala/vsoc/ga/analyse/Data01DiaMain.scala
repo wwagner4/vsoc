@@ -4,7 +4,7 @@ import vsoc.ga.common.config.Configs
 
 object Data01DiaMain extends App {
 
-  Data01Dia.createDiaConfig(Configs.work015a)
+  Data01Dia.createDiaConfig(Configs.bob017b)
 
 }
 

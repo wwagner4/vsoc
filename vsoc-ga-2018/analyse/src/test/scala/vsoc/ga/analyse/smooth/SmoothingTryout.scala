@@ -3,7 +3,7 @@ package vsoc.ga.analyse.smooth
 import java.nio.file.{Files, Paths}
 
 import entelijan.viz.Viz.{DataRow, XY}
-import entelijan.viz.{Viz, VizCreators}
+import entelijan.viz.{Viz, VizCreator, VizCreators}
 import org.slf4j.LoggerFactory
 
 import scala.util.Random
@@ -19,7 +19,7 @@ object SmoothingTryout extends App {
   val imgDir = workDir.resolve("dia-grouping")
   Files.createDirectories(imgDir)
   log.info(s"Writing image to '$imgDir'")
-  implicit val creator = VizCreators.gnuplot(scriptDir = scriptDir.toFile, imageDir = imgDir.toFile, clazz=classOf[Viz.XY])
+  implicit val creator: VizCreator[XY] = VizCreators.gnuplot(scriptDir = scriptDir.toFile, imageDir = imgDir.toFile, clazz=classOf[Viz.XY])
 
   val data = (0 to 100).map(i => (i, i * 0.05 + Random.nextDouble() * (5 + (i * 0.1))))
 

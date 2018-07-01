@@ -1,13 +1,13 @@
 package vsoc.ga.analyse.kickout
 
-import entelijan.viz.{Viz, VizCreators}
+import entelijan.viz.{Viz, VizCreator, VizCreators}
 import vsoc.ga.common.config.ConfigHelper
 
 object KickoutFunctionAnalyse extends App {
 
   val wd = ConfigHelper.workDir.toFile
 
-  implicit val creator = VizCreators.gnuplot(wd, wd, true, classOf[Viz.XY])
+  implicit val creator: VizCreator[Viz.XY] = VizCreators.gnuplot(wd, wd, execute = true, classOf[Viz.XY])
 
   def now(n: Int): Double = n.toDouble * 10
 
@@ -15,7 +15,7 @@ object KickoutFunctionAnalyse extends App {
 
   def newExp(n: Int): Double = 10000 * (1.0 - math.exp(n * -0.003))
 
-  val xs = (0 to (2000, 10))
+  val xs = 0 to(2000, 10)
 
   val nowData = xs.map(x => Viz.XY(x, now(x)))
   val newLogData = xs.map(x => Viz.XY(x, newLog(x)))
@@ -27,7 +27,7 @@ object KickoutFunctionAnalyse extends App {
     Viz.DataRow(name = Some("log"), data = newLogData),
   )
 
-  val dia = Viz.Diagram[Viz.XY]("ko", "Analyse Kickout Function", dataRows = _dataRows);
+  val dia = Viz.Diagram[Viz.XY]("ko", "Analyse Kickout Function", dataRows = _dataRows)
 
   Viz.createDiagram(dia)
 

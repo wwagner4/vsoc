@@ -6,22 +6,22 @@ import vsoc.ga.matches.{PlayerResult, TeamResult}
 class FitnessFunctionsSuite extends FunSuite {
 
   test("kickingPlayers no kicks") {
-    var tr: TeamResult = TR(Seq(PR(0), PR(0)))
+    val tr: TeamResult = TR(Seq(PR(0), PR(0)))
     FitnessFunctions.kickingPlayers(tr) === 0
   }
 
   test("kickingPlayers no player result") {
-    var tr: TeamResult = TR(Seq())
+    val tr: TeamResult = TR(Seq())
     FitnessFunctions.kickingPlayers(tr) === 0
   }
 
   test("kickingPlayers one player many kicks") {
-    var tr: TeamResult = TR(Seq(PR(100), PR(0)))
+    val tr: TeamResult = TR(Seq(PR(100), PR(0)))
     FitnessFunctions.kickingPlayers(tr) === 1
   }
 
   test("kickingPlayers both players kicks") {
-    var tr: TeamResult = TR(Seq(PR(100), PR(1)))
+    val tr: TeamResult = TR(Seq(PR(100), PR(1)))
     FitnessFunctions.kickingPlayers(tr) === 2
   }
 

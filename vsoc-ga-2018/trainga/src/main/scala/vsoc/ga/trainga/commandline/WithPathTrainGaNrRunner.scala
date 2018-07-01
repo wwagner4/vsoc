@@ -30,7 +30,7 @@ trait WithPathTrainGaNrRunner {
         f(trainGa, popNr, generationNr)
       } catch {
         case e: ScalaReflectionException =>
-          println(s"Invalid configuration '$trainGaId'")
+          println(s"Invalid configuration '$trainGaId'. ${e.getMessage}")
           println(usage)
       }
     }

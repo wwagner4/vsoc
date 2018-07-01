@@ -42,7 +42,7 @@ object ExportCsv extends App {
         val popName = popDir.getName(popDir.getNameCount - 1).toString
         includeSerPopulations.contains((gaName, popName))
       }
-      val files = Files.list(popDir)
+      Files.list(popDir)
         .iterator()
         .asScala
         .foreach { f =>

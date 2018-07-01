@@ -16,7 +16,7 @@ trait WithConfigRunner {
         f(cfg)
       } catch {
         case e: ScalaReflectionException =>
-          println(s"Invalid configuration '$id'")
+          println(s"Invalid configuration '$id' ${e.getMessage}")
           println(usage(clazz))
       }
     }
