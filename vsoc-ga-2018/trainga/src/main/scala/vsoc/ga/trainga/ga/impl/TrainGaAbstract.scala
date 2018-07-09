@@ -1,6 +1,7 @@
 package vsoc.ga.trainga.ga.impl
 
 import org.slf4j.LoggerFactory
+import vsoc.ga.common.data.Data02
 import vsoc.ga.common.describe.{DescribableFormatter, PropertiesProvider}
 import vsoc.ga.genetic._
 import vsoc.ga.matches.Team
@@ -10,17 +11,17 @@ import vsoc.ga.trainga.nn.NeuralNet
 
 import scala.util.Random
 
-abstract class TrainGaAbstract extends TrainGa[Double] with PropertiesProvider {
+abstract class TrainGaAbstract extends TrainGa[Data02] with PropertiesProvider {
 
   private val log = LoggerFactory.getLogger(classOf[TrainGaAbstract])
 
   protected def createNeuralNet: () => NeuralNet
 
-  protected def fitness: FitnessFunction
+  protected def fitness: FitnessFunction[Data02]
 
-  protected def popMultiplicationTestFactor: Int = 3
+  protected def testFactor: Int = 2
 
-  protected def populationSize: Int = 20
+  protected def populationSize: Int = 10
 
   protected def mutationRate: Double = 0.001
 
@@ -39,7 +40,7 @@ abstract class TrainGaAbstract extends TrainGa[Double] with PropertiesProvider {
   override def properties: Seq[(String, Any)] = Seq(
     ("player cnt", playerCount),
     ("pop size", populationSize),
-    ("matches", populationSize * popMultiplicationTestFactor),
+    ("matches", populationSize * testFactor),
     ("mut rate", mutationRate),
     ("nn", nnTempl),
     ("fit func", fitness),
@@ -54,17 +55,17 @@ abstract class TrainGaAbstract extends TrainGa[Double] with PropertiesProvider {
   }
 
   private case class GAR(
-                          score: Option[Double],
+                          score: Option[Data02],
                           newPopulation: Seq[Seq[Double]]
-                        ) extends GAResult[Double, Double]
+                        ) extends GAResult[Data02, Double]
 
   def randomAllele(_ran: Random): Double = 2.0 * _ran.nextDouble() - 1.0
 
-  protected lazy val tester: PhenoTester[TeamGa, Double] = new PhenoTesterTeam(ran, fitness, popMultiplicationTestFactor)
+  protected lazy val tester: PhenoTester[TeamGa, Data02] = new PhenoTesterTeam(ran, fitness, testFactor)
   protected lazy val selStrat: SelectionStrategy[Double] = SelectionStrategies.crossover(mutationRate, randomAllele, ran)
   protected lazy val transformer: Transformer[Double, TeamGa] = new TransformerTeam(playerCount, createNeuralNet, inMapper, outMapper)
 
-  lazy val ga: GA[Double, TeamGa, Double] = new GA(tester, selStrat, transformer)
+  lazy val ga: GA[Double, TeamGa, Data02] = new GA(tester, selStrat, transformer)
 
   def createRandomPopGeno: Seq[Seq[Double]] = {
     def ranSeq(size: Int): Seq[Double] =
@@ -84,22 +85,21 @@ abstract class TrainGaAbstract extends TrainGa[Double] with PropertiesProvider {
     log.info(s"start GA populationSize: $populationSize playerCount: $playerCount playerParamSize:$playerParamSize")
     try {
       val initialPop: Seq[Seq[Double]] = population.getOrElse(createRandomPopGeno)
-      var gar: GAResult[Double, Double] = GAR(None, initialPop)
+      var gar: GAResult[Data02, Double] = GAR(None, initialPop)
       var i = iterations.getOrElse(0)
       while (true) {
         i += 1
         gar = ga.nextPopulation(gar.newPopulation)
-        val s = gar.score.map(s => f"$s%.2f").getOrElse("-")
-        log.info(f"finished iteration $i. score: $s")
+        val s = gar.score.map(d => f"${d.score}%.2f").getOrElse("-")
+        log.info(f"finished iteration $i. populationScore: $s")
         iterations = Some(i)
         population = Some(gar.newPopulation)
-        val data: Seq[(String, Any)] = Seq(
-          ("trainGaId", trainGaId),
-          ("populationNr", trainGaNr),
-          ("iterations", i),
-          ("score", gar.score.getOrElse(0.0))
-        )
-        listeners.foreach(l => l.onIterationFinished(i, gar.score, data))
+        val score = gar.score.map(s => s.copy(
+          trainGaId = trainGaId,
+          trainGaNr = trainGaNr,
+          iterations = i
+        ))
+        listeners.foreach(l => l.onIterationFinished(i, score))
       }
     } catch {
       case e: Exception =>

@@ -45,7 +45,7 @@ class TestGA extends FunSuite with MustMatchers {
       new PhenoTesterResult[String, Score] {
         override def testedPhenos: Seq[(Double, String)] = _testedPhenos
 
-        override def score: Option[Score] = Some(_score)
+        override def populationScore: Option[Score] = Some(_score)
       }
     }
 
@@ -68,12 +68,12 @@ class TestGA extends FunSuite with MustMatchers {
   case class GAResultImpl(
                            score: Option[Score],
                            newPopulation: Seq[Seq[Int]]
-                         ) extends GAResult[Int, Score]
+                         ) extends GAResult[Score, Int]
 
   private def popToStr(pop: Seq[Seq[Int]]) = pop.map(p => p.map(x => intToChar(x)).mkString("")).mkString("  ")
 
   //noinspection ScalaUnusedSymbol
-  private def popsToStdout(popStream: Stream[GAResult[Int, Score]]): Unit =
+  private def popsToStdout(popStream: Stream[GAResult[Score, Int]]): Unit =
     for ((pop, n) <- popStream.take(500).zipWithIndex) {
       val popStr = popToStr(pop.newPopulation)
       println(f"$n%4d ${pop.score.get.minRating}%7.1f ${pop.score.get.meanRating}%7.1f ${pop.score.get.maxRating}%7.1f   $popStr")
@@ -88,7 +88,7 @@ class TestGA extends FunSuite with MustMatchers {
 
     def randomGenome: Seq[Int] = (1 to 10).map(_ => ranAllele(r1))
 
-    val start: GAResult[Int, Score] = GAResultImpl(newPopulation = for (_ <- 1 to 10) yield randomGenome, score = None)
+    val start: GAResult[Score, Int] = GAResultImpl(score = None, newPopulation = for (_ <- 1 to 10) yield randomGenome)
 
     val popStream = Stream.iterate(start)(r => gat.nextPopulation(r.newPopulation))
 
@@ -104,7 +104,7 @@ class TestGA extends FunSuite with MustMatchers {
 
     def randomGenome: Seq[Int] = (1 to 10).map(_ => ranAllele(ran))
 
-    val start: GAResult[Int, Score] = GAResultImpl(newPopulation = for (_ <- 1 to 10) yield randomGenome, score = None)
+    val start: GAResult[Score, Int] = GAResultImpl(newPopulation = for (_ <- 1 to 10) yield randomGenome, score = None)
 
     val popStream = Stream.iterate(start)(r => gaTest.nextPopulation(r.newPopulation))
 

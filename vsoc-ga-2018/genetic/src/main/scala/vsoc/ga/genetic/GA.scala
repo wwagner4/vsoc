@@ -11,14 +11,14 @@ import vsoc.ga.common.describe.Describable
   *
   * For an example see TestGA
   *
-  * @param tester      Tests the fitness of phenotypes. Might also create a score
+  * @param tester      Tests the fitness of phenotypes. Might also create a populationScore
   * @param selStrategy Selects a new population out of a sequence of rated
   *                    genotypes. Might (should) apply mutation and crossover
   *                    to the members of the newly generated population.
   * @param transformer Transforms geno- to phenotype and vice versa.
   * @tparam A Class of an allele
   * @tparam P Class of the phenotype
-  * @tparam S Class of the score. The score might give you insight into the process of creating the
+  * @tparam S Class of the populationScore. The populationScore might give you insight into the process of creating the
   *           next generation. It can help to decide if generating more generations makes sense
   */
 class GA[A, P, S](
@@ -27,15 +27,15 @@ class GA[A, P, S](
                    val transformer: Transformer[A, P],
                  ) {
 
-  def nextPopulation(pop: Seq[Seq[A]]): GAResult[A, S] = {
+  def nextPopulation(pop: Seq[Seq[A]]): GAResult[S, A] = {
 
     val phenos: Seq[P] = pop.map(transformer.toPheno)
     val testResult = tester.test(phenos)
     val testedGenos: Seq[(Double, Seq[A])] = testResult.testedPhenos.map { case (r, g) => (r, transformer.toGeno(g)) }
     val newPop = selStrategy.select(testedGenos)
-    new GAResult[A, S] {
+    new GAResult[S, A] {
 
-      def score: Option[S] = testResult.score
+      def score: Option[S] = testResult.populationScore
 
       override def newPopulation: Seq[Seq[A]] = newPop
 
@@ -43,17 +43,31 @@ class GA[A, P, S](
   }
 }
 
-trait GAResult[A, S] {
+/**
+  * Result of testing one the result of testing a population
+  * @tparam S Score data. Some data containing the fitness value of the population and some additional parameters
+  *           that where used to calculate that fitness value.
+  * @tparam A Type of one parameter genotype parameter. Usually a Double
+  */
+trait GAResult[S, A] {
 
   def score: Option[S]
 
   def newPopulation: Seq[Seq[A]]
 }
 
+
 trait PhenoTesterResult[P, S] {
+
+  /**
+    * @return Sequence of Phenotypes with their score value
+    */
   def testedPhenos: Seq[(Double, P)]
 
-  def score: Option[S]
+  /**
+    * @return The mean score of the population
+    */
+  def populationScore: Option[S]
 }
 
 trait PhenoTester[P, S] extends Describable {

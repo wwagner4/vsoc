@@ -1,12 +1,11 @@
 package vsoc.ga.trainga.ga
 
 import vsoc.ga.common.describe.Describable
-import vsoc.ga.matches.TeamResult
 
-trait FitnessFunction extends Describable {
+trait FitnessFunction[T] extends Describable {
 
   def id: String
 
-  def fitness(result: TeamResult): Double
+  def fitness(result: T): Double
 
 }

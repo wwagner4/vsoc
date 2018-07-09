@@ -12,7 +12,7 @@ start "work017b" /LOW java -Xmx8g ^
 ------ bob training -----
 nohup nice -6 java -Xmx6g \
  -cp $HOME/prj/vsoc/vsoc-ga-2018/trainga/target/scala-2.12/trainga-assembly-0.0.1-SNAPSHOT.jar \
- vsoc.ga.trainga.ga.TrainGaMain bob017b &
+ vsoc.ga.trainga.ga.TrainGaMain bobB01 &
 
 ------ bob server -----
 nohup java -Xmx512k -Xmx512m \

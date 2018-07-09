@@ -5,6 +5,8 @@ import java.nio.charset.Charset
 import java.nio.file.{Files, OpenOption, Path, StandardOpenOption}
 import java.util.Locale
 
+import vsoc.ga.common.UtilReflection
+
 class CsvWriter(filePath: Path) {
   require(filePath.isAbsolute, s"$filePath must be absolute")
   if (Files.notExists(filePath.getParent)) Files.createDirectories(filePath.getParent)
@@ -13,18 +15,18 @@ class CsvWriter(filePath: Path) {
 
   private val sepa = ";"
 
-  private def fmt(value: Any) = value match {
+  private def fmt(value: Any):String = value match {
     case v: Double => "%5.3f" formatLocal (Locale.ENGLISH, v)
     case v: Any => v.toString
   }
 
-  private def writeHeader(br: BufferedWriter, line: Seq[(String, Any)]): Unit = {
-    val l: String = (for ((k, _) <- line) yield k).mkString(sepa)
+  private def writeHeader(br: BufferedWriter, line: AnyRef): Unit = {
+    val l: String = UtilReflection.allPropNames(line).mkString(sepa)
     br.write(f"$l\n")
   }
 
-  private def writeData(br: BufferedWriter, line: Seq[(String, Any)]): Unit = {
-    val l: String = (for ((_, v) <- line) yield fmt(v)).mkString(sepa)
+  private def writeData(br: BufferedWriter, line: AnyRef): Unit = {
+    val l: String = UtilReflection.allPropValues(line).map(fmt).mkString(sepa)
     br.write(f"$l\n")
   }
 
@@ -37,7 +39,7 @@ class CsvWriter(filePath: Path) {
     }
   }
 
-  def writeLine(line: Seq[(String, Any)]): Unit = {
+  def writeLine(line: AnyRef): Unit = {
     if (Files.notExists(filePath))
       write(StandardOpenOption.CREATE_NEW) { br =>
         writeHeader(br, line)

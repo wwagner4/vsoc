@@ -8,6 +8,7 @@ import entelijan.viz.{Viz, VizCreator, VizCreators}
 import org.slf4j.LoggerFactory
 import vsoc.ga.analyse.smooth.Smoothing
 import vsoc.ga.common.config.{Config, ConfigHelper, ConfigTrainGa}
+import vsoc.ga.common.data.Data01
 
 import scala.collection.JavaConverters._
 

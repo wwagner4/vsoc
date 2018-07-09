@@ -6,7 +6,7 @@ import vsoc.ga.matches.Team
 /**
   * Trainer for Teams
   *
-  * @tparam S type of score
+  * @tparam S type of populationScore
   */
 trait TrainGa[S] extends Describable {
 
