@@ -175,11 +175,17 @@ object PhenoTesterTeamUtil {
   }
 
   def pairs(size: Int, testFactor: Int): Seq[(Int, Int)] = {
+
+    def contaisEqual(pairs: Seq[(Int, Int)]):Boolean = {
+      !pairs.forall(t => t._1 != t._2)
+    }
+
     require(testFactor >= 1)
-    val indexes = (0 until size).toList
-    def ran: Seq[Int] = Random.shuffle(indexes)
-    val pairs = Seq.fill(testFactor + 1)(0 until size).flatMap(s => s.zip(ran))
-    pairs.filter{case (a, b) => a != b}.take(size * testFactor)
+    val base = Seq.fill(testFactor)(0 until size).flatten
+    def ran: Seq[Int] = Random.shuffle(base)
+    val re = base.zip(ran)
+    if (contaisEqual(re)) pairs(size, testFactor)
+    else re
   }
 
 }
