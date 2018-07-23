@@ -6,7 +6,7 @@ object FitnessFunctions {
 
   def data02A: FitnessFunction[Data02] = new FitnessFunction[Data02] {
 
-    override def id: String = "fitnessKicks01"
+    override def id: String = "data02A"
 
     override def fitness(data: Data02): Double = {
       math.min(100, data.kicksMax)
@@ -20,7 +20,7 @@ object FitnessFunctions {
       +data.goalDifference * 100
     }
 
-    override def fullDesc: String = s"'$id' - Consider only kicks"
+    override def fullDesc: String = s"'$id' - Summary Fitnessfunction with max values"
   }
 
 }
