@@ -44,12 +44,26 @@ class PhenoTesterTeam(
     }
   }
 
+  def str(result: TeamResult): String =
+    s"kicks:${result.kickCount} kickOut:${result.kickOutCount}"
+
   def playMatch(t1: TeamGa, t2: TeamGa): (Data02, Data02) = {
     val m = Matches.of(t1.vsocTeam, t2.vsocTeam)
     for (_ <- 1 to matchSteps) m.takeStep()
     val matchResult: MatchResult = m.state
-    val d1 = PhenoTesterTeamUtil.resultToData(matchResult.teamEastResult, matchResult.teamWestResult)
-    val d2 = PhenoTesterTeamUtil.resultToData(matchResult.teamWestResult, matchResult.teamEastResult)
+    val eastResult = matchResult.teamEastResult
+    val westResult = matchResult.teamWestResult
+
+    println("--- east :" + str(eastResult))
+    println("--- west :" + str(westResult))
+
+    val d1 = PhenoTesterTeamUtil.resultToData(eastResult, westResult)
+    val d2 = PhenoTesterTeamUtil.resultToData(westResult, eastResult)
+
+    println("--- d1 :" + d1)
+    println("--- d2 :" + d2)
+
+
     val s1: Double = fitness.fitness(d1)
     val s2: Double = fitness.fitness(d2)
     log.info("finished match %.2f %.2f" format(s1, s2))

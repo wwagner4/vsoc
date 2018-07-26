@@ -59,9 +59,7 @@ class PhenoTesterTeamUtilSuite extends FunSuite with MustMatchers {
     data.otherGoalsMin mustBe 0
 
     data.score mustBe 0.0
-
   }
-
 
   case class PT(
                  kicks: Int = 0,
