@@ -13,8 +13,7 @@ import atan.model.*;
 /**
  * A player.
  */
-
-public abstract class VsocPlayer extends MoveObject implements Player {
+public abstract class VsocPlayer extends MoveObject implements Player, IVsocPlayer {
 
     private static final long serialVersionUID = 1L;
 

@@ -1,6 +1,6 @@
 package vsoc.ga.matches
 
-import vsoc.server.VsocPlayer
+import vsoc.server.IVsocPlayer
 
 object MatchResults {
 
@@ -82,7 +82,7 @@ object MatchResults {
 
   }
 
-  def of(steps: Int, east: Seq[VsocPlayer], west: Seq[VsocPlayer]): MatchResult = {
+  def of(steps: Int, east: Seq[IVsocPlayer], west: Seq[IVsocPlayer]): MatchResult = {
 
     case class TeamResultImpl(
                                ownGoalCount: Int = 0,
@@ -101,7 +101,7 @@ object MatchResults {
                               ) extends PlayerResult
 
 
-    def teamResult(players: Seq[VsocPlayer]): TeamResult = {
+    def teamResult(players: Seq[IVsocPlayer]): TeamResult = {
       val ps: Seq[PlayerResult] = players.map { p =>
         PayerResultImpl(
           p.getNumber,
