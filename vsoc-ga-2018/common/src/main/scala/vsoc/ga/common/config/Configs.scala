@@ -2,35 +2,24 @@ package vsoc.ga.common.config
 
 object Configs {
 
-  def wallB01: Config = new Config {
+  def wallB01: Config = b01("wall")
 
-    override def id: String = "wallB01"
+  def bobB01: Config = b01("bob")
+
+  def workB01: Config = b01("work")
+
+  def b01(env: String): Config = new Config {
+
+    override def id: String = env + "B01"
 
     override def trainings: Seq[ConfigTrainGa] = Seq(
-      ConfigTrainGa("trainGaB", "wall001"),
-      ConfigTrainGa("trainGaB", "wall002"),
-      ConfigTrainGa("trainGaB", "wall003"),
+      ConfigTrainGa("trainGaB", env + "001"),
+      ConfigTrainGa("trainGaB", env + "002"),
+      ConfigTrainGa("trainGaB", env + "003"),
     )
 
     override def fullDesc: String =
-      """B01 initial test
-        |""".stripMargin
+      """B01 initial test"""
   }
-
-  def bobB01: Config = new Config {
-
-    override def id: String = "bobB01"
-
-    override def trainings: Seq[ConfigTrainGa] = Seq(
-      ConfigTrainGa("trainGaB", "bob001"),
-      ConfigTrainGa("trainGaB", "bob002"),
-      ConfigTrainGa("trainGaB", "bob003"),
-    )
-
-    override def fullDesc: String =
-      """B01 initial test
-        |""".stripMargin
-  }
-
 
 }
