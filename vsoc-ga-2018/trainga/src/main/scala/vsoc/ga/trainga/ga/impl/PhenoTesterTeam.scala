@@ -54,14 +54,14 @@ class PhenoTesterTeam(
     val eastResult = matchResult.teamEastResult
     val westResult = matchResult.teamWestResult
 
-    println("--- east :" + str(eastResult))
-    println("--- west :" + str(westResult))
+    //println("--- east :" + str(eastResult))
+    //println("--- west :" + str(westResult))
 
     val d1 = PhenoTesterTeamUtil.resultToData(eastResult, westResult)
     val d2 = PhenoTesterTeamUtil.resultToData(westResult, eastResult)
 
-    println("--- d1 :" + d1)
-    println("--- d2 :" + d2)
+    //println("--- d1 :" + d1)
+    //println("--- d2 :" + d2)
 
 
     val s1: Double = fitness.fitness(d1)
