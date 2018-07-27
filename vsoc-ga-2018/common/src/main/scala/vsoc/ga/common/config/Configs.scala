@@ -22,4 +22,20 @@ object Configs {
       """B01 initial test"""
   }
 
+
+  def workTrainGa05fitFac03b: Config = new Config {
+    override def id: String = "workTrainGa05fitFac03b"
+
+    override def trainings: Seq[ConfigTrainGa] = Seq(
+      ConfigTrainGa("trainGa05fitFac03b", "w001"),
+      ConfigTrainGa("trainGa05fitFac03b", "w002"),
+      ConfigTrainGa("trainGa05fitFac03b", "w003"),
+      ConfigTrainGa("trainGa05fitFac03b", "w004"),
+      ConfigTrainGa("trainGa05fitFac03b", "w005"),
+      ConfigTrainGa("trainGa05fitFac03b", "w006"),
+    )
+
+    override def fullDesc: String = "Initial fitness function"
+  }
+
 }

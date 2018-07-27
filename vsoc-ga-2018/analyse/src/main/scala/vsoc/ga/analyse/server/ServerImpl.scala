@@ -7,7 +7,7 @@ import java.time.{Instant, LocalDateTime, ZoneId}
 import java.util.concurrent.{Executors, TimeUnit}
 
 import org.slf4j.LoggerFactory
-import vsoc.ga.analyse.{Data01Dia, DiaConf_SUPRESS_TIMESTAMP}
+import vsoc.ga.analyse.{Data02Dia, DiaConf_SUPRESS_TIMESTAMP}
 import vsoc.ga.common.config.Config
 
 object ServerImpl {
@@ -79,7 +79,7 @@ object ServerImpl {
       cfgs.foreach{c =>
         log.info(s"creating data for configuration '${c.id}'")
         clearDir(httpPath)
-        Data01Dia.createDiaConfig(c, diaConfs = Seq(DiaConf_SUPRESS_TIMESTAMP), diaDir = Some(httpPath))
+        new Data02Dia().createDiaConfig(c, diaConfs = Seq(DiaConf_SUPRESS_TIMESTAMP), diaDir = Some(httpPath))
       }
       createIndexHtml(httpPath)
     }

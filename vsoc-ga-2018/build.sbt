@@ -8,7 +8,6 @@ lazy val commonSettings = Seq(
   version := "0.0.1-SNAPSHOT",
   fork := true,
   // If your maven repository is located at another file location define this in $HOME/.sbt/<version>/local.sbt
-  resolvers += "Local Maven Repository" at s"file://$userHome/.m2/repository",
   libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.2" % "test",
   libraryDependencies += "org.slf4j" % "slf4j-log4j12" % "1.7.25",
   // Checkout https://github.com/wwagner4/viz.git

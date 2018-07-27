@@ -3,8 +3,8 @@ package vsoc.ga.common.data
 case class Data01(
                    trainGaId: String,
                    trainGaNr: String,
-                   iterations: Int,
-                   score: Double,
+                   iterations: Int = 0,
+                   score: Double = 0.0,
                  )
 
 case class Data02(

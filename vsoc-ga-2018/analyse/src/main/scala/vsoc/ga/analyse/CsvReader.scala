@@ -6,7 +6,7 @@ import java.util.Locale
 
 import scala.collection.JavaConverters._
 
-abstract class AbstractCsvReader[D] {
+abstract class CsvReader[D] {
   def toInt(str: String): Int = str.toInt
 
   def toDouble(str: String): Double = {
