@@ -4,7 +4,7 @@ import java.nio.file.attribute.BasicFileAttributeView
 import java.nio.file.{Files, Path}
 import java.time.format.DateTimeFormatter
 import java.time.{Instant, LocalDateTime, ZoneId}
-import java.util.concurrent.{Executors, TimeUnit}
+import java.util.concurrent.Executors
 
 import org.slf4j.LoggerFactory
 import vsoc.ga.analyse.{Data02Dia, DiaConf_SUPRESS_TIMESTAMP}
@@ -69,10 +69,14 @@ object ServerImpl {
     Files.list(base).iterator().asScala.foreach{p => Files.delete(p)}
   }
 
-  def start(httpPath: Path, cfgs: Seq[Config]): Unit = {
+  def start(httpPath: Path, cfgs: Seq[Config], period: Period): Unit = {
+    val cfgStr = cfgs.map(_.id).mkString(",")
+    log.info(s"Started Server: path:   $httpPath")
+    log.info(s"                cfg:    $cfgStr")
+    log.info(s"                period: $period")
     val cfgsStr = cfgs.map(_.id).mkString(", ")
     val exe = Executors.newScheduledThreadPool(10)
-    exe.scheduleAtFixedRate(() => run(), 0, 60, TimeUnit.MINUTES)
+    exe.scheduleAtFixedRate(() => run(), 0, period.period, period.unit)
     log.info(s"started server for configurations '$cfgsStr'")
 
     def run(): Unit = {
