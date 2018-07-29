@@ -34,6 +34,20 @@ abstract class DataDia[T](csvReader: CsvReader[T]) {
     Viz.createDiagram(dia)
   }
 
+  def createDiaTrainGa(
+                        trainGa: String,
+                        xRange: Option[Viz.Range] = None,
+                        yRange: Option[Viz.Range] = None,
+                        diaConfs: Seq[DiaConf] = Seq.empty[DiaConf],
+                        diaDir: Option[Path] = None,
+                        dataPoints: Option[Int] = None,
+                      ): Unit = {
+    val dir = _workDir.resolve(trainGa)
+    val configs: Seq[ConfigTrainGa] = extractConfigs(dir)
+    val diaId = configs(0).id
+    createDia(configs, diaId, dataPoints=Some(50), diaConfs=diaConfs, xRange=xRange, yRange=yRange, title=Some(diaId))
+  }
+
   def createDiaWorkDir(
                         id: String,
                         columns: Int = 4,
