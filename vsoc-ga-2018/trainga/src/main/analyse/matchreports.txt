@@ -1,0 +1,15 @@
+trainGaB
+- work003
+- 1288 Generations
+- ca. 500  Fitness
+- Report
+-- One player (per team) kicking the ball
+-- Seems as if there is no punshing of own goals
+--- Eventual Reason: Reard for score
+--- Eventual Reason: Error in fitness function
+- Conclusion
+-- Using score is eventually a bad idea.
+--- Reason: You get reward if the other team is bad.
+-- Use mean values to get the other playsers involfed
+-- Increase number of matches per population
+--- Reason: Get more accurate fitness values
