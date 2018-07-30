@@ -1,6 +1,6 @@
 trainGaB
 - work003
-- 1288 Generations
+- 1288 generations
 - ca. 500  Fitness
 - Report
 -- One player (per team) kicking the ball
@@ -13,3 +13,13 @@ trainGaB
 -- Use mean values to get the other playsers involfed
 -- Increase number of matches per population
 --- Reason: Get more accurate fitness values
+
+trainGa05fitFac03b
+- work002, and the others
+- 3000 Generations
+- ca 1200000 fitness
+- Report
+-- Only one Player per team is really playing.
+--- Tis player moves fast and finds the ball immediately
+-- Other Players kick the ball sometimes.
+-- Own goals seem not to matter
