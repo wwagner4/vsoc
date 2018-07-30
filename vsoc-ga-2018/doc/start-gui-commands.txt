@@ -1,5 +1,3 @@
 # Wallace
-java -cp /Users/wwagner4/prj/vsoc-a/vsoc-ga-2018/trainga/target/scala-2.12/trainga-assembly-A.jar  \
-vsoc.ga.trainga.gui.GuiPopulationMain
+java -cp   vsoc.ga.trainga.gui.GuiPopulationMain
 
-/Users/wwagner4/prj/vsoc-a/vsoc-ga-2018/trainga/target/scala-2.12/trainga-assembly-A.jar
