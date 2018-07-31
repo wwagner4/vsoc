@@ -1,0 +1,32 @@
+TrainGA configurations to be tested
+
+trainGa02
+trainGa04M0om02varL
+trainGa05fitFac03
+trainGa05fitFac03a
+trainGa05fitFac03b
+
+
+Core Data
+
+trainGa02
+w001	w002	w003	w004
+1400 25
+
+trainGa04M0om02varL
+bob001	bob002	bob003	bob004	w001	w002	w003	w004	w005	w006	w007	w008
+1800 16000
+
+trainGa05fitFac03
+b001	b002	b003	b004
+600 350000
+
+trainGa05fitFac03a
+b001	b002	b003	b004
+450 160000
+
+trainGa05fitFac03b
+b001	b002	b003	b004	b005	b006
+2500 600000
+
+

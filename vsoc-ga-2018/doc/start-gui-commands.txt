@@ -1,3 +1,0 @@
-# Wallace
-java -cp   vsoc.ga.trainga.gui.GuiPopulationMain
-
