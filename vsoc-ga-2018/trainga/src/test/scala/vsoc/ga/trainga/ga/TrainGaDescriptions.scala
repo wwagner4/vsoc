@@ -3,7 +3,7 @@ package vsoc.ga.trainga.ga
 object TrainGaDescriptions extends App {
 
   val descs = Seq(
-    TrainGas.trainGaB,
+    TrainGas.trainGaB01,
   )
 
   for((d, i) <- descs.zipWithIndex) {

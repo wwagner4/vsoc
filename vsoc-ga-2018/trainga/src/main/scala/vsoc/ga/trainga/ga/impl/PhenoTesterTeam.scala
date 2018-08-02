@@ -166,7 +166,7 @@ object PhenoTesterTeamUtil {
     val otherGoals = ownResult.playerResults.map(_.otherGoalCount)
     val ownGoals = ownResult.playerResults.map(_.ownGoalCount)
 
-    def mean(d: Seq[Int]) = if (d.isEmpty) 0 else d.sum / d.size
+    def mean(d: Seq[Int]): Double = if (d.isEmpty) 0 else d.sum.toDouble / d.size
 
 
     Data02(
@@ -183,8 +183,8 @@ object PhenoTesterTeamUtil {
       ownGoalsMean = mean(ownGoals),
       ownGoalsMin = ownGoals.min,
       goalDifference =
-        ownResult.ownGoalCount + otherResult.ownGoalCount
-          - (otherResult.ownGoalCount + ownResult.otherGoalCount)
+        ownResult.otherGoalCount + otherResult.ownGoalCount
+          - (otherResult.otherGoalCount + ownResult.ownGoalCount)
     )
   }
 

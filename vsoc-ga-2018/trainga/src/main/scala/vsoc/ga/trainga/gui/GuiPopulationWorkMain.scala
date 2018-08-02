@@ -4,6 +4,6 @@ import vsoc.ga.trainga.ga.TrainGas
 
 object GuiPopulationWorkMain extends App {
 
-  GuiPopulationRunner.run(TrainGas.trainGaB, "work002", None)
+  GuiPopulationRunner.run(TrainGas.trainGaB01, "work003", None)
 
 }

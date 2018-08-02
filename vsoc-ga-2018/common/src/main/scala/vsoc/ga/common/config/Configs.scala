@@ -13,13 +13,14 @@ object Configs {
     override def id: String = env + "B01"
 
     override def trainings: Seq[ConfigTrainGa] = Seq(
-      ConfigTrainGa("trainGaB", env + "001"),
-      ConfigTrainGa("trainGaB", env + "002"),
-      ConfigTrainGa("trainGaB", env + "003"),
+      ConfigTrainGa("trainGaB01", env + "001"),
+      ConfigTrainGa("trainGaB01", env + "002"),
+      ConfigTrainGa("trainGaB01", env + "003"),
+      ConfigTrainGa("trainGaB01", env + "004"),
     )
 
     override def fullDesc: String =
-      """B01 initial test"""
+      """B01 initial test after score fix"""
   }
 
 

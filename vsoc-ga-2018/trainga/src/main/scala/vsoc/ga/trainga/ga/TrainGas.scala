@@ -8,11 +8,11 @@ import vsoc.ga.trainga.nn.{NeuralNet, NeuralNets}
 object TrainGas {
 
 
-  def trainGaB: TrainGa[Data02] = new TrainGaAbstract {
+  def trainGaB01: TrainGa[Data02] = new TrainGaAbstract {
 
-    override def id: String = "trainGaB"
+    override def id: String = "trainGaB01"
 
-    override protected def fitness: FitnessFunction[Data02] = FitnessFunctions.data02A
+    override protected def fitness: FitnessFunction[Data02] = FitnessFunctions.data02A01
 
     override def fullDescHeading: String = "B initial test"
 
