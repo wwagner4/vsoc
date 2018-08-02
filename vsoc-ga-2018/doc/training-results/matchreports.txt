@@ -1,4 +1,15 @@
-trainGaB
+
+trainGaB 2.8.2018
+- work003
+- 2500 generations
+- ca. 800  Fitness
+- Report
+-- Only one player per team is playing
+-- Looks like own goals score positive
+- Conclusion
+-- There seem to be major issues
+
+trainGaB 28.7.2018
 - work003
 - 1288 generations
 - ca. 500  Fitness
@@ -14,6 +25,9 @@ trainGaB
 -- Increase number of matches per population
 --- Reason: Get more accurate fitness values
 
+
+
+...............................................................................................
 trainGa05fitFac03b
 - work002, and the others
 - 3000 Generations
