@@ -10,6 +10,8 @@ class Data02Csv extends DataCsv[Data02](new CsvReaderData02) {
 
   override def formatter: Formatter[Data02] = FormatterAll
 
+  //override def sepa: String = ""
+
   override def createPrintWriter(cfg: Config): PrintWriter = {
     val outDir = _workDir.resolve("csv")
     if (!Files.exists(outDir)) Files.createDirectories(outDir)
@@ -22,7 +24,7 @@ class Data02Csv extends DataCsv[Data02](new CsvReaderData02) {
   case object FormatterScoreOnly extends Formatter[Data02] {
 
     def header: PrintWriter => Unit = (pw: PrintWriter) => {
-      pw.println(fmtHeader(Seq("id", "nr", "score")))
+      pw.println(defaultHeaders(Seq("id", "nr", "score")))
     }
 
     def data: (Data02, PrintWriter) => Unit = (line: Data02, pw: PrintWriter) => {
@@ -37,7 +39,7 @@ class Data02Csv extends DataCsv[Data02](new CsvReaderData02) {
   case object FormatterKicks extends Formatter[Data02] {
 
     def header: PrintWriter => Unit = (pw: PrintWriter) => {
-      pw.println(fmtHeader(Seq("id", "nr", "kicksMax", "kicksMean", "kicksMin", "score")))
+      pw.println(defaultHeaders(Seq("id", "nr", "kicksMax", "kicksMean", "kicksMin", "score")))
     }
 
     def data: (Data02, PrintWriter) => Unit = (line: Data02, pw: PrintWriter) => {
@@ -55,7 +57,7 @@ class Data02Csv extends DataCsv[Data02](new CsvReaderData02) {
   case object FormatterAll extends Formatter[Data02] {
 
     override def header: PrintWriter => Unit = (pw: PrintWriter) => {
-      pw.println(fmtHeader(Seq("id", "nr", "iterations",
+      pw.println(defaultHeaders(Seq("id", "nr", "iterations",
         "kicksMax", "kicksMean", "kicksMin", "kickOutMax", "kickOutMean", "kickOutMin",
         "otherGoalsMax", "otherGoalsMean", "otherGoalsMin", "ownGoalsMax", "ownGoalsMean", "ownGoalsMin",
         "goalDifference", "score")))

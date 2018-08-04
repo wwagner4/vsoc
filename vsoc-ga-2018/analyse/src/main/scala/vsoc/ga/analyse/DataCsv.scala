@@ -1,23 +1,25 @@
 package vsoc.ga.analyse
 
 import java.io.PrintWriter
-import java.nio.file.Paths
+import java.nio.file.{Files, Path, Paths}
 
 import vsoc.ga.common.config.{Config, ConfigHelper, ConfigTrainGa}
 
 abstract class DataCsv[T](csvReader: CsvReader[T]) {
 
-  val sepa = "\t"
+  protected def sepa = "\t"
+
+  protected def colWidth = 13
 
   def fmtStr(fmtDef: Seq[Fmt]): String = {
     fmtDef.map(_.toString).mkString(sepa)
   }
 
-  def fmtHeader(headers: Seq[String]): String = {
+  def defaultHeaders(headers: Seq[String]): String = {
     headers.map(_.toString).mkString(sepa)
   }
 
-  trait Formatter[T] {
+  trait Formatter[U] {
 
     def header: (PrintWriter) => Unit
 
@@ -26,17 +28,17 @@ abstract class DataCsv[T](csvReader: CsvReader[T]) {
 
   trait Fmt
   case object F extends Fmt {
-    override def toString: String = "%10.2f"
+    override def toString: String = s"%$colWidth.2f"
   }
   case object S extends Fmt {
-    override def toString: String = "%10s"
+    override def toString: String = s"%${colWidth}s"
   }
 
   case object D extends Fmt {
-    override def toString: String = "%10d"
+    override def toString: String = s"%${colWidth}d"
   }
 
-  protected val _workDir = ConfigHelper.workDir
+  protected val _workDir: Path = ConfigHelper.workDir
 
   def createCsvConfig(
                        cfg: Config,
@@ -61,11 +63,10 @@ abstract class DataCsv[T](csvReader: CsvReader[T]) {
     for (ConfigTrainGa(id, nr) <- trainGas) {
       println(s"writing $id $nr")
       def prjDir = _workDir.resolve(Paths.get(id, nr))
-
       def filePath = _workDir.resolve(prjDir.resolve(Paths.get(s"$id-$nr-data.csv")))
-
+      println(s"reading $filePath")
+      require(Files.exists(filePath))
       val raw: Seq[T] = csvReader.read(filePath)
-
       val n = raw.size
       println(s"found $n lines")
       raw.foreach(l => formatter.data(l, printWriter))
