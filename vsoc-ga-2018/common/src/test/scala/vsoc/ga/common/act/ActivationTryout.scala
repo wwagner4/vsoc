@@ -18,7 +18,7 @@ object ActivationTryout extends App {
 
   val ks = Seq(0.1, 0.2, 0.5, 0.8, 1.0)
   val yr = Some(Viz.Range(Some(-1.5), Some(1.5)))
-  val xs = -60.0 to(60.0, 1.0)
+  val xs = -60 to 60 by 1
 
   val sigDrs = ks.map { k =>
     val data = xs.map(x => Viz.XY(x, Activation.sigmoid(k)(x)))

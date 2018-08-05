@@ -10,8 +10,6 @@ class Data02Csv extends DataCsv[Data02](new CsvReaderData02) {
 
   override def formatter: Formatter[Data02] = FormatterAll
 
-  //override def sepa: String = ""
-
   override def createPrintWriter(cfg: Config): PrintWriter = {
     val outDir = _workDir.resolve("csv")
     if (!Files.exists(outDir)) Files.createDirectories(outDir)

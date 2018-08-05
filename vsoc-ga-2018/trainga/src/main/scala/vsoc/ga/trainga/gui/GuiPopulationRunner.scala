@@ -76,8 +76,8 @@ object GuiPopulationRunner {
       }
     }
     val idx = Random.shuffle(teams.indices.toList)
-    val t1 = teams(idx(0))
-    val t2 = teams(idx(1))
+    val t1: Team = teams(idx(0))
+    val t2: Team = teams(idx(1))
     Matches.of(t1, t2)
   }
 

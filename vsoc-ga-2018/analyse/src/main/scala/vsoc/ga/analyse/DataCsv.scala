@@ -21,7 +21,7 @@ abstract class DataCsv[T](csvReader: CsvReader[T]) {
 
   trait Formatter[U] {
 
-    def header: (PrintWriter) => Unit
+    def header: PrintWriter => Unit
 
     def data: (T, PrintWriter) => Unit
   }

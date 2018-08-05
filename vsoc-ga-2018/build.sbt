@@ -35,7 +35,7 @@ lazy val matches = (project in file("matches"))
 lazy val common = (project in file("common"))
   .settings(
     name := "common",
-    libraryDependencies += "org.scala-lang" % "scala-reflect" % "2.12.4",
+    libraryDependencies += "org.scala-lang" % "scala-reflect" % "2.12.6",
     commonSettings,
   )
 
