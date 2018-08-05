@@ -1,10 +1,10 @@
-import sbt.Keys.libraryDependencies
+
 
 lazy val userHome = System.getProperty("user.home")
 
 lazy val commonSettings = Seq(
   organization := "net.entelijan",
-  scalaVersion := "2.12.4",
+  scalaVersion := "2.12.6",
   version := "0.0.1-SNAPSHOT",
   fork := true,
   // If your maven repository is located at another file location define this in $HOME/.sbt/<version>/local.sbt
