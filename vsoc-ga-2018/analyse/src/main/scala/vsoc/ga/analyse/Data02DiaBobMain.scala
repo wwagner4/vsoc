@@ -5,7 +5,7 @@ import vsoc.ga.common.config.Configs
 object Data02DiaBobMain extends App {
 
   new Data02Dia().createDiaConfig(
-    cfg = Configs.workB01,
+    cfg = Configs.bobB01,
     diaConfs = Seq(DiaConf_SUPRESS_TIMESTAMP),
   )
 
