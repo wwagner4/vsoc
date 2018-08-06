@@ -7,7 +7,7 @@ import java.time.format.DateTimeFormatter
 import entelijan.viz.{Viz, VizCreator, VizCreators}
 import org.slf4j.LoggerFactory
 import vsoc.ga.analyse.smooth.Smoothing
-import vsoc.ga.common.config.{Config, ConfigHelper, ConfigTrainGa}
+import vsoc.ga.common.config.{ConfigHelper, ConfigTrainGa}
 
 import scala.collection.JavaConverters._
 
@@ -20,19 +20,6 @@ abstract class DataDia[T](csvReader: CsvReader[T]) {
   private val _workDir = ConfigHelper.workDir
 
   private val log = LoggerFactory.getLogger(classOf[DataDia[_]])
-
-  def createDiaConfig(
-                       cfg: Config,
-                       xRange: Option[Viz.Range] = None,
-                       yRange: Option[Viz.Range] = None,
-                       diaConfs: Seq[DiaConf] = Seq.empty[DiaConf],
-                       diaDir: Option[Path] = None,
-                       dataPoints: Int = 50,
-                     ): Unit = {
-    implicit val creator: VizCreator[Viz.XY] = createCreator(diaDir)
-    val dia: Viz.Dia[Viz.XY] = createDia(cfg.trainings, cfg.id, dataPoints, diaConfs, xRange, yRange, None)
-    Viz.createDiagram(dia)
-  }
 
   def createDiaTrainGa(
                         trainGa: String,
@@ -48,69 +35,8 @@ abstract class DataDia[T](csvReader: CsvReader[T]) {
     createDia(configs, diaId, dataPoints=5, diaConfs=diaConfs, xRange=xRange, yRange=yRange, title=Some(diaId))
   }
 
-  def createDiaWorkDir(
-                        id: String,
-                        columns: Int = 4,
-                        xRange: Option[Viz.Range] = None,
-                        yRange: Option[Viz.Range] = None,
-                        diaConfs: Seq[DiaConf] = Seq.empty[DiaConf],
-                        diaDir: Option[Path] = None,
-                        dataPoints: Int = 50,
-                        excludes: Seq[String] = Seq.empty[String],
-                        includes: Option[Seq[String]] = None
-                      ): Unit = {
-
-    val _imgWidth = 3000
-    val _imgHeight = 1500
-
-    def resultDirsDia: Seq[Path] = {
-      resultDirs.filter { file =>
-        def excluded: Boolean = {
-          val dirName = file.getFileName.toString
-          excludes.contains(dirName)
-        }
-
-        def included: Boolean = {
-          val dirName = file.getFileName.toString
-          includes.forall(is => is.contains(dirName))
-        }
-
-        included && !excluded
-      }
-    }
-
-
-    def extractTrainings: Seq[Seq[ConfigTrainGa]] = {
-      resultDirsDia
-        .map(file => extractConfigs(file))
-        .filter(s => s.nonEmpty)
-        .sortBy(f => f(0).id)
-    }
-
-    implicit val creator: VizCreator[Viz.XY] = createCreator(diaDir)
-
-    val trainings: Seq[Seq[ConfigTrainGa]] = extractTrainings
-
-    val dias: Seq[Viz.Diagram[Viz.XY]] = trainings.zipWithIndex.map {
-      case (tr, i) =>
-        require(tr.nonEmpty)
-        val tit = Some(s"Training Config ${tr(0).id}")
-        createDia(tr, s"dia$i", dataPoints, diaConfs, xRange, yRange, tit)
-    }
-
-    val dia = Viz.MultiDiagram[Viz.XY](
-      id = s"all_$id",
-      columns = columns,
-      diagrams = dias,
-      imgWidth = _imgWidth,
-      imgHeight = _imgHeight
-    )
-
-    Viz.createDiagram(dia)
-  }
-
   private def extractConfigs(trainGaDir: Path): Seq[ConfigTrainGa] = {
-    require(Files.isDirectory(trainGaDir))
+    require(Files.isDirectory(trainGaDir), s"$trainGaDir is not a directory")
     val cfgs = Files.list(trainGaDir).iterator().asScala.toSeq.map { nrDir =>
       if (Files.isDirectory(nrDir) && !nrDir.getFileName.toString.startsWith(".")) {
         val cfgName = trainGaDir.getFileName.toString
