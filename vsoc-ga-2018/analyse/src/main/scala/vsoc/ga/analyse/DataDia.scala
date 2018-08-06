@@ -27,7 +27,7 @@ abstract class DataDia[T](csvReader: CsvReader[T]) {
                        yRange: Option[Viz.Range] = None,
                        diaConfs: Seq[DiaConf] = Seq.empty[DiaConf],
                        diaDir: Option[Path] = None,
-                       dataPoints: Option[Int] = None,
+                       dataPoints: Int = 50,
                      ): Unit = {
     implicit val creator: VizCreator[Viz.XY] = createCreator(diaDir)
     val dia: Viz.Dia[Viz.XY] = createDia(cfg.trainings, cfg.id, dataPoints, diaConfs, xRange, yRange, None)
@@ -45,7 +45,7 @@ abstract class DataDia[T](csvReader: CsvReader[T]) {
     val dir = _workDir.resolve(trainGa)
     val configs: Seq[ConfigTrainGa] = extractConfigs(dir)
     val diaId = configs(0).id
-    createDia(configs, diaId, dataPoints=Some(50), diaConfs=diaConfs, xRange=xRange, yRange=yRange, title=Some(diaId))
+    createDia(configs, diaId, dataPoints=5, diaConfs=diaConfs, xRange=xRange, yRange=yRange, title=Some(diaId))
   }
 
   def createDiaWorkDir(
@@ -55,7 +55,7 @@ abstract class DataDia[T](csvReader: CsvReader[T]) {
                         yRange: Option[Viz.Range] = None,
                         diaConfs: Seq[DiaConf] = Seq.empty[DiaConf],
                         diaDir: Option[Path] = None,
-                        dataPoints: Option[Int] = None,
+                        dataPoints: Int = 50,
                         excludes: Seq[String] = Seq.empty[String],
                         includes: Option[Seq[String]] = None
                       ): Unit = {
@@ -145,7 +145,7 @@ abstract class DataDia[T](csvReader: CsvReader[T]) {
   private def createDia(
                          trainGas: Seq[ConfigTrainGa],
                          diaId: String,
-                         dataPoints: Option[Int],
+                         dataPoints: Int,
                          diaConfs: Seq[DiaConf],
                          xRange: Option[Viz.Range],
                          yRange: Option[Viz.Range],
@@ -158,9 +158,8 @@ abstract class DataDia[T](csvReader: CsvReader[T]) {
       val raw: Seq[T] = origin(id, nr) :: csvReader.read(filePath).toList
 
       val data = raw.map(b => Viz.XY(x(b), y(b)))
-      val _dataPoints = dataPoints.getOrElse(50)
-      require(_dataPoints > 2, "You must define at least 3 data points")
-      val grpSize = math.ceil(data.size.toDouble / _dataPoints).toInt
+      require(dataPoints > 2, "You must define at least 3 data points")
+      val grpSize = math.ceil(data.size.toDouble / dataPoints).toInt
       val dataGrouped = Smoothing.smooth(data, grpSize)
 
       if (data.isEmpty) None
