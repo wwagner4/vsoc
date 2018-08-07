@@ -14,12 +14,12 @@ class DataDia[T](csvReader: CsvReader[T]) {
 
   private val log = LoggerFactory.getLogger(classOf[DataDia[_]])
 
-  val _workDir = ConfigHelper.workDir
+  private val _workDir = ConfigHelper.workDir
 
   def createDiaTrainGa(trainGa: String, diaFactory: DiaFactory[T], diaDir: Option[Path] = None): Unit = {
-    implicit val crea = createCreator(diaDir)
+    implicit val crea: VizCreator[Viz.XY] = createCreator(diaDir)
     val data = csvReader.read(trainGa)
-    val dia = diaFactory.createDia(data)
+    val dia = diaFactory.createDia(trainGa, data)
     Viz.createDiagram(dia)
   }
 
