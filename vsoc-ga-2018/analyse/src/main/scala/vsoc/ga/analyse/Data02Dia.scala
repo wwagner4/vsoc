@@ -2,14 +2,7 @@ package vsoc.ga.analyse
 
 import vsoc.ga.common.data.Data02
 
-class Data02Dia extends DataDia[Data02](new CsvReaderData02) {
-
-  override def origin(id: String, nr: String): Data02 = Data02(id, nr)
-
-  override def x(data: Data02): Double = data.iterations
-
-  override def y(data: Data02): Double = data.score
-}
+class Data02Dia extends DataDia[Data02](new CsvReaderData02)
 
 class CsvReaderData02 extends CsvReader[Data02] {
   override def toBean(line: String): Data02 = {
