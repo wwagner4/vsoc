@@ -23,4 +23,22 @@ object TrainGas {
     override protected def outMapper: OutputMapperNn = OutputMappers.om02
   }
 
+  def trainGaB02: TrainGa[Data02] = new TrainGaAbstract {
+
+    override def id: String = "trainGaB02"
+
+    override protected def fitness: FitnessFunction[Data02] = FitnessFunctions.data02A02
+
+    override def fullDescHeading: String =
+      """B first impoement
+        |Tryout better Fitness function
+      """.stripMargin
+
+    override protected def createNeuralNet: () => NeuralNet = () => NeuralNets.team02
+
+    override protected def inMapper: InputMapperNn = new InputMapperNnTeam(1.0)
+
+    override protected def outMapper: OutputMapperNn = OutputMappers.om02
+  }
+
 }

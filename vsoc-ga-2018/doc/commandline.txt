@@ -5,21 +5,21 @@ sbt ";project trainga;runMain vsoc.ga.trainga.ga.TrainGaMain"
 java -cp /Users/wwagner4/prj/vsoc/vsoc-ga-2018/trainga/target/scala-2.12/trainga-assembly-0.0.1-SNAPSHOT.jar vsoc.ga.trainga.ga.TrainGaMain traiaKicks01 007
 
 ------ windows ------
-start "workB01" /LOW java -Xmx8g ^
+start "b02Work" /LOW java -Xmx8g ^
   -cp C:\ta30\entw1\vsoc\vsoc-ga-2018\trainga\target\scala-2.12\trainga-assembly-0.0.1-SNAPSHOT.jar ^
-  vsoc.ga.trainga.ga.TrainGaMain workB01
+  vsoc.ga.trainga.ga.TrainGaMain b02Work
 
 ------ bob training -----
 nohup nice -6 java -Xmx6g \
  -cp $HOME/prj/vsoc/vsoc-ga-2018/trainga/target/scala-2.12/trainga-assembly-0.0.1-SNAPSHOT.jar \
- vsoc.ga.trainga.ga.TrainGaMain bobB01 &
+ vsoc.ga.trainga.ga.TrainGaMain b02Work &
 
 ------ bob server -----
 nohup java -Xmx512k -Xmx512m \
  -cp ~/prj/vsoc/vsoc-ga-2018/analyse/target/scala-2.12/analyse-assembly-0.0.1-SNAPSHOT.jar \
  vsoc.ga.analyse.server.Server \
  /var/www/html \
- bobB01 \
+ b02Work \
  5 &
 
 ----- sync -----

@@ -4,6 +4,6 @@ import vsoc.ga.common.config.Configs
 
 object TrainGaMainWork extends App {
 
-  new ConfigRunner().run(Configs.workB01)
+  new ConfigRunner().run(Configs.b02Work)
 
 }

@@ -2,41 +2,52 @@ package vsoc.ga.common.config
 
 object Configs {
 
-  def wallB01: Config = b01("wall")
+  def b01Work: Config = new Config {
 
-  def bobB01: Config = b01("bob")
-
-  def workB01: Config = b01("work")
-
-  def b01(env: String): Config = new Config {
-
-    override def id: String = env + "B01"
+    override def id: String = "b01Work"
 
     override def trainings: Seq[ConfigTrainGa] = Seq(
-      ConfigTrainGa("trainGaB01", env + "001"),
-      ConfigTrainGa("trainGaB01", env + "002"),
-      ConfigTrainGa("trainGaB01", env + "003"),
-      ConfigTrainGa("trainGaB01", env + "004"),
+      ConfigTrainGa("trainGaB01", "work001"),
+      ConfigTrainGa("trainGaB01", "work002"),
+      ConfigTrainGa("trainGaB01", "work003"),
+      ConfigTrainGa("trainGaB01", "work004"),
     )
 
     override def fullDesc: String =
-      """B01 initial test after score fix"""
+      """Four populations using B01"""
   }
 
+  def b02Work: Config = new Config {
 
-  def workTrainGa05fitFac03b: Config = new Config {
-    override def id: String = "workTrainGa05fitFac03b"
+    override def id: String = "b02Work"
 
     override def trainings: Seq[ConfigTrainGa] = Seq(
-      ConfigTrainGa("trainGa05fitFac03b", "w001"),
-      ConfigTrainGa("trainGa05fitFac03b", "w002"),
-      ConfigTrainGa("trainGa05fitFac03b", "w003"),
-      ConfigTrainGa("trainGa05fitFac03b", "w004"),
-      ConfigTrainGa("trainGa05fitFac03b", "w005"),
-      ConfigTrainGa("trainGa05fitFac03b", "w006"),
+      ConfigTrainGa("trainGaB02", "work001"),
+      ConfigTrainGa("trainGaB02", "work002"),
+      ConfigTrainGa("trainGaB02", "work003"),
+      ConfigTrainGa("trainGaB02", "work004"),
+      ConfigTrainGa("trainGaB02", "work005"),
+      ConfigTrainGa("trainGaB02", "work006"),
     )
 
-    override def fullDesc: String = "Initial fitness function"
+    override def fullDesc: String =
+      """Six populations using B02"""
   }
+
+  def b02Bob: Config = new Config {
+
+    override def id: String = "b02Bob"
+
+    override def trainings: Seq[ConfigTrainGa] = Seq(
+      ConfigTrainGa("trainGaB02", "bob001"),
+      ConfigTrainGa("trainGaB02", "bob002"),
+      ConfigTrainGa("trainGaB02", "bob003"),
+      ConfigTrainGa("trainGaB02", "bob004"),
+    )
+
+    override def fullDesc: String =
+      """Four populations using B02"""
+  }
+
 
 }
