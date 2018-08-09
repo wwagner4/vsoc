@@ -75,7 +75,7 @@ object DiaFactories {
       override def createDia(name: String, data: Seq[Data02]): Viz.Dia[Viz.XY] = {
         require(data.nonEmpty, "Cannot handle empty dataset")
         val rows: Map[String, Seq[Data02]] = data.groupBy(d => d.trainGaNr)
-        val _dias = for (nr <- rows.keys) yield {
+        val _dias = for (nr <- rows.keys.toSeq.sorted) yield {
           diagram(nr, nr, rows(nr))
         }
         Viz.MultiDiagram[Viz.XY](
@@ -126,7 +126,7 @@ object DiaFactories {
       override def createDia(name: String, data: Seq[Data02]): Viz.Dia[Viz.XY] = {
         require(data.nonEmpty, "Cannot handle empty dataset")
         val rows: Map[String, Seq[Data02]] = data.groupBy(d => d.trainGaNr)
-        val _dias = for (nr <- rows.keys) yield {
+        val _dias = for (nr <- rows.keys.toSeq.sorted) yield {
           diagram(nr, nr, rows(nr))
         }
         Viz.MultiDiagram[Viz.XY](
