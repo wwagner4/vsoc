@@ -2,15 +2,21 @@ package vsoc.ga.analyse
 
 object Data02DiaMain extends App {
 
-  val factories = Seq(
+  val factoriesB01 = Seq(
     DiaFactories.scoreGroupedByPopulation,
-    DiaFactories.scoreComposition,
-    DiaFactories.kicks,
+    DiaFactories.scoreCompositionB01,
+    DiaFactories.kicksB01,
   )
 
-  for (f <- factories) {
+  val factoriesB02 = Seq(
+    DiaFactories.scoreGroupedByPopulation,
+    DiaFactories.scoreCompositionB02,
+    DiaFactories.kicksB02,
+  )
+
+  for (f <- factoriesB02) {
     new Data02Dia().createDiaTrainGa(
-      trainGa = "trainGaB01",
+      trainGa = "trainGaB02",
       diaFactory = f,
     )
   }
