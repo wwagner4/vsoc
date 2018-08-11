@@ -13,7 +13,7 @@ lazy val commonSettings = Seq(
 
   // If your maven repository is located at another file location define this in $HOME/.sbt/<version>/local.sbt
   libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.2" % "test",
-  libraryDependencies += "org.slf4j" % "slf4j-log4j12" % "1.7.25",
+  libraryDependencies += "org.slf4j" % "slf4j-log4j12" % "1.7.10",
   libraryDependencies += "net.entelijan" %% "viz" % "0.1",
 )
 
