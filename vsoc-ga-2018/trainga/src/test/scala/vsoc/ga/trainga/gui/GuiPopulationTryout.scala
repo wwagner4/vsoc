@@ -2,6 +2,6 @@ package vsoc.ga.trainga.gui
 
 object GuiPopulationTryout extends App {
 
-  GuiPopulationMain.main(Array("trainGaB01", "bob002"))
+  GuiPopulationMain.main(Array("trainGaB02", "bob003"))
 
 }

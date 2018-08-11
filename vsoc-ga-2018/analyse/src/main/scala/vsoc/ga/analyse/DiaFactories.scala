@@ -84,7 +84,59 @@ object DiaFactories {
           title = Some(s"$title $name"),
           imgWidth = 2000,
           imgHeight = 1500,
-          diagrams = _dias.toSeq
+          diagrams = _dias
+        )
+      }
+    }
+
+  }
+
+  def scoreCompositionB02: DiaFactory[Data02] = {
+    val grpSize = 50
+    val diaId = "scorecomp"
+    val title = "score composition"
+
+    new DiaFactory[Data02] {
+
+      def diagram(diaId: String, name: String, diaData: Seq[Data02]): Viz.Diagram[Viz.XY] = {
+        require(diaData.nonEmpty, "Cannot handle empty dataset")
+        val rows = Seq(
+          ("kicks x 10", Smoothing.smooth(diaData.map(d => Viz.XY(d.iterations, d.kicksMax * 10)), grpSize)),
+          ("kick out X 10", Smoothing.smooth(diaData.map(d => Viz.XY(d.iterations, d.kickOutMax * 10)), grpSize)),
+          ("goals x 1000", Smoothing.smooth(diaData.map(d => Viz.XY(d.iterations, d.otherGoalsMax * 1000)), grpSize)),
+          ("own goals x 1000", Smoothing.smooth(diaData.map(d => Viz.XY(d.iterations, d.ownGoalsMax * 1000)), grpSize)),
+          ("score", Smoothing.smooth(diaData.map(d => Viz.XY(d.iterations, d.score)), grpSize))
+        )
+
+        val vizDataRows =
+          for ((nam, dat) <- rows) yield {
+            Viz.DataRow(
+              name = Some(nam),
+              data = dat
+            )
+          }
+        Viz.Diagram(
+          id = diaId,
+          title = name,
+          //yRange = Some(Viz.Range(Some(0), Some(1600))),
+          dataRows = vizDataRows
+        )
+      }
+
+
+      override def createDia(name: String, data: Seq[Data02]): Viz.Dia[Viz.XY] = {
+        require(data.nonEmpty, "Cannot handle empty dataset")
+        val rows: Map[String, Seq[Data02]] = data.groupBy(d => d.trainGaNr)
+        val _dias = for (nr <- rows.keys.toSeq.sorted) yield {
+          diagram(nr, nr, rows(nr))
+        }
+        Viz.MultiDiagram[Viz.XY](
+          id = diaId + name,
+          columns = 2,
+          title = Some(s"$title $name"),
+          imgWidth = 2000,
+          imgHeight = 1500,
+          diagrams = _dias
         )
       }
     }
@@ -117,7 +169,7 @@ object DiaFactories {
         Viz.Diagram(
           id = diaId,
           title = name,
-          //yRange = Some(Viz.Range(Some(0), Some(1600))),
+          yRange = Some(Viz.Range(Some(0), Some(7000))),
           dataRows = vizDataRows
         )
       }
@@ -136,6 +188,57 @@ object DiaFactories {
           imgWidth = 2000,
           imgHeight = 1500,
           diagrams = _dias.toSeq
+        )
+      }
+    }
+
+  }
+
+  def kicksB02: DiaFactory[Data02] = {
+    val grpSize = 50
+    val diaId = "kicks"
+    val title = "kicks max mean min"
+
+    new DiaFactory[Data02] {
+
+      def diagram(diaId: String, name: String, diaData: Seq[Data02]): Viz.Diagram[Viz.XY] = {
+        require(diaData.nonEmpty, "Cannot handle empty dataset")
+        val rows = Seq(
+          ("kicks max x 10", Smoothing.smooth(diaData.map(d => Viz.XY(d.iterations, d.kicksMax * 10)), grpSize)),
+          ("kicks mean x 10", Smoothing.smooth(diaData.map(d => Viz.XY(d.iterations, d.kicksMean * 10)), grpSize)),
+          ("kicks min x 10", Smoothing.smooth(diaData.map(d => Viz.XY(d.iterations, d.kicksMin * 10)), grpSize)),
+          ("score", Smoothing.smooth(diaData.map(d => Viz.XY(d.iterations, d.score)), grpSize))
+        )
+
+        val vizDataRows =
+          for ((nam, dat) <- rows) yield {
+            Viz.DataRow(
+              name = Some(nam),
+              data = dat
+            )
+          }
+        Viz.Diagram(
+          id = diaId,
+          title = name,
+          yRange = Some(Viz.Range(Some(0), Some(7000))),
+          dataRows = vizDataRows
+        )
+      }
+
+
+      override def createDia(name: String, data: Seq[Data02]): Viz.Dia[Viz.XY] = {
+        require(data.nonEmpty, "Cannot handle empty dataset")
+        val rows: Map[String, Seq[Data02]] = data.groupBy(d => d.trainGaNr)
+        val _dias = for (nr <- rows.keys.toSeq.sorted) yield {
+          diagram(nr, nr, rows(nr))
+        }
+        Viz.MultiDiagram[Viz.XY](
+          id = diaId + name,
+          columns = 2,
+          title = Some(s"$title $name"),
+          imgWidth = 2000,
+          imgHeight = 1500,
+          diagrams = _dias
         )
       }
     }
