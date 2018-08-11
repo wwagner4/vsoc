@@ -10,8 +10,8 @@ object Data02DiaMain extends App {
 
   for (f <- factories) {
     new Data02Dia().createDiaTrainGa(
-      trainGa = "trainGaB01",
-      diaFactory = f,
+      trainGa = "trainGaB02",
+      diaFactory = f
     )
   }
 
