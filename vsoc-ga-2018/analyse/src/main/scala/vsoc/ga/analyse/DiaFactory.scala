@@ -1,5 +1,7 @@
 package vsoc.ga.analyse
 
+import java.nio.file.Path
+
 import entelijan.viz.Viz
 import entelijan.viz.Viz.Dia
 

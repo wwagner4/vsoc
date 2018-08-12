@@ -39,7 +39,7 @@ object DiaFactories {
 
   }
 
-  def scoreComposition: DiaFactory[Data02] = {
+  def scoreCompositionB01: DiaFactory[Data02] = {
     val grpSize = 50
     val diaId = "scorecomp"
     val title = "score composition"
@@ -83,7 +83,7 @@ object DiaFactories {
           columns = 2,
           title = Some(s"$title $name"),
           imgWidth = 2000,
-          imgHeight = 1500,
+          imgHeight = 2500,
           diagrams = _dias
         )
       }
@@ -143,7 +143,7 @@ object DiaFactories {
 
   }
 
-  def kicks: DiaFactory[Data02] = {
+  def kicksB01: DiaFactory[Data02] = {
     val grpSize = 50
     val diaId = "kicks"
     val title = "kicks max mean min"
@@ -155,7 +155,7 @@ object DiaFactories {
         val rows = Seq(
           ("kicks max", Smoothing.smooth(diaData.map(d => Viz.XY(d.iterations, d.kicksMax)), grpSize)),
           ("kicks mean", Smoothing.smooth(diaData.map(d => Viz.XY(d.iterations, d.kicksMean)), grpSize)),
-          ("kicks min x 1000", Smoothing.smooth(diaData.map(d => Viz.XY(d.iterations, d.kicksMin * 1000)), grpSize)),
+          ("kicks min x 10.000", Smoothing.smooth(diaData.map(d => Viz.XY(d.iterations, d.kicksMin * 10000)), grpSize)),
           ("score", Smoothing.smooth(diaData.map(d => Viz.XY(d.iterations, d.score)), grpSize))
         )
 
@@ -169,7 +169,7 @@ object DiaFactories {
         Viz.Diagram(
           id = diaId,
           title = name,
-          yRange = Some(Viz.Range(Some(0), Some(7000))),
+          yRange = Some(Viz.Range(Some(0), Some(1500))),
           dataRows = vizDataRows
         )
       }
@@ -186,8 +186,8 @@ object DiaFactories {
           columns = 2,
           title = Some(s"$title $name"),
           imgWidth = 2000,
-          imgHeight = 1500,
-          diagrams = _dias.toSeq
+          imgHeight = 2500,
+          diagrams = _dias
         )
       }
     }
