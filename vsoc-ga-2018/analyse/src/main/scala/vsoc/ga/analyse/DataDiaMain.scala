@@ -47,7 +47,7 @@ object DataDiaMain extends App {
     }
   }
 
-  trainGaB01()
+  trainGaB02()
 
 }
 

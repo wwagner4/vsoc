@@ -1,0 +1,67 @@
+        fs km g
+
+bob001  L  B  A
+bob002  M  B  B
+bob003  H  B  B 
+bob004  M  A  A
+work001 M  C  C
+work002 M  A  B
+work003 M  C  B
+work004 M  CB B
+
+fs   ... final score
+km   ... kicks min
+km A ... medium in the middle
+km B ... very low but medium at the end
+km C ... high at the beginning but then always low
+g    ... goals
+g A  ... no goals at all 
+g B  ... goals since the middle
+g C  ... goals at the middle but none at the end
+
+
+bob001
+One player per team is kicking. 
+Other players have little to no interest at the ball.
+No goals
+
+bob002
+One player per team is kicking and scoring goals.
+Own goals are avoided
+Other players have no interest at the ball.
+
+bob003
+One player per team is kicking and scoring goals.
+Own goals are avoided
+Other players have no interest at the ball.
+
+bob004
+One player per team is kicking.
+No goals.
+Other players have no interest at the ball.
+
+work001
+One player per team is kicking.
+No goals.
+Other players have no interest at the ball.
+
+work002
+One player per team is kicking and scoring goals.
+Own goals are avoided
+Other players have no interest at the ball.
+
+work003
+One player per team is kicking and scoring some goals.
+Other players have no interest at the ball.
+
+bob004
+One player per team is kicking and scoring goals.
+Own goals are avoided
+Other players have no interest at the ball.
+
+Conclusion.
+Only one player per team learns kicking and (sometimes) scoring goals.
+
+
+
+
