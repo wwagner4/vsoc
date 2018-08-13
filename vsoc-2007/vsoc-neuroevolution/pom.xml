@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>net.entelijan</groupId>
 		<artifactId>vsoc</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
+		<version>0.0.2-SNAPSHOT</version>
 	</parent>
 	<artifactId>vsoc-neuroevolution</artifactId>
 	<name>vsoc neuroevolution</name>

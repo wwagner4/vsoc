@@ -12,14 +12,14 @@ start "b02Work" /LOW java -Xmx8g ^
 ------ bob training -----
 nohup nice -6 java -Xmx6g \
  -cp $HOME/prj/vsoc/vsoc-ga-2018/trainga/target/scala-2.12/trainga-assembly-0.0.1-SNAPSHOT.jar \
- vsoc.ga.trainga.ga.TrainGaMain b02Work &
+ vsoc.ga.trainga.ga.TrainGaMain b02Bob &
 
 ------ bob server -----
 nohup java -Xmx512k -Xmx512m \
  -cp ~/prj/vsoc/vsoc-ga-2018/analyse/target/scala-2.12/analyse-assembly-0.0.1-SNAPSHOT.jar \
  vsoc.ga.analyse.server.Server \
  /var/www/html \
- b02Work \
+ b02Bob \
  5 &
 
 ----- sync -----
