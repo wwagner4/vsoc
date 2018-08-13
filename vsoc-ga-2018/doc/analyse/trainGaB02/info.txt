@@ -1,1 +1,3 @@
 penalty for kicking out avoids goal kicking.
+higest value for kickMax is evtl. too high.
+

@@ -135,7 +135,7 @@ object DiaFactories {
           columns = 2,
           title = Some(s"$title $name"),
           imgWidth = 2000,
-          imgHeight = 1500,
+          imgHeight = 2500,
           diagrams = _dias
         )
       }
@@ -220,7 +220,7 @@ object DiaFactories {
         Viz.Diagram(
           id = diaId,
           title = name,
-          yRange = Some(Viz.Range(Some(0), Some(7000))),
+          yRange = Some(Viz.Range(Some(0), Some(16000))),
           dataRows = vizDataRows
         )
       }
@@ -237,7 +237,7 @@ object DiaFactories {
           columns = 2,
           title = Some(s"$title $name"),
           imgWidth = 2000,
-          imgHeight = 1500,
+          imgHeight = 2500,
           diagrams = _dias
         )
       }
