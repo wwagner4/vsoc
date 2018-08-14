@@ -72,7 +72,7 @@ object MatchResults {
           ("score", formatScore),
           ("kicks", formatKicks),
           ("kick outs", formatKickOuts),
-          ("other goals", formatOtherGoals),
+          ("goals", formatOtherGoals),
           ("own goals", formatOwnGoals)
         )
       )
