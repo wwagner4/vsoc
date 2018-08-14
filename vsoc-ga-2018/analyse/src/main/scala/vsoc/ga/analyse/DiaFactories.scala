@@ -101,10 +101,10 @@ object DiaFactories {
       def diagram(diaId: String, name: String, diaData: Seq[Data02]): Viz.Diagram[Viz.XY] = {
         require(diaData.nonEmpty, "Cannot handle empty dataset")
         val rows = Seq(
-          ("kicks x 10", Smoothing.smooth(diaData.map(d => Viz.XY(d.iterations, d.kicksMax * 10)), grpSize)),
-          ("kick out X 10", Smoothing.smooth(diaData.map(d => Viz.XY(d.iterations, d.kickOutMax * 10)), grpSize)),
-          ("goals x 1000", Smoothing.smooth(diaData.map(d => Viz.XY(d.iterations, d.otherGoalsMax * 1000)), grpSize)),
-          ("own goals x 1000", Smoothing.smooth(diaData.map(d => Viz.XY(d.iterations, d.ownGoalsMax * 1000)), grpSize)),
+          ("kicks", Smoothing.smooth(diaData.map(d => Viz.XY(d.iterations, d.kicksMax)), grpSize)),
+          ("kick out", Smoothing.smooth(diaData.map(d => Viz.XY(d.iterations, d.kickOutMax)), grpSize)),
+          ("goals x 5000", Smoothing.smooth(diaData.map(d => Viz.XY(d.iterations, d.otherGoalsMax * 5000)), grpSize)),
+          ("own goals x 5000", Smoothing.smooth(diaData.map(d => Viz.XY(d.iterations, d.ownGoalsMax * 5000)), grpSize)),
           ("score", Smoothing.smooth(diaData.map(d => Viz.XY(d.iterations, d.score)), grpSize))
         )
 
@@ -118,7 +118,7 @@ object DiaFactories {
         Viz.Diagram(
           id = diaId,
           title = name,
-          //yRange = Some(Viz.Range(Some(0), Some(1600))),
+          yRange = Some(Viz.Range(Some(0), Some(10000))),
           dataRows = vizDataRows
         )
       }
@@ -204,9 +204,9 @@ object DiaFactories {
       def diagram(diaId: String, name: String, diaData: Seq[Data02]): Viz.Diagram[Viz.XY] = {
         require(diaData.nonEmpty, "Cannot handle empty dataset")
         val rows = Seq(
-          ("kicks max x 10", Smoothing.smooth(diaData.map(d => Viz.XY(d.iterations, d.kicksMax * 10)), grpSize)),
+          ("kicks max", Smoothing.smooth(diaData.map(d => Viz.XY(d.iterations, d.kicksMax)), grpSize)),
           ("kicks mean x 10", Smoothing.smooth(diaData.map(d => Viz.XY(d.iterations, d.kicksMean * 10)), grpSize)),
-          ("kicks min x 10", Smoothing.smooth(diaData.map(d => Viz.XY(d.iterations, d.kicksMin * 10)), grpSize)),
+          ("kicks min x 100", Smoothing.smooth(diaData.map(d => Viz.XY(d.iterations, d.kicksMin * 100)), grpSize)),
           ("score", Smoothing.smooth(diaData.map(d => Viz.XY(d.iterations, d.score)), grpSize))
         )
 
@@ -220,7 +220,7 @@ object DiaFactories {
         Viz.Diagram(
           id = diaId,
           title = name,
-          yRange = Some(Viz.Range(Some(0), Some(16000))),
+          yRange = Some(Viz.Range(Some(0), Some(10000))),
           dataRows = vizDataRows
         )
       }
@@ -244,5 +244,7 @@ object DiaFactories {
     }
 
   }
+
+
 
 }
