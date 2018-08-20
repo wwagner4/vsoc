@@ -30,7 +30,7 @@ object TrainGas {
     override protected def fitness: FitnessFunction[Data02] = FitnessFunctions.data02A02
 
     override def fullDescHeading: String =
-      """B first impoement
+      """B first improvement
         |Tryout better Fitness function
       """.stripMargin
 
@@ -39,6 +39,27 @@ object TrainGas {
     override protected def inMapper: InputMapperNn = new InputMapperNnTeam(1.0)
 
     override protected def outMapper: OutputMapperNn = OutputMappers.om02
+  }
+
+  def trainGaB03: TrainGa[Data02] = new TrainGaAbstract {
+
+    override def id: String = "trainGaB03"
+
+    override protected def fitness: FitnessFunction[Data02] = FitnessFunctions.data02A03
+
+    override def fullDescHeading: String =
+      """More training matches by increasing the test factor (2 -> 4)
+        |New fitness function A03
+      """.stripMargin
+
+    override protected def createNeuralNet: () => NeuralNet = () => NeuralNets.team02
+
+    override protected def inMapper: InputMapperNn = new InputMapperNnTeam(1.0)
+
+    override protected def outMapper: OutputMapperNn = OutputMappers.om02
+
+    override def testFactor: Int = 4
+
   }
 
 }

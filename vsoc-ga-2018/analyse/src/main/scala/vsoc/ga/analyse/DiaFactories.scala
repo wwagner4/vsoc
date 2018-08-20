@@ -143,6 +143,56 @@ object DiaFactories {
 
   }
 
+  def kicksToKickOutB02: DiaFactory[Data02] = {
+    val grpSize = 50
+    val diaId = "kicksToKickOut"
+    val title = "Kicks Kickout"
+
+    new DiaFactory[Data02] {
+
+      def diagram(diaId: String, name: String, diaData: Seq[Data02]): Viz.Diagram[Viz.XY] = {
+        require(diaData.nonEmpty, "Cannot handle empty dataset")
+        val rows = Seq(
+          ("kicks max", Smoothing.smooth(diaData.map(d => Viz.XY(d.iterations, d.kicksMax)), grpSize)),
+          ("kick out max", Smoothing.smooth(diaData.map(d => Viz.XY(d.iterations, d.kickOutMax)), grpSize)),
+          //          ("score", Smoothing.smooth(diaData.map(d => Viz.XY(d.iterations, d.score)), grpSize))
+        )
+
+        val vizDataRows =
+          for ((nam, dat) <- rows) yield {
+            Viz.DataRow(
+              name = Some(nam),
+              data = dat
+            )
+          }
+        Viz.Diagram(
+          id = diaId,
+          title = name,
+          //yRange = Some(Viz.Range(Some(0), Some(10000))),
+          dataRows = vizDataRows
+        )
+      }
+
+
+      override def createDia(name: String, data: Seq[Data02]): Viz.Dia[Viz.XY] = {
+        require(data.nonEmpty, "Cannot handle empty dataset")
+        val rows: Map[String, Seq[Data02]] = data.groupBy(d => d.trainGaNr)
+        val _dias = for (nr <- rows.keys.toSeq.sorted) yield {
+          diagram(nr, nr, rows(nr))
+        }
+        Viz.MultiDiagram[Viz.XY](
+          id = diaId + name,
+          columns = 2,
+          title = Some(s"$title $name"),
+          imgWidth = 1500,
+          imgHeight = 1000,
+          diagrams = _dias
+        )
+      }
+    }
+
+  }
+
   def goalsB02: DiaFactory[Data02] = {
     val grpSize = 50
     val diaId = "goals"
@@ -155,7 +205,7 @@ object DiaFactories {
         val rows = Seq(
           ("goals", Smoothing.smooth(diaData.map(d => Viz.XY(d.iterations, d.otherGoalsMax)), grpSize)),
           ("own goals x 5000", Smoothing.smooth(diaData.map(d => Viz.XY(d.iterations, d.ownGoalsMax)), grpSize)),
-//          ("score", Smoothing.smooth(diaData.map(d => Viz.XY(d.iterations, d.score)), grpSize))
+          //          ("score", Smoothing.smooth(diaData.map(d => Viz.XY(d.iterations, d.score)), grpSize))
         )
 
         val vizDataRows =
