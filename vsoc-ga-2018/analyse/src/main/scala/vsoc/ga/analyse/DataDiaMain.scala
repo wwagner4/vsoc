@@ -37,6 +37,7 @@ object DataDiaMain extends App {
       DiaFactories.scoreCompositionB02,
       DiaFactories.kicksB02,
       DiaFactories.goalsB02,
+      DiaFactories.kicksToKickOutB02,
     )
 
     for (f <- factories) {
