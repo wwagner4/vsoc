@@ -2,8 +2,13 @@ package vsoc.ga.trainga.gui
 
 object GuiPopulationTryout extends App {
 
+  //GuiPopulationMain.main(Array("trainGaB03", "bob001")) // trainGaB02-bob001
+  //GuiPopulationMain.main(Array("trainGaB03", "bob002")) // trainGaB02-bob002
+  //GuiPopulationMain.main(Array("trainGaB03", "bob003")) // trainGaB02-bob003
+  GuiPopulationMain.main(Array("trainGaB03", "bob004")) // trainGaB02-bob004
+
   //GuiPopulationMain.main(Array("trainGaB02", "bob001")) // trainGaB02-bob001
-  GuiPopulationMain.main(Array("trainGaB02", "bob002")) // trainGaB02-bob002
+  //GuiPopulationMain.main(Array("trainGaB02", "bob002")) // trainGaB02-bob002
   //GuiPopulationMain.main(Array("trainGaB02", "bob003")) // trainGaB02-bob003
   //GuiPopulationMain.main(Array("trainGaB02", "bob004")) // trainGaB02-bob004
 

@@ -49,7 +49,28 @@ object DataDiaMain extends App {
     }
   }
 
-  trainGaB02()
+  def trainGaB03(): Unit = {
+    val _trainGa = "trainGaB03"
+    val rel = Paths.get("viz_img", _trainGa)
+    val diaDir = ConfigHelper.workDir.resolve(rel)
+
+    val factories = Seq(
+      DiaFactories.scoreGroupedByPopulation,
+      DiaFactories.kicksB03,
+      DiaFactories.scoreCompositionB03,
+      DiaFactories.goalsB03,
+    )
+
+    for (f <- factories) {
+      new Data02Dia().createDiaTrainGa(
+        trainGa = _trainGa,
+        diaFactory = f,
+        diaDir = Some(diaDir)
+      )
+    }
+  }
+
+  trainGaB03()
 
 }
 
