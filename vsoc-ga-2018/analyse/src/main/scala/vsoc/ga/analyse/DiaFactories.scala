@@ -134,8 +134,8 @@ object DiaFactories {
           id = diaId + name,
           columns = 2,
           title = Some(s"$title $name"),
-          imgWidth = 1500,
-          imgHeight = 1000,
+          imgWidth = 1000,
+          imgHeight = 1500,
           diagrams = _dias
         )
       }
@@ -236,8 +236,8 @@ object DiaFactories {
           id = diaId + name,
           columns = 2,
           title = Some(s"$title $name"),
-          imgWidth = 1500,
-          imgHeight = 1000,
+          imgWidth = 1000,
+          imgHeight = 1500,
           diagrams = _dias
         )
       }
@@ -286,8 +286,8 @@ object DiaFactories {
           id = diaId + name,
           columns = 2,
           title = Some(s"$title $name"),
-          imgWidth = 1500,
-          imgHeight = 1000,
+          imgWidth = 1000,
+          imgHeight = 1500,
           diagrams = _dias
         )
       }
@@ -438,8 +438,8 @@ object DiaFactories {
           id = diaId + name,
           columns = 2,
           title = Some(s"$title $name"),
-          imgWidth = 1500,
-          imgHeight = 1000,
+          imgWidth = 1000,
+          imgHeight = 1500,
           diagrams = _dias
         )
       }
