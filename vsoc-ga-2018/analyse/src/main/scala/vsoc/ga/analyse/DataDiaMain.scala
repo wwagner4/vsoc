@@ -1,76 +1,27 @@
 package vsoc.ga.analyse
 
-import java.nio.file.{Path, Paths}
+import java.nio.file.Paths
 
 import vsoc.ga.common.config.ConfigHelper
+import vsoc.ga.common.data.Data02
 
 object DataDiaMain extends App {
 
-  def trainGaB01(): Unit = {
-    val _trainGa = "trainGaB01"
+  def trainGaData02(diaFactories: DiaFactories[Data02]): Unit = {
+    val _trainGa = diaFactories.trainGaId
     val rel = Paths.get("viz_img", _trainGa)
     val diaDir = ConfigHelper.workDir.resolve(rel)
 
-    val factories = Seq(
-      DiaFactories.scoreGroupedByPopulation,
-      DiaFactories.scoreCompositionB01,
-      DiaFactories.kicksB01,
-    )
-
-    for (f <- factories) {
+    for (f <- diaFactories.diaFactories) {
       new Data02Dia().createDiaTrainGa(
-        trainGa =_trainGa,
+        trainGa = diaFactories.trainGaId,
         diaFactory = f,
         diaDir = Some(diaDir)
       )
     }
   }
 
-
-  def trainGaB02(): Unit = {
-    val _trainGa = "trainGaB02"
-    val rel = Paths.get("viz_img", _trainGa)
-    val diaDir = ConfigHelper.workDir.resolve(rel)
-
-    val factories = Seq(
-      DiaFactories.scoreGroupedByPopulation,
-      DiaFactories.scoreCompositionB02,
-      DiaFactories.kicksB02,
-      DiaFactories.goalsB02,
-      DiaFactories.kicksToKickOutB02,
-    )
-
-    for (f <- factories) {
-      new Data02Dia().createDiaTrainGa(
-        trainGa = _trainGa,
-        diaFactory = f,
-        diaDir = Some(diaDir)
-      )
-    }
-  }
-
-  def trainGaB03(): Unit = {
-    val _trainGa = "trainGaB03"
-    val rel = Paths.get("viz_img", _trainGa)
-    val diaDir = ConfigHelper.workDir.resolve(rel)
-
-    val factories = Seq(
-      DiaFactories.scoreGroupedByPopulation,
-      DiaFactories.kicksB03,
-      DiaFactories.scoreCompositionB03,
-      DiaFactories.goalsB03,
-    )
-
-    for (f <- factories) {
-      new Data02Dia().createDiaTrainGa(
-        trainGa = _trainGa,
-        diaFactory = f,
-        diaDir = Some(diaDir)
-      )
-    }
-  }
-
-  trainGaB03()
+  trainGaData02(DiaFactoriesB02)
 
 }
 

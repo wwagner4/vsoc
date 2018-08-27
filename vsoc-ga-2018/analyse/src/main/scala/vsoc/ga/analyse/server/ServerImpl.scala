@@ -7,7 +7,7 @@ import java.time.{Instant, LocalDateTime, ZoneId}
 import java.util.concurrent.Executors
 
 import org.slf4j.LoggerFactory
-import vsoc.ga.analyse.{Data02Dia, DiaFactories}
+import vsoc.ga.analyse.{Data02Dia, DiaFactoriesB03}
 
 object ServerImpl {
 
@@ -79,7 +79,7 @@ object ServerImpl {
 
     def run(): Unit = {
       clearDir(httpPath)
-      new Data02Dia().createDiaTrainGa(trainGa, DiaFactories.scoreGroupedByPopulation, Some(httpPath))
+      new Data02Dia().createDiaTrainGa(trainGa, DiaFactoriesB03.scoreGroupedByPopulation, Some(httpPath))
     }
     createIndexHtml(httpPath)
   }
