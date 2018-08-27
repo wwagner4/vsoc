@@ -98,7 +98,7 @@ object DiaFactoriesB03  extends DiaFactories[Data02]{
   def goals: DiaFactory[Data02] =
     (name: String, data: Seq[Data02]) => {
 
-      val grpSize = 150
+      val grpSize = 100
       val diaId = "goals"
       val title = "Goals vs own Goals"
 
@@ -120,7 +120,7 @@ object DiaFactoriesB03  extends DiaFactories[Data02]{
         Viz.Diagram(
           id = diaId,
           title = name,
-          yRange = Some(Viz.Range(Some(0), Some(2))),
+          //yRange = Some(Viz.Range(Some(0), Some(2))),
           dataRows = vizDataRows
         )
       }

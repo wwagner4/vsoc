@@ -21,7 +21,7 @@ object DataDiaMain extends App {
     }
   }
 
-  trainGaData02(DiaFactoriesB02)
+  trainGaData02(DiaFactoriesB03)
 
 }
 
