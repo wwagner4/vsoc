@@ -2,17 +2,17 @@ package vsoc.ga.trainga.gui
 
 object GuiPopulationTryout extends App {
 
-  //GuiPopulationMain.main(Array("trainGaB03", "bob001")) // trainGaB02-bob001
-  //GuiPopulationMain.main(Array("trainGaB03", "bob002")) // trainGaB02-bob002
-  //GuiPopulationMain.main(Array("trainGaB03", "bob003")) // trainGaB02-bob003
-  GuiPopulationMain.main(Array("trainGaB03", "bob004")) // trainGaB02-bob004
+  //GuiPopulationMain.main(Array("trainGaB03", "bob001")) // trainGaB03-bob001
+  //GuiPopulationMain.main(Array("trainGaB03", "bob002")) // trainGaB03-bob002
+  //GuiPopulationMain.main(Array("trainGaB03", "bob003")) // trainGaB03-bob003
+  //GuiPopulationMain.main(Array("trainGaB03", "bob004")) // trainGaB03-bob004
 
-  //GuiPopulationMain.main(Array("trainGaB03", "work001")) // trainGaB02-bob001
-  //GuiPopulationMain.main(Array("trainGaB03", "work002")) // trainGaB02-bob002
-  //GuiPopulationMain.main(Array("trainGaB03", "work003")) // trainGaB02-bob003
-  //GuiPopulationMain.main(Array("trainGaB03", "work004")) // trainGaB02-bob004
-  //GuiPopulationMain.main(Array("trainGaB03", "work005")) // trainGaB02-bob003
-  //GuiPopulationMain.main(Array("trainGaB03", "work006")) // trainGaB02-bob004
+  //GuiPopulationMain.main(Array("trainGaB03", "work001")) // trainGaB03-bob001
+  //GuiPopulationMain.main(Array("trainGaB03", "work002")) // trainGaB03-bob002
+  //GuiPopulationMain.main(Array("trainGaB03", "work003")) // trainGaB03-bob003
+  //GuiPopulationMain.main(Array("trainGaB03", "work004")) // trainGaB03-bob004
+  //GuiPopulationMain.main(Array("trainGaB03", "work005")) // trainGaB03-bob003
+  //GuiPopulationMain.main(Array("trainGaB03", "work006")) // trainGaB03-bob004
 
   //GuiPopulationMain.main(Array("trainGaB02", "bob001")) // trainGaB02-bob001
   //GuiPopulationMain.main(Array("trainGaB02", "bob002")) // trainGaB02-bob002

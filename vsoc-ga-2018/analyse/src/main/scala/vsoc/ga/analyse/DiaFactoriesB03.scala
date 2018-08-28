@@ -41,6 +41,8 @@ object DiaFactoriesB03  extends DiaFactories[Data02]{
       Viz.Diagram(
         id = id,
         title = title,
+        imgWidth = 1000,
+        imgHeight = 1000,
         dataRows = vizDataRows
       )
     }
@@ -87,7 +89,7 @@ object DiaFactoriesB03  extends DiaFactories[Data02]{
         id = diaId + name,
         columns = 2,
         title = Some(s"$title $name"),
-        imgWidth = 1500,
+        imgWidth = 1000,
         imgHeight = 1000,
         diagrams = _dias
       )
@@ -134,7 +136,7 @@ object DiaFactoriesB03  extends DiaFactories[Data02]{
         id = diaId + name,
         columns = 2,
         title = Some(s"$title $name"),
-        imgWidth = 1500,
+        imgWidth = 1000,
         imgHeight = 1000,
         diagrams = _dias
       )
@@ -179,7 +181,7 @@ object DiaFactoriesB03  extends DiaFactories[Data02]{
         id = diaId + name,
         columns = 2,
         title = Some(s"$title $name"),
-        imgWidth = 1500,
+        imgWidth = 1000,
         imgHeight = 1000,
         diagrams = _dias
       )
