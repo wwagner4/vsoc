@@ -6,16 +6,7 @@ import vsoc.ga.common.UtilPath._
 
 object CreateAllResources {
 
-  def create: Path = {
-    val tmpDirStr = System.getProperty("java.io.tmpdir")
-    val javaTmpDir = Paths.get(tmpDirStr)
-    if (!Files.exists(javaTmpDir)) throw new IllegalStateException(s"No tmp dir available. '$tmpDirStr'")
-
-    createDataFromZip(javaTmpDir)
-  }
-
-
-  private def createDataFromZip(javaTmpDir: Path): Path = {
+  def create(baseDir: Path): Path = {
 
     def moveTo(fromDir: Path, subDir: String, prefix: String, toDir: Path): Unit = {
       val fd = fromDir.resolve(subDir)
@@ -27,7 +18,7 @@ object CreateAllResources {
         })
     }
 
-    val iterDir = javaTmpDir.resolve("iter04")
+    val iterDir = baseDir.resolve("iter04")
     if (Files.exists(iterDir)) delDirectory(iterDir)
     Files.createDirectories(iterDir)
 

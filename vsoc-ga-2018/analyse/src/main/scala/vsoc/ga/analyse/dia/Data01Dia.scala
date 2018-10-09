@@ -1,4 +1,4 @@
-package vsoc.ga.analyse
+package vsoc.ga.analyse.dia
 
 import vsoc.ga.common.data.Data01
 

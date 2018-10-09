@@ -3,12 +3,12 @@ package vsoc.ga.common.act
 import java.nio.file.Files
 
 import entelijan.viz.{Viz, VizCreator, VizCreators}
-import vsoc.ga.common.config.ConfigHelper
+import vsoc.ga.common.UtilPath
 
 object ActivationTryout extends App {
 
   implicit val vizCreator: VizCreator[Viz.XY] = {
-    val wd = ConfigHelper.workDir
+    val wd = UtilPath.workDir
     val scriptDir = wd.resolve(".script")
     Files.createDirectories(scriptDir)
     val imgDir = wd.resolve("viz_img")

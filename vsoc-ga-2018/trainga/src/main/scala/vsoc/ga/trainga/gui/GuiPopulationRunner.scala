@@ -4,6 +4,7 @@ import java.nio.file.{Files, Path, Paths}
 import java.util.Comparator
 
 import atan.model.Controller
+import vsoc.ga.common.UtilPath
 import vsoc.ga.common.config.ConfigHelper
 import vsoc.ga.common.persist.Persistors
 import vsoc.ga.matches.gui.VsocMatchFrame
@@ -14,7 +15,7 @@ import scala.util.Random
 
 object GuiPopulationRunner {
 
-  private val workBasic = ConfigHelper.workDir
+  private val workBasic = UtilPath.workDir
 
   def run(trainGa: TrainGa[_], populationNr: String, generationNrOpt: Option[String]): Unit = {
 

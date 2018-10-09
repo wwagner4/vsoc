@@ -1,8 +1,9 @@
-package vsoc.ga.analyse
+package vsoc.ga.analyse.dia
 
 import java.io.PrintWriter
 import java.nio.file.{Files, Path, Paths}
 
+import vsoc.ga.common.UtilPath
 import vsoc.ga.common.config.{Config, ConfigHelper, ConfigTrainGa}
 
 abstract class DataCsv[T](csvReader: CsvReader[T]) {
@@ -38,7 +39,7 @@ abstract class DataCsv[T](csvReader: CsvReader[T]) {
     override def toString: String = s"%${colWidth}d"
   }
 
-  protected val _workDir: Path = ConfigHelper.workDir
+  protected val _workDir: Path = UtilPath.workDir
 
   def createCsvConfig(
                        cfg: Config,

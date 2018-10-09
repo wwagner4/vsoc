@@ -1,4 +1,4 @@
-package vsoc.ga.analyse
+package vsoc.ga.analyse.dia
 
 import java.nio.file.{Files, Path}
 
@@ -14,19 +14,17 @@ class DataDia[T](csvReader: CsvReader[T]) {
 
   private val log = LoggerFactory.getLogger(classOf[DataDia[_]])
 
-  private val _workDir = ConfigHelper.workDir
-
-  def createDiaTrainGa(trainGa: String, diaFactory: DiaFactory[T], diaDir: Option[Path] = None): Unit = {
-    implicit val crea: VizCreator[Viz.XY] = createCreator(diaDir)
+  def createDiaTrainGa(trainGa: String, diaFactory: DiaFactory[T], workDir: Path, diaDir: Option[Path] = None): Unit = {
+    implicit val crea: VizCreator[Viz.XY] = createCreator(workDir, diaDir)
     val data = csvReader.read(trainGa)
     val dia = diaFactory.createDia(trainGa, data)
     Viz.createDiagram(dia)
   }
 
-  private def createCreator(diaDir: Option[Path]): VizCreator[Viz.XY] = {
-    val scriptDir = _workDir.resolve(".script")
+  private def createCreator(workDir: Path, diaDir: Option[Path]): VizCreator[Viz.XY] = {
+    val scriptDir = workDir.resolve(".script")
     Files.createDirectories(scriptDir)
-    val imgDir = diaDir.getOrElse(_workDir.resolve("viz_img"))
+    val imgDir = diaDir.getOrElse(workDir.resolve("dias"))
     Files.createDirectories(imgDir)
     log.info(s"image directory $imgDir")
     log.info(s"script directory $scriptDir")

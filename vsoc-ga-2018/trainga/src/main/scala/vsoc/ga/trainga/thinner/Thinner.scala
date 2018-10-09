@@ -3,6 +3,7 @@ package vsoc.ga.trainga.thinner
 import java.nio.file.{Files, Path, Paths}
 
 import org.slf4j.LoggerFactory
+import vsoc.ga.common.UtilPath
 import vsoc.ga.common.config.ConfigHelper
 import vsoc.ga.trainga.thinner.impl.ThinnerFiles
 
@@ -12,7 +13,7 @@ object Thinner {
 
   private val log = LoggerFactory.getLogger(Thinner.getClass)
 
-  private val workDir = ConfigHelper.workDir
+  private val workDir = UtilPath.workDir
 
   def thinFromTrainGaId(id: String, nr: String): Unit = {
     val baseDir = workDir.resolve(Paths.get(id, nr))

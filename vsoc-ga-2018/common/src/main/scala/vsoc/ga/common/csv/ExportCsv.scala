@@ -4,13 +4,14 @@ import java.nio.file._
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
+import vsoc.ga.common.UtilPath
 import vsoc.ga.common.config.ConfigHelper
 
 import scala.collection.JavaConverters._
 
 object ExportCsv extends App {
 
-  val wd = ConfigHelper.workDir
+  val wd = UtilPath.workDir
 
   val includeSerPopulations = Seq(
     ("trainGa05fitFac01", "w001"),

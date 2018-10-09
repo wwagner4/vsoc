@@ -8,14 +8,14 @@ import vsoc.ga.common.config.{ConfigHelper, ConfigTrainGa}
 import vsoc.ga.common.data.{CsvWriter, Data02}
 import vsoc.ga.common.describe.DescribableFormatter
 import vsoc.ga.common.persist.{Persistor, Persistors}
-import vsoc.ga.common.{UtilReflection, UtilTransform}
+import vsoc.ga.common.{UtilPath, UtilReflection, UtilTransform}
 import vsoc.ga.trainga.thinner.Thinner
 
 object TrainGaRunner {
 
   private val log = LoggerFactory.getLogger(TrainGaRunner.getClass)
 
-  private val workDir = ConfigHelper.workDir
+  private val workDir = UtilPath.workDir
 
   def run (cfg: ConfigTrainGa): Unit = {
 

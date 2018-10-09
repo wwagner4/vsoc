@@ -1,4 +1,4 @@
-package vsoc.ga.analyse
+package vsoc.ga.analyse.dia
 
 import java.io.PrintWriter
 import java.nio.file.Files
