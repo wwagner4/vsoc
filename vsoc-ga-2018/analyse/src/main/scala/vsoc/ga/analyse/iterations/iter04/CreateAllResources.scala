@@ -4,15 +4,18 @@ import java.nio.file._
 
 import vsoc.ga.common.UtilPath._
 
-object CreateAllResources extends App {
+object CreateAllResources {
 
-  private val tmpDirStr = System.getProperty("java.io.tmpdir")
-  val javaTmpDir = Paths.get(tmpDirStr)
-  if (!Files.exists(javaTmpDir)) throw new IllegalStateException(s"No tmp dir available. '$tmpDirStr'")
+  def create: Path = {
+    val tmpDirStr = System.getProperty("java.io.tmpdir")
+    val javaTmpDir = Paths.get(tmpDirStr)
+    if (!Files.exists(javaTmpDir)) throw new IllegalStateException(s"No tmp dir available. '$tmpDirStr'")
 
-  val iterDir = createDataFromZip(javaTmpDir)
+    createDataFromZip(javaTmpDir)
+  }
 
-  def createDataFromZip(javaTmpDir: Path): Path = {
+
+  private def createDataFromZip(javaTmpDir: Path): Path = {
 
     def moveTo(fromDir: Path, subDir: String, prefix: String, toDir: Path): Unit = {
       val fd = fromDir.resolve(subDir)
