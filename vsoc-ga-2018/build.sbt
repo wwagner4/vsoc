@@ -4,7 +4,7 @@ lazy val userHome = System.getProperty("user.home")
 
 lazy val commonSettings = Seq(
   organization := "net.entelijan",
-  scalaVersion := "2.12.6",
+  scalaVersion := "2.12.7",
   version := "0.0.1-SNAPSHOT",
   fork := true,
 
@@ -37,7 +37,7 @@ lazy val matches = (project in file("matches"))
 lazy val common = (project in file("common"))
   .settings(
     name := "common",
-    libraryDependencies += "org.scala-lang" % "scala-reflect" % "2.12.6",
+    libraryDependencies += "org.scala-lang" % "scala-reflect" % "2.12.7",
     commonSettings,
   )
 
