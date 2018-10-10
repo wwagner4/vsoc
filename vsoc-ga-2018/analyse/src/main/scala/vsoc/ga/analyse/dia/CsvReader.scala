@@ -4,9 +4,6 @@ import java.nio.file.{Files, Path}
 import java.text.NumberFormat
 import java.util.Locale
 
-import vsoc.ga.common.UtilPath
-import vsoc.ga.common.config.ConfigHelper
-
 import scala.collection.JavaConverters._
 
 abstract class CsvReader[D] {
@@ -21,7 +18,7 @@ abstract class CsvReader[D] {
     re
   }
 
-  def read(trainGaId: String): Seq[D] = {
+  def read(trainGaId: String)(implicit workDir: Path): Seq[D] = {
     val files: Seq[Path] = extractCsvFiles(trainGaId)
     files.flatMap(f => read(f))
   }
@@ -39,8 +36,8 @@ abstract class CsvReader[D] {
 
   def toBean(line: String): D
 
-  private def extractCsvFiles(trainGaId: String): Seq[Path] = {
-    val trainGaDir = UtilPath.workDir.resolve(trainGaId)
+  private def extractCsvFiles(trainGaId: String)(implicit workDir: Path): Seq[Path] = {
+    val trainGaDir = workDir.resolve(trainGaId)
     require(Files.isDirectory(trainGaDir), s"$trainGaDir is not a directory")
     files(trainGaDir)
       .flatMap{d =>
