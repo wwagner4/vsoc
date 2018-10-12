@@ -134,8 +134,6 @@ training goals where attained.
 #### Categories
 The results of the 7 populations can be fit into three categories.
 
-TODO Diagram that shows the categorisation
-
 * One Kicker [OK]
 * All Kickers [AL]
 * One Goalgetter [OG]
@@ -143,7 +141,9 @@ TODO Diagram that shows the categorisation
 **OG** teams include one player hitting the ball as often as he can. 
 The hitting player moves slowly towards the ball and hits it very soft
 so that he can hit it again and again. The other players usually 
-keep their initial behaviour. NOT WHAT WE WANTED. 
+keep their initial behaviour. NOT WHAT WE WANTED.
+
+ work001, work006
 TODO Diagram that shows that behaviour
 
 

@@ -10,10 +10,11 @@ object DiaFactoriesB03  extends DiaFactories[Data02]{
   override def trainGaId: String = "trainGaB03"
 
   def diaFactories: Seq[DiaFactory[Data02]] = Seq(
-    scoreGroupedByPopulation,
-    scoreComposition,
-    kicks,
-    goals,
+//    scoreGroupedByPopulation,
+//    scoreComposition,
+//    kicks,
+//    goals,
+    cat,
   )
 
   def scoreGroupedByPopulation: DiaFactory[Data02] =
@@ -91,6 +92,56 @@ object DiaFactoriesB03  extends DiaFactories[Data02]{
         columns = 2,
         title = Some(s"$title $name"),
         imgWidth = 1000,
+        imgHeight = 1000,
+        diagrams = _dias
+      )
+    }
+
+  }
+
+  def cat: DiaFactory[Data02] = {
+
+    (name: String, data: Seq[Data02]) => {
+
+      val grpSize = 50
+      val diaId = "cat"
+      val title = "categorisation"
+
+      def diagram(diaId: String, name: String, diaData: Seq[Data02]): Viz.Diagram[Viz.XY] = {
+        require(diaData.nonEmpty, "Cannot handle empty dataset")
+        val rows = Seq(
+          ("kicks max x 2", Smoothing.smooth(diaData.map(d => Viz.XY(d.iterations, d.kicksMax * 2)), grpSize)),
+          ("kicks min x 100", Smoothing.smooth(diaData.map(d => Viz.XY(d.iterations, d.kicksMin * 100)), grpSize)),
+          ("goals max x 1000", Smoothing.smooth(diaData.map(d => Viz.XY(d.iterations, d.otherGoalsMax * 1000)), grpSize)),
+          ("score", Smoothing.smooth(diaData.map(d => Viz.XY(d.iterations, d.score)), grpSize))
+        )
+
+        val vizDataRows =
+          for ((nam, dat) <- rows) yield {
+            Viz.DataRow(
+              name = Some(nam),
+              data = dat
+            )
+          }
+        Viz.Diagram(
+          id = diaId,
+          title = name,
+          yRange = Some(Viz.Range(Some(0), Some(15000))),
+          xRange = Some(Viz.Range(Some(0), Some(5000))),
+          dataRows = vizDataRows
+        )
+      }
+
+      require(data.nonEmpty, "Cannot handle empty dataset")
+      val rows: Map[String, Seq[Data02]] = data.groupBy(d => d.trainGaNr)
+      val _dias = for (nr <- rows.keys.toSeq.sorted) yield {
+        diagram(nr, nr, rows(nr))
+      }
+      Viz.MultiDiagram[Viz.XY](
+        id = diaId + name,
+        columns = 5,
+        title = Some(s"$title $name"),
+        imgWidth = 2800,
         imgHeight = 1000,
         diagrams = _dias
       )
