@@ -138,7 +138,7 @@ The results of the 7 populations can be fit into three categories.
 * All Kickers [AL]
 * One Goalgetter [OG]
 
-![categories](https://raw.githubusercontent.com/wwagner4/vsoc/master1/vsoc-ga-2018/doc/articles/resources/results/iter4/cattrainGaB03.png | width=90)
+![categories](https://raw.githubusercontent.com/wwagner4/vsoc/master1/vsoc-ga-2018/doc/articles/resources/results/iter4/cattrainGaB03.png = 90x)
 
 **OG** teams include one player hitting the ball as often as he can. 
 The hitting player moves slowly towards the ball and hits it very soft
