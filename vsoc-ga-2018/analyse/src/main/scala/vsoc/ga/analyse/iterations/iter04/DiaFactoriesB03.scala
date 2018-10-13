@@ -12,23 +12,18 @@ object DiaFactoriesB03 extends DiaFactories[Data02] {
 
   def diaFactories: Seq[FDia[Data02]] = Seq(
     scores,
-    cat,
-  )
+  ) ++ cats
 
-
-  def smoothProp(data: Seq[Data02], f: Data02 => Double, grpSize: Int):Seq[Viz.XY]= {
+  def smoothProp(data: Seq[Data02], f: Data02 => Double, grpSize: Int): Seq[Viz.XY] = {
     val xy = data.map(d => Viz.XY(d.iterations, f(d)))
     Smoothing.smooth(xy, grpSize)
   }
-
-
 
   val categories = Seq(
     ("One Kicker [OK]", "OK", Seq("work001", "work006")),
     ("All Kickers [AL]", "AL", Seq("bob001", "bob004", "work003")),
     ("One Goalgetter [OG]", "OG", Seq("bob002", "bob003", "work002", "work004", "work005")),
   )
-
 
   def scores: FDia[Data02] =
     (trainingId: String, data: Seq[Data02]) => {
@@ -62,13 +57,16 @@ object DiaFactoriesB03 extends DiaFactories[Data02] {
       )
     }
 
-  def cat: FDia[Data02] = {
+  def cats: Seq[FDia[Data02]] =
+    for ((title, diaId, trainGaNrs) <- categories) yield {
+      cat(title, diaId, trainGaNrs, _: String, _: Seq[Data02])
+    }
 
-    (name: String, data: Seq[Data02]) => {
+  private def cat = {
+
+    (title: String, diaId: String, trainGaNrs: Seq[String], name: String, data: Seq[Data02]) => {
 
       val grpSize = 50
-      val diaId = "cat"
-      val title = "categorisation"
 
       def diagram(diaId: String, name: String, diaData: Seq[Data02]): Viz.Diagram[Viz.XY] = {
         require(diaData.nonEmpty, "Cannot handle empty dataset")
@@ -95,16 +93,18 @@ object DiaFactoriesB03 extends DiaFactories[Data02] {
           id = diaId + name,
           columns = 5,
           title = Some(s"$title $name"),
-          imgWidth = 2800,
-          imgHeight = 1000,
+          imgWidth = 2000,
+          imgHeight = 400,
           diagrams = dias
         )
       }
 
       require(data.nonEmpty, "Cannot handle empty dataset")
 
-      val gdata: Map[String, Seq[Data02]] = data.groupBy(d => d.trainGaNr)
-      mdiagram(gdata.toSeq.sortBy{case (k, _) => k})
+      val gdata: Map[String, Seq[Data02]] = data
+        .filter(d => trainGaNrs.contains(d.trainGaNr))
+        .groupBy(d => d.trainGaNr)
+      mdiagram(gdata.toSeq.sortBy { case (k, _) => k })
 
     }
 
