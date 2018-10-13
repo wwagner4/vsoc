@@ -101,10 +101,11 @@ object DiaFactoriesB03 extends DiaFactories[Data02] {
 
     require(data.nonEmpty, "Cannot handle empty dataset")
 
-    val gdata: Map[String, Seq[Data02]] = data
+    val gdata = data
       .filter(d => trainGaNrs.contains(d.trainGaNr))
       .groupBy(d => d.trainGaNr)
-    mdiagram(gdata.toSeq.sortBy { case (k, _) => k })
+      .toSeq.sortBy { case (k, _) => k }
+    mdiagram(gdata)
 
   }
 

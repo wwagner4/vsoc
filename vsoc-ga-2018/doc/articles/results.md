@@ -147,21 +147,18 @@ The results of the 7 populations can be fit into three categories as shown by th
 The hitting player moves slowly towards the ball and hits it very soft
 so that he can hit it again and again. The other players usually 
 keep their initial behaviour. NOT WHAT WE WANTED.
-```
- Populations work001, work006
-```
+
+![categories](https://raw.githubusercontent.com/wwagner4/vsoc/master1/vsoc-ga-2018/doc/articles/resources/results/iter4/OKtrainGaB03.png)
+
+
 
 In **AL** Teams all players are are kicking the ball. They are not
 very focused on that aim but at least all players are kicking. SOMHOW WHAT WE WANTED TO GET.
-```
- Populations bob001, bob004, work003
-```
+![categories](https://raw.githubusercontent.com/wwagner4/vsoc/master1/vsoc-ga-2018/doc/articles/resources/results/iter4/ALtrainGaB03.png)
 
 The **OG** category represents teams where one player is scoring goals, but
 the other two are not evolving at all
-```
- Populations bob002, bob003, work002, work004, work005
-```
+![categories](https://raw.githubusercontent.com/wwagner4/vsoc/master1/vsoc-ga-2018/doc/articles/resources/results/iter4/OGtrainGaB03.png)
 
 
 
