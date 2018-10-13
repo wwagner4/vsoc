@@ -1,7 +1,7 @@
 package vsoc.ga.analyse.iterations.iter04
 
 import entelijan.viz.Viz
-import vsoc.ga.analyse.dia.DataDia.DIA
+import vsoc.ga.analyse.dia.DataDia.FDia
 import vsoc.ga.analyse.dia.DiaFactories
 import vsoc.ga.analyse.smooth.Smoothing
 import vsoc.ga.common.data.Data02
@@ -10,7 +10,7 @@ object DiaFactoriesB03 extends DiaFactories[Data02] {
 
   override def trainGaId: String = "trainGaB03"
 
-  def diaFactories: Seq[DIA[Data02]] = Seq(
+  def diaFactories: Seq[FDia[Data02]] = Seq(
     scores,
     cat,
   )
@@ -30,7 +30,7 @@ object DiaFactoriesB03 extends DiaFactories[Data02] {
   )
 
 
-  def scores: DIA[Data02] =
+  def scores: FDia[Data02] =
     (trainingId: String, data: Seq[Data02]) => {
 
       val title = "score for " + trainingId
@@ -62,7 +62,7 @@ object DiaFactoriesB03 extends DiaFactories[Data02] {
       )
     }
 
-  def cat: DIA[Data02] = {
+  def cat: FDia[Data02] = {
 
     (name: String, data: Seq[Data02]) => {
 
