@@ -4,17 +4,25 @@ import java.nio.file.{Files, Path}
 
 import entelijan.viz.{Viz, VizCreator, VizCreators}
 import org.slf4j.LoggerFactory
+import vsoc.ga.analyse.dia.DataDia.DIA
+
+object DataDia {
+
+  type DIA[T] = (String, Seq[T]) => Viz.Dia[Viz.XY]
+
+}
 
 abstract class DataDia[T] {
+
 
   def csvReader: CsvReader[T]
 
   private val log = LoggerFactory.getLogger(classOf[DataDia[_]])
 
-  def createDiaTrainGa(trainGa: String, diaFactory: DiaFactory[T], workDir: Path, diaDir: Option[Path] = None): Unit = {
+  def createDiaTrainGa(trainGa: String, diaFactory: DIA[T], workDir: Path, diaDir: Option[Path] = None): Unit = {
     implicit val crea: VizCreator[Viz.XY] = createCreator(workDir, diaDir)
     val data = csvReader.read(trainGa)(workDir)
-    val dia = diaFactory.createDia(trainGa, data)
+    val dia = diaFactory(trainGa, data)
     Viz.createDiagram(dia)
   }
 

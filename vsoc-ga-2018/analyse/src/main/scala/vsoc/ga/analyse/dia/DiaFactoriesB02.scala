@@ -1,6 +1,7 @@
 package vsoc.ga.analyse.dia
 
 import entelijan.viz.Viz
+import vsoc.ga.analyse.dia.DataDia.DIA
 import vsoc.ga.analyse.smooth.Smoothing
 import vsoc.ga.common.data.Data02
 
@@ -8,7 +9,7 @@ object DiaFactoriesB02  extends DiaFactories[Data02]{
 
   override def trainGaId: String = "trainGaB02"
 
-  def diaFactories: Seq[DiaFactory[Data02]] = Seq(
+  def diaFactories: Seq[DIA[Data02]] = Seq(
     scoreForAllPopulations,
     scoreComposition,
     kicksToKickOut,
@@ -16,7 +17,7 @@ object DiaFactoriesB02  extends DiaFactories[Data02]{
     goals,
   )
 
-  def scoreForAllPopulations: DiaFactory[Data02] =
+  def scoreForAllPopulations: DIA[Data02] =
 
     (id: String, data: Seq[Data02]) => {
 
@@ -47,7 +48,7 @@ object DiaFactoriesB02  extends DiaFactories[Data02]{
 
 
 
-  def scoreComposition: DiaFactory[Data02] =
+  def scoreComposition: DIA[Data02] =
 
     (name: String, data: Seq[Data02]) => {
 
@@ -96,7 +97,7 @@ object DiaFactoriesB02  extends DiaFactories[Data02]{
     }
 
 
-  def kicksToKickOut: DiaFactory[Data02] =
+  def kicksToKickOut: DIA[Data02] =
     (name: String, data: Seq[Data02]) => {
       val grpSize = 50
       val diaId = "kicksToKickOut"
@@ -141,7 +142,7 @@ object DiaFactoriesB02  extends DiaFactories[Data02]{
     }
 
 
-  def goals: DiaFactory[Data02] =
+  def goals: DIA[Data02] =
 
     (name: String, data: Seq[Data02]) => {
 
@@ -187,7 +188,7 @@ object DiaFactoriesB02  extends DiaFactories[Data02]{
       )
     }
 
-  def kicks: DiaFactory[Data02] =
+  def kicks: DIA[Data02] =
 
     (name: String, data: Seq[Data02]) => {
 
