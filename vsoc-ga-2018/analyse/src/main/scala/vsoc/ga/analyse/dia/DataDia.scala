@@ -5,11 +5,9 @@ import java.nio.file.{Files, Path}
 import entelijan.viz.{Viz, VizCreator, VizCreators}
 import org.slf4j.LoggerFactory
 
-//sealed trait DiaConf
+abstract class DataDia[T] {
 
-//case object DiaConf_SUPRESS_TIMESTAMP extends DiaConf
-
-class DataDia[T](csvReader: CsvReader[T]) {
+  def csvReader: CsvReader[T]
 
   private val log = LoggerFactory.getLogger(classOf[DataDia[_]])
 

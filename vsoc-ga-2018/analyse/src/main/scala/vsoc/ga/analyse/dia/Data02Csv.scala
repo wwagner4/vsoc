@@ -6,7 +6,7 @@ import java.nio.file.Files
 import vsoc.ga.common.config.Config
 import vsoc.ga.common.data.Data02
 
-class Data02Csv extends DataCsv[Data02](new CsvReaderData02) {
+class Data02Csv extends DataCsv[Data02] {
 
   override def formatter: Formatter[Data02] = FormatterAll
 
@@ -87,5 +87,5 @@ class Data02Csv extends DataCsv[Data02](new CsvReaderData02) {
     }
   }
 
-
+  override def csvReader: CsvReader[Data02] = new CsvReaderData02
 }

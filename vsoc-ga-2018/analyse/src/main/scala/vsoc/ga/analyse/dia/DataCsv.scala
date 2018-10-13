@@ -6,11 +6,13 @@ import java.nio.file.{Files, Path, Paths}
 import vsoc.ga.common.UtilPath
 import vsoc.ga.common.config.{Config, ConfigHelper, ConfigTrainGa}
 
-abstract class DataCsv[T](csvReader: CsvReader[T]) {
+abstract class DataCsv[T] {
 
   protected def sepa = "\t"
 
   protected def colWidth = 13
+
+  def csvReader: CsvReader[T]
 
   def fmtStr(fmtDef: Seq[Fmt]): String = {
     fmtDef.map(_.toString).mkString(sepa)
