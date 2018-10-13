@@ -6,4 +6,7 @@ trait DiaFactories[T] {
 
   def diaFactories: Seq[DiaFactory[T]]
 
+
+
+
 }

@@ -82,7 +82,7 @@ object ServerImpl {
     def run(): Unit = {
       clearDir(httpPath)
       val workDir = UtilPath.workDir
-      new Data02Dia().createDiaTrainGa(trainGa, DiaFactoriesB03.scoreGroupedByPopulation, workDir, Some(httpPath))
+      new Data02Dia().createDiaTrainGa(trainGa, DiaFactoriesB03.scores, workDir, Some(httpPath))
     }
     createIndexHtml(httpPath)
   }
