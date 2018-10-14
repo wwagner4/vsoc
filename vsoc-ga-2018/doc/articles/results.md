@@ -36,6 +36,7 @@ trained to score goals (which is the finall goal by the way)
 
 ## Iteration 4
 ### Principles
+
 * Players are trained independendly.
 * Improved stepwise optimizing fitness function. 
 
@@ -89,7 +90,7 @@ the main purpose of the game. To get teams where all players
 score goals, goals of the best player are weighted less than 
 those of the worst player. 
 
-The values for scoring are capped (why did I do that ???).
+The values for scoring are capped (why did I do that ?).
 
 Penalties are given for scoring own goals.
 
@@ -169,7 +170,7 @@ To achieve that goal the max value for the best kicking
 palyer was reduced.
 
 ### Score for all Populations
-![alt text](https://raw.githubusercontent.com/wwagner4/vsoc/master1/vsoc-ga-2018/doc/articles/resources/results/iter3/trainGaB02.png)
+![Score for all Populations](https://raw.githubusercontent.com/wwagner4/vsoc/master1/vsoc-ga-2018/doc/articles/resources/results/iter3/trainGaB02.png)
 This diagram shows us that some populations stopped increasing
 fitness between 1000 and 1500 generations. two of those at a relative
 high level of about 7000 (bob002, work003). five at a lower level of
@@ -179,7 +180,7 @@ increasing fitness althogh it did not increase very fast at the
 beginning.
 
 ### Relation between Max, Mean and Min Fitness
-![alt text](https://raw.githubusercontent.com/wwagner4/vsoc/master1/vsoc-ga-2018/doc/articles/resources/results/iter3/kickstrainGaB02.png)
+![Relation between Max, Mean and Min Fitness](https://raw.githubusercontent.com/wwagner4/vsoc/master1/vsoc-ga-2018/doc/articles/resources/results/iter3/kickstrainGaB02.png)
 This diagram shows us two classes of population. populations
 where all players are kicking [ALL] the ball and others where only one
 player kicks the ball.
@@ -221,12 +222,69 @@ but then did not improve that (very important) behaviour any longer
 
 ## Iteration 2
 ### Diagrams
+![iter2 01](https://raw.githubusercontent.com/wwagner4/vsoc/master1/vsoc-ga-2018/doc/articles/resources/results/iter3/trainGaB01.png)
+![iter2 02](https://raw.githubusercontent.com/wwagner4/vsoc/master1/vsoc-ga-2018/doc/articles/resources/results/iter3/scorecomptrainGaB01.png)
+![iter2 03](https://raw.githubusercontent.com/wwagner4/vsoc/master1/vsoc-ga-2018/doc/articles/resources/results/iter3/kickstrainGaB01.png)
 
 ### Videos
 
+[bob001 &#9654;](https://www.youtube.com/embed/PZAosVPFOXw)
+One player per team is kicking. Other
+players have little to no interest at the ball.
+
+[bob002 &#9654;](https://www.youtube.com/embed/uYDOse_okbk)
+One player per team is kicking and scoring goals.
+Own goals are avoided. Other players have no interest at the ball.
+
+[bob003 &#9654;](https://www.youtube.com/embed/0Rpm12aq38I)
+One player per team is kicking and scoring goals.
+Own goals are avoided.<br> Other players have no interest at the ball.
+
+[bob004 &#9654;](https://www.youtube.com/embed/g1mHbM2xOj0)
+One player per team is kicking.<br> No goals.
+Other players have no interest at the ball.
+
+[work001 &#9654;](https://www.youtube.com/embed/817eIpDZeGM)
+One player per team is kicking. No goals.
+Other players have no interest at the ball.
+
+[work002 &#9654;](https://www.youtube.com/embed/KHeifGK_bZo)
+One player per team is kicking and scoring goals.
+Own goals are avoided.<br> Other players have no interest at the ball
+
+[work003 &#9654;](https://www.youtube.com/embed/DXwhpZ_Kn54)
+One player per team is kicking and scoring some goals.
+Other players have no interest at the ball.
+
+[work004 &#9654;](https://www.youtube.com/embed/CU2l0annFM4)
+One player per team is kicking and scoring goals.
+Own goals are avoided<br> Other players have no interest at the ball
+
+### Conclusions
+Only one player per team learns kicking and (sometimes) scoring goals.
+NOT EXACTLY WHAT WE WANTED.
 
 ## Iteration 1
-### Videos
+### Diagrams and related Video(s)
+![iter1](https://raw.githubusercontent.com/wwagner4/vsoc/master1/vsoc-ga-2018/
+doc/articles/resources/results/iter1/trainGa03.png)
+[trainGa03 a &#9654;](https://www.youtube.com/embed/YVx2tspZJwE)
+[trainGa03 b &#9654;](https://www.youtube.com/embed/s2fviN9zUj0)
+
+![iter1](https://raw.githubusercontent.com/wwagner4/vsoc/master1/vsoc-ga-2018/
+doc/articles/resources/results/iter1/trainGa04M0om02.png)
+[04M0om02 &#9654;](https://www.youtube.com/embed/EtJ4-NlgMf0)
+
+![iter1](https://raw.githubusercontent.com/wwagner4/vsoc/master1/vsoc-ga-2018/
+doc/articles/resources/results/iter1/trainGa04M0om02varL.png)
+[04M0om02varL &#9654;](https://www.youtube.com/embed/i8lH4ojFnpE)
+
+![iter1](https://raw.githubusercontent.com/wwagner4/vsoc/master1/vsoc-ga-2018/
+doc/articles/resources/results/iter1/trainGa05fitFac03b.png)
+[fitFac03b &#9654;](https://www.youtube.com/embed/Vg93pYbuNIw)
+
+
+
 
 
 
