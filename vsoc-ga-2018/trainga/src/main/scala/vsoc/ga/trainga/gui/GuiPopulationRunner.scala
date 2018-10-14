@@ -15,16 +15,14 @@ import scala.util.Random
 
 object GuiPopulationRunner {
 
-  private val workBasic = UtilPath.workDir
-
-  def run(trainGa: TrainGa[_], populationNr: String, generationNrOpt: Option[String]): Unit = {
+  def run(trainGa: TrainGa[_], populationNr: String, generationNrOpt: Option[String])(implicit workBasic: Path): Unit = {
 
     val populationdir = workBasic.resolve(Paths.get(trainGa.id, populationNr))
     require(Files.exists(populationdir), s"Directory must exist '$populationdir'")
     require(Files.isDirectory(populationdir))
     val generationNr = generationNrOpt.getOrElse(latestGeneration(populationdir))
 
-    val mf: () => Match = () => createMatch(trainGa, populationNr, generationNr, populationdir)
+    val mf: () => Match = () => createMatch(trainGa, populationNr, generationNr, populationdir, workBasic)
     val f = new VsocMatchFrame(s"${trainGa.id}-$populationNr", s"Generation: $generationNr", mf)
     f.setSize(960, 584)
     f.setVisible(true)
@@ -41,7 +39,7 @@ object GuiPopulationRunner {
     fnam.substring(0, fnam.length - 4)
   }
 
-  def createMatch(trainGa: TrainGa[_], populationNr: String, generationNr: String, popDir: Path): Match = {
+  def createMatch(trainGa: TrainGa[_], populationNr: String, generationNr: String, popDir: Path, workDir: Path): Match = {
 
     def generationPath: Path = {
       Files.list(popDir)
@@ -55,7 +53,7 @@ object GuiPopulationRunner {
       import vsoc.ga.common.UtilTransform._
 
       val genPath: Path = generationPath
-      val persistor = Persistors.nio(workBasic)
+      val persistor = Persistors.nio(workDir)
       val genDir = Paths.get(trainGa.id, populationNr, genPath.getFileName.toString)
       persistor.load(genDir) { ois =>
         val cont = ois.readObject().asInstanceOf[TrainGaContainer]

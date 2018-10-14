@@ -150,14 +150,20 @@ The hitting player moves slowly towards the ball and hits it very soft
 so that he can hit it again and again. The other players. NOT WHAT WE WANTED.
 ![categories](https://raw.githubusercontent.com/wwagner4/vsoc/master1/vsoc-ga-2018/doc/articles/resources/results/iter4/OKtrainGaB03.png)
 
+[work001 &#9654;](https://www.youtube.com/embed/wRZgbNliXYo)
+
 In **AL** Teams all players are are kicking the ball. They are not
 very focused on that aim but at least all players are kicking.
 SOMHOW WHAT WE WANTED TO GET.
 ![categories](https://raw.githubusercontent.com/wwagner4/vsoc/master1/vsoc-ga-2018/doc/articles/resources/results/iter4/ALtrainGaB03.png)
 
+[bob001 &#9654;](https://www.youtube.com/embed/pXlvV-XJO8s)
+
 The **OG** category represents teams where one player is scoring goals, but
 the other two are not evolving at all. NOT WHAT WE WANTED.
 ![categories](https://raw.githubusercontent.com/wwagner4/vsoc/master1/vsoc-ga-2018/doc/articles/resources/results/iter4/OGtrainGaB03.png)
+
+[bob002 &#9654;](https://www.youtube.com/embed/IdiImG9voAA)
 
 ## Iteration 3
 

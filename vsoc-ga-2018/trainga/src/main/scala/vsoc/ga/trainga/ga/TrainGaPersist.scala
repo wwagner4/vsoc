@@ -25,4 +25,5 @@ class TrainGaPersist[S] {
 
 }
 
-case class TrainGaContainer(id: String, iterations: Int, population: Array[Array[Double]])
+@SerialVersionUID(-3164640124303372341L)
+case class TrainGaContainer(id: String, iterations: Int, population: Array[Array[Double]]) {}
