@@ -50,7 +50,7 @@ trained to score goals (which is the finall goal by the way)
  - math.min(10000, data.ownGoalsMean * 500)
  
 Reformated for better understanding
- 
+
 #### General Description
 Has rewards for kicking and goal scoring. Gives penalty for 
 kick out and own goals. 
@@ -156,9 +156,9 @@ The **OG** category represents teams where one player is scoring goals, but
 the other two are not evolving at all. NOT WHAT WE WANTED.
 ![categories](https://raw.githubusercontent.com/wwagner4/vsoc/master1/vsoc-ga-2018/doc/articles/resources/results/iter4/OGtrainGaB03.png)
 
- 
-# Iteration 3
-## Aims and Principles
+## Iteration 3
+
+### Aims and Principles
 Goal of that iteration was to find a better fitness functions 
 to avoid the pitfalls from the previous iteration. 
 Mainly to avoid the breeding of teams that have only one 
@@ -166,14 +166,14 @@ evolving player.
 To achieve that goal the max value for the best kicking 
 palyer was reduced.
 
-## Score for all Populations
+### Score for all Populations
 ![alt text](res/it3/trainGaB02.png "Logo Title Text 1")
 
 
 
-# Iteration 2
+## Iteration 2
 
-# Iteration 1 
+## Iteration 1
 
 
 
