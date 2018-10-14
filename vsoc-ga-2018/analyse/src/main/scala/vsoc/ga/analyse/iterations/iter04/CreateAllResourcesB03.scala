@@ -4,7 +4,7 @@ import java.nio.file._
 
 import vsoc.ga.common.UtilPath._
 
-object CreateAllResources {
+object CreateAllResourcesB03 {
 
   def create(baseDir: Path): Path = {
 
