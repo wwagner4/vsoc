@@ -94,17 +94,17 @@ Penalties are given for scoring own goals.
 
 #### Expected Values
 To get an overview of the expected results the max values of
-the elements of the fitness function are calculated 
+the elements of the fitness function are calculated
 
-|Element       |+/-|max Actions |max Value |
-|--------------|---|-----------:|---------:|
-|kicksMax      | + |100         |100       |
-|kicksMean     | + |200         |2.000     |
-|kicksMin      | + |50          |5.000     |
-|kickOutMean   | - |1.000       |1.000     |
-|otherGoalsMax | + |20          |10.000    |
-|otherGoalsMin | + |80          |80.000    |
-|ownGoalsMin   | - |20          |10.000    |
+| Element        | +/- | max Actions  | max Value  |
+| -------------- | --- | -----------: | ---------: |
+| kicksMax       |  +  | 100          | 100        |
+| kicksMean      |  +  | 200          | 2.000      |
+| kicksMin       |  +  | 50           | 5.000      |
+| kickOutMean    |  -  | 1.000        | 1.000      |
+| otherGoalsMax  |  +  | 20           | 10.000     |
+| otherGoalsMin  |  +  | 80           | 80.000     |
+| ownGoalsMin    |  -  | 20           | 10.000     |
 
 (why did I not make these calculations before the testrun ???)
 
@@ -135,20 +135,20 @@ training goals where attained.
 
 #### Categories
 The following diagram shows that the populations can be fit into three categories
- 
+
 ![categories](https://raw.githubusercontent.com/wwagner4/vsoc/master1/vsoc-ga-2018/doc/articles/resources/results/iter4/cattrainGaB03.png)
 
 * One Kicker [OK]
 * All Kickers [AL]
 * One Goalgetter [OG]
 
-The **OK** teams include one player hitting the ball as often as he can. 
+The **OK** teams include one player hitting the ball as often as he can.
 The hitting player moves slowly towards the ball and hits it very soft
 so that he can hit it again and again. The other players. NOT WHAT WE WANTED.
 ![categories](https://raw.githubusercontent.com/wwagner4/vsoc/master1/vsoc-ga-2018/doc/articles/resources/results/iter4/OKtrainGaB03.png)
 
 In **AL** Teams all players are are kicking the ball. They are not
-very focused on that aim but at least all players are kicking. 
+very focused on that aim but at least all players are kicking.
 SOMHOW WHAT WE WANTED TO GET.
 ![categories](https://raw.githubusercontent.com/wwagner4/vsoc/master1/vsoc-ga-2018/doc/articles/resources/results/iter4/ALtrainGaB03.png)
 
