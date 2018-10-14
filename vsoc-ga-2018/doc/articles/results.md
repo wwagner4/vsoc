@@ -205,13 +205,27 @@ the training there is only one populaton that fulfills that task
 but then did not improve that (very important) behaviour any longer
 (bob001 generation 200 to 1500, bob004 generation 700 to 1400)
 
-### Videos (Screenshots)
+### Videos (Screenshots of simulations)
 [bob001 &#9654;](https://www.youtube.com/embed/JnysjnrOf40)
+[bob002 &#9654;](https://www.youtube.com/embed/58RfdxZ6MEY)
+[bob003 &#9654;](https://www.youtube.com/embed/mdAbUIv9Sek)
+[bob004 &#9654;](https://www.youtube.com/embed/-0raLNPos4c)
+[work001 &#9654;](https://www.youtube.com/embed/-0raLNPos4c)
+[work002 &#9654;](https://www.youtube.com/embed/SnDZplg0Ejg)
+[work003 &#9654;](https://www.youtube.com/embed/Q9RRPBsHCLI)
+[work004 &#9654;](https://www.youtube.com/embed/UPI7UdZmMrs)
+[work005 &#9654;](https://www.youtube.com/embed/KalS5Bx0TJY)
+[work006 &#9654;](https://www.youtube.com/embed/r6_EfeEtTEM)
 
 
 ## Iteration 2
+### Diagrams
+
+### Videos
+
 
 ## Iteration 1
+### Videos
 
 
 
