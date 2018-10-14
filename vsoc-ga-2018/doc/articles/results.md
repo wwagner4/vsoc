@@ -34,6 +34,39 @@ focusing on the final goal of game.
 E.g. Train the players to kick the ball before they are 
 trained to score goals (which is the finall goal by the way)
 
+## Iteration 5
+### Principles
+
+* Same as Iteration 4
+* Improve Fitness-Function of Iteration 4
+
+### Fitness Function 'data02A04'
+
+```
+ + math.min(500, data.kicksMax)
+ + math.min(50000, data.kicksMin * 100)
+ - data.kickOutMean
+ + math.min(10000, data.otherGoalsMax * 500)
+ + data.otherGoalsMin * 1000
+ - data.ownGoalsMean * 500
+```
+
+#### Expected Values
+
+To get an overview of the expected results the max values of
+the elements of the fitness function are calculated.
+
+| Element        | +/- | reinforcement | max Actions  | max Value  |
+| -------------- | --- | ------------: | -----------: | ---------: |
+| kicksMax       |  +  | 1             | 500          | 500        |
+| kicksMin       |  +  | 100           | 500          | 50.000     |
+| kickOutMean    |  -  | 1             | -            | -          |
+| otherGoalsMax  |  +  | 50            | 50           | 50.000     |
+| otherGoalsMin  |  +  | 1000          | -            | -          |
+| ownGoalsMin    |  -  | 500           | -            | -          |
+
+- '-' ... no limit
+
 ## Iteration 4
 ### Principles
 
@@ -164,6 +197,23 @@ the other two are not evolving at all. NOT WHAT WE WANTED.
 ![categories](https://raw.githubusercontent.com/wwagner4/vsoc/master1/vsoc-ga-2018/doc/articles/resources/results/iter4/OGtrainGaB03.png)
 
 [bob002 &#9654;](https://www.youtube.com/embed/IdiImG9voAA)
+
+### Conclusion and Proposals for the next iteration
+One of the main aims of the simulation is to breed teams where all players are scoring goals. In this
+iteration most population are stuck in local minima where players do not fulfill the
+main aim.
+
+The only populations (Category AL) where actually all players are trained are unsatisfying as
+scoring goals is not really what the players have learned.
+
+As a consequence of that the fitness function of further iterations should reward goals of the
+worst player without limitation.
+
+Another consequence must be, that the max value of the worst player must be higher. The max action count for
+that element of the fitness function must be much higher than 20 (For details see the table above).
+
+Rewarding of mean values seems to have no positive effect and should not be a separate
+element of the fitness function any longer.
 
 ## Iteration 3
 
