@@ -266,7 +266,7 @@ NOT EXACTLY WHAT WE WANTED.
 
 ## Iteration 1
 ### Diagrams and related Video(s)
-![iter1](https://raw.githubusercontent.com/wwagner4/vsoc/master1/vsoc-ga-2018/
+![iter1](https://raw.githubusercontent.com/wwagner4/vsoc/master1/vsoc-ga-2018/\
 doc/articles/resources/results/iter1/trainGa03.png)
 [trainGa03 a &#9654;](https://www.youtube.com/embed/YVx2tspZJwE)
 [trainGa03 b &#9654;](https://www.youtube.com/embed/s2fviN9zUj0)
