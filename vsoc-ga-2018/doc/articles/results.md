@@ -93,8 +93,9 @@ The values for scoring are capped (why did I do that ???).
 Penalties are given for scoring own goals.
 
 #### Expected Values
+
 To get an overview of the expected results the max values of
-the elements of the fitness function are calculated
+the elements of the fitness function are calculated.
 
 | Element        | +/- | max Actions  | max Value  |
 | -------------- | --- | -----------: | ---------: |
@@ -167,8 +168,45 @@ To achieve that goal the max value for the best kicking
 palyer was reduced.
 
 ### Score for all Populations
-![alt text](res/it3/trainGaB02.png "Logo Title Text 1")
+![alt text](https://raw.githubusercontent.com/wwagner4/vsoc/master1/vsoc-ga-2018/doc/articles/resources/results/iter3/trainGaB02.png)
+This diagram shows us that some populations stopped increasing
+fitness between 1000 and 1500 generations. two of those at a relative
+high level of about 7000 (bob002, work003). five at a lower level of
+3000 to 5000 (bob001, w001, w002 w005, w006). bob003 and wok004 show
+still increasing fitness at a high level. bob004 also shows continous
+increasing fitness althogh it did not increase very fast at the
+beginning.
 
+### Relation between Max, Mean and Min Fitness
+![alt text](https://raw.githubusercontent.com/wwagner4/vsoc/master1/vsoc-ga-2018/doc/articles/resources/results/iter3/kickstrainGaB02.png)
+This diagram shows us two classes of population. populations
+where all players are kicking [ALL] the ball and others where only one
+player kicks the ball.
+
+| Class | Populations                                       |
+| ----- | ------------------------------------------------- |
+| ALL   | bob002, bob003, work003, work004                  |
+| ONE   | bob001, bob004, work001, work002, work005, work00 |
+
+The populations with the continous incrasing fitness can be
+found in both groups. bob004 gets incrasing fitness by improving
+exactly one player. bob003 and work004 have all players kicking the
+ball, which was the goal of this iteration.
+
+### Goals vs Own Goals
+![Goals vs Own Goals](https://raw.githubusercontent.com/wwagner4/vsoc/master1/vsoc-ga-2018/doc/articles/resources/results/iter3/goalstrainGaB02.png)
+on that diagram you can watch how the kicking of goals evolves.
+of course goalkicking increases as kicking increases because the
+players hit the goals by chance. therefor we also observe the number
+of owngoals. if this number is lower than the number of goals the
+players tend to shoot more goals than own goals (good) at the end of
+the training there is only one populaton that fulfills that task
+(work006). other population where shooting goals for a certain time
+but then did not improve that (very important) behaviour any longer
+(bob001 generation 200 to 1500, bob004 generation 700 to 1400)
+
+### Videos (Screenshots)
+[bob001 &#9654;](https://www.youtube.com/embed/JnysjnrOf40)
 
 
 ## Iteration 2
