@@ -46,7 +46,7 @@ trained to score goals (which is the finall goal by the way)
  + math.min(500, data.kicksMax)
  + math.min(50000, data.kicksMin * 100)
  - data.kickOutMean
- + math.min(10000, data.otherGoalsMax * 500)
+ + math.min(5000, data.otherGoalsMax * 500)
  + data.otherGoalsMin * 1000
  - data.ownGoalsMean * 500
 ```
@@ -61,7 +61,7 @@ the elements of the fitness function are calculated.
 | kicksMax       |  +  | 1             | 500          | 500        |
 | kicksMin       |  +  | 100           | 500          | 50.000     |
 | kickOutMean    |  -  | 1             | -            | -          |
-| otherGoalsMax  |  +  | 50            | 50           | 50.000     |
+| otherGoalsMax  |  +  | 500           | 10           | 5.000     |
 | otherGoalsMin  |  +  | 1000          | -            | -          |
 | ownGoalsMin    |  -  | 500           | -            | -          |
 

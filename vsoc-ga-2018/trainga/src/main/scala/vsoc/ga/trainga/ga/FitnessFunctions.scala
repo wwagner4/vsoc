@@ -36,14 +36,14 @@ object FitnessFunctions {
 
     override def fullDesc: String =
       s"""'$id' - Summary Fitnessfunction with max mean values
-         |Higher bebefit for kicksMin and kicksMean
+         |Higher benefit for kicksMin and kicksMean
          |That should avoid breeding only one kicking player per team
        """.stripMargin
   }
 
   def data02A03: FitnessFunction[Data02] = new FitnessFunction[Data02] {
 
-    override def id: String = "data02A02"
+    override def id: String = "data02A03"
 
     override def fitness(data: Data02): Double = {
       math.min(100, data.kicksMax) +
@@ -59,6 +59,25 @@ object FitnessFunctions {
       s"""'$id' - Summary Fitnessfunction
          |Reduced top value for kicks max to avoid one player team
          |Increased factors for goals to get goal kickers
+       """.stripMargin
+  }
+
+  def data02A04: FitnessFunction[Data02] = new FitnessFunction[Data02] {
+
+    override def id: String = "data02A04"
+
+    override def fitness(data: Data02): Double = {
+      math.min(500, data.kicksMax) +
+        math.min(50000, data.kicksMin * 100) -
+        data.kickOutMean +
+        math.min(5000, data.otherGoalsMax * 500) +
+        data.otherGoalsMin * 1000 -
+        data.ownGoalsMean * 500
+    }
+
+    override def fullDesc: String =
+      s"""'$id' - Summary Fitnessfunction
+         |Iteration 5
        """.stripMargin
   }
 
