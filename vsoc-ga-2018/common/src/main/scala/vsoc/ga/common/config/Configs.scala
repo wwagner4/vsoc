@@ -81,5 +81,37 @@ object Configs {
       """Four populations using TrainGa B03"""
   }
 
+  def b04Bob: Config = new Config {
+
+    override def id: String = "b04Bob"
+
+    override def trainings: Seq[ConfigTrainGa] = Seq(
+      ConfigTrainGa("trainGaB04", "bob001"),
+      ConfigTrainGa("trainGaB04", "bob002"),
+      ConfigTrainGa("trainGaB04", "bob003"),
+      ConfigTrainGa("trainGaB04", "bob004"),
+    )
+
+    override def fullDesc: String =
+      """Four populations using TrainGa B04"""
+  }
+
+  def b04Work: Config = new Config {
+
+    override def id: String = "b04work"
+
+    override def trainings: Seq[ConfigTrainGa] = Seq(
+      ConfigTrainGa("trainGaB04", "work001"),
+      ConfigTrainGa("trainGaB04", "work002"),
+      ConfigTrainGa("trainGaB04", "work003"),
+      ConfigTrainGa("trainGaB04", "work004"),
+      ConfigTrainGa("trainGaB04", "work005"),
+      ConfigTrainGa("trainGaB04", "work006"),
+    )
+
+    override def fullDesc: String =
+      """Four populations using TrainGa B04"""
+  }
+
 
 }
