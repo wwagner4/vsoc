@@ -42,7 +42,7 @@ trained to score goals (which is the finall goal by the way)
 
 ### Fitntness Function 'data02A03'
 
-````
+```
  + math.min(100, data.kicksMax) 
  + math.min(2000, data.kicksMean) * 10 
  + math.min(5000, data.kicksMin * 100) 
@@ -50,7 +50,7 @@ trained to score goals (which is the finall goal by the way)
  + math.min(10000, data.otherGoalsMax * 500) 
  + math.min(80000, data.otherGoalsMin * 1000) 
  - math.min(10000, data.ownGoalsMean * 500)
-````
+```
 Reformated for better understanding
 
 #### General Description
@@ -171,6 +171,7 @@ palyer was reduced.
 
 ### Score for all Populations
 ![Score for all Populations](https://raw.githubusercontent.com/wwagner4/vsoc/master1/vsoc-ga-2018/doc/articles/resources/results/iter3/trainGaB02.png)
+
 This diagram shows us that some populations stopped increasing
 fitness between 1000 and 1500 generations. two of those at a relative
 high level of about 7000 (bob002, work003). five at a lower level of
@@ -181,6 +182,7 @@ beginning.
 
 ### Relation between Max, Mean and Min Fitness
 ![Relation between Max, Mean and Min Fitness](https://raw.githubusercontent.com/wwagner4/vsoc/master1/vsoc-ga-2018/doc/articles/resources/results/iter3/kickstrainGaB02.png)
+
 This diagram shows us two classes of population. populations
 where all players are kicking [ALL] the ball and others where only one
 player kicks the ball.
@@ -267,16 +269,23 @@ NOT EXACTLY WHAT WE WANTED.
 ## Iteration 1
 ### Diagrams and related Video(s)
 ![iter1](https://raw.githubusercontent.com/wwagner4/vsoc/master1/vsoc-ga-2018/doc/articles/resources/results/iter1/trainGa03.png)
+
 [trainGa03 a &#9654;](https://www.youtube.com/embed/YVx2tspZJwE)
 [trainGa03 b &#9654;](https://www.youtube.com/embed/s2fviN9zUj0)
 
+
 ![iter1](https://raw.githubusercontent.com/wwagner4/vsoc/master1/vsoc-ga-2018/doc/articles/resources/results/iter1/trainGa04M0om02.png)
+
 [04M0om02 &#9654;](https://www.youtube.com/embed/EtJ4-NlgMf0)
 
+
 ![iter1](https://raw.githubusercontent.com/wwagner4/vsoc/master1/vsoc-ga-2018/doc/articles/resources/results/iter1/trainGa04M0om02varL.png)
+
 [04M0om02varL &#9654;](https://www.youtube.com/embed/i8lH4ojFnpE)
 
+
 ![iter1](https://raw.githubusercontent.com/wwagner4/vsoc/master1/vsoc-ga-2018/doc/articles/resources/results/iter1/trainGa05fitFac03b.png)
+
 [fitFac03b &#9654;](https://www.youtube.com/embed/Vg93pYbuNIw)
 
 
