@@ -40,7 +40,8 @@ trained to score goals (which is the finall goal by the way)
 * Improved stepwise optimizing fitness function. 
 
 ### Fitntness Function 'data02A03'
-´´´´
+
+````
  + math.min(100, data.kicksMax) 
  + math.min(2000, data.kicksMean) * 10 
  + math.min(5000, data.kicksMin * 100) 
@@ -48,8 +49,7 @@ trained to score goals (which is the finall goal by the way)
  + math.min(10000, data.otherGoalsMax * 500) 
  + math.min(80000, data.otherGoalsMin * 1000) 
  - math.min(10000, data.ownGoalsMean * 500)
-´´´´
-
+````
 Reformated for better understanding
 
 #### General Description
