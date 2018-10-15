@@ -6,7 +6,7 @@ import vsoc.ga.analyse.dia.CreateDiasData02
 import vsoc.ga.common.UtilPath
 import vsoc.ga.common.analyse.iterations.iter04.CreateAllResourcesB03
 
-object Analyse extends App {
+object AnalyseB03 extends App {
 
   val baseDir = UtilPath.workDir
   implicit val iterDir: Path = CreateAllResourcesB03.create(baseDir)
