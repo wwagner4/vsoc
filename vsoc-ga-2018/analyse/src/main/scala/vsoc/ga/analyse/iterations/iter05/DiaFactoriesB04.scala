@@ -13,6 +13,7 @@ object DiaFactoriesB04 extends DiaFactories[Data02] {
   def diaFactories: Seq[FDia[Data02]] = Seq(
     Seq(scores),
     cats,
+    goalsOtherOwns,
   ).flatten
 
   def smoothProp(data: Seq[Data02], f: Data02 => Double, grpSize: Int): Seq[Viz.XY] = {
@@ -53,7 +54,7 @@ object DiaFactoriesB04 extends DiaFactories[Data02] {
     }
 
   val categories = Seq(
-    ("Bob [BOB]", "BOB", Seq("bob001", "bob002", "bob003", "bob004")),
+  //  ("Bob [BOB]", "BOB", Seq("bob001", "bob002", "bob003", "bob004")),
     ("Work [WORK]", "WORK", Seq("work001","work002","work003","work004","work005","work006")),
   )
 
@@ -62,9 +63,15 @@ object DiaFactoriesB04 extends DiaFactories[Data02] {
       cat(title, diaId, trainGaNrs) _
     }
 
+  def goalsOtherOwns: Seq[FDia[Data02]] =
+    for ((title, diaId, trainGaNrs) <- categories) yield {
+      goalsOtherOwn(title, diaId, trainGaNrs) _
+    }
+
   private def cat(title: String, diaId: String, trainGaNrs: Seq[String])
                  (name: String, data: Seq[Data02]): Viz.Dia[Viz.XY] = {
 
+    val mdiaId = "cat"
     val grpSize = 50
 
     def diagram(diaId: String, name: String, diaData: Seq[Data02]): Viz.Diagram[Viz.XY] = {
@@ -80,7 +87,7 @@ object DiaFactoriesB04 extends DiaFactories[Data02] {
       Viz.Diagram(
         id = diaId,
         title = name,
-        yRange = Some(Viz.Range(Some(0), Some(500))),
+        //yRange = Some(Viz.Range(Some(0), Some(1000))),
         //xRange = Some(Viz.Range(Some(0), Some(5000))),
         dataRows = rows
       )
@@ -89,11 +96,57 @@ object DiaFactoriesB04 extends DiaFactories[Data02] {
     def mdiagram(gdata: Seq[(String, Seq[Data02])]): Viz.Dia[Viz.XY] = {
       val dias = for ((nr, data) <- gdata) yield diagram(nr, nr, data)
       Viz.MultiDiagram[Viz.XY](
-        id = diaId + name,
-        columns = 5,
+        id = diaId + name + mdiaId,
+        columns = 3,
         title = Some(s"$title $name"),
-        imgWidth = 2000,
-        imgHeight = 400,
+        imgWidth = 1600,
+        imgHeight = 1200,
+        diagrams = dias
+      )
+    }
+
+    require(data.nonEmpty, "Cannot handle empty dataset")
+
+    val gdata = data
+      .filter(d => trainGaNrs.contains(d.trainGaNr))
+      .groupBy(d => d.trainGaNr)
+      .toSeq.sortBy { case (k, _) => k }
+    mdiagram(gdata)
+
+  }
+
+  private def goalsOtherOwn(title: String, diaId: String, trainGaNrs: Seq[String])
+                 (name: String, data: Seq[Data02]): Viz.Dia[Viz.XY] = {
+
+    val grpSize = 50
+
+    val mdiaId = "goalsOtherOwn"
+
+    def diagram(diaId: String, name: String, diaData: Seq[Data02]): Viz.Diagram[Viz.XY] = {
+      require(diaData.nonEmpty, "Cannot handle empty dataset")
+
+      val rows = Seq(
+        Viz.DataRow(Some("goals max"), data = smoothProp(diaData, d => d.otherGoalsMax, grpSize)),
+        Viz.DataRow(Some("own goals max"), data = smoothProp(diaData, d => d.ownGoalsMax, grpSize)),
+      )
+
+      Viz.Diagram(
+        id = diaId,
+        title = name,
+        //yRange = Some(Viz.Range(Some(0), Some(1000))),
+        //xRange = Some(Viz.Range(Some(0), Some(5000))),
+        dataRows = rows
+      )
+    }
+
+    def mdiagram(gdata: Seq[(String, Seq[Data02])]): Viz.Dia[Viz.XY] = {
+      val dias = for ((nr, data) <- gdata) yield diagram(nr, nr, data)
+      Viz.MultiDiagram[Viz.XY](
+        id = diaId + name + mdiaId,
+        columns = 3,
+        title = Some(s"$title $name"),
+        imgWidth = 1600,
+        imgHeight = 1200,
         diagrams = dias
       )
     }
