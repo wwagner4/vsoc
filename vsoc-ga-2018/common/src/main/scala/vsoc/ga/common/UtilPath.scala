@@ -29,6 +29,6 @@ object UtilPath {
 
   def tmpDir: Path = Paths.get(System.getProperty("java.io.tmpdir"))
 
-  def workDir: Path = ConfigHelper.workDir1
+  def workDir: Path = ConfigHelper.workDir
 
 }

@@ -13,7 +13,7 @@ object ConfigHelper {
     _props
   }
 
-  def workDir1: Path = Paths.get(props.getProperty("vsoc.workdir"))
+  def workDir: Path = Paths.get(props.getProperty("vsoc.workdir"))
 
   def hostName: String = props.getProperty("vsoc.hostname")
 

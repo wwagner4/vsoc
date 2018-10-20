@@ -6,7 +6,7 @@ import vsoc.ga.analyse.dia.DiaFactories
 import vsoc.ga.analyse.smooth.Smoothing
 import vsoc.ga.common.data.Data02
 
-object DiaFactoriesB04 extends DiaFactories[Data02] {
+object DiaFactoriesB04bob extends DiaFactories[Data02] {
 
   override def trainGaId: String = "trainGaB04"
 
@@ -54,8 +54,7 @@ object DiaFactoriesB04 extends DiaFactories[Data02] {
     }
 
   val categories = Seq(
-  //  ("Bob [BOB]", "BOB", Seq("bob001", "bob002", "bob003", "bob004")),
-    ("Work [WORK]", "WORK", Seq("work001","work002","work003","work004","work005","work006")),
+    ("Bob [BOB]", "BOB", Seq("bob001", "bob002", "bob003", "bob004")),
   )
 
   def cats: Seq[FDia[Data02]] =
@@ -97,7 +96,7 @@ object DiaFactoriesB04 extends DiaFactories[Data02] {
       val dias = for ((nr, data) <- gdata) yield diagram(nr, nr, data)
       Viz.MultiDiagram[Viz.XY](
         id = diaId + name + mdiaId,
-        columns = 3,
+        columns = 2,
         title = Some(s"$title $name"),
         imgWidth = 1600,
         imgHeight = 1200,
@@ -116,7 +115,7 @@ object DiaFactoriesB04 extends DiaFactories[Data02] {
   }
 
   private def goalsOtherOwn(title: String, diaId: String, trainGaNrs: Seq[String])
-                 (name: String, data: Seq[Data02]): Viz.Dia[Viz.XY] = {
+                           (name: String, data: Seq[Data02]): Viz.Dia[Viz.XY] = {
 
     val grpSize = 50
 
@@ -143,7 +142,7 @@ object DiaFactoriesB04 extends DiaFactories[Data02] {
       val dias = for ((nr, data) <- gdata) yield diagram(nr, nr, data)
       Viz.MultiDiagram[Viz.XY](
         id = diaId + name + mdiaId,
-        columns = 3,
+        columns = 2,
         title = Some(s"$title $name"),
         imgWidth = 1600,
         imgHeight = 1200,
