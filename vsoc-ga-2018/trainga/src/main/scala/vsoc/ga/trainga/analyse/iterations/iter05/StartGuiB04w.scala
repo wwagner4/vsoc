@@ -6,12 +6,12 @@ import vsoc.ga.common.UtilPath
 import vsoc.ga.trainga.ga.TrainGas
 import vsoc.ga.trainga.gui.GuiPopulationRunner
 
-object StartGuiB04b extends App {
+object StartGuiB04w extends App {
 
   implicit val workDir: Path = UtilPath.workDir
 
   val tga = TrainGas.trainGaB04
-  val pops = List(
+  val popsAll = List(
     "work001",
     "work002",
     "work003",
@@ -20,12 +20,12 @@ object StartGuiB04b extends App {
     "work006",
   )
 
-  val i = 5
+  val i = 3
   val tgaStr = tga.id
-  val popStr = pops(i)
+  val popStr = popsAll(i)
 
   println(s"name = '${tgaStr}_$popStr'")
 
-  GuiPopulationRunner.run(tga, pops(i), None)
+  GuiPopulationRunner.run(tga, popsAll(i), None)
 
 }
