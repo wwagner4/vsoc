@@ -1,9 +1,11 @@
 package vsoc.ga.common
 
+import java.io.FileOutputStream
 import java.nio.file.{Files, Path, Paths}
 import java.util.Comparator
 import java.util.zip.ZipInputStream
 
+import org.apache.commons.compress.archivers.sevenz.{SevenZFile, SevenZOutputFile}
 import vsoc.ga.common.config.ConfigHelper
 
 object UtilPath {
@@ -16,6 +18,26 @@ object UtilPath {
         else Files.copy(zipInputStream, toPath)
         entry = zipInputStream.getNextEntry
       }
+    }
+  }
+
+  def un7z(_7zPath: Path, outDir: Path): Unit = {
+    val _7zFile = new SevenZFile(_7zPath.toFile)
+    var entry = _7zFile.getNextEntry
+    while (entry != null) {
+      if (!entry.isDirectory) {
+        val curfile = outDir.resolve(entry.getName)
+        val parent = curfile.getParent
+        if (!Files.exists(parent)) {
+          Files.createDirectories(parent)
+        }
+        UtilTryWithResource.withResources(Files.newOutputStream(curfile)) { out =>
+          val content = Array.ofDim[Byte](entry.getSize.toInt)
+          _7zFile.read(content, 0, content.length)
+          out.write(content)
+        }
+      }
+      entry = _7zFile.getNextEntry
     }
   }
 

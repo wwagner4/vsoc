@@ -38,6 +38,8 @@ lazy val common = (project in file("common"))
   .settings(
     name := "common",
     libraryDependencies += "org.scala-lang" % "scala-reflect" % "2.12.7",
+    libraryDependencies += "org.apache.commons" % "commons-compress" % "1.18",
+    libraryDependencies += "org.tukaani" % "xz" % "1.8",
     commonSettings,
   )
 
