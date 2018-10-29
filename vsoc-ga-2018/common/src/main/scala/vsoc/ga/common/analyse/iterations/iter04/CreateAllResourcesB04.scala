@@ -8,16 +8,6 @@ object CreateAllResourcesB04 {
 
   def create(baseDir: Path): Path = {
 
-    def moveTo(fromDir: Path, subDir: String, prefix: String, toDir: Path): Unit = {
-      val fd = fromDir.resolve(subDir)
-      Files.list(fd)
-        .filter(file => file.getFileName.toString.startsWith(prefix))
-        .forEach(file => {
-          val toFile = toDir.resolve(file.getFileName)
-          Files.move(file, toFile)
-        })
-    }
-
     val iterDir = baseDir.resolve("iter05")
     if (Files.exists(iterDir)) {
       println(s"Resources already exist $iterDir")
@@ -35,14 +25,26 @@ object CreateAllResourcesB04 {
       Files.createDirectories(tmpDir)
 
       un7z(Paths.get("doc/training-results/trainGaB04work.7z"), tmpDir)
+      un7z(Paths.get("doc/training-results/trainGaB04Bob.7z"), tmpDir)
       println(s"Extracted results to $tmpDir")
 
       moveTo(tmpDir, "trainGaB04work", "work", workDir1)
+      moveTo(tmpDir, "trainGaB04Bob", "bob", workDir1)
       println(s"Moved results to $workDir")
 
       println(s"Created all resources for iteration 5 in $iterDir")
     }
     iterDir
+  }
+
+  def moveTo(fromDir: Path, subDir: String, prefix: String, toDir: Path): Unit = {
+    val fd = fromDir.resolve(subDir)
+    Files.list(fd)
+      .filter(file => file.getFileName.toString.startsWith(prefix))
+      .forEach(file => {
+        val toFile = toDir.resolve(file.getFileName)
+        Files.move(file, toFile)
+      })
   }
 
 }
