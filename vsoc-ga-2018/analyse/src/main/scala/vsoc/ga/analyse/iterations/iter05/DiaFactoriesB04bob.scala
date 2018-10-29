@@ -97,8 +97,8 @@ object DiaFactoriesB04bob extends DiaFactories[Data02] {
       require(diaData.nonEmpty, "Cannot handle empty dataset")
 
       val rows = Seq(
-        Viz.DataRow(Some("kicks max x 2"), data = smoothProp(diaData, d => d.kicksMax * 2, grpSize)),
-        Viz.DataRow(Some("kicks min x 100"), data = smoothProp(diaData, d => d.kicksMin * 100, grpSize)),
+        Viz.DataRow(Some("kicks max x 20"), data = smoothProp(diaData, d => d.kicksMax * 20, grpSize)),
+        Viz.DataRow(Some("kicks min x 20"), data = smoothProp(diaData, d => d.kicksMin * 20, grpSize)),
         Viz.DataRow(Some("goals max x 1000"), data = smoothProp(diaData, d => d.otherGoalsMax * 1000, grpSize)),
         Viz.DataRow(Some("score"), data = smoothProp(diaData, d => d.score, grpSize))
       )
@@ -106,7 +106,7 @@ object DiaFactoriesB04bob extends DiaFactories[Data02] {
       Viz.Diagram(
         id = diaId,
         title = name,
-        //yRange = Some(Viz.Range(Some(0), Some(25000))),
+        yRange = Some(Viz.Range(Some(0), Some(25000))),
         //xRange = Some(Viz.Range(Some(0), Some(5000))),
         dataRows = rows
       )
@@ -198,7 +198,7 @@ object DiaFactoriesB04bob extends DiaFactories[Data02] {
       Viz.Diagram(
         id = diaId,
         title = name,
-        //yRange = Some(Viz.Range(Some(0), Some(1.5))),
+        yRange = Some(Viz.Range(Some(0), Some(5))),
         //xRange = Some(Viz.Range(Some(0), Some(5000))),
         dataRows = rows
       )
