@@ -20,6 +20,7 @@ class VsocMatchFrame(title: String, subtitle: String, matchFactory: () => Match)
   setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE)
   setSize(1200, 600)
   setLocationByPlatform(true)
+  setTitle(title)
 
   private var running = false
   private var delay = SpeedManager.DEFAULT_DELAY

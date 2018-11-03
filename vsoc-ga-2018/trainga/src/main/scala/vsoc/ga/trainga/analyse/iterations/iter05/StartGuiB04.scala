@@ -13,7 +13,7 @@ object StartGuiB04 extends App {
   val iterBaseDir = CreateAllResourcesB04.create(workDir)
   implicit val iterWorkDir: Path = iterBaseDir.resolve("work")
 
-  val popNr = "bob001"
+  val popNr = "work002"
   val tga = TrainGas.trainGaB04
 
   val tgaStr = tga.id

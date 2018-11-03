@@ -24,7 +24,7 @@ object GuiPopulationRunner {
 
     val mf: () => Match = () => createMatch(trainGa, populationNr, generationNr, populationdir, workBasic)
     val f = new VsocMatchFrame(s"${trainGa.id}-$populationNr", s"Generation: $generationNr", mf)
-    f.setSize(960, 584)
+    f.setSize(1000, 584)
     f.setVisible(true)
 
   }
