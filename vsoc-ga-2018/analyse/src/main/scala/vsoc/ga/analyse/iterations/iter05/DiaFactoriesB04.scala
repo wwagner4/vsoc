@@ -14,19 +14,19 @@ object DiaFactoriesB04 extends DiaFactories[Data02] {
     Seq(scores),
     kicksAndGoalsAll,
     kicksAndGoalsKicker,
-    goalsOtherOwnAll,
+    goalsOtherOwnKicker,
   ).flatten
 
   val catAll = Seq(
-    Cat("B04 All", "B04All", Seq("work001", "work002", "work003", "work004", "work005", "work006", "bob001", "bob002", "bob003", "bob004")),
+    Cat("All", "B04All", Seq("work001", "work002", "work003", "work004", "work005", "work006", "bob001", "bob002", "bob003", "bob004")),
   )
 
   val catKicker = Seq(
-    Cat("B04 Kicker", "B04Kicker", Seq("bob001", "work001", "work002", "work004")),
+    Cat("Kicker", "B04Kicker", Seq("bob001", "work001", "work002", "work004")),
   )
 
   val catGoalGetters = Seq(
-    Cat("B04 GoalGetter", "B04GoalGetter", Seq("bob002", "bob003", "bob004", "work003", "work005", "work006")),
+    Cat("GoalGetter", "B04GoalGetter", Seq("bob002", "bob003", "bob004", "work003", "work005", "work006")),
   )
 
   def kicksAndGoalsAll: Seq[FDia[Data02]] =
@@ -39,8 +39,8 @@ object DiaFactoriesB04 extends DiaFactories[Data02] {
       kicksAndGoalsKicker(cat) _
     }
 
-  def goalsOtherOwnAll: Seq[FDia[Data02]] =
-    for (cat <- catAll) yield {
+  def goalsOtherOwnKicker: Seq[FDia[Data02]] =
+    for (cat <- catKicker) yield {
       goalsOtherOwn(cat) _
     }
 
@@ -73,10 +73,10 @@ object DiaFactoriesB04 extends DiaFactories[Data02] {
                            (name: String, data: Seq[Data02]): Viz.Dia[Viz.XY] = {
 
     val mdiaId = "kicksAndGoals"
+    val mdiaTitle = "Categories by Kicks and Goals"
     val grpSize = 50
 
     def diagram(diaId: String, name: String, diaData: Seq[Data02]): Viz.Diagram[Viz.XY] = {
-      require(diaData.nonEmpty, "Cannot handle empty dataset")
 
       val rows = Seq(
         Viz.DataRow(Some("kicks max x 2"), data = smoothProp(diaData, d => d.kicksMax * 2, grpSize)),
@@ -85,24 +85,17 @@ object DiaFactoriesB04 extends DiaFactories[Data02] {
         Viz.DataRow(Some("score"), data = smoothProp(diaData, d => d.score, grpSize))
       )
 
-      Viz.Diagram(
-        id = diaId,
-        title = name,
+      Viz.Diagram(id = diaId, title = name,
         //yRange = Some(Viz.Range(Some(0), Some(25000))),
-        //xRange = Some(Viz.Range(Some(0), Some(5000))),
+        xRange = Some(Viz.Range(Some(0), Some(2500))),
         dataRows = rows
       )
     }
 
-    def mdiagram(gdata: Seq[(String, Seq[Data02])]): Viz.Dia[Viz.XY] = {
-      val dias = for ((nr, data) <- gdata) yield diagram(nr, nr, data)
-      Viz.MultiDiagram[Viz.XY](
-        id = cat.id + name + mdiaId,
-        columns = 3,
-        title = Some(s"${cat.title} $name"),
-        imgWidth = 1600,
-        imgHeight = 1200,
-        diagrams = dias
+    def mdiagram(catData: Seq[(String, Seq[Data02])]): Viz.Dia[Viz.XY] = {
+      val dias = for ((nr, data) <- catData) yield diagram(nr, nr, data)
+      Viz.MultiDiagram[Viz.XY](id = cat.id + name + mdiaId, title = Some(s"$mdiaTitle ${cat.title} $name"),
+        columns = 5, imgWidth = 2500, imgHeight = 1000, diagrams = dias
       )
     }
 
@@ -114,37 +107,32 @@ object DiaFactoriesB04 extends DiaFactories[Data02] {
                                  (name: String, data: Seq[Data02]): Viz.Dia[Viz.XY] = {
 
     val mdiaId = "kicksAndGoalsKicker"
+    val mdiaTitle = "Kicks and Goals"
     val grpSize = 50
 
     def diagram(diaId: String, name: String, diaData: Seq[Data02]): Viz.Diagram[Viz.XY] = {
       require(diaData.nonEmpty, "Cannot handle empty dataset")
 
       val rows = Seq(
-        Viz.DataRow(Some("kicks max x 20"), data = smoothProp(diaData, d => d.kicksMax * 20, grpSize)),
-        Viz.DataRow(Some("kicks min x 20"), data = smoothProp(diaData, d => d.kicksMin * 20, grpSize)),
+        Viz.DataRow(Some("kicks max x 50"), data = smoothProp(diaData, d => d.kicksMax * 50, grpSize)),
+        Viz.DataRow(Some("kicks min x 50"), data = smoothProp(diaData, d => d.kicksMin * 50, grpSize)),
         Viz.DataRow(Some("goals max x 10.000"), data = smoothProp(diaData, d => d.otherGoalsMax * 10000, grpSize)),
         Viz.DataRow(Some("goals min x 10.000"), data = smoothProp(diaData, d => d.otherGoalsMin * 10000, grpSize)),
         Viz.DataRow(Some("score"), data = smoothProp(diaData, d => d.score, grpSize))
       )
 
-      Viz.Diagram(
-        id = diaId,
-        title = name,
-        yRange = Some(Viz.Range(Some(0), Some(20000))),
+      Viz.Diagram(id = diaId, title = name, dataRows = rows,
+        yRange = Some(Viz.Range(Some(0), Some(30000))),
         //xRange = Some(Viz.Range(Some(0), Some(5000))),
-        dataRows = rows
       )
     }
 
-    def mdiagram(gdata: Seq[(String, Seq[Data02])]): Viz.Dia[Viz.XY] = {
-      val dias = for ((nr, data) <- gdata) yield diagram(nr, nr, data)
-      Viz.MultiDiagram[Viz.XY](
-        id = cat.id + name + mdiaId,
-        columns = 3,
-        title = Some(s"${cat.title} $name"),
-        imgWidth = 2000,
-        imgHeight = 800,
-        diagrams = dias
+    def mdiagram(catData: Seq[(String, Seq[Data02])]): Viz.Dia[Viz.XY] = {
+      val dias = for ((nr, data) <- catData) yield diagram(nr, nr, data)
+      Viz.MultiDiagram[Viz.XY](id = cat.id + name + mdiaId, title = Some(s"$mdiaTitle ${cat.title} $name"), diagrams = dias,
+        columns = 2,
+        imgWidth = 1500,
+        imgHeight = 1200,
       )
     }
 
@@ -160,6 +148,7 @@ object DiaFactoriesB04 extends DiaFactories[Data02] {
     val grpSize = 50
 
     val mdiaId = "goalsOtherOwn"
+    val mdiaTitle = "Goals Other vs. Own"
 
     def diagram(diaId: String, name: String, diaData: Seq[Data02]): Viz.Diagram[Viz.XY] = {
       require(diaData.nonEmpty, "Cannot handle empty dataset")
@@ -169,28 +158,20 @@ object DiaFactoriesB04 extends DiaFactories[Data02] {
         Viz.DataRow(Some("own goals max"), data = smoothProp(diaData, d => d.ownGoalsMax, grpSize)),
       )
 
-      Viz.Diagram(
-        id = diaId,
-        title = name,
+      Viz.Diagram(id = diaId, title = "name", dataRows = rows,
         //yRange = Some(Viz.Range(Some(0), Some(1.5))),
         //xRange = Some(Viz.Range(Some(0), Some(5000))),
-        dataRows = rows
       )
     }
 
     def mdiagram(gdata: Seq[(String, Seq[Data02])]): Viz.Dia[Viz.XY] = {
       val dias = for ((nr, data) <- gdata) yield diagram(nr, nr, data)
-      Viz.MultiDiagram[Viz.XY](
-        id = cat.id + name + mdiaId,
-        columns = 3,
-        title = Some(s"${cat.title} $name"),
-        imgWidth = 1600,
+      Viz.MultiDiagram[Viz.XY](id = cat.id + name + mdiaId, title = Some(s"$mdiaTitle ${cat.title} $name"), diagrams = dias,
+        columns = 2,
+        imgWidth = 1400,
         imgHeight = 1200,
-        diagrams = dias
       )
     }
-
-    require(data.nonEmpty, "Cannot handle empty dataset")
 
     mdiagram(filterCat(data, cat))
 
