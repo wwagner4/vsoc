@@ -6,7 +6,7 @@ import vsoc.ga.analyse.dia.DiaFactories
 import vsoc.ga.analyse.smooth.Smoothing
 import vsoc.ga.common.data.Data02
 
-object DiaFactoriesB04w extends DiaFactories[Data02] {
+object DiaFactoriesB04 extends DiaFactories[Data02] {
 
   override def trainGaId: String = "trainGaB04"
 
@@ -16,6 +16,33 @@ object DiaFactoriesB04w extends DiaFactories[Data02] {
     kicksAndGoalsKicker,
     goalsOtherOwnAll,
   ).flatten
+
+  val catAll = Seq(
+    Cat("B04 All", "B04All", Seq("work001", "work002", "work003", "work004", "work005", "work006", "bob001", "bob002", "bob003", "bob004")),
+  )
+
+  val catKicker = Seq(
+    Cat("B04 Kicker", "B04Kicker", Seq("bob001", "work001", "work002", "work004")),
+  )
+
+  val catGoalGetters = Seq(
+    Cat("B04 GoalGetter", "B04GoalGetter", Seq("bob002", "bob003", "bob004", "work003", "work005", "work006")),
+  )
+
+  def kicksAndGoalsAll: Seq[FDia[Data02]] =
+    for (cat <- catAll) yield {
+      kicksAndGoals(cat) _
+    }
+
+  def kicksAndGoalsKicker: Seq[FDia[Data02]] =
+    for (cat <- catKicker) yield {
+      kicksAndGoalsKicker(cat) _
+    }
+
+  def goalsOtherOwnAll: Seq[FDia[Data02]] =
+    for (cat <- catAll) yield {
+      goalsOtherOwn(cat) _
+    }
 
   def smoothProp(data: Seq[Data02], f: Data02 => Double, grpSize: Int): Seq[Viz.XY] = {
     val xy = data.map(d => Viz.XY(d.iterations, f(d)))
@@ -27,58 +54,19 @@ object DiaFactoriesB04w extends DiaFactories[Data02] {
 
       val title = "score for " + trainingId
 
-      def createVizData(rowData: Seq[Data02]): Seq[Viz.XY] = {
-        for (d <- rowData) yield {
-          Viz.XY(d.iterations, d.score)
-        }
-      }
+      def createVizData(rowData: Seq[Data02]): Seq[Viz.XY] =
+        for (d <- rowData) yield Viz.XY(d.iterations, d.score)
 
-      require(data.size > 4, "Cannot handle empty dataset")
       val rows: Map[String, Seq[Data02]] = data.groupBy(d => d.trainGaNr)
       val vizDataRows =
         for (pop <- rows.keys.toList.sorted) yield {
           val rowData = rows(pop)
           require(rowData.size > 4, s"Row data must contain at least 3 records. $pop")
           val vizData = Smoothing.smooth(createVizData(rowData), 40)
-          Viz.DataRow(
-            name = Some(pop),
-            data = vizData
-          )
+          Viz.DataRow(name = Some(pop), data = vizData)
         }
-      Viz.Diagram(
-        id = trainingId,
-        title = title,
-        imgWidth = 1000,
-        imgHeight = 1000,
-        dataRows = vizDataRows
-      )
-    }
-
-  val catWorkAll = Seq(
-    Cat("Work [WORK]", "WORK", Seq("work001", "work002", "work003", "work004", "work005", "work006")),
-  )
-
-  val catWorkKicker = Seq(
-    Cat("WorkKicker [K]", "K", Seq("work001", "work002", "work004")),
-  )
-
-  val catGoalGetters = Seq(
-    Cat("GoalGetter [G]", "G", Seq("work003", "work005", "work006")),
-  )
-
-  def kicksAndGoalsAll: Seq[FDia[Data02]] =
-    for (cat <- catWorkAll) yield {
-      kicksAndGoals(cat) _
-    }
-
-  def kicksAndGoalsKicker: Seq[FDia[Data02]] =
-    for (cat <- catWorkKicker) yield {
-      kicksAndGoalsKicker(cat) _
-    }
-
-  def goalsOtherOwnAll: Seq[FDia[Data02]] =
-    for (cat <- catWorkAll) yield {
-      goalsOtherOwn(cat) _
+      Viz.Diagram(id = trainingId, title = title,
+        imgWidth = 1000, imgHeight = 1000, dataRows = vizDataRows)
     }
 
   private def kicksAndGoals(cat: Cat)
@@ -118,16 +106,12 @@ object DiaFactoriesB04w extends DiaFactories[Data02] {
       )
     }
 
-    val gdata = data
-      .filter(d => cat.trainGaNrs.contains(d.trainGaNr))
-      .groupBy(d => d.trainGaNr)
-      .toSeq.sortBy { case (k, _) => k }
-    mdiagram(gdata)
+    mdiagram(filterCat(data, cat))
 
   }
 
   private def kicksAndGoalsKicker(cat: Cat)
-                           (name: String, data: Seq[Data02]): Viz.Dia[Viz.XY] = {
+                                 (name: String, data: Seq[Data02]): Viz.Dia[Viz.XY] = {
 
     val mdiaId = "kicksAndGoalsKicker"
     val grpSize = 50
@@ -166,11 +150,7 @@ object DiaFactoriesB04w extends DiaFactories[Data02] {
 
     require(data.nonEmpty, "Cannot handle empty dataset")
 
-    val gdata = data
-      .filter(d => cat.trainGaNrs.contains(d.trainGaNr))
-      .groupBy(d => d.trainGaNr)
-      .toSeq.sortBy { case (k, _) => k }
-    mdiagram(gdata)
+    mdiagram(filterCat(data, cat))
 
   }
 
@@ -212,11 +192,7 @@ object DiaFactoriesB04w extends DiaFactories[Data02] {
 
     require(data.nonEmpty, "Cannot handle empty dataset")
 
-    val gdata = data
-      .filter(d => cat.trainGaNrs.contains(d.trainGaNr))
-      .groupBy(d => d.trainGaNr)
-      .toSeq.sortBy { case (k, _) => k }
-    mdiagram(gdata)
+    mdiagram(filterCat(data, cat))
 
   }
 

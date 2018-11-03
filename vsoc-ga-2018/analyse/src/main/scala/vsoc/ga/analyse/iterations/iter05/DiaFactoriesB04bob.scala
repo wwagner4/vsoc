@@ -66,12 +66,6 @@ object DiaFactoriesB04bob extends DiaFactories[Data02] {
       )
     }
 
-  case class Cat(
-                  title: String,
-                  id: String,
-                  trainGaNrs: Seq[String],
-                )
-
   def kicksAndGoalsAll: Seq[FDia[Data02]] =
     for (cat <- catWorkAll) yield {
       kicksAndGoals(cat) _

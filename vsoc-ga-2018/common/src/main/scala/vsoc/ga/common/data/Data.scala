@@ -1,11 +1,21 @@
 package vsoc.ga.common.data
 
+trait DataBase {
+  def trainGaId: String
+
+  def trainGaNr: String
+
+  def iterations: Int
+
+  def score: Double
+}
+
 case class Data01(
                    trainGaId: String,
                    trainGaNr: String,
                    iterations: Int = 0,
                    score: Double = 0.0,
-                 )
+                 ) extends DataBase
 
 case class Data02(
                    trainGaId: String = "",
@@ -29,4 +39,4 @@ case class Data02(
                    goalDifference: Double = 0.0,
 
                    score: Double = 0.0,
-                 )
+                 ) extends DataBase
