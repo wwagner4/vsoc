@@ -1,6 +1,6 @@
 package vsoc.ga.analyse.dia
 
-import java.nio.file.{Path, Paths}
+import java.nio.file.{Files, Path, Paths}
 
 import vsoc.ga.common.data.Data02
 
