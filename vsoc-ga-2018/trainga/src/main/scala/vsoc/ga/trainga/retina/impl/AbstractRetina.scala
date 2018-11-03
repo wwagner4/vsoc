@@ -18,7 +18,7 @@ abstract class AbstractRetina extends Retina {
     }
 
     /**
-      * Prepare the linpeak functions for each index
+      * Prepare the 'linpeak' functions for each index
       */
     lazy val linpeakMap: Map[Int, Double => Double] = (0 until resolution).map { i =>
       val d = 90.0 / (resolution * 2)
