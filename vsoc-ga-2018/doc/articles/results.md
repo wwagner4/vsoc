@@ -100,7 +100,7 @@ The following diagram shows that the score (fitness value) is only created from 
 
 The max score value for kicksMin is 50.000 (see table 051), which is not yet reached for any of the testruns.
 
-Video: [work001 &#9654;](https://youtu.be/_M_wEQ-NmK8)
+Video: [work001 &#9654;](https://www.youtube.com/embed/_M_wEQ-NmK8)
 
 #### Goalgetters
 Testruns in that categoryimprove the capabillity of one player to score goals. The other players
@@ -114,7 +114,7 @@ The max score value for goalsMax is 5000 (see table 051), which is almost reache
 Though the max value was reached none of the simulations started to optimize another parameter.
 They seem to be stuck in a local maximum.
 
-Video: [bob004 &#9654;](https://youtu.be/lHIdfN83Hto)
+Video: [bob004 &#9654;](https://www.youtube.com/embed/lHIdfN83Hto)
 
 ## Iteration 4
 ### Principles
