@@ -61,11 +61,29 @@ the elements of the fitness function are calculated.
 | kicksMax       |  +  | 1             | 500          | 500        |
 | kicksMin       |  +  | 100           | 500          | 50.000     |
 | kickOutMean    |  -  | 1             | -            | -          |
-| otherGoalsMax  |  +  | 500           | 10           | 5.000     |
+| otherGoalsMax  |  +  | 500           | 10           | 5.000      |
 | otherGoalsMin  |  +  | 1000          | -            | -          |
 | ownGoalsMin    |  -  | 500           | -            | -          |
 
-- '-' ... no limit
+#### Testruns
+There where 10 independend testruns each with configured with the exact same
+configuration. 
+
+Names of the testruns: 'work001', 'work002', 'work003', 'work004', 'work005', 'work006', 
+'bob001', 'bob002', 'bob003', 'bob004'. 
+
+Looking at the timlines of the fitness value and some other parameters show that the 
+testruns can be assigned to two categories.
+
+* Kickers: All players kick the ball. 
+* Goalgetters: One player of the team scores goals. The other players do not contribue to the fitness value.
+
+| Category    | Testrun                                                       |
+| ----------- | ------------------------------------------------------------- |
+| Kickers     | 'work001', 'work002', 'work004', 'bob001'                     |
+| Goalgetters | 'work003', 'work005', 'work006', 'bob002', 'bob003', 'bob004' |
+
+
 
 ## Iteration 4
 ### Principles

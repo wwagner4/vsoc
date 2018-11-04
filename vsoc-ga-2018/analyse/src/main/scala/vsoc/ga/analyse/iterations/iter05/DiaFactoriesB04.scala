@@ -166,11 +166,11 @@ object DiaFactoriesB04 extends DiaFactories[Data02] {
 
       val rows = Seq(
         Viz.DataRow(Some("score"), data = smoothProp(diaData, d => d.score, grpSize)),
-        Viz.DataRow(Some("kicks min x 100"), data = smoothProp(diaData, d => d.kicksMin * 100, grpSize)),
+        Viz.DataRow(Some("kicks min x 80"), data = smoothProp(diaData, d => d.kicksMin * 80, grpSize)),
       )
 
       Viz.Diagram(id = diaId, title = name, dataRows = rows,
-        // yRange = Some(Viz.Range(Some(0), Some(30000))),
+        yRange = Some(Viz.Range(Some(0), Some(55000))),
         // xRange = Some(Viz.Range(Some(0), Some(5000))),
       )
     }
@@ -202,11 +202,11 @@ object DiaFactoriesB04 extends DiaFactories[Data02] {
 
       val rows = Seq(
         Viz.DataRow(Some("score"), data = smoothProp(diaData, d => d.score, grpSize)),
-        Viz.DataRow(Some("goals max x 500"), data = smoothProp(diaData, d => d.otherGoalsMax * 500, grpSize)),
+        Viz.DataRow(Some("goals max x 400"), data = smoothProp(diaData, d => d.otherGoalsMax * 400, grpSize)),
       )
 
       Viz.Diagram(id = diaId, title = name, dataRows = rows,
-        // yRange = Some(Viz.Range(Some(0), Some(30000))),
+        yRange = Some(Viz.Range(Some(0), Some(6000))),
         // xRange = Some(Viz.Range(Some(0), Some(5000))),
       )
     }
