@@ -113,22 +113,38 @@ object Configs {
       """Six populations using TrainGa B04"""
   }
 
-  def b04Ben: Config = new Config {
+  def b05Bob: Config = new Config {
 
-    override def id: String = "b04ben"
+    override def id: String = "b05Bob"
 
     override def trainings: Seq[ConfigTrainGa] = Seq(
-      ConfigTrainGa("trainGaB04", "ben001"),
-      ConfigTrainGa("trainGaB04", "ben002"),
-      ConfigTrainGa("trainGaB04", "ben003"),
-      ConfigTrainGa("trainGaB04", "ben004"),
-      ConfigTrainGa("trainGaB04", "ben005"),
-      ConfigTrainGa("trainGaB04", "ben006"),
+      ConfigTrainGa("trainGaB05", "bob001"),
+      ConfigTrainGa("trainGaB05", "bob002"),
+      ConfigTrainGa("trainGaB05", "bob003"),
+      ConfigTrainGa("trainGaB05", "bob004"),
     )
 
     override def fullDesc: String =
-      """Six populations using TrainGa B04"""
+      """Four populations using TrainGa B05"""
   }
+
+  def b05Work: Config = new Config {
+
+    override def id: String = "b05work"
+
+    override def trainings: Seq[ConfigTrainGa] = Seq(
+      ConfigTrainGa("trainGaB05", "work001"),
+      ConfigTrainGa("trainGaB05", "work002"),
+      ConfigTrainGa("trainGaB05", "work003"),
+      ConfigTrainGa("trainGaB05", "work004"),
+      ConfigTrainGa("trainGaB05", "work005"),
+      ConfigTrainGa("trainGaB05", "work006"),
+    )
+
+    override def fullDesc: String =
+      """Six populations using TrainGa B05"""
+  }
+
 
 
 }

@@ -81,4 +81,23 @@ object FitnessFunctions {
        """.stripMargin
   }
 
+  def data02A05: FitnessFunction[Data02] = new FitnessFunction[Data02] {
+
+    override def id: String = "data02A05"
+
+    override def fitness(data: Data02): Double = {
+      math.min(500, data.kicksMax) +
+        math.min(10000, data.kicksMin * 100) -
+        data.kickOutMean +
+        math.min(2000, data.otherGoalsMax * 500) +
+        data.otherGoalsMin * 1000 -
+        data.ownGoalsMean * 500
+    }
+
+    override def fullDesc: String =
+      s"""'$id' - Summary Fitnessfunction
+         |Iteration 6
+       """.stripMargin
+  }
+
 }

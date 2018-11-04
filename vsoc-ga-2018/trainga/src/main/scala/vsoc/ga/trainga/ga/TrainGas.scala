@@ -69,7 +69,27 @@ object TrainGas {
     override protected def fitness: FitnessFunction[Data02] = FitnessFunctions.data02A04
 
     override def fullDescHeading: String =
-      """New fitness function A04"""
+      """New fitness function data02A04"""
+
+    override protected def createNeuralNet: () => NeuralNet = () => NeuralNets.team02
+
+    override protected def inMapper: InputMapperNn = new InputMapperNnTeam(1.0)
+
+    override protected def outMapper: OutputMapperNn = OutputMappers.om02
+
+    override def testFactor: Int = 4
+
+  }
+
+  def trainGaB05: TrainGa[Data02] = new TrainGaAbstract {
+
+    override def id: String = "trainGaB05"
+
+    override protected def fitness: FitnessFunction[Data02] = FitnessFunctions.data02A05
+
+    override def fullDescHeading: String =
+      """Iteration 6
+        |New fitness function data02A05""".stripMargin
 
     override protected def createNeuralNet: () => NeuralNet = () => NeuralNets.team02
 

@@ -34,6 +34,39 @@ focusing on the final goal of game.
 E.g. Train the players to kick the ball before they are 
 trained to score goals (which is the finall goal by the way)
 
+## Iteration 6
+### Principles
+
+* Same as Iteration 5
+* Lower max Values for kicksMin and otherGoalsMax
+
+### Fitness Function 'data02A04'
+
+```
+ + math.min(500, data.kicksMax)
+ + math.min(50000, data.kicksMin * 100)
+ - data.kickOutMean
+ + math.min(5000, data.otherGoalsMax * 500)
+ + data.otherGoalsMin * 1000
+ - data.ownGoalsMean * 500
+```
+
+#### Expected Values
+
+To get an overview of the expected results the max values of
+the elements of the fitness function are calculated.
+
+| Element        | +/- | reinforcement | max Actions  | max Value  |
+| -------------- | --- | ------------: | -----------: | ---------: |
+| kicksMax       |  +  | 1             | 500          | 500        |
+| kicksMin       |  +  | 100           | 100          | 10.000     |
+| kickOutMean    |  -  | 1             | -            | -          |
+| otherGoalsMax  |  +  | 500           | 5            | 2.000      |
+| otherGoalsMin  |  +  | 1000          | -            | -          |
+| ownGoalsMin    |  -  | 500           | -            | -          |
+
+table 051
+
 ## Iteration 5
 ### Principles
 
@@ -44,9 +77,9 @@ trained to score goals (which is the finall goal by the way)
 
 ```
  + math.min(500, data.kicksMax)
- + math.min(50000, data.kicksMin * 100)
+ + math.min(10000, data.kicksMin * 100)
  - data.kickOutMean
- + math.min(5000, data.otherGoalsMax * 500)
+ + math.min(2000, data.otherGoalsMax * 500)
  + data.otherGoalsMin * 1000
  - data.ownGoalsMean * 500
 ```
