@@ -89,6 +89,12 @@ B04AlltrainGaB04kicksAndGoals
 #### Kickers
 Testruns in the kicker category improve the capabillity of all players to kick the ball.
 They do not improve any of the other capabillities as e.g. scoring goals.
+That means they are optimizing the number of kicks of the worst player, and by that the
+number of kicks for all players.
+
+The following diagram shows that the score (fitness value) is only created from 'kicksMin'.
+![kickers kicks min](https://raw.githubusercontent.com/wwagner4/vsoc/master1/vsoc-ga-2018/doc/articles/resources/results/iter5/B04KickertrainGaB04kicksMinScore.png)
+
 
 
 ## Iteration 4
