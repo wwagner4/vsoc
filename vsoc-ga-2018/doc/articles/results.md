@@ -83,6 +83,12 @@ testruns can be assigned to two categories.
 | Kickers     | 'work001', 'work002', 'work004', 'bob001'                     |
 | Goalgetters | 'work003', 'work005', 'work006', 'bob002', 'bob003', 'bob004' |
 
+B04AlltrainGaB04kicksAndGoals
+![categories](https://raw.githubusercontent.com/wwagner4/vsoc/master1/vsoc-ga-2018/doc/articles/resources/results/iter5/B04AlltrainGaB04kicksAndGoals.png)
+
+#### Kickers
+Testruns in the kicker category improve the capabillity of all players to kick the ball.
+They do not improve any of the other capabillities as e.g. scoring goals.
 
 
 ## Iteration 4
