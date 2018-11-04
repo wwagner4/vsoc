@@ -65,6 +65,8 @@ the elements of the fitness function are calculated.
 | otherGoalsMin  |  +  | 1000          | -            | -          |
 | ownGoalsMin    |  -  | 500           | -            | -          |
 
+table 051
+
 #### Testruns
 There where 10 independend testruns each with configured with the exact same
 configuration. 
@@ -93,9 +95,22 @@ That means they are optimizing the number of kicks of the worst player, and by t
 number of kicks for all players.
 
 The following diagram shows that the score (fitness value) is only created from 'kicksMin'.
+
 ![kickers kicks min](https://raw.githubusercontent.com/wwagner4/vsoc/master1/vsoc-ga-2018/doc/articles/resources/results/iter5/B04KickertrainGaB04kicksMinScore.png)
 
+The max score value for kicksMin is 50.000 (see table 051), which is not yet reached for any of the testruns.
 
+#### Goalgetters
+Testruns in that categoryimprove the capabillity of one player to score goals. The other players
+of a team do not contribue anything to the fitness.
+
+The following diagram shows that the score is only created from goalsMax.
+
+![kickers kicks min](https://raw.githubusercontent.com/wwagner4/vsoc/master1/vsoc-ga-2018/doc/articles/resources/results/iter5/B04GoalGettertrainGaB04goalsToScore.png)
+
+The max score value for goalsMax is 5000 (see table 051), which is almost reached by some testruns ('bob004', 'work005', ...).
+Though the max value was reached none of the simulations started to optimize another parameter.
+They seem to be stuck in a local maximum.
 
 ## Iteration 4
 ### Principles
