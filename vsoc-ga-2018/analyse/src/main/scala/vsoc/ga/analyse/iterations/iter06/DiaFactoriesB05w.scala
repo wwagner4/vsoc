@@ -1,4 +1,4 @@
-package vsoc.ga.analyse.iterations.iter6
+package vsoc.ga.analyse.iterations.iter06
 
 import entelijan.viz.Viz
 import vsoc.ga.analyse.dia.DataDia.FDia
@@ -6,7 +6,7 @@ import vsoc.ga.analyse.dia.DiaFactories
 import vsoc.ga.analyse.smooth.Smoothing
 import vsoc.ga.common.data.Data02
 
-object DiaFactoriesB05b extends DiaFactories[Data02] {
+object DiaFactoriesB05w extends DiaFactories[Data02] {
 
   override def trainGaId: String = "trainGaB05"
 
@@ -16,7 +16,7 @@ object DiaFactoriesB05b extends DiaFactories[Data02] {
   ).flatten
 
   val catAll = Seq(
-    Cat("All", "B04All", Seq("bob001", "bob002", "bob003", "bob004")),
+    Cat("All", "B04All", Seq("work001", "work002", "work003", "work004", "work005", "work006")),
   )
 
   def kicksAndGoalsAll: Seq[FDia[Data02]] =
