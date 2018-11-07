@@ -1,4 +1,4 @@
-package vsoc.ga.analyse.iterations.iter6
+package vsoc.ga.analyse.iterations.iter06
 
 import vsoc.ga.analyse.dia.CreateDiasData02
 import vsoc.ga.common.UtilPath
