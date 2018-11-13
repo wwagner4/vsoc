@@ -1,4 +1,11 @@
-package vsoc.ga.analyse.iterations.iter06;
+package vsoc.ga.analyse.iterations.iter06
+
+import entelijan.viz.Viz
+import vsoc.ga.analyse.dia.DataDia.FDia
+import vsoc.ga.analyse.dia.DiaFactories
+import vsoc.ga.analyse.smooth.Smoothing
+import vsoc.ga.common.data.Data02
+;
 
 object DiaFactoriesB05w extends DiaFactories[Data02] {
 
