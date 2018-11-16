@@ -115,7 +115,7 @@ class PhenoTesterTeamCollector[T] {
 
 object PhenoTesterTeamUtil {
 
-  def sum(d1: Data02, d2: Data02): Data02 = {
+  private def sum(d1: Data02, d2: Data02): Data02 = {
     d1.copy(
       kicksMax = d1.kicksMax + d2.kicksMax,
       kicksMean = d1.kicksMean + d2.kicksMean,
@@ -134,10 +134,10 @@ object PhenoTesterTeamUtil {
     )
   }
 
-  def sum(rs: Seq[Data02]): Data02 =
+  private def sum(rs: Seq[Data02]): Data02 =
     rs.reduce { (d1, d2) => sum(d1, d2) }
 
-  def div(d1: Data02, divisor: Double): Data02 =
+  private def div(d1: Data02, divisor: Double): Data02 =
     d1.copy(
       kicksMax = d1.kicksMax / divisor,
       kicksMean = d1.kicksMean / divisor,
