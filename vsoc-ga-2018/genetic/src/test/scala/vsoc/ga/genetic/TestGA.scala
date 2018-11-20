@@ -70,10 +70,10 @@ class TestGA extends FunSuite with MustMatchers {
 
   case class GAResultImpl(
                            score: Option[Score],
-                           newPopulation: Seq[Geno[Int]]
+                           newPopulation: PopGeno[Int]
                          ) extends GAResult[Score, Int]
 
-  private def popToStr(pop: Seq[Geno[Int]]) = pop.map(p => p.alleles.map(x => intToChar(x)).mkString("")).mkString("  ")
+  private def popToStr(pop: PopGeno[Int]) = pop.genos.map(p => p.alleles.map(x => intToChar(x)).mkString("")).mkString("  ")
 
   //noinspection ScalaUnusedSymbol
   private def popsToStdout(popStream: Stream[GAResult[Score, Int]]): Unit =
@@ -94,7 +94,7 @@ class TestGA extends FunSuite with MustMatchers {
       Geno(gseq)
     }
 
-    val start: GAResult[Score, Int] = GAResultImpl(score = None, newPopulation = for (_ <- 1 to 10) yield randomGenome)
+    val start: GAResult[Score, Int] = GAResultImpl(score = None, newPopulation = PopGeno(for (_ <- 1 to 10) yield randomGenome))
 
     val popStream = Stream.iterate(start)(r => gat.nextPopulation(r.newPopulation))
 
@@ -113,7 +113,7 @@ class TestGA extends FunSuite with MustMatchers {
       Geno(gseq)
     }
 
-    val start: GAResult[Score, Int] = GAResultImpl(newPopulation = for (_ <- 1 to 10) yield randomGenome, score = None)
+    val start: GAResult[Score, Int] = GAResultImpl(newPopulation = PopGeno(for (_ <- 1 to 10) yield randomGenome), score = None)
 
     val popStream = Stream.iterate(start)(r => gaTest.nextPopulation(r.newPopulation))
 
@@ -169,8 +169,8 @@ class TestGA extends FunSuite with MustMatchers {
       (i.toDouble, Geno(Seq.fill(15)(i)))
     }
 
-    val sel: Seq[Geno[Int]] = strat.select(tested)
-    val dist = sel.map(s => s.alleles.toSet)
+    val sel: PopGeno[Int] = strat.select(tested)
+    val dist = sel.genos.map(s => s.alleles.toSet)
 
     dist.size mustBe tested.size
 
@@ -239,8 +239,8 @@ class TestGA extends FunSuite with MustMatchers {
       (i.toDouble, Geno(Seq.fill(15)(i)))
     }
 
-    val sel: Seq[Geno[Int]] = strat.select(tested)
-    val dist = sel.map(s => s.alleles.distinct.sorted)
+    val sel: PopGeno[Int] = strat.select(tested)
+    val dist = sel.genos.map(s => s.alleles.distinct.sorted)
 
     dist.size mustBe tested.size
     dist(0) must contain(7)

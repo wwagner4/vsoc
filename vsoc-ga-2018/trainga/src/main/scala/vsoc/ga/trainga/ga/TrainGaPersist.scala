@@ -3,13 +3,14 @@ package vsoc.ga.trainga.ga
 import java.io.{ObjectInputStream, ObjectOutputStream}
 
 import vsoc.ga.common.UtilReflection
+import vsoc.ga.genetic.PopGeno
 
 class TrainGaPersist[S] {
 
   def save(trainga: TrainGa[S], oos: ObjectOutputStream): Unit = {
     require(trainga.iterations.isDefined, "iterations must be defined")
     require(trainga.population.isDefined, "pupulation must be defined")
-    val cont = TrainGaContainer(trainga.id, trainga.iterations.get, UtilTransformGeno.asArrayGenoDouble(trainga.population.get))
+    val cont = TrainGaContainer(trainga.id, trainga.iterations.get, UtilTransformGeno.asArrayGenoDouble(trainga.population.get.genos))
     oos.writeObject(cont)
   }
 
@@ -17,7 +18,7 @@ class TrainGaPersist[S] {
     val cont = ois.readObject().asInstanceOf[TrainGaContainer]
     val tga = UtilReflection.call(TrainGas, cont.id, classOf[TrainGa[S]])
     tga.iterations = Some(cont.iterations)
-    tga.population = Some(UtilTransformGeno.toSeqGeno(cont.population))
+    tga.population = Some(PopGeno(UtilTransformGeno.toSeqGeno(cont.population)))
     tga
   }
 

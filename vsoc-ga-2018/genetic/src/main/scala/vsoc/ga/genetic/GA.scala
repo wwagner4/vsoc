@@ -27,9 +27,9 @@ class GA[A, P, S](
                    val transformer: Transformer[A, P],
                  ) {
 
-  def nextPopulation(pop: Seq[Geno[A]]): GAResult[S, A] = {
+  def nextPopulation(pop: PopGeno[A]): GAResult[S, A] = {
 
-    val phenos: Seq[P] = pop.map(transformer.toPheno)
+    val phenos: Seq[P] = pop.genos.map(transformer.toPheno)
     val testResult = tester.test(phenos)
     val testedGenos: Seq[(Double, Geno[A])] = testResult.testedPhenos.map { case (r, g) => (r, transformer.toGeno(g)) }
     val newPop = selStrategy.select(testedGenos)
@@ -37,7 +37,7 @@ class GA[A, P, S](
 
       def score: Option[S] = testResult.populationScore
 
-      override def newPopulation: Seq[Geno[A]] = newPop
+      override def newPopulation: PopGeno[A] = newPop
 
     }
   }
@@ -53,7 +53,7 @@ trait GAResult[S, A] {
 
   def score: Option[S]
 
-  def newPopulation: Seq[Geno[A]]
+  def newPopulation: PopGeno[A]
 }
 
 
@@ -75,7 +75,7 @@ trait PhenoTester[P, S] extends Describable {
 }
 
 trait SelectionStrategy[A] extends Describable {
-  def select(tested: Seq[(Double, Geno[A])]): Seq[Geno[A]]
+  def select(tested: Seq[(Double, Geno[A])]): PopGeno[A]
 }
 
 trait Transformer[A, P] {

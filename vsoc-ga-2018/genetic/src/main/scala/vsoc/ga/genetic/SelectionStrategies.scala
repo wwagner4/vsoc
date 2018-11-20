@@ -20,7 +20,7 @@ object SelectionStrategies {
 
       override val ran: Random = _ran
 
-      override def select(tested: Seq[(Double, Geno[A])]): Seq[Geno[A]] = {
+      override def select(tested: Seq[(Double, Geno[A])]): PopGeno[A] = {
         require(tested.length >= minSize, s"population size ${tested.size} too small. required $minSize")
         val sorted = tested.sortBy(f => -f._1).map(t => t._2).toList
         val cos = List(
@@ -31,9 +31,10 @@ object SelectionStrategies {
           crossover(sorted(1), sorted(3)),
           crossover(sorted(2), sorted(3))
         )
-        val x = sorted.take(3) ::: cos ::: sorted.drop(3)
-        val all: Seq[Geno[A]] = x.take(tested.size)
-        all.map(g => mutation(g, mutationRate, randomAllele))
+        val allSeq = sorted.take(3) ::: cos ::: sorted.drop(3)
+        val all: Seq[Geno[A]] = allSeq.take(tested.size)
+        val allGenos: Seq[Geno[A]] = all.map(g => mutation(g, mutationRate, randomAllele))
+        PopGeno(allGenos)
       }
 
       override def properties: Seq[(String, Any)] = Seq(
@@ -63,7 +64,7 @@ object SelectionStrategies {
 
       override def ran: Random = _ran
 
-      override def select(tested: Seq[(Double, Geno[A])]): Seq[Geno[A]] = {
+      override def select(tested: Seq[(Double, Geno[A])]): PopGeno[A] = {
         require(tested.size >= minSize, s"population size ${tested.size} too small. required $minSize")
         val sorted = tested.sortBy(f => -f._1).map(t => t._2).toList
         val all = (List(
@@ -72,7 +73,8 @@ object SelectionStrategies {
           sorted(2),
           sorted(3)
         ) ::: sorted).take(tested.size)
-        all.map(t => mutation(t, mutationRate, randomAllele))
+        val allGenos: Seq[Geno[A]] = all.map(t => mutation(t, mutationRate, randomAllele))
+        PopGeno(allGenos)
       }
 
       override def properties: Seq[(String, Any)] = Seq(

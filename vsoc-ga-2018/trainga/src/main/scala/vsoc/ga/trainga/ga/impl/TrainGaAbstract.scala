@@ -57,7 +57,7 @@ abstract class TrainGaAbstract extends TrainGa[Data02] with PropertiesProvider {
 
   private case class GAR(
                           score: Option[Data02],
-                          newPopulation: Seq[Geno[Double]]
+                          newPopulation: PopGeno[Double]
                         ) extends GAResult[Data02, Double]
 
   def randomAllele(_ran: Random): Double = 2.0 * _ran.nextDouble() - 1.0
@@ -68,7 +68,7 @@ abstract class TrainGaAbstract extends TrainGa[Data02] with PropertiesProvider {
 
   lazy val ga: GA[Double, TeamGa, Data02] = new GA(tester, selStrat, transformer)
 
-  def createRandomPopGeno: Seq[Geno[Double]] = {
+  def createRandomPopGeno: PopGeno[Double] = {
     def ranSeq(size: Int): Seq[Double] =
       (1 to size).map(_ => randomAllele(ran))
 
@@ -78,16 +78,16 @@ abstract class TrainGaAbstract extends TrainGa[Data02] with PropertiesProvider {
       }
       Geno(gseq)
     }
-
-    (1 to populationSize).map { _ =>
+    val genos = (1 to populationSize).map { _ =>
       createRandomTeamGeno
     }
+    PopGeno(genos)
   }
 
   override def run(trainGaId: String, trainGaNr: String): Unit = {
     log.info(s"start GA populationSize: $populationSize playerCount: $playerCount playerParamSize:$playerParamSize")
     try {
-      val initialPop: Seq[Geno[Double]] = population.getOrElse(createRandomPopGeno)
+      val initialPop: PopGeno[Double] = population.getOrElse(createRandomPopGeno)
       var gar: GAResult[Data02, Double] = GAR(None, initialPop)
       var i = iterations.getOrElse(0)
       while (true) {
