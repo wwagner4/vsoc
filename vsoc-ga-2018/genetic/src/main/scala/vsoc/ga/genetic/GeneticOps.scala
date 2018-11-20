@@ -6,21 +6,21 @@ trait GeneticOps[A] {
 
   def ran: Random
 
-  def crossover(a: Seq[A], b: Seq[A]): Seq[A] = {
-    require(a.size == b.size, "Sizes of gnomes must be the same")
-    val cutPoint = ran.nextInt(a.size)
+  def crossover(a: Geno[A], b: Geno[A]): Geno[A] = {
+    require(a.genos.size == b.genos.size, "Sizes of gnomes must be the same")
+    val cutPoint = ran.nextInt(a.genos.size)
 
-    val (a1, _) = a.splitAt(cutPoint)
-    val (_, b1) = b.splitAt(cutPoint)
-    a1 ++ b1
+    val (a1, _) = a.genos.splitAt(cutPoint)
+    val (_, b1) = b.genos.splitAt(cutPoint)
+    Geno(a1 ++ b1)
   }
 
-  def mutation(a: Seq[A], mutationRate: Double, ranAllele: Random => A): Seq[A] = {
-    a.map { a =>
+  def mutation(a: Geno[A], mutationRate: Double, ranAllele: Random => A): Geno[A] = {
+    val genos = a.genos.map { a =>
       val mut = ran.nextDouble() < mutationRate
       if (mut) ranAllele(ran) else a
     }
-
+    Geno(genos)
   }
 
 }

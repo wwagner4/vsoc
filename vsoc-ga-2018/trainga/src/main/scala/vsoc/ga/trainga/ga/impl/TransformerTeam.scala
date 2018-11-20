@@ -3,14 +3,14 @@ package vsoc.ga.trainga.ga.impl
 import java.util.Optional
 
 import vsoc.behaviour.Behaviour
-import vsoc.ga.genetic.Transformer
+import vsoc.ga.genetic.{Geno, Transformer}
 import vsoc.ga.matches.{Behaviours, Team, Teams}
 import vsoc.ga.trainga.behav.{BehaviourNeuralNet, InputMapperNn, OutputMapperNn}
 import vsoc.ga.trainga.nn.NeuralNet
 
 class TransformerTeam(playerCount: Int, createNeuralNet: () => NeuralNet, _in: InputMapperNn, _out: OutputMapperNn) extends Transformer[Double, TeamGa] {
 
-  override def toPheno(geno: Seq[Double]): TeamGa = {
+  override def toPheno(geno: Geno[Double]): TeamGa = {
 
     def behav(nn: NeuralNet): Behaviour = {
       val in: InputMapperNn = _in
@@ -25,8 +25,8 @@ class TransformerTeam(playerCount: Int, createNeuralNet: () => NeuralNet, _in: I
       nn
     }
 
-    val grpSize = geno.size / playerCount
-    val nns: Seq[NeuralNet] = geno
+    val grpSize = geno.genos.size / playerCount
+    val nns: Seq[NeuralNet] = geno.genos
       .grouped(grpSize)
       .toSeq
       .map(nn)
@@ -41,8 +41,9 @@ class TransformerTeam(playerCount: Int, createNeuralNet: () => NeuralNet, _in: I
     }
   }
 
-  override def toGeno(pheno: TeamGa): Seq[Double] = {
+  override def toGeno(pheno: TeamGa): Geno[Double] = {
     val nns: Seq[NeuralNet] = pheno.neuralNets
-    nns.flatMap(nn => nn.getParam)
+    val gseq = nns.flatMap(nn => nn.getParam)
+    Geno(gseq)
   }
 }

@@ -20,7 +20,7 @@ object SelectionStrategies {
 
       override val ran: Random = _ran
 
-      override def select(tested: Seq[(Double, Seq[A])]): Seq[Seq[A]] = {
+      override def select(tested: Seq[(Double, Geno[A])]): Seq[Geno[A]] = {
         require(tested.length >= minSize, s"population size ${tested.size} too small. required $minSize")
         val sorted = tested.sortBy(f => -f._1).map(t => t._2).toList
         val cos = List(
@@ -31,7 +31,8 @@ object SelectionStrategies {
           crossover(sorted(1), sorted(3)),
           crossover(sorted(2), sorted(3))
         )
-        val all: Seq[Seq[A]] = (sorted.take(3) ::: cos ::: sorted.drop(3)).take(tested.size)
+        val x = sorted.take(3) ::: cos ::: sorted.drop(3)
+        val all: Seq[Geno[A]] = x.take(tested.size)
         all.map(g => mutation(g, mutationRate, randomAllele))
       }
 
@@ -62,7 +63,7 @@ object SelectionStrategies {
 
       override def ran: Random = _ran
 
-      override def select(tested: Seq[(Double, Seq[A])]): Seq[Seq[A]] = {
+      override def select(tested: Seq[(Double, Geno[A])]): Seq[Geno[A]] = {
         require(tested.size >= minSize, s"population size ${tested.size} too small. required $minSize")
         val sorted = tested.sortBy(f => -f._1).map(t => t._2).toList
         val all = (List(

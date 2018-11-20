@@ -4,12 +4,11 @@ import java.nio.file.{Files, Path, Paths}
 import java.util.Comparator
 
 import atan.model.Controller
-import vsoc.ga.common.UtilPath
-import vsoc.ga.common.config.ConfigHelper
 import vsoc.ga.common.persist.Persistors
+import vsoc.ga.genetic.Geno
 import vsoc.ga.matches.gui.VsocMatchFrame
 import vsoc.ga.matches.{Match, Matches, Team}
-import vsoc.ga.trainga.ga.{TrainGa, TrainGaContainer}
+import vsoc.ga.trainga.ga.{TrainGa, TrainGaContainer, UtilTransformGeno}
 
 import scala.util.Random
 
@@ -48,20 +47,18 @@ object GuiPopulationRunner {
         .orElseThrow(() => new IllegalStateException(s"Could not find generation with nr '$generationNr'"))
     }
 
-    def loadGenotype: Seq[Seq[Double]] = {
-
-      import vsoc.ga.common.UtilTransform._
+    def loadGenotype: Seq[Geno[Double]] = {
 
       val genPath: Path = generationPath
       val persistor = Persistors.nio(workDir)
       val genDir = Paths.get(trainGa.id, populationNr, genPath.getFileName.toString)
       persistor.load(genDir) { ois =>
         val cont = ois.readObject().asInstanceOf[TrainGaContainer]
-        toSeq(cont.population)
+        UtilTransformGeno.toSeqGeno(cont.population)
       }.getOrElse(throw new IllegalStateException(s"Error loading genotype from $genPath"))
     }
 
-    val geno: Seq[Seq[Double]] = loadGenotype
+    val geno: Seq[Geno[Double]] = loadGenotype
     val teams = for ((t, i) <- trainGa.teamsFromGeno(geno).zipWithIndex) yield {
       new Team {
         private val _name = s"$i"

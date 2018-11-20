@@ -54,9 +54,12 @@ class TestGA extends FunSuite with MustMatchers {
 
   class TransformerT extends Transformer[Int, String] {
 
-    override def toPheno(geno: Seq[Int]): String = geno.map(g => intToChar(g)).mkString("")
+    override def toPheno(geno: Geno[Int]): String = geno.genos.map(g => intToChar(g)).mkString("")
 
-    override def toGeno(pheno: String): Seq[Int] = pheno.toSeq.map(c => charToInt(c))
+    override def toGeno(pheno: String): Geno[Int] = {
+      val gseq = pheno.toSeq.map(c => charToInt(c))
+      Geno(gseq)
+    }
   }
 
   case class Score(
@@ -67,10 +70,10 @@ class TestGA extends FunSuite with MustMatchers {
 
   case class GAResultImpl(
                            score: Option[Score],
-                           newPopulation: Seq[Seq[Int]]
+                           newPopulation: Seq[Geno[Int]]
                          ) extends GAResult[Score, Int]
 
-  private def popToStr(pop: Seq[Seq[Int]]) = pop.map(p => p.map(x => intToChar(x)).mkString("")).mkString("  ")
+  private def popToStr(pop: Seq[Geno[Int]]) = pop.map(p => p.genos.map(x => intToChar(x)).mkString("")).mkString("  ")
 
   //noinspection ScalaUnusedSymbol
   private def popsToStdout(popStream: Stream[GAResult[Score, Int]]): Unit =
@@ -86,7 +89,10 @@ class TestGA extends FunSuite with MustMatchers {
     val r1 = new Random(987987L)
     val gat = new GA(new PhenoTesterT(), SelectionStrategies.mutationOnly(0.005, ranAllele, r1), new TransformerT)
 
-    def randomGenome: Seq[Int] = (1 to 10).map(_ => ranAllele(r1))
+    def randomGenome: Geno[Int] = {
+      val gseq = (1 to 10).map(_ => ranAllele(r1))
+      Geno(gseq)
+    }
 
     val start: GAResult[Score, Int] = GAResultImpl(score = None, newPopulation = for (_ <- 1 to 10) yield randomGenome)
 
@@ -102,7 +108,10 @@ class TestGA extends FunSuite with MustMatchers {
     val ran = new Random(987987L)
     val gaTest = new GA(new PhenoTesterT(), SelectionStrategies.crossover(0.005, ranAllele, ran), new TransformerT)
 
-    def randomGenome: Seq[Int] = (1 to 10).map(_ => ranAllele(ran))
+    def randomGenome: Geno[Int] = {
+      val gseq = (1 to 10).map(_ => ranAllele(ran))
+      Geno(gseq)
+    }
 
     val start: GAResult[Score, Int] = GAResultImpl(newPopulation = for (_ <- 1 to 10) yield randomGenome, score = None)
 
@@ -122,11 +131,11 @@ class TestGA extends FunSuite with MustMatchers {
     }
 
     val n = 10
-    val a = Seq.fill(n)("A")
-    val b = Seq.fill(n)("B")
+    val a = Geno(Seq.fill(n)("A"))
+    val b = Geno(Seq.fill(n)("B"))
     val r = go.crossover(a, b)
 
-    val (ra, rb) = r.splitAt(8)
+    val (ra, rb) = r.genos.splitAt(8)
     ra mustBe Seq.fill(8)("A")
     rb mustBe Seq.fill(2)("B")
   }
@@ -139,11 +148,11 @@ class TestGA extends FunSuite with MustMatchers {
     }
 
     val n = 9
-    val a = Seq.fill(n)("A")
-    val b = Seq.fill(n)("B")
+    val a = Geno(Seq.fill(n)("A"))
+    val b = Geno(Seq.fill(n)("B"))
     val r = go.crossover(a, b)
 
-    val (ra, rb) = r.splitAt(1)
+    val (ra, rb) = r.genos.splitAt(1)
     ra mustBe Seq.fill(1)("A")
     rb mustBe Seq.fill(8)("B")
   }
@@ -157,11 +166,11 @@ class TestGA extends FunSuite with MustMatchers {
     val strat = SelectionStrategies.crossover(0.0, ra, r)
 
     val tested = for (i <- 0 to 19) yield {
-      (i.toDouble, Seq.fill(15)(i))
+      (i.toDouble, Geno(Seq.fill(15)(i)))
     }
 
-    val sel: Seq[Seq[Int]] = strat.select(tested)
-    val dist = sel.map(s => s.toSet)
+    val sel: Seq[Geno[Int]] = strat.select(tested)
+    val dist = sel.map(s => s.genos.toSet)
 
     dist.size mustBe tested.size
 
@@ -227,11 +236,11 @@ class TestGA extends FunSuite with MustMatchers {
     val strat = SelectionStrategies.mutationOnly(0.5, ra, r)
 
     val tested = for (i <- 0 to 7) yield {
-      (i.toDouble, Seq.fill(15)(i))
+      (i.toDouble, Geno(Seq.fill(15)(i)))
     }
 
-    val sel: Seq[Seq[Int]] = strat.select(tested)
-    val dist = sel.map(s => s.distinct.sorted)
+    val sel: Seq[Geno[Int]] = strat.select(tested)
+    val dist = sel.map(s => s.genos.distinct.sorted)
 
     dist.size mustBe tested.size
     dist(0) must contain(7)
