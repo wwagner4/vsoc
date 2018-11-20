@@ -54,7 +54,7 @@ class TestGA extends FunSuite with MustMatchers {
 
   class TransformerT extends Transformer[Int, String] {
 
-    override def toPheno(geno: Geno[Int]): String = geno.genos.map(g => intToChar(g)).mkString("")
+    override def toPheno(geno: Geno[Int]): String = geno.alleles.map(g => intToChar(g)).mkString("")
 
     override def toGeno(pheno: String): Geno[Int] = {
       val gseq = pheno.toSeq.map(c => charToInt(c))
@@ -73,7 +73,7 @@ class TestGA extends FunSuite with MustMatchers {
                            newPopulation: Seq[Geno[Int]]
                          ) extends GAResult[Score, Int]
 
-  private def popToStr(pop: Seq[Geno[Int]]) = pop.map(p => p.genos.map(x => intToChar(x)).mkString("")).mkString("  ")
+  private def popToStr(pop: Seq[Geno[Int]]) = pop.map(p => p.alleles.map(x => intToChar(x)).mkString("")).mkString("  ")
 
   //noinspection ScalaUnusedSymbol
   private def popsToStdout(popStream: Stream[GAResult[Score, Int]]): Unit =
@@ -135,7 +135,7 @@ class TestGA extends FunSuite with MustMatchers {
     val b = Geno(Seq.fill(n)("B"))
     val r = go.crossover(a, b)
 
-    val (ra, rb) = r.genos.splitAt(8)
+    val (ra, rb) = r.alleles.splitAt(8)
     ra mustBe Seq.fill(8)("A")
     rb mustBe Seq.fill(2)("B")
   }
@@ -152,7 +152,7 @@ class TestGA extends FunSuite with MustMatchers {
     val b = Geno(Seq.fill(n)("B"))
     val r = go.crossover(a, b)
 
-    val (ra, rb) = r.genos.splitAt(1)
+    val (ra, rb) = r.alleles.splitAt(1)
     ra mustBe Seq.fill(1)("A")
     rb mustBe Seq.fill(8)("B")
   }
@@ -170,7 +170,7 @@ class TestGA extends FunSuite with MustMatchers {
     }
 
     val sel: Seq[Geno[Int]] = strat.select(tested)
-    val dist = sel.map(s => s.genos.toSet)
+    val dist = sel.map(s => s.alleles.toSet)
 
     dist.size mustBe tested.size
 
@@ -240,7 +240,7 @@ class TestGA extends FunSuite with MustMatchers {
     }
 
     val sel: Seq[Geno[Int]] = strat.select(tested)
-    val dist = sel.map(s => s.genos.distinct.sorted)
+    val dist = sel.map(s => s.alleles.distinct.sorted)
 
     dist.size mustBe tested.size
     dist(0) must contain(7)

@@ -9,7 +9,7 @@ object UtilTransformGeno {
   }
 
   def asArrayGenoDouble(pop: Seq[Geno[Double]]): Array[Array[Double]] = {
-    pop.map(g => g.genos.toArray).toArray
+    pop.map(g => g.alleles.toArray).toArray
   }
 
 }

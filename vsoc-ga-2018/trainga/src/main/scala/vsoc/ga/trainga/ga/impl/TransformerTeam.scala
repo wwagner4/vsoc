@@ -25,8 +25,8 @@ class TransformerTeam(playerCount: Int, createNeuralNet: () => NeuralNet, _in: I
       nn
     }
 
-    val grpSize = geno.genos.size / playerCount
-    val nns: Seq[NeuralNet] = geno.genos
+    val grpSize = geno.alleles.size / playerCount
+    val nns: Seq[NeuralNet] = geno.alleles
       .grouped(grpSize)
       .toSeq
       .map(nn)

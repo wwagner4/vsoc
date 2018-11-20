@@ -1,3 +1,3 @@
 package vsoc.ga.genetic
 
-case class Geno[A](genos: Seq[A])
+case class Geno[A](alleles: Seq[A])
