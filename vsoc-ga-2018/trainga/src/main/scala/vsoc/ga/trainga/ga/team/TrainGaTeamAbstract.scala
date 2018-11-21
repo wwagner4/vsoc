@@ -1,4 +1,4 @@
-package vsoc.ga.trainga.ga.impl
+package vsoc.ga.trainga.ga.team
 
 import org.slf4j.LoggerFactory
 import vsoc.ga.common.data.Data02
@@ -11,9 +11,9 @@ import vsoc.ga.trainga.nn.NeuralNet
 
 import scala.util.Random
 
-abstract class TrainGaAbstract extends TrainGa[Data02] with PropertiesProvider {
+abstract class TrainGaTeamAbstract extends TrainGa[Data02] with PropertiesProvider {
 
-  private val log = LoggerFactory.getLogger(classOf[TrainGaAbstract])
+  private val log = LoggerFactory.getLogger(classOf[TrainGaTeamAbstract])
 
   protected def createNeuralNet: () => NeuralNet
 

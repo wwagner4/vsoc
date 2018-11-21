@@ -9,7 +9,7 @@ import vsoc.behaviour.{DistDirVision, Sensors}
 import vsoc.ga.common.UtilReflection
 import vsoc.ga.common.persist.Persistors
 import vsoc.ga.trainga.ga.OutputMappers
-import vsoc.ga.trainga.ga.impl.InputMapperNnTeam
+import vsoc.ga.trainga.ga.team.InputMapperNnTeam
 import vsoc.ga.trainga.nn.{NeuralNet, NeuralNetPersist, NeuralNets}
 
 import scala.collection.JavaConverters._

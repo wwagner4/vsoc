@@ -1,4 +1,4 @@
-package vsoc.ga.trainga.ga.impl
+package vsoc.ga.trainga.ga.team
 
 import org.scalatest.{FunSuite, MustMatchers}
 import vsoc.ga.common.data.Data02

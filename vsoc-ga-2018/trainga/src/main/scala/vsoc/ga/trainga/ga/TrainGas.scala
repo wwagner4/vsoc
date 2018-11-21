@@ -2,13 +2,13 @@ package vsoc.ga.trainga.ga
 
 import vsoc.ga.common.data.Data02
 import vsoc.ga.trainga.behav.{InputMapperNn, OutputMapperNn}
-import vsoc.ga.trainga.ga.impl._
+import vsoc.ga.trainga.ga.team._
 import vsoc.ga.trainga.nn.{NeuralNet, NeuralNets}
 
 object TrainGas {
 
 
-  def trainGaB01: TrainGa[Data02] = new TrainGaAbstract {
+  def trainGaB01: TrainGa[Data02] = new TrainGaTeamAbstract {
 
     override def id: String = "trainGaB01"
 
@@ -23,7 +23,7 @@ object TrainGas {
     override protected def outMapper: OutputMapperNn = OutputMappers.om02
   }
 
-  def trainGaB02: TrainGa[Data02] = new TrainGaAbstract {
+  def trainGaB02: TrainGa[Data02] = new TrainGaTeamAbstract {
 
     override def id: String = "trainGaB02"
 
@@ -41,7 +41,7 @@ object TrainGas {
     override protected def outMapper: OutputMapperNn = OutputMappers.om02
   }
 
-  def trainGaB03: TrainGa[Data02] = new TrainGaAbstract {
+  def trainGaB03: TrainGa[Data02] = new TrainGaTeamAbstract {
 
     override def id: String = "trainGaB03"
 
@@ -62,7 +62,7 @@ object TrainGas {
 
   }
 
-  def trainGaB04: TrainGa[Data02] = new TrainGaAbstract {
+  def trainGaB04: TrainGa[Data02] = new TrainGaTeamAbstract {
 
     override def id: String = "trainGaB04"
 
@@ -81,7 +81,7 @@ object TrainGas {
 
   }
 
-  def trainGaB05: TrainGa[Data02] = new TrainGaAbstract {
+  def trainGaB05: TrainGa[Data02] = new TrainGaTeamAbstract {
 
     override def id: String = "trainGaB05"
 
