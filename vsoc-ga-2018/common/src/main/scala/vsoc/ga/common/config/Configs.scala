@@ -145,6 +145,19 @@ object Configs {
       """Six populations using TrainGa B05"""
   }
 
+  def b05Test: Config = new Config {
+
+    override def id: String = "b05Test"
+
+    override def trainings: Seq[ConfigTrainGa] = Seq(
+      ConfigTrainGa("trainGaB05", "test001"),
+      ConfigTrainGa("trainGaB05", "test002"),
+    )
+
+    override def fullDesc: String =
+      """Test for new selection strategie"""
+  }
+
 
 
 }
