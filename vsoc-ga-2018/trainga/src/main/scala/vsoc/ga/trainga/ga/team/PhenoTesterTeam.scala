@@ -4,7 +4,7 @@ import org.slf4j.LoggerFactory
 import vsoc.ga.common.data.Data02
 import vsoc.ga.common.describe.PropertiesProvider
 import vsoc.ga.genetic.{PhenoTester, PhenoTesterResult}
-import vsoc.ga.matches.{MatchResult, Matches, TeamResult}
+import vsoc.ga.matches.{Match, MatchResult, Matches, TeamResult}
 import vsoc.ga.trainga.ga.FitnessFunction
 
 import scala.util.Random
@@ -48,7 +48,7 @@ class PhenoTesterTeam(
     s"kicks:${result.kickCount} kickOut:${result.kickOutCount}"
 
   def playMatch(t1: TeamGa, t2: TeamGa): (Data02, Data02) = {
-    val m = Matches.of(t1.vsocTeam, t2.vsocTeam)
+    val m: Match = Matches.of(t1.vsocTeam, t2.vsocTeam)
     for (_ <- 1 to matchSteps) m.takeStep()
     val matchResult: MatchResult = m.state
     val eastResult = matchResult.teamEastResult
