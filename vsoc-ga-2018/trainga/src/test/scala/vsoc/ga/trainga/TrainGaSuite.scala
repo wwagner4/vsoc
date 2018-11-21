@@ -9,11 +9,10 @@ import vsoc.behaviour.{DistDirVision, Sensors}
 import vsoc.ga.common.UtilReflection
 import vsoc.ga.common.persist.Persistors
 import vsoc.ga.trainga.ga.OutputMappers
-import vsoc.ga.trainga.ga.impl.{InputMapperNnTeam, RandomElemsPicker}
+import vsoc.ga.trainga.ga.impl.InputMapperNnTeam
 import vsoc.ga.trainga.nn.{NeuralNet, NeuralNetPersist, NeuralNets}
 
 import scala.collection.JavaConverters._
-import scala.util.Random
 
 class TrainGaSuite extends FunSuite with MustMatchers {
 
@@ -225,19 +224,6 @@ class TrainGaSuite extends FunSuite with MustMatchers {
     val m = OutputMappers.om01FDefault
     m.applyOutput(p, out)
     p.result mustBe "kick[420,10.00]turn[-31.11]"
-  }
-
-  test("RandomElemsPicker") {
-    val i = collection.mutable.Set.empty[Int]
-    val ran = new Random(123123L)
-    val seq = 0 to 9
-    for (_ <- 1 to 50) {
-      val (a, b) = RandomElemsPicker.pick(seq, ran)
-      i.add(a)
-      i.add(b)
-      a must not be b
-    }
-    (0 to 9).foreach(v => assert(i.contains(v)))
   }
 
   def emptySensor: Sensors = new Sensors
