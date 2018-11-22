@@ -30,7 +30,7 @@ class TransformerTeam(playerCount: Int, createNeuralNet: () => NeuralNet, _in: I
       .grouped(grpSize)
       .toSeq
       .map(nn)
-    val behavs = nns.map(behav)
+    val behavs: Seq[Behaviour] = nns.map(behav)
     val team = Teams.behaviours(behavs, "undefined")
     new TeamGa {
       override def vsocTeam: Team = team

@@ -1,5 +1,5 @@
 package vsoc.ga.trainga.ga.player
 
-class PlayerPheno {
+import vsoc.behaviour.Behaviour
 
-}
+case class PlayerPheno(behaviour: Behaviour)

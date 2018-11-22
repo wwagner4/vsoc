@@ -3,6 +3,7 @@ package vsoc.ga.trainga.ga.team
 import org.scalatest.{FunSuite, MustMatchers}
 import vsoc.ga.common.data.Data02
 import vsoc.ga.matches.{MatchResult, MatchResults}
+import vsoc.ga.trainga.ga.common.TrainGaUtil
 import vsoc.server.IVsocPlayer
 
 class PhenoTesterTeamUtilSuite extends FunSuite with MustMatchers {
@@ -14,7 +15,7 @@ class PhenoTesterTeamUtilSuite extends FunSuite with MustMatchers {
       east = Seq(PT(kicks = 2)),
       west = Seq())
 
-    val data: Data02 = PhenoTesterTeamUtil.resultToData(r.teamEastResult, r.teamWestResult)
+    val data: Data02 = TrainGaUtil.resultToData(r.teamEastResult, r.teamWestResult)
 
     data.kicksMean mustBe 2
     data.kicksMax mustBe 2
@@ -40,7 +41,7 @@ class PhenoTesterTeamUtilSuite extends FunSuite with MustMatchers {
       east = Seq(PT(kicks = 2), PT(kicks = 4)),
       west = Seq())
 
-    val data: Data02 = PhenoTesterTeamUtil.resultToData(r.teamEastResult, r.teamWestResult)
+    val data: Data02 = TrainGaUtil.resultToData(r.teamEastResult, r.teamWestResult)
 
     data.kicksMean mustBe 3
     data.kicksMax mustBe 4
@@ -67,7 +68,7 @@ class PhenoTesterTeamUtilSuite extends FunSuite with MustMatchers {
       east = Seq(PT(ownGoals = 3), PT(ownGoals = 1)),
       west = Seq(PT(otherGoals = 100), PT(otherGoals = 200)))
 
-    val data: Data02 = PhenoTesterTeamUtil.resultToData(r.teamEastResult, r.teamWestResult)
+    val data: Data02 = TrainGaUtil.resultToData(r.teamEastResult, r.teamWestResult)
 
     data.kicksMean mustBe 0
     data.kicksMax mustBe 0
@@ -96,7 +97,7 @@ class PhenoTesterTeamUtilSuite extends FunSuite with MustMatchers {
       east = Seq(PT(otherGoals = 1), PT(otherGoals = 2)),
       west = Seq(PT(otherGoals = 2), PT(otherGoals = 2)))
 
-    val data: Data02 = PhenoTesterTeamUtil.resultToData(r.teamEastResult, r.teamWestResult)
+    val data: Data02 = TrainGaUtil.resultToData(r.teamEastResult, r.teamWestResult)
 
     data.kicksMean mustBe 0
     data.kicksMax mustBe 0

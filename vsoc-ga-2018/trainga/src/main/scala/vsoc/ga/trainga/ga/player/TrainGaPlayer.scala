@@ -1,22 +1,29 @@
 package vsoc.ga.trainga.ga.player
 
+import org.slf4j.LoggerFactory
 import vsoc.ga.common.data.Data02
 import vsoc.ga.genetic._
-import vsoc.ga.matches.{Match, MatchResult, Matches, Team}
-import vsoc.ga.trainga.ga.TrainGa
+import vsoc.ga.matches._
+import vsoc.ga.trainga.ga.common.TrainGaUtil
+import vsoc.ga.trainga.ga.{FitnessFunction, FitnessFunctions, TrainGa}
 
 import scala.util.Random
 
 class TrainGaPlayer extends TrainGa[Data02] {
 
-  val matchSteps = 20000
+  val stepsPerMatch = 20000
 
+  val matchesPerTest = 20
+
+  val fitness: FitnessFunction[Data02] = FitnessFunctions.data02A05
 
   val tester: PhenoTester[PlayerPheno, Data02] = createTester
 
   val selStrategy: SelectionStrategy[Double] = createSelStrategy
 
   val transformer: Transformer[Double, PlayerPheno] = createTransformer
+
+  private val log = LoggerFactory.getLogger(classOf[TrainGaPlayer])
 
   override def id: String = "TrainGaPlayer"
 
@@ -50,23 +57,47 @@ class TrainGaPlayer extends TrainGa[Data02] {
 
       case class PhenoTested(score: Data02, player: PlayerPheno)
 
-      def createTeam: Team = ???
+      def createTeam(p1: PlayerPheno, p2: PlayerPheno, p3: PlayerPheno): Team = {
+        Teams.behaviours(Seq(p1.behaviour, p2.behaviour, p3.behaviour), "anonymous")
+      }
+
+      def updatePhenosTested(phenosTested: Seq[PhenoTested], i11: Int, d1: Data02):Unit = {
+        ???
+      }
 
       override def test(phenos: Seq[PlayerPheno]): PhenoTesterResult[PlayerPheno, Data02] = {
 
-        var phenosTested: Seq[PhenoTested] = phenos.map(p => PhenoTested(Data02(), p))
+        val ic = new PlayerIndexCreator(phenos.size)
 
+        var phenosTested: Seq[PhenoTested] = phenos.map(p => PhenoTested(Data02(), p)).toBuffer
 
-        val t1 = createTeam
-        val t2 = createTeam
-        val m: Match = Matches.of(t1, t2)
-        for (_ <- 1 to matchSteps) m.takeStep()
-        val matchResult: MatchResult = m.state
-        val eastResult = matchResult.teamEastResult
-        val westResult = matchResult.teamWestResult
+        for (i <- 1 to matchesPerTest) {
+          val (i11, i12, i13) = ic.ran
+          val (i21, i22, i23) = ic.ran
+          val t1 = createTeam(phenosTested(i11).player, phenosTested(i12).player, phenosTested(i13).player)
+          val t2 = createTeam(phenosTested(i21).player, phenosTested(i22).player, phenosTested(i23).player)
+          val (d1, d2) = TrainGaUtil.playMatch(t1, t2, fitness, stepsPerMatch);
 
-        ???
+          log.info(s"finished match ${d1.score} - ${d2.score}")
 
+          updatePhenosTested(phenosTested, i11, d1)
+          updatePhenosTested(phenosTested, i12, d1)
+          updatePhenosTested(phenosTested, i13, d1)
+
+          updatePhenosTested(phenosTested, i21, d2)
+          updatePhenosTested(phenosTested, i22, d2)
+          updatePhenosTested(phenosTested, i23, d2)
+
+        }
+
+        val retested = phenosTested.map(pt => (pt.score.score, pt.player))
+        val rescore = TrainGaUtil.mean(phenosTested.map(p => p.score))
+
+        new PhenoTesterResult[PlayerPheno, Data02] {
+          override def testedPhenos: Seq[(Double, PlayerPheno)] = retested
+
+          override def populationScore: Option[Data02] = Some(rescore)
+        }
       }
 
       override def fullDesc: String = "Player:PhenoTester"
