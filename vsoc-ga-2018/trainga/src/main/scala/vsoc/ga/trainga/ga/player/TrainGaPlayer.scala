@@ -5,6 +5,8 @@ import vsoc.ga.genetic._
 import vsoc.ga.matches.{Match, MatchResult, Matches, Team}
 import vsoc.ga.trainga.ga.TrainGa
 
+import scala.util.Random
+
 class TrainGaPlayer extends TrainGa[Data02] {
 
   val matchSteps = 20000
@@ -46,7 +48,7 @@ class TrainGaPlayer extends TrainGa[Data02] {
 
     new PhenoTester[PlayerPheno, Data02]() {
 
-      case class PhenoTested(score : Data02, player: PlayerPheno)
+      case class PhenoTested(score: Data02, player: PlayerPheno)
 
       def createTeam: Team = ???
 
@@ -79,3 +81,33 @@ class TrainGaPlayer extends TrainGa[Data02] {
 
 
 }
+
+
+/**
+  * Selects players for a team
+  * In order to create some kinds of player roles player 1
+  * is selected from the first third of population, player 2
+  * is selcted from the second third of the population and
+  * player 3 from the third third.
+  * To understand this have a look at the testcases.
+  */
+class PlayerIndexCreator(popSize: Int) {
+
+  val ms = math.floor(popSize.toDouble / 3).toInt
+  val diff = popSize - (ms * 3)
+  val (amin, amax, bmin, bmax, cmin, cmax) =
+    if (diff == 0)
+      (0, ms - 1, ms, 2 * ms - 1, 2 * ms, 3 * ms - 1)
+    else if (diff == 1)
+      (0, ms, ms + 1, 2 * ms, 2 * ms + 1, 3 * ms)
+    else
+      (0, ms, ms + 1, 2 * ms + 1, 2 * ms + 2, 3 * ms + 1)
+
+  def ran: (Int, Int, Int) = {
+    (amin + Random.nextInt(amax - amin + 1),
+      bmin + Random.nextInt(bmax - bmin + 1),
+      cmin + Random.nextInt(cmax - cmin + 1))
+  }
+
+}
+
