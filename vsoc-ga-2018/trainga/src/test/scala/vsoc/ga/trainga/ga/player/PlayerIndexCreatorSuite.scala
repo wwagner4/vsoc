@@ -2,10 +2,14 @@ package vsoc.ga.trainga.ga.player
 
 import org.scalatest.{FunSuite, MustMatchers}
 
+import scala.util.Random
+
 class PlayerIndexCreatorSuite extends FunSuite with MustMatchers {
 
+  val ran = new Random()
+
   test("length 12") {
-    val c = new PlayerIndexCreator(12)
+    val c = new PlayerIndexCreator(12, ran)
     val cs = ntimes(1000, c)
     cs.map(_._1).min mustBe 0
     cs.map(_._1).max mustBe 3
@@ -16,7 +20,7 @@ class PlayerIndexCreatorSuite extends FunSuite with MustMatchers {
   }
 
   test("length 13") {
-    val c = new PlayerIndexCreator(13)
+    val c = new PlayerIndexCreator(13, ran)
     val cs = ntimes(1000, c)
     cs.map(_._1).min mustBe 0
     cs.map(_._1).max mustBe 4
@@ -27,7 +31,7 @@ class PlayerIndexCreatorSuite extends FunSuite with MustMatchers {
   }
 
   test("length 14") {
-    val c = new PlayerIndexCreator(14)
+    val c = new PlayerIndexCreator(14, ran)
     val cs = ntimes(1000, c)
     cs.map(_._1).min mustBe 0
     cs.map(_._1).max mustBe 4
@@ -38,7 +42,7 @@ class PlayerIndexCreatorSuite extends FunSuite with MustMatchers {
   }
 
   test("length 15") {
-    val c = new PlayerIndexCreator(15)
+    val c = new PlayerIndexCreator(15, ran)
     val cs = ntimes(1000, c)
     cs.map(_._1).min mustBe 0
     cs.map(_._1).max mustBe 4

@@ -11,6 +11,8 @@ import scala.util.Random
 
 class TrainGaPlayer extends TrainGa[Data02] {
 
+  val ran = new Random()
+
   val stepsPerMatch = 20000
 
   val matchesPerTest = 20
@@ -67,7 +69,7 @@ class TrainGaPlayer extends TrainGa[Data02] {
 
       override def test(phenos: Seq[PlayerPheno]): PhenoTesterResult[PlayerPheno, Data02] = {
 
-        val ic = new PlayerIndexCreator(phenos.size)
+        val ic = new PlayerIndexCreator(phenos.size, ran)
 
         var phenosTested: Seq[PhenoTested] = phenos.map(p => PhenoTested(Data02(), p)).toBuffer
 
@@ -106,7 +108,9 @@ class TrainGaPlayer extends TrainGa[Data02] {
 
   }
 
-  def createSelStrategy: SelectionStrategy[Double] = ???
+  def randomAllele(_ran: Random): Double = 2.0 * _ran.nextDouble() - 1.0
+
+  def createSelStrategy: SelectionStrategy[Double] = SelectionStrategies.crossover(0.001, randomAllele, ran)
 
   def createTransformer: Transformer[Double, PlayerPheno] = ???
 
@@ -122,7 +126,7 @@ class TrainGaPlayer extends TrainGa[Data02] {
   * player 3 from the third third.
   * To understand this have a look at the testcases.
   */
-class PlayerIndexCreator(popSize: Int) {
+class PlayerIndexCreator(popSize: Int, _ran: Random) {
 
   val ms = math.floor(popSize.toDouble / 3).toInt
   val diff = popSize - (ms * 3)
@@ -135,9 +139,9 @@ class PlayerIndexCreator(popSize: Int) {
       (0, ms, ms + 1, 2 * ms + 1, 2 * ms + 2, 3 * ms + 1)
 
   def ran: (Int, Int, Int) = {
-    (amin + Random.nextInt(amax - amin + 1),
-      bmin + Random.nextInt(bmax - bmin + 1),
-      cmin + Random.nextInt(cmax - cmin + 1))
+    (amin + _ran.nextInt(amax - amin + 1),
+      bmin + _ran.nextInt(bmax - bmin + 1),
+      cmin + _ran.nextInt(cmax - cmin + 1))
   }
 
 }
