@@ -2,7 +2,7 @@ package vsoc.ga.trainga.ga.player
 
 import org.slf4j.LoggerFactory
 import vsoc.ga.common.data.Data02
-import vsoc.ga.genetic._
+import vsoc.ga.genetic.{Transformer, _}
 import vsoc.ga.matches._
 import vsoc.ga.trainga.ga.common.TrainGaUtil
 import vsoc.ga.trainga.ga.{FitnessFunction, FitnessFunctions, TrainGa}
@@ -16,6 +16,10 @@ class TrainGaPlayer extends TrainGa[Data02] {
   val stepsPerMatch = 20000
 
   val matchesPerTest = 20
+
+  val populationSize = 30
+
+  val genoSize = 555 // Depends on NN
 
   val fitness: FitnessFunction[Data02] = FitnessFunctions.data02A05
 
@@ -42,9 +46,22 @@ class TrainGaPlayer extends TrainGa[Data02] {
     }
   }
 
+  def randomAllele(_ran: Random): Double = 2.0 * _ran.nextDouble() - 1.0
+
+
   def initialGaResult: GAResult[Data02, Double] = {
 
-    def initialPopGeno: PopGeno[Double] = ???
+    def initialPopGeno: PopGeno[Double] = {
+
+      def ranGeno: Geno[Double] = {
+        val alleles: Seq[Double] = Seq.fill(genoSize)(randomAllele(ran))
+        Geno(alleles)
+      }
+
+      val genos: Seq[Geno[Double]] = Seq.fill(populationSize)(ranGeno)
+
+      PopGeno(genos)
+    }
 
     new GAResult[Data02, Double] {
       override def score: Option[Data02] = None
@@ -63,7 +80,7 @@ class TrainGaPlayer extends TrainGa[Data02] {
         Teams.behaviours(Seq(p1.behaviour, p2.behaviour, p3.behaviour), "anonymous")
       }
 
-      def updatePhenosTested(phenosTested: Seq[PhenoTested], i11: Int, d1: Data02):Unit = {
+      def updatePhenosTested(phenosTested: Seq[PhenoTested], i11: Int, d1: Data02): Unit = {
         ???
       }
 
@@ -108,11 +125,15 @@ class TrainGaPlayer extends TrainGa[Data02] {
 
   }
 
-  def randomAllele(_ran: Random): Double = 2.0 * _ran.nextDouble() - 1.0
-
   def createSelStrategy: SelectionStrategy[Double] = SelectionStrategies.crossover(0.001, randomAllele, ran)
 
-  def createTransformer: Transformer[Double, PlayerPheno] = ???
+  def createTransformer: Transformer[Double, PlayerPheno] = new Transformer[Double, PlayerPheno]() {
+
+    def toPheno(geno: Geno[Double]): PlayerPheno = ???
+
+    def toGeno(pheno: PlayerPheno): Geno[Double] = ???
+
+  }
 
 
 }

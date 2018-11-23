@@ -29,8 +29,8 @@ class PhenoTesterTeam(
     val _pairs: Seq[(Int, Int)] = TrainGaUtil.pairs(phenos.size, testFactor)
     for ((i1, i2) <- _pairs) {
       val (d1, d2) = TrainGaUtil.playMatch(phenos(i1).vsocTeam, phenos(i2).vsocTeam, fitness, matchSteps)
-      val s1 = d1.score
-      val s2 = d2.score
+      val s1 = "%f.2" format d1.score
+      val s2 = "%f.2" format d2.score
       log.info(s"finished match $s1 - $s2")
       mrc.addResult(i1, d1)
       mrc.addResult(i2, d2)
