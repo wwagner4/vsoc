@@ -25,51 +25,12 @@ object TrainGaUtil {
 
   def mean(rs: Seq[Data02]): Data02 = {
 
-    def div(d1: Data02, divisor: Double): Data02 = {
-      d1.copy(
-        kicksMax = d1.kicksMax / divisor,
-        kicksMean = d1.kicksMean / divisor,
-        kicksMin = d1.kicksMin / divisor,
-        kickOutMax = d1.kickOutMax / divisor,
-        kickOutMean = d1.kickOutMean / divisor,
-        kickOutMin = d1.kickOutMin / divisor,
-        otherGoalsMax = d1.otherGoalsMax / divisor,
-        otherGoalsMean = d1.otherGoalsMean / divisor,
-        otherGoalsMin = d1.otherGoalsMin / divisor,
-        ownGoalsMax = d1.ownGoalsMax / divisor,
-        ownGoalsMean = d1.ownGoalsMean / divisor,
-        ownGoalsMin = d1.ownGoalsMin / divisor,
-        goalDifference = d1.goalDifference / divisor,
-        score = d1.score / divisor
-      )
+    def sum(rs: Seq[Data02]): Data02 = {
+      rs.reduce { (d1, d2) => Data02Ops.sumData(d1, d2) }
     }
 
     require(rs.nonEmpty)
-    div(sum(rs), rs.size)
-  }
-
-  private def sum(rs: Seq[Data02]): Data02 = {
-
-    def sum(d1: Data02, d2: Data02): Data02 = {
-      d1.copy(
-        kicksMax = d1.kicksMax + d2.kicksMax,
-        kicksMean = d1.kicksMean + d2.kicksMean,
-        kicksMin = d1.kicksMin + d2.kicksMin,
-        kickOutMax = d1.kickOutMax + d2.kickOutMax,
-        kickOutMean = d1.kickOutMean + d2.kickOutMean,
-        kickOutMin = d1.kickOutMin + d2.kickOutMin,
-        otherGoalsMax = d1.otherGoalsMax + d2.otherGoalsMax,
-        otherGoalsMean = d1.otherGoalsMean + d2.otherGoalsMean,
-        otherGoalsMin = d1.otherGoalsMin + d2.otherGoalsMin,
-        ownGoalsMax = d1.ownGoalsMax + d2.ownGoalsMax,
-        ownGoalsMean = d1.ownGoalsMean + d2.ownGoalsMean,
-        ownGoalsMin = d1.ownGoalsMin + d2.ownGoalsMin,
-        goalDifference = d1.goalDifference + d2.goalDifference,
-        score = d1.score + d2.score
-      )
-    }
-
-    rs.reduce { (d1, d2) => sum(d1, d2) }
+    Data02Ops.div(sum(rs), rs.size)
   }
 
 
