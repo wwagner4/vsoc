@@ -23,17 +23,6 @@ object TrainGaUtil {
     (d1.copy(score = s1), d2.copy(score = s2))
   }
 
-  def mean(rs: Seq[Data02]): Data02 = {
-
-    def sum(rs: Seq[Data02]): Data02 = {
-      rs.reduce { (d1, d2) => Data02Ops.sumData(d1, d2) }
-    }
-
-    require(rs.nonEmpty)
-    Data02Ops.div(sum(rs), rs.size)
-  }
-
-
   def resultToData(ownResult: TeamResult, otherResult: TeamResult): Data02 = {
     val kicks = ownResult.playerResults.map(_.kickCount)
     val kickOut = ownResult.playerResults.map(_.kickOutCount)

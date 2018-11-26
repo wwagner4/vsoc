@@ -4,7 +4,7 @@ import org.slf4j.LoggerFactory
 import vsoc.ga.common.data.Data02
 import vsoc.ga.genetic.{Transformer, _}
 import vsoc.ga.matches._
-import vsoc.ga.trainga.ga.common.TrainGaUtil
+import vsoc.ga.trainga.ga.common.{TrainGaUtil, ValuesByIndexCollectorData02}
 import vsoc.ga.trainga.ga.{FitnessFunction, FitnessFunctions, TrainGa}
 
 import scala.util.Random
@@ -74,43 +74,41 @@ class TrainGaPlayer extends TrainGa[Data02] {
 
     new PhenoTester[PlayerPheno, Data02]() {
 
-      case class PhenoTested(score: Data02, player: PlayerPheno)
-
       def createTeam(p1: PlayerPheno, p2: PlayerPheno, p3: PlayerPheno): Team = {
         Teams.behaviours(Seq(p1.behaviour, p2.behaviour, p3.behaviour), "anonymous")
-      }
-
-      def updatePhenosTested(phenosTested: Seq[PhenoTested], i11: Int, d1: Data02): Unit = {
-        ???
       }
 
       override def test(phenos: Seq[PlayerPheno]): PhenoTesterResult[PlayerPheno, Data02] = {
 
         val ic = new PlayerIndexCreator(phenos.size, ran)
-
-        var phenosTested: Seq[PhenoTested] = phenos.map(p => PhenoTested(Data02(), p)).toBuffer
+        val coll = new ValuesByIndexCollectorData02()
 
         for (i <- 1 to matchesPerTest) {
           val (i11, i12, i13) = ic.ran
           val (i21, i22, i23) = ic.ran
-          val t1 = createTeam(phenosTested(i11).player, phenosTested(i12).player, phenosTested(i13).player)
-          val t2 = createTeam(phenosTested(i21).player, phenosTested(i22).player, phenosTested(i23).player)
+          val t1 = createTeam(phenos(i11), phenos(i12), phenos(i13))
+          val t2 = createTeam(phenos(i21), phenos(i22), phenos(i23))
           val (d1, d2) = TrainGaUtil.playMatch(t1, t2, fitness, stepsPerMatch);
+          val s1 = "%f.2" format d1.score
+          val s2 = "%f.2" format d2.score
 
-          log.info(s"finished match ${d1.score} - ${d2.score}")
+          log.info(s"finished match $s1 - $s2")
 
-          updatePhenosTested(phenosTested, i11, d1)
-          updatePhenosTested(phenosTested, i12, d1)
-          updatePhenosTested(phenosTested, i13, d1)
+          coll.putValue(i11, d1)
+          coll.putValue(i12, d1)
+          coll.putValue(i13, d1)
 
-          updatePhenosTested(phenosTested, i21, d2)
-          updatePhenosTested(phenosTested, i22, d2)
-          updatePhenosTested(phenosTested, i23, d2)
-
+          coll.putValue(i21, d2)
+          coll.putValue(i22, d2)
+          coll.putValue(i23, d2)
         }
 
-        val retested = phenosTested.map(pt => (pt.score.score, pt.player))
-        val rescore = TrainGaUtil.mean(phenosTested.map(p => p.score))
+        val retested = for((p, i) <- phenos.zipWithIndex) yield {
+          val data = coll.mean(i)
+          (data.score, p)
+        }
+
+        val rescore = coll.meanAll
 
         new PhenoTesterResult[PlayerPheno, Data02] {
           override def testedPhenos: Seq[(Double, PlayerPheno)] = retested

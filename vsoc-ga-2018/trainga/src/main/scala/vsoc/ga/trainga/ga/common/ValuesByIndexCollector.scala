@@ -29,6 +29,15 @@ abstract class ValuesByIndexCollector[T] {
     }
   }
 
+  def meanAll: T = {
+    if (values.nonEmpty) {
+      val all = values.values.flatten
+      divideBase(all.reduce(sumBase), all.size)
+    } else {
+      unitValue
+    }
+  }
+
   def putValue(index: Int, value: T):Unit = {
     if (values.contains(index)) {
       values = values + (index -> (value :: values(index)))
