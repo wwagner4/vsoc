@@ -13,6 +13,7 @@ object DiaFactoriesB05b extends DiaFactories[Data02] {
   def diaFactories: Seq[FDia[Data02]] = Seq(
     Seq(scores),
     kicksAndGoalsAll,
+    goalsOtherOwnAll,
   ).flatten
 
   val catAll = Seq(
@@ -28,6 +29,11 @@ object DiaFactoriesB05b extends DiaFactories[Data02] {
     val xy = data.map(d => Viz.XY(d.iterations, f(d)))
     Smoothing.smooth(xy, grpSize)
   }
+
+  def goalsOtherOwnAll: Seq[FDia[Data02]] =
+    for (cat <- catAll) yield {
+      goalsOtherOwn(cat) _
+    }
 
   def scores: FDia[Data02] =
     (trainingId: String, data: Seq[Data02]) => {
@@ -159,7 +165,7 @@ object DiaFactoriesB05b extends DiaFactories[Data02] {
   }
 
   private def goalsToScore(cat: Cat)
-                             (name: String, data: Seq[Data02]): Viz.Dia[Viz.XY] = {
+                          (name: String, data: Seq[Data02]): Viz.Dia[Viz.XY] = {
 
     val mdiaId = "goalsToScore"
     val mdiaTitle = "Goals Score"
@@ -210,9 +216,9 @@ object DiaFactoriesB05b extends DiaFactories[Data02] {
         Viz.DataRow(Some("own goals max"), data = smoothProp(diaData, d => d.ownGoalsMax, grpSize)),
       )
 
-      Viz.Diagram(id = diaId, title = "name", dataRows = rows,
-        yRange = Some(Viz.Range(Some(0), Some(1.2))),
-        xRange = Some(Viz.Range(Some(0), Some(2000))),
+      Viz.Diagram(id = diaId, title = name, dataRows = rows,
+        yRange = Some(Viz.Range(Some(0), Some(7.0))),
+        //xRange = Some(Viz.Range(Some(0), Some(2000))),
       )
     }
 
