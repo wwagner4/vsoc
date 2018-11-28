@@ -6,7 +6,7 @@ import vsoc.ga.common.describe.PropertiesProvider
 import vsoc.ga.genetic.{PhenoTester, PhenoTesterResult}
 import vsoc.ga.matches._
 import vsoc.ga.trainga.ga.FitnessFunction
-import vsoc.ga.trainga.ga.common.{TrainGaUtil, ValuesByIndexCollectorData02}
+import vsoc.ga.trainga.ga.common.ValuesByIndexCollectorData02
 
 import scala.util.Random
 
@@ -26,9 +26,9 @@ class PhenoTesterTeam(
     val teamCnt = phenos.size
     log.info(s"testing $teamCnt teams")
     val coll = new ValuesByIndexCollectorData02()
-    val _pairs: Seq[(Int, Int)] = TrainGaUtil.pairs(phenos.size, testFactor)
+    val _pairs: Seq[(Int, Int)] = TrainGaTeamUtil.pairs(phenos.size, testFactor)
     for ((i1, i2) <- _pairs) {
-      val (d1, d2) = TrainGaUtil.playMatch(phenos(i1).vsocTeam, phenos(i2).vsocTeam, fitness, matchSteps)
+      val (d1, d2) = TrainGaTeamUtil.playMatch(phenos(i1).vsocTeam, phenos(i2).vsocTeam, fitness, matchSteps)
       val s1 = "%f.2" format d1.score
       val s2 = "%f.2" format d2.score
       log.info(s"finished match $s1 - $s2")

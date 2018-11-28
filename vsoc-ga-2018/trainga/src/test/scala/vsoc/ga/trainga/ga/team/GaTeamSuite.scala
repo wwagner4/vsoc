@@ -1,7 +1,6 @@
 package vsoc.ga.trainga.ga.team
 
 import org.scalatest.{FunSuite, MustMatchers}
-import vsoc.ga.trainga.ga.common.TrainGaUtil
 
 import scala.util.Random
 
@@ -23,7 +22,7 @@ class GaTeamSuite extends FunSuite with MustMatchers {
     test("pairs " + size) {
       val requiredIndexes: Seq[Int] = 0 until size
       for (n <- 1 to 1000) {
-        val _pairs: Seq[(Int, Int)] = TrainGaUtil.pairs(size, 2)
+        val _pairs: Seq[(Int, Int)] = TrainGaTeamUtil.pairs(size, 2)
         val ls = _pairs.map(_._1)
         val rs = _pairs.map(_._2)
         val tested = (ls ++ rs).distinct.sorted

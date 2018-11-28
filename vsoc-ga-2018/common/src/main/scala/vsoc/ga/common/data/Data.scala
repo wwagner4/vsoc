@@ -40,3 +40,11 @@ case class Data02(
 
                    score: Double = 0.0,
                  ) extends DataBase
+
+case class Data03(
+                   trainGaId: String,
+                   trainGaNr: String,
+                   iterations: Int = 0,
+                   score: Double = 0.0,
+                 ) extends DataBase
+

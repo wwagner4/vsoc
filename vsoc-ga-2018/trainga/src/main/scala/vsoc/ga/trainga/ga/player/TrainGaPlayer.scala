@@ -4,7 +4,8 @@ import org.slf4j.LoggerFactory
 import vsoc.ga.common.data.Data02
 import vsoc.ga.genetic.{Transformer, _}
 import vsoc.ga.matches._
-import vsoc.ga.trainga.ga.common.{TrainGaUtil, ValuesByIndexCollectorData02}
+import vsoc.ga.trainga.ga.common.ValuesByIndexCollectorData02
+import vsoc.ga.trainga.ga.team.TrainGaTeamUtil
 import vsoc.ga.trainga.ga.{FitnessFunction, FitnessFunctions, TrainGa}
 
 import scala.util.Random
@@ -88,7 +89,7 @@ class TrainGaPlayer extends TrainGa[Data02] {
           val (i21, i22, i23) = ic.ran
           val t1 = createTeam(phenos(i11), phenos(i12), phenos(i13))
           val t2 = createTeam(phenos(i21), phenos(i22), phenos(i23))
-          val (d1, d2) = TrainGaUtil.playMatch(t1, t2, fitness, stepsPerMatch);
+          val (d1, d2) = TrainGaTeamUtil.playMatch(t1, t2, fitness, stepsPerMatch);
           val s1 = "%f.2" format d1.score
           val s2 = "%f.2" format d2.score
 

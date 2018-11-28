@@ -1,4 +1,4 @@
-package vsoc.ga.trainga.ga.common
+package vsoc.ga.trainga.ga.team
 
 import vsoc.ga.common.data.Data02
 import vsoc.ga.matches._
@@ -6,7 +6,7 @@ import vsoc.ga.trainga.ga.FitnessFunction
 
 import scala.util.Random
 
-object TrainGaUtil {
+object TrainGaTeamUtil {
 
   def playMatch(t1: Team, t2: Team, fitness: FitnessFunction[Data02], stepsPerMatch: Int): (Data02, Data02) = {
     val m: Match = Matches.of(t1, t2)
