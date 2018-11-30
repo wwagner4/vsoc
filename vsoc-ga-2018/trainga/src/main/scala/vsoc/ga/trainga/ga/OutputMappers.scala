@@ -1,7 +1,6 @@
 package vsoc.ga.trainga.ga
 
 import atan.model.Player
-import vsoc.ga.common.act.Activation
 import vsoc.ga.trainga.behav.OutputMapperNn
 
 object OutputMappers {

@@ -1,6 +1,6 @@
 package vsoc.ga.trainga.analyse.old.dia
 
-import vsoc.ga.common.config.Configs
+import vsoc.ga.trainga.config.Configs
 
 object DataCsvMain extends App {
 

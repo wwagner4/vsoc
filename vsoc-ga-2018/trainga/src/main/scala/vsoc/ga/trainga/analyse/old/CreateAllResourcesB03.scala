@@ -1,4 +1,4 @@
-package vsoc.ga.common.analyse.iterations.iter04
+package vsoc.ga.trainga.analyse.old
 
 import java.nio.file.{Files, Path, Paths}
 

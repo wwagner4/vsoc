@@ -3,7 +3,7 @@ package vsoc.ga.trainga.analyse.old.dia
 import java.io.PrintWriter
 import java.nio.file.Files
 
-import vsoc.ga.common.config.Config
+import vsoc.ga.trainga.config.Config
 import vsoc.ga.trainga.ga.Data02
 
 class Data02Csv extends DataCsv[Data02] {

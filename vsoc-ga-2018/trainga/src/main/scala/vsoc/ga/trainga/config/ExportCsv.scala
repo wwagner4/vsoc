@@ -1,17 +1,14 @@
-package vsoc.ga.common.csv
+package vsoc.ga.trainga.config
 
-import java.nio.file._
+import java.nio.file.{Files, Path, Paths, StandardCopyOption}
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-
-import vsoc.ga.common.UtilPath
-import vsoc.ga.common.config.ConfigHelper
 
 import scala.collection.JavaConverters._
 
 object ExportCsv extends App {
 
-  val wd = UtilPath.workDir
+  val wd = ConfigHelper.workDir
 
   val includeSerPopulations = Seq(
     ("trainGa05fitFac01", "w001"),

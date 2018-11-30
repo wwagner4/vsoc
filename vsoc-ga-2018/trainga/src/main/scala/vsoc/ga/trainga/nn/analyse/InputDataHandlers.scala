@@ -4,9 +4,8 @@ import java.nio.file.Files
 
 import atan.model.{Player, ViewAngle, ViewQuality}
 import entelijan.viz.{Viz, VizCreator, VizCreators}
-import vsoc.ga.common.UtilPath
-import vsoc.ga.common.config.ConfigHelper
 import vsoc.ga.trainga.behav.OutputMapperNn
+import vsoc.ga.trainga.config.ConfigHelper
 import vsoc.ga.trainga.nn.NeuralNet
 
 object InputDataHandlers {
@@ -34,7 +33,7 @@ object InputDataHandlers {
       override def close(): Unit = {
 
         implicit val vizCreator: VizCreator[Viz.X] = {
-          val wd = UtilPath.workDir
+          val wd = ConfigHelper.workDir
           val scriptDir = wd.resolve(".script")
           Files.createDirectories(scriptDir)
           val imgDir = wd.resolve("viz_img")

@@ -1,7 +1,6 @@
-package vsoc.ga.common.commandline
+package vsoc.ga.trainga.config
 
 import vsoc.ga.common.UtilReflection
-import vsoc.ga.common.config.{Config, Configs}
 
 trait WithConfigRunner {
 

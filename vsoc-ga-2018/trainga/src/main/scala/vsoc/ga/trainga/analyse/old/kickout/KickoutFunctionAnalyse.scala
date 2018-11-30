@@ -1,12 +1,11 @@
 package vsoc.ga.trainga.analyse.old.kickout
 
 import entelijan.viz.{Viz, VizCreator, VizCreators}
-import vsoc.ga.common.UtilPath
-import vsoc.ga.common.config.ConfigHelper
+import vsoc.ga.trainga.config.ConfigHelper
 
 object KickoutFunctionAnalyse extends App {
 
-  val wd = UtilPath.workDir.toFile
+  val wd = ConfigHelper.workDir.toFile
 
   implicit val creator: VizCreator[Viz.XY] = VizCreators.gnuplot(wd, wd, execute = true, classOf[Viz.XY])
 

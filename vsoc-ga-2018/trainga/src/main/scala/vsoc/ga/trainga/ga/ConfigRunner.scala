@@ -2,7 +2,7 @@ package vsoc.ga.trainga.ga
 
 import java.util.concurrent.Executors
 
-import vsoc.ga.common.config.Config
+import vsoc.ga.trainga.config.Config
 
 class ConfigRunner {
 

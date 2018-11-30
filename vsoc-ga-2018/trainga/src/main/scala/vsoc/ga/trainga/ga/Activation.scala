@@ -1,4 +1,4 @@
-package vsoc.ga.common.act
+package vsoc.ga.trainga.ga
 
 object Activation {
 

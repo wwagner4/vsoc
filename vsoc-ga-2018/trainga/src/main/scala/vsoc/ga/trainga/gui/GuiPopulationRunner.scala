@@ -4,8 +4,6 @@ import java.nio.file.{Files, Path, Paths}
 import java.util.Comparator
 
 import atan.model.Controller
-import vsoc.ga.common.UtilPath
-import vsoc.ga.common.config.ConfigHelper
 import vsoc.ga.common.persist.Persistors
 import vsoc.ga.matches.gui.VsocMatchFrame
 import vsoc.ga.matches.{Match, Matches, Team}

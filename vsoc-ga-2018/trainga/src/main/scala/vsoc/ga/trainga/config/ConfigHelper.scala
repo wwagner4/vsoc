@@ -1,4 +1,4 @@
-package vsoc.ga.common.config
+package vsoc.ga.trainga.config
 
 import java.nio.file.{Path, Paths}
 import java.util.Properties

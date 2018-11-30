@@ -1,8 +1,8 @@
-package vsoc.ga.common.analyse.iterations.iter04
+package vsoc.ga.trainga.analyse.old
 
 import java.nio.file.{Files, Path, Paths}
 
-import vsoc.ga.common.UtilPath._
+import vsoc.ga.common.UtilPath.{delDirectory, un7z}
 
 object CreateAllResourcesB04 {
 
