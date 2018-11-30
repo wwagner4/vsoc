@@ -21,7 +21,7 @@ lazy val root = (project in file("."))
   .settings(
     name := "vsoc-ga-2018-root",
   )
-  .aggregate(common, matches, genetic, trainga, analyse)
+  .aggregate(common, matches, genetic, trainga)
 
 
 lazy val matches = (project in file("matches"))
@@ -56,9 +56,3 @@ lazy val trainga = (project in file("trainga"))
     libraryDependencies += "org.deeplearning4j" % "deeplearning4j-nn" % "0.9.1" exclude("com.github.stephenc.findbugs", "findbugs-annotations"),
     libraryDependencies += "org.nd4j" % "nd4j-native-platform" % "0.9.1" exclude("com.github.stephenc.findbugs", "findbugs-annotations"),
   ).dependsOn(matches, genetic)
-
-lazy val analyse = (project in file("analyse"))
-  .settings(
-    name := "analyse",
-    commonSettings,
-  ).dependsOn(common)
