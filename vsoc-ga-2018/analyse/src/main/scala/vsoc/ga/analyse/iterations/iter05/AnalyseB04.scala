@@ -4,7 +4,7 @@ import java.nio.file.Path
 
 import vsoc.ga.analyse.dia.CreateDiasData02
 import vsoc.ga.common.UtilPath
-import vsoc.ga.common.analyse.iterations.iter04.CreateAllResourcesB04
+import vsoc.ga.common.analyse.iterations.CreateAllResourcesB04
 
 object AnalyseB04 extends App {
 

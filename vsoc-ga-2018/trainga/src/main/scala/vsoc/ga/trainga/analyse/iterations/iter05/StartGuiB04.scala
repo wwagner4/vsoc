@@ -3,7 +3,7 @@ package vsoc.ga.trainga.analyse.iterations.iter05
 import java.nio.file.Path
 
 import vsoc.ga.common.UtilPath
-import vsoc.ga.common.analyse.iterations.iter04.CreateAllResourcesB04
+import vsoc.ga.common.analyse.iterations.CreateAllResourcesB04
 import vsoc.ga.trainga.ga.TrainGas
 import vsoc.ga.trainga.gui.GuiPopulationRunner
 
