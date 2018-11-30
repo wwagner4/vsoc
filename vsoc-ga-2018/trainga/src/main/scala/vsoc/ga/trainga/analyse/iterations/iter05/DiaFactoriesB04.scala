@@ -1,12 +1,10 @@
-package vsoc.ga.analyse.old.iterations.iter05
+package vsoc.ga.trainga.analyse.iterations.iter05
 
 import entelijan.viz.Viz
 import vsoc.ga.analyse.old.dia.DataDia.FDia
 import vsoc.ga.analyse.old.dia.DiaFactories
-import vsoc.ga.analyse.old.dia.DiaFactories
 import vsoc.ga.analyse.old.smooth.Smoothing
-import vsoc.ga.analyse.old.smooth.Smoothing
-import vsoc.ga.common.data.Data02
+import vsoc.ga.trainga.ga.Data02
 
 object DiaFactoriesB04 extends DiaFactories[Data02] {
 

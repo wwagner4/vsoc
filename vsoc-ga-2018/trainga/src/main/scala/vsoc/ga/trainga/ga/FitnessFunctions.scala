@@ -1,7 +1,5 @@
 package vsoc.ga.trainga.ga
 
-import vsoc.ga.common.data.Data02
-
 object FitnessFunctions {
 
   def data02A01: FitnessFunction[Data02] = new FitnessFunction[Data02] {

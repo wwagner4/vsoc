@@ -1,6 +1,5 @@
 package vsoc.ga.trainga.ga
 
-import vsoc.ga.common.data.Data02
 import vsoc.ga.trainga.behav.{InputMapperNn, OutputMapperNn}
 import vsoc.ga.trainga.ga.impl._
 import vsoc.ga.trainga.nn.{NeuralNet, NeuralNets}

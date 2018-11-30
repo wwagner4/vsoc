@@ -1,6 +1,6 @@
 package vsoc.ga.analyse.old.dia
 
-import vsoc.ga.common.data.Data02
+import vsoc.ga.trainga.ga.Data02
 
 class CsvReaderData02 extends CsvReader[Data02] {
   override def toBean(line: String): Data02 = {

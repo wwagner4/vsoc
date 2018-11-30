@@ -3,7 +3,7 @@ package vsoc.ga.analyse.old.dia
 import entelijan.viz.Viz
 import vsoc.ga.analyse.old.dia.DataDia.FDia
 import vsoc.ga.analyse.old.smooth.Smoothing
-import vsoc.ga.common.data.Data02
+import vsoc.ga.trainga.ga.Data02
 
 object DiaFactoriesB01 extends DiaFactories[Data02] {
 

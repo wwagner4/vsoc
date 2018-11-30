@@ -1,7 +1,6 @@
 package vsoc.ga.trainga.ga
 
 import org.scalatest.{FunSuite, MustMatchers}
-import vsoc.ga.common.data.Data02
 
 class FitnessFunctionsSuite extends FunSuite with MustMatchers {
 

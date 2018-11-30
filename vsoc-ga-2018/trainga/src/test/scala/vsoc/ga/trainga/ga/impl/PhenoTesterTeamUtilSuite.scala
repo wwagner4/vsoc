@@ -1,8 +1,8 @@
 package vsoc.ga.trainga.ga.impl
 
 import org.scalatest.{FunSuite, MustMatchers}
-import vsoc.ga.common.data.Data02
 import vsoc.ga.matches.{MatchResult, MatchResults}
+import vsoc.ga.trainga.ga.Data02
 import vsoc.server.IVsocPlayer
 
 class PhenoTesterTeamUtilSuite extends FunSuite with MustMatchers {

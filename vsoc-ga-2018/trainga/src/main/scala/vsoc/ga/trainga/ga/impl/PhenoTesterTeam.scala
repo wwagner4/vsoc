@@ -1,11 +1,10 @@
 package vsoc.ga.trainga.ga.impl
 
 import org.slf4j.LoggerFactory
-import vsoc.ga.common.data.Data02
 import vsoc.ga.common.describe.PropertiesProvider
 import vsoc.ga.genetic.{PhenoTester, PhenoTesterResult}
 import vsoc.ga.matches.{MatchResult, Matches, TeamResult}
-import vsoc.ga.trainga.ga.FitnessFunction
+import vsoc.ga.trainga.ga.{Data02, FitnessFunction}
 
 import scala.util.Random
 

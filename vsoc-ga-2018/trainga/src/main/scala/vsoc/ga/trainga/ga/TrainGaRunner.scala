@@ -4,8 +4,8 @@ import java.nio.file.{Files, Path, Paths}
 import java.util.{Comparator, Optional}
 
 import org.slf4j.LoggerFactory
-import vsoc.ga.common.config.{ConfigHelper, ConfigTrainGa}
-import vsoc.ga.common.data.{CsvWriter, Data02}
+import vsoc.ga.common.config.ConfigTrainGa
+import vsoc.ga.common.data.CsvWriter
 import vsoc.ga.common.describe.DescribableFormatter
 import vsoc.ga.common.persist.{Persistor, Persistors}
 import vsoc.ga.common.{UtilPath, UtilReflection, UtilTransform}

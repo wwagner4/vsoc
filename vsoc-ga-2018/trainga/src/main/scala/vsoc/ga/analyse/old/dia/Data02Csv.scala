@@ -4,7 +4,7 @@ import java.io.PrintWriter
 import java.nio.file.Files
 
 import vsoc.ga.common.config.Config
-import vsoc.ga.common.data.Data02
+import vsoc.ga.trainga.ga.Data02
 
 class Data02Csv extends DataCsv[Data02] {
 

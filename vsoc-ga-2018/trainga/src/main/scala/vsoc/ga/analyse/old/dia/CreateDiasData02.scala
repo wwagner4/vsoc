@@ -1,8 +1,8 @@
 package vsoc.ga.analyse.old.dia
 
-import java.nio.file.{Files, Path, Paths}
+import java.nio.file.Path
 
-import vsoc.ga.common.data.Data02
+import vsoc.ga.trainga.ga.Data02
 
 object CreateDiasData02 {
 

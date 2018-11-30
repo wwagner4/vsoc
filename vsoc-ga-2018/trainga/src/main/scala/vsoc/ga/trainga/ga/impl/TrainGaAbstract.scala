@@ -1,12 +1,11 @@
 package vsoc.ga.trainga.ga.impl
 
 import org.slf4j.LoggerFactory
-import vsoc.ga.common.data.Data02
 import vsoc.ga.common.describe.{DescribableFormatter, PropertiesProvider}
 import vsoc.ga.genetic._
 import vsoc.ga.matches.Team
 import vsoc.ga.trainga.behav.{InputMapperNn, OutputMapperNn}
-import vsoc.ga.trainga.ga.{FitnessFunction, TrainGa}
+import vsoc.ga.trainga.ga.{Data02, FitnessFunction, TrainGa}
 import vsoc.ga.trainga.nn.NeuralNet
 
 import scala.util.Random

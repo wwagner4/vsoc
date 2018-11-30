@@ -1,4 +1,4 @@
-package vsoc.ga.common.data
+package vsoc.ga.trainga.ga
 
 trait DataBase {
   def trainGaId: String
