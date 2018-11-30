@@ -1,4 +1,4 @@
-package vsoc.ga.analyse.old.dia
+package vsoc.ga.trainga.analyse.old.dia
 
 import vsoc.ga.trainga.ga.Data02
 

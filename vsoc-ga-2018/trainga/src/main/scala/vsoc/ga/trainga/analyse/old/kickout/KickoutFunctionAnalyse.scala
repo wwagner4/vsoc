@@ -1,4 +1,4 @@
-package vsoc.ga.analyse.old.kickout
+package vsoc.ga.trainga.analyse.old.kickout
 
 import entelijan.viz.{Viz, VizCreator, VizCreators}
 import vsoc.ga.common.UtilPath

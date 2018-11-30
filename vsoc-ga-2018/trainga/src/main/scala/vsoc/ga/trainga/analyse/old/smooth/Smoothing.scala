@@ -1,4 +1,4 @@
-package vsoc.ga.analyse.old.smooth
+package vsoc.ga.trainga.analyse.old.smooth
 
 import entelijan.viz.Viz
 
