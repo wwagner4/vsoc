@@ -14,25 +14,25 @@ object SelectionStrategies {
     * @tparam A Class of alleles
     */
   def crossover[A](mutationRate: Double, randomAllele: Random => A, _ran: Random): SelectionStrategy[A] = {
-    new SelectionStrategy[A] with GeneticOps[A] with PropertiesProvider {
+    new SelectionStrategy[A] with PropertiesProvider {
 
       def minSize = 3
 
-      override val ran: Random = _ran
+      val ran: Random = _ran
 
       override def select(tested: Seq[(Double, Seq[A])]): Seq[Seq[A]] = {
         require(tested.length >= minSize, s"population size ${tested.size} too small. required $minSize")
         val sorted = tested.sortBy(f => -f._1).map(t => t._2).toList
         val cos = List(
-          crossover(sorted(0), sorted(1)),
-          crossover(sorted(0), sorted(2)),
-          crossover(sorted(0), sorted(3)),
-          crossover(sorted(1), sorted(2)),
-          crossover(sorted(1), sorted(3)),
-          crossover(sorted(2), sorted(3))
+          GeneticOps.crossover(sorted(0), sorted(1), ran),
+          GeneticOps.crossover(sorted(0), sorted(2), ran),
+          GeneticOps.crossover(sorted(0), sorted(3), ran),
+          GeneticOps.crossover(sorted(1), sorted(2), ran),
+          GeneticOps.crossover(sorted(1), sorted(3), ran),
+          GeneticOps.crossover(sorted(2), sorted(3), ran)
         )
         val all: Seq[Seq[A]] = (sorted.take(3) ::: cos ::: sorted.drop(3)).take(tested.size)
-        all.map(g => mutation(g, mutationRate, randomAllele))
+        all.map(g => GeneticOps.mutation(g, mutationRate, randomAllele, ran))
       }
 
       override def properties: Seq[(String, Any)] = Seq(
@@ -56,11 +56,11 @@ object SelectionStrategies {
     * @tparam A Class of alleles
     */
   def mutationOnly[A](mutationRate: Double, randomAllele: Random => A, _ran: Random): SelectionStrategy[A] = {
-    new SelectionStrategy[A] with GeneticOps[A] with PropertiesProvider {
+    new SelectionStrategy[A] with PropertiesProvider {
 
       def minSize = 4
 
-      override def ran: Random = _ran
+      def ran: Random = _ran
 
       override def select(tested: Seq[(Double, Seq[A])]): Seq[Seq[A]] = {
         require(tested.size >= minSize, s"population size ${tested.size} too small. required $minSize")
@@ -71,7 +71,7 @@ object SelectionStrategies {
           sorted(2),
           sorted(3)
         ) ::: sorted).take(tested.size)
-        all.map(t => mutation(t, mutationRate, randomAllele))
+        all.map(t => GeneticOps.mutation(t, mutationRate, randomAllele, ran))
       }
 
       override def properties: Seq[(String, Any)] = Seq(
@@ -82,7 +82,6 @@ object SelectionStrategies {
         s"""Selection strategy using no crossover
            |$propsFmt
         """.stripMargin
-
 
     }
   }

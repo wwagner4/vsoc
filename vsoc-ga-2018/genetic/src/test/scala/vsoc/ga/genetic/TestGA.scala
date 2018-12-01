@@ -117,14 +117,10 @@ class TestGA extends FunSuite with MustMatchers {
   test("GeneticOps crossover 10") {
     val _ran = new Random(987987L)
 
-    val go = new GeneticOps[String] {
-      override def ran: Random = _ran
-    }
-
     val n = 10
     val a = Seq.fill(n)("A")
     val b = Seq.fill(n)("B")
-    val r = go.crossover(a, b)
+    val r = GeneticOps.crossover(a, b, _ran)
 
     val (ra, rb) = r.splitAt(8)
     ra mustBe Seq.fill(8)("A")
@@ -134,14 +130,10 @@ class TestGA extends FunSuite with MustMatchers {
   test("GeneticOps crossover 9") {
     val _ran = new Random(232L)
 
-    val go = new GeneticOps[String] {
-      override def ran: Random = _ran
-    }
-
     val n = 9
     val a = Seq.fill(n)("A")
     val b = Seq.fill(n)("B")
-    val r = go.crossover(a, b)
+    val r = GeneticOps.crossover(a, b, _ran)
 
     val (ra, rb) = r.splitAt(1)
     ra mustBe Seq.fill(1)("A")

@@ -1,7 +1,5 @@
 package vsoc.ga.genetic
 
-import vsoc.ga.common.describe.Describable
-
 /**
   * A complete genetic algorithm for arbitrary pheno- and genotype
   * Phenotype: Any Class that can be somehow tested for fitness
@@ -41,46 +39,4 @@ class GA[A, P, S](
 
     }
   }
-}
-
-/**
-  * Result of testing one the result of testing a population
-  * @tparam S Score data. Some data containing the fitness value of the population and some additional parameters
-  *           that where used to calculate that fitness value.
-  * @tparam A Type of one parameter genotype parameter. Usually a Double
-  */
-trait GAResult[S, A] {
-
-  def score: Option[S]
-
-  def newPopulation: Seq[Seq[A]]
-}
-
-
-trait PhenoTesterResult[P, S] {
-
-  /**
-    * @return Sequence of Phenotypes with their score value
-    */
-  def testedPhenos: Seq[(Double, P)]
-
-  /**
-    * @return The mean score of the population
-    */
-  def populationScore: Option[S]
-}
-
-trait PhenoTester[P, S] extends Describable {
-  def test(phenos: Seq[P]): PhenoTesterResult[P, S]
-}
-
-trait SelectionStrategy[A] extends Describable {
-  def select(tested: Seq[(Double, Seq[A])]): Seq[Seq[A]]
-}
-
-trait Transformer[A, P] {
-
-  def toPheno(geno: Seq[A]): P
-
-  def toGeno(pheno: P): Seq[A]
 }

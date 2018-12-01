@@ -2,11 +2,9 @@ package vsoc.ga.genetic
 
 import scala.util.Random
 
-trait GeneticOps[A] {
+object GeneticOps {
 
-  def ran: Random
-
-  def crossover(a: Seq[A], b: Seq[A]): Seq[A] = {
+  def crossover[A](a: Seq[A], b: Seq[A], ran: Random): Seq[A] = {
     require(a.size == b.size, "Sizes of gnomes must be the same")
     val cutPoint = ran.nextInt(a.size)
 
@@ -15,7 +13,7 @@ trait GeneticOps[A] {
     a1 ++ b1
   }
 
-  def mutation(a: Seq[A], mutationRate: Double, ranAllele: Random => A): Seq[A] = {
+  def mutation[A](a: Seq[A], mutationRate: Double, ranAllele: Random => A, ran: Random): Seq[A] = {
     a.map { a =>
       val mut = ran.nextDouble() < mutationRate
       if (mut) ranAllele(ran) else a
