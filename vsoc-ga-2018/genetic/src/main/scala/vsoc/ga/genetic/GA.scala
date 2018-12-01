@@ -19,7 +19,7 @@ package vsoc.ga.genetic
   * @tparam S Class of the populationScore. The populationScore might give you insight into the process of creating the
   *           next generation. It can help to decide if generating more generations makes sense
   */
-class GA[A, P, S](
+class GA[A, P, S <: Score[S]](
                    val tester: PhenoTester[P, S],
                    val selStrategy: SelectionStrategy[A],
                    val transformer: Transformer[A, P],

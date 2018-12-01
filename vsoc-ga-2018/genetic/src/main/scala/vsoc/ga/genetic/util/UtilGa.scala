@@ -1,4 +1,4 @@
-package vsoc.ga.genetic
+package vsoc.ga.genetic.util
 
 object UtilGa {
 

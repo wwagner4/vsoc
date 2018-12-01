@@ -1,6 +1,7 @@
 package vsoc.ga.genetic
 
 import org.scalatest.{FunSuite, MustMatchers}
+import vsoc.ga.genetic.util.{SelectionStrategies, UtilGa}
 
 import scala.util.Random
 
@@ -26,26 +27,26 @@ class TestGA extends FunSuite with MustMatchers {
   private val rating: Map[Char, Double] = baseData.map(t => (t._1, t._3)).toMap
 
 
-  class PhenoTesterT extends PhenoTester[String, Score] {
-    override def test(phenos: Seq[String]): PhenoTesterResult[String, Score] = {
+  class PhenoTesterT extends PhenoTester[String, TestScore] {
+    override def test(phenos: Seq[String]): PhenoTesterResult[String, TestScore] = {
       def test(p: String): (Double, String) = {
         val r: Double = p.toSeq.map(c => rating(c)).sum
         (r, p)
       }
 
-      def calculateScore(testedPhenos: Seq[(Double, String)]): Score = {
+      def calculateScore(testedPhenos: Seq[(Double, String)]): TestScore = {
         val ratings = testedPhenos.map(t => t._1)
         val (max, mean, min) = UtilGa.minMeanMax(ratings)
-        Score(max, mean, min)
+        TestScore(max, mean, min)
       }
 
       val _testedPhenos = phenos.map(test)
       val _score = calculateScore(_testedPhenos)
 
-      new PhenoTesterResult[String, Score] {
+      new PhenoTesterResult[String, TestScore] {
         override def testedPhenos: Seq[(Double, String)] = _testedPhenos
 
-        override def populationScore: Option[Score] = Some(_score)
+        override def populationScore: Option[TestScore] = Some(_score)
       }
     }
 
@@ -59,21 +60,36 @@ class TestGA extends FunSuite with MustMatchers {
     override def toGeno(pheno: String): Seq[Int] = pheno.toSeq.map(c => charToInt(c))
   }
 
-  case class Score(
-                    minRating: Double,
-                    meanRating: Double,
-                    maxRating: Double,
-                  )
+  case class TestScore(
+                        minRating: Double,
+                        meanRating: Double,
+                        maxRating: Double,
+                      ) extends Score[TestScore] {
+
+    override def score: Double = meanRating
+
+    override def sum(score1: TestScore, score2: TestScore): TestScore = TestScore(
+      minRating = score1.minRating + score2.minRating,
+      meanRating = score1.meanRating + score2.meanRating,
+      maxRating = score1.maxRating + score2.maxRating,
+    )
+
+    override def div(score: TestScore, divisor: Double): TestScore = TestScore(
+      minRating = score.minRating / divisor,
+      meanRating = score.meanRating / divisor,
+      maxRating = score.maxRating / divisor,
+    )
+  }
 
   case class GAResultImpl(
-                           score: Option[Score],
+                           score: Option[TestScore],
                            newPopulation: Seq[Seq[Int]]
-                         ) extends GAResult[Score, Int]
+                         ) extends GAResult[TestScore, Int]
 
   private def popToStr(pop: Seq[Seq[Int]]) = pop.map(p => p.map(x => intToChar(x)).mkString("")).mkString("  ")
 
   //noinspection ScalaUnusedSymbol
-  private def popsToStdout(popStream: Stream[GAResult[Score, Int]]): Unit =
+  private def popsToStdout(popStream: Stream[GAResult[TestScore, Int]]): Unit =
     for ((pop, n) <- popStream.take(500).zipWithIndex) {
       val popStr = popToStr(pop.newPopulation)
       println(f"$n%4d ${pop.score.get.minRating}%7.1f ${pop.score.get.meanRating}%7.1f ${pop.score.get.maxRating}%7.1f   $popStr")
@@ -88,7 +104,7 @@ class TestGA extends FunSuite with MustMatchers {
 
     def randomGenome: Seq[Int] = (1 to 10).map(_ => ranAllele(r1))
 
-    val start: GAResult[Score, Int] = GAResultImpl(score = None, newPopulation = for (_ <- 1 to 10) yield randomGenome)
+    val start: GAResult[TestScore, Int] = GAResultImpl(score = None, newPopulation = for (_ <- 1 to 10) yield randomGenome)
 
     val popStream = Stream.iterate(start)(r => gat.nextPopulation(r.newPopulation))
 
@@ -104,7 +120,7 @@ class TestGA extends FunSuite with MustMatchers {
 
     def randomGenome: Seq[Int] = (1 to 10).map(_ => ranAllele(ran))
 
-    val start: GAResult[Score, Int] = GAResultImpl(newPopulation = for (_ <- 1 to 10) yield randomGenome, score = None)
+    val start: GAResult[TestScore, Int] = GAResultImpl(newPopulation = for (_ <- 1 to 10) yield randomGenome, score = None)
 
     val popStream = Stream.iterate(start)(r => gaTest.nextPopulation(r.newPopulation))
 
@@ -244,8 +260,6 @@ class TestGA extends FunSuite with MustMatchers {
     dist(7) must contain(111)
 
   }
-
-
 
 
 }
