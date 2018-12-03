@@ -1,4 +1,4 @@
-package vsoc.ga.genetic.util
+package vsoc.ga.genetic.impl
 
 import vsoc.ga.common.describe.PropertiesProvider
 import vsoc.ga.genetic.{SelectionStrategy, Score}

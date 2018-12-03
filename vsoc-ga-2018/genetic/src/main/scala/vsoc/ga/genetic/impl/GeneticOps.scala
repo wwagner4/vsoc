@@ -1,4 +1,4 @@
-package vsoc.ga.genetic.util
+package vsoc.ga.genetic.impl
 
 import scala.util.Random
 

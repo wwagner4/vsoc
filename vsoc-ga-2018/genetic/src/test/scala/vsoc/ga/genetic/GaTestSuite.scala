@@ -1,11 +1,11 @@
 package vsoc.ga.genetic
 
 import org.scalatest.{FunSuite, MustMatchers}
-import vsoc.ga.genetic.util.{GeneticOps, SelectionStrategies, UtilGa}
+import vsoc.ga.genetic.impl.{GeneticOps, SelectionStrategies, UtilGa}
 
 import scala.util.Random
 
-class TestGA extends FunSuite with MustMatchers {
+class GaTestSuite extends FunSuite with MustMatchers {
 
   private val baseData = Seq(
     ('#', 0, 1.0),
@@ -87,15 +87,15 @@ class TestGA extends FunSuite with MustMatchers {
     override def unit: TestScore = TestScore(0, 0, 0)
   }
 
-  case class GAResultImpl(
+  case class GaResultTestImpl(
                            score: Option[TestScore],
                            newPopulation: Seq[Seq[Int]]
-                         ) extends GAResult[TestScore, Int]
+                         ) extends GaResultTest[TestScore, Int]
 
   private def popToStr(pop: Seq[Seq[Int]]) = pop.map(p => p.map(x => intToChar(x)).mkString("")).mkString("  ")
 
   //noinspection ScalaUnusedSymbol
-  private def popsToStdout(popStream: Stream[GAResult[TestScore, Int]]): Unit =
+  private def popsToStdout(popStream: Stream[GaResultTest[TestScore, Int]]): Unit =
     for ((pop, n) <- popStream.take(500).zipWithIndex) {
       val popStr = popToStr(pop.newPopulation)
       println(f"$n%4d ${pop.score.get.minRating}%7.1f ${pop.score.get.meanRating}%7.1f ${pop.score.get.maxRating}%7.1f   $popStr")
@@ -103,18 +103,18 @@ class TestGA extends FunSuite with MustMatchers {
 
   def ranAllele(ran: Random): Int = _alleles(ran.nextInt(_alleles.size))
 
-  test("GA mutationOnly") {
+  test("GaTest mutationOnly") {
 
     val r1 = new Random(987987L)
     val tester: PhenoTesterT = new PhenoTesterT()
     val selStrat: SelectionStrategy[Int] = SelectionStrategies.mutationOnly(0.005, ranAllele, r1)
     val fitFunc = new TestFitnessFunction()
     val trans = new TransformerT
-    val gat = new GA(tester, selStrat, fitFunc, trans)
+    val gat = new GaTest(tester, selStrat, fitFunc, trans)
 
     def randomGenome: Seq[Int] = (1 to 10).map(_ => ranAllele(r1))
 
-    val start: GAResult[TestScore, Int] = GAResultImpl(score = None, newPopulation = for (_ <- 1 to 10) yield randomGenome)
+    val start: GaResultTest[TestScore, Int] = GaResultTestImpl(score = None, newPopulation = for (_ <- 1 to 10) yield randomGenome)
 
     val popStream = Stream.iterate(start)(r => gat.nextPopulation(r.newPopulation))
 
@@ -123,10 +123,10 @@ class TestGA extends FunSuite with MustMatchers {
 
   }
 
-  test("GA crossover") {
+  test("GaTest crossover") {
 
     val ran = new Random(987987L)
-    val gaTest = new GA(
+    val gaTest = new GaTest(
       new PhenoTesterT(),
       SelectionStrategies.crossover(0.005, ranAllele, ran),
       new TestFitnessFunction(),
@@ -134,7 +134,7 @@ class TestGA extends FunSuite with MustMatchers {
 
     def randomGenome: Seq[Int] = (1 to 10).map(_ => ranAllele(ran))
 
-    val start: GAResult[TestScore, Int] = GAResultImpl(newPopulation = for (_ <- 1 to 10) yield randomGenome, score = None)
+    val start: GaResultTest[TestScore, Int] = GaResultTestImpl(newPopulation = for (_ <- 1 to 10) yield randomGenome, score = None)
 
     val popStream = Stream.iterate(start)(r => gaTest.nextPopulation(r.newPopulation))
 

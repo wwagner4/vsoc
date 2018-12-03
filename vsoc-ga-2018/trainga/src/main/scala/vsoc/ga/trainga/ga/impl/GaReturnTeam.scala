@@ -1,4 +1,6 @@
-package vsoc.ga.genetic
+package vsoc.ga.trainga.ga.impl
+
+import vsoc.ga.genetic._
 
 /**
   * Result of testing one the result of testing a population
@@ -6,12 +8,10 @@ package vsoc.ga.genetic
   *           that where used to calculate that fitness value.
   * @tparam A Type of one parameter genotype parameter. Usually a Double
   */
-trait GAResult[S <: Score[S], A] {
+trait GaReturnTeam[S <: Score[S], A] {
 
   def score: Option[S]
 
   def newPopulation: Seq[Seq[A]]
 
 }
-
-

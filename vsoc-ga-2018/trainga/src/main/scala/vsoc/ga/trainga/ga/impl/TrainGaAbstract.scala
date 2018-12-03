@@ -3,7 +3,7 @@ package vsoc.ga.trainga.ga.impl
 import org.slf4j.LoggerFactory
 import vsoc.ga.common.describe.{DescribableFormatter, PropertiesProvider}
 import vsoc.ga.genetic._
-import vsoc.ga.genetic.util.SelectionStrategies
+import vsoc.ga.genetic.impl.SelectionStrategies
 import vsoc.ga.matches.Team
 import vsoc.ga.trainga.behav.{InputMapperNn, OutputMapperNn}
 import vsoc.ga.trainga.ga.{Data02, FitnessFunction1, TrainGa}
@@ -58,7 +58,7 @@ abstract class TrainGaAbstract extends TrainGa[Data02] with PropertiesProvider {
   private case class GAR(
                           score: Option[Data02],
                           newPopulation: Seq[Seq[Double]]
-                        ) extends GAResult[Data02, Double]
+                        ) extends GaReturnTeam[Data02, Double]
 
   def randomAllele(_ran: Random): Double = 2.0 * _ran.nextDouble() - 1.0
 
@@ -66,7 +66,7 @@ abstract class TrainGaAbstract extends TrainGa[Data02] with PropertiesProvider {
   protected lazy val selStrat: SelectionStrategy[Double] = SelectionStrategies.crossover(mutationRate, randomAllele, ran)
   protected lazy val transformer: Transformer[Double, TeamGa] = new TransformerTeam(playerCount, createNeuralNet, inMapper, outMapper)
 
-  lazy val ga: GA[Double, TeamGa, Data02] = new GA(tester, selStrat, fitness,  transformer)
+  lazy val ga: GaTeam[Double, TeamGa, Data02] = new GaTeam(tester, selStrat, fitness,  transformer)
 
   def createRandomPopGeno: Seq[Seq[Double]] = {
     def ranSeq(size: Int): Seq[Double] =
@@ -83,10 +83,10 @@ abstract class TrainGaAbstract extends TrainGa[Data02] with PropertiesProvider {
   }
 
   override def run(trainGaId: String, trainGaNr: String): Unit = {
-    log.info(s"start GA populationSize: $populationSize playerCount: $playerCount playerParamSize:$playerParamSize")
+    log.info(s"start GaTeam populationSize: $populationSize playerCount: $playerCount playerParamSize:$playerParamSize")
     try {
       val initialPop: Seq[Seq[Double]] = population.getOrElse(createRandomPopGeno)
-      var gar: GAResult[Data02, Double] = GAR(None, initialPop)
+      var gar: GaReturnTeam[Data02, Double] = GAR(None, initialPop)
       var i = iterations.getOrElse(0)
       while (true) {
         i += 1
