@@ -1,4 +1,4 @@
-package vsoc.ga.trainga.ga.impl
+package vsoc.ga.trainga.ga.impl.team
 
 import org.slf4j.LoggerFactory
 import vsoc.ga.common.describe.{DescribableFormatter, PropertiesProvider}
