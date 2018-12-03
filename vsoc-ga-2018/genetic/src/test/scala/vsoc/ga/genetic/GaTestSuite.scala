@@ -27,19 +27,21 @@ class GaTestSuite extends FunSuite with MustMatchers {
   private val rating: Map[Char, Double] = baseData.map(t => (t._1, t._3)).toMap
 
 
-  class PhenoTesterT extends PhenoTester[String, TestScore] {
-    override def test(phenos: Seq[String]): PhenoTesterResult[String, TestScore] = {
-      def test(p: String): (TestScore, String) = {
-        val r: Double = p.toSeq.map(c => rating(c)).sum
+  case class PhenoTest(value: String, geno: Seq[Int]) extends Pheno[Int]
+
+  class PhenoTesterT extends PhenoTester[PhenoTest, TestScore] {
+    override def test(phenos: Seq[PhenoTest]): PhenoTesterResult[PhenoTest, TestScore] = {
+      def test(p: PhenoTest): (TestScore, PhenoTest) = {
+        val r: Double = p.value.toSeq.map(c => rating(c)).sum
         (TestScore(r, r, r), p)
       }
 
-      val _testedPhenos: Seq[(TestScore, String)] = phenos.map(test)
+      val _testedPhenos: Seq[(TestScore, PhenoTest)] = phenos.map(test)
       val _scores = _testedPhenos.map { case (b, _) => b }
       val _score = UtilGa.meanScore(_scores, TestScoreOps)
 
-      new PhenoTesterResult[String, TestScore] {
-        override def testedPhenos: Seq[(TestScore, String)] = _testedPhenos
+      new PhenoTesterResult[PhenoTest, TestScore] {
+        override def testedPhenos: Seq[(TestScore, PhenoTest)] = _testedPhenos
 
         override def populationScore: Option[TestScore] = Some(_score)
       }
@@ -48,11 +50,13 @@ class GaTestSuite extends FunSuite with MustMatchers {
     override def fullDesc: String = "test"
   }
 
-  class TransformerT extends Transformer[Int, String] {
+  class TransformerT extends Transformer[Int, PhenoTest] {
 
-    override def toPheno(geno: Seq[Int]): String = geno.map(g => intToChar(g)).mkString("")
+    override def toPheno(geno: Seq[Int]): PhenoTest = {
+      val str = geno.map(g => intToChar(g)).mkString("")
+      PhenoTest(str, geno)
+    }
 
-    override def toGeno(pheno: String): Seq[Int] = pheno.toSeq.map(c => charToInt(c))
   }
 
   class TestFitnessFunction extends FitnessFunction[TestScore] {

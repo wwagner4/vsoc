@@ -21,7 +21,7 @@ import vsoc.ga.genetic._
   * @tparam S Class of the populationScore. The populationScore might give you insight into the process of creating the
   *           next generation. It can help to decide if generating more generations makes sense
   */
-class GaTeam[A, P, S <: Score[S]](
+class GaTeam[A, P <: Pheno[A], S <: Score[S]](
                                val tester: PhenoTester[P, S],
                                val selStrategy: SelectionStrategy[A],
                                val fitnessFunction: FitnessFunction[S],
@@ -31,12 +31,12 @@ class GaTeam[A, P, S <: Score[S]](
                                def nextPopulation(pop: Seq[Seq[A]]): GaReturnTeam[S, A] = {
 
                                  val phenos: Seq[P] = pop.map(transformer.toPheno)
-                                 val testResult = tester.test(phenos)
+                                 val testResult: PhenoTesterResult[P, S] = tester.test(phenos)
                                  val testedGenos: Seq[(Double, Seq[A])] =
                                    testResult.testedPhenos.map {
                                      case (r, g) => (
                                        fitnessFunction.fitness(r),
-                                       transformer.toGeno(g))
+                                       g.geno)
                                    }
                                  val newPop = selStrategy.select(testedGenos)
                                  new GaReturnTeam[S, A] {

@@ -10,7 +10,7 @@ import vsoc.ga.trainga.nn.NeuralNet
 
 class TransformerTeam(playerCount: Int, createNeuralNet: () => NeuralNet, _in: InputMapperNn, _out: OutputMapperNn) extends Transformer[Double, TeamGa] {
 
-  override def toPheno(geno: Seq[Double]): TeamGa = {
+  override def toPheno(_geno: Seq[Double]): TeamGa = {
 
     def behav(nn: NeuralNet): Behaviour = {
       val in: InputMapperNn = _in
@@ -25,24 +25,24 @@ class TransformerTeam(playerCount: Int, createNeuralNet: () => NeuralNet, _in: I
       nn
     }
 
-    val grpSize = geno.size / playerCount
-    val nns: Seq[NeuralNet] = geno
+    val grpSize = _geno.size / playerCount
+    val nns: Seq[NeuralNet] = _geno
       .grouped(grpSize)
       .toSeq
       .map(nn)
     val behavs = nns.map(behav)
     val team = Teams.behaviours(behavs, "undefined")
     new TeamGa {
+
       override def vsocTeam: Team = team
 
       override def toString: String = team.name
 
       override def neuralNets: Seq[NeuralNet] = nns
+
+      override def geno: Seq[Double] = _geno
     }
+
   }
 
-  override def toGeno(pheno: TeamGa): Seq[Double] = {
-    val nns: Seq[NeuralNet] = pheno.neuralNets
-    nns.flatMap(nn => nn.getParam)
-  }
 }
