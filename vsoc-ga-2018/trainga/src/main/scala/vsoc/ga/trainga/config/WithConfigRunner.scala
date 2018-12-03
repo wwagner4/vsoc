@@ -4,7 +4,6 @@ import vsoc.ga.common.UtilReflection
 
 trait WithConfigRunner {
 
-
   def runWithConfig(_args: Array[String], f: Config => Unit, clazz: String): Unit = {
     if (_args.length != 1) {
       println(usage(clazz))

@@ -20,8 +20,6 @@ class GaTestSuite extends FunSuite with MustMatchers {
 
   private val _alleles = baseData.map(t => t._2)
 
-  private val charToInt: Map[Char, Int] = baseData.map(t => (t._1, t._2)).toMap
-
   private val intToChar: Map[Int, Char] = baseData.map(t => (t._2, t._1)).toMap
 
   private val rating: Map[Char, Double] = baseData.map(t => (t._1, t._3)).toMap
