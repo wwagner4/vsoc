@@ -1,4 +1,4 @@
-package vsoc.ga.genetic
+package vsoc.ga.genetic.util
 
 import scala.util.Random
 
@@ -22,4 +22,3 @@ object GeneticOps {
   }
 
 }
-

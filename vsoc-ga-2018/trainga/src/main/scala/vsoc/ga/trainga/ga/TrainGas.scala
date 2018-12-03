@@ -11,7 +11,7 @@ object TrainGas {
 
     override def id: String = "trainGaB01"
 
-    override protected def fitness: FitnessFunction[Data02] = FitnessFunctions.data02A01
+    override protected def fitness: FitnessFunction1[Data02] = FitnessFunctions.data02A01
 
     override def fullDescHeading: String = "B initial test"
 
@@ -26,7 +26,7 @@ object TrainGas {
 
     override def id: String = "trainGaB02"
 
-    override protected def fitness: FitnessFunction[Data02] = FitnessFunctions.data02A02
+    override protected def fitness: FitnessFunction1[Data02] = FitnessFunctions.data02A02
 
     override def fullDescHeading: String =
       """B first improvement
@@ -44,7 +44,7 @@ object TrainGas {
 
     override def id: String = "trainGaB03"
 
-    override protected def fitness: FitnessFunction[Data02] = FitnessFunctions.data02A03
+    override protected def fitness: FitnessFunction1[Data02] = FitnessFunctions.data02A03
 
     override def fullDescHeading: String =
       """More training matches by increasing the test factor (2 -> 4)
@@ -65,7 +65,7 @@ object TrainGas {
 
     override def id: String = "trainGaB04"
 
-    override protected def fitness: FitnessFunction[Data02] = FitnessFunctions.data02A04
+    override protected def fitness: FitnessFunction1[Data02] = FitnessFunctions.data02A04
 
     override def fullDescHeading: String =
       """New fitness function data02A04"""
@@ -84,7 +84,7 @@ object TrainGas {
 
     override def id: String = "trainGaB05"
 
-    override protected def fitness: FitnessFunction[Data02] = FitnessFunctions.data02A05
+    override protected def fitness: FitnessFunction1[Data02] = FitnessFunctions.data02A05
 
     override def fullDescHeading: String =
       """Iteration 6

@@ -1,7 +1,7 @@
 package vsoc.ga.genetic
 
 import org.scalatest.{FunSuite, MustMatchers}
-import vsoc.ga.genetic.util.{SelectionStrategies, UtilGa}
+import vsoc.ga.genetic.util.{GeneticOps, SelectionStrategies, UtilGa}
 
 import scala.util.Random
 
@@ -29,22 +29,17 @@ class TestGA extends FunSuite with MustMatchers {
 
   class PhenoTesterT extends PhenoTester[String, TestScore] {
     override def test(phenos: Seq[String]): PhenoTesterResult[String, TestScore] = {
-      def test(p: String): (Double, String) = {
+      def test(p: String): (TestScore, String) = {
         val r: Double = p.toSeq.map(c => rating(c)).sum
-        (r, p)
+        (TestScore(r, r, r), p)
       }
 
-      def calculateScore(testedPhenos: Seq[(Double, String)]): TestScore = {
-        val ratings = testedPhenos.map(t => t._1)
-        val (max, mean, min) = UtilGa.minMeanMax(ratings)
-        TestScore(max, mean, min)
-      }
-
-      val _testedPhenos = phenos.map(test)
-      val _score = calculateScore(_testedPhenos)
+      val _testedPhenos: Seq[(TestScore, String)] = phenos.map(test)
+      val _scores = _testedPhenos.map { case (b, _) => b }
+      val _score = UtilGa.meanScore(_scores, TestScoreOps)
 
       new PhenoTesterResult[String, TestScore] {
-        override def testedPhenos: Seq[(Double, String)] = _testedPhenos
+        override def testedPhenos: Seq[(TestScore, String)] = _testedPhenos
 
         override def populationScore: Option[TestScore] = Some(_score)
       }
@@ -60,6 +55,12 @@ class TestGA extends FunSuite with MustMatchers {
     override def toGeno(pheno: String): Seq[Int] = pheno.toSeq.map(c => charToInt(c))
   }
 
+  class TestFitnessFunction extends FitnessFunction[TestScore] {
+
+    override def fitness(score: TestScore): Double = score.meanRating
+
+  }
+
   case class TestScore(
                         minRating: Double,
                         meanRating: Double,
@@ -67,6 +68,9 @@ class TestGA extends FunSuite with MustMatchers {
                       ) extends Score[TestScore] {
 
     override def score: Double = meanRating
+  }
+
+  object TestScoreOps extends ScoreOps[TestScore] {
 
     override def sum(score1: TestScore, score2: TestScore): TestScore = TestScore(
       minRating = score1.minRating + score2.minRating,
@@ -79,6 +83,8 @@ class TestGA extends FunSuite with MustMatchers {
       meanRating = score.meanRating / divisor,
       maxRating = score.maxRating / divisor,
     )
+
+    override def unit: TestScore = TestScore(0, 0, 0)
   }
 
   case class GAResultImpl(
@@ -100,7 +106,11 @@ class TestGA extends FunSuite with MustMatchers {
   test("GA mutationOnly") {
 
     val r1 = new Random(987987L)
-    val gat = new GA(new PhenoTesterT(), SelectionStrategies.mutationOnly(0.005, ranAllele, r1), new TransformerT)
+    val tester: PhenoTesterT = new PhenoTesterT()
+    val selStrat: SelectionStrategy[Int] = SelectionStrategies.mutationOnly(0.005, ranAllele, r1)
+    val fitFunc = new TestFitnessFunction()
+    val trans = new TransformerT
+    val gat = new GA(tester, selStrat, fitFunc, trans)
 
     def randomGenome: Seq[Int] = (1 to 10).map(_ => ranAllele(r1))
 
@@ -116,7 +126,11 @@ class TestGA extends FunSuite with MustMatchers {
   test("GA crossover") {
 
     val ran = new Random(987987L)
-    val gaTest = new GA(new PhenoTesterT(), SelectionStrategies.crossover(0.005, ranAllele, ran), new TransformerT)
+    val gaTest = new GA(
+      new PhenoTesterT(),
+      SelectionStrategies.crossover(0.005, ranAllele, ran),
+      new TestFitnessFunction(),
+      new TransformerT)
 
     def randomGenome: Seq[Int] = (1 to 10).map(_ => ranAllele(ran))
 
@@ -261,6 +275,25 @@ class TestGA extends FunSuite with MustMatchers {
 
   }
 
+
+}
+
+case class IntScore(value: Int) extends Score[IntScore] {
+
+  override def score: Double = value
+
+}
+
+object IntScoreOps extends ScoreOps[IntScore] {
+
+
+  override def sum(score1: IntScore, score2: IntScore): IntScore =
+    IntScore(score1.value + score2.value)
+
+  override def div(score: IntScore, divisor: Double): IntScore =
+    IntScore((score.value / divisor).toInt)
+
+  override def unit: IntScore = IntScore(0)
 
 }
 

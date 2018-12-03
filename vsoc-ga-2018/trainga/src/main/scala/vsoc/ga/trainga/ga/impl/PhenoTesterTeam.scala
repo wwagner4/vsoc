@@ -4,13 +4,13 @@ import org.slf4j.LoggerFactory
 import vsoc.ga.common.describe.PropertiesProvider
 import vsoc.ga.genetic.{PhenoTester, PhenoTesterResult}
 import vsoc.ga.matches.{MatchResult, Matches, TeamResult}
-import vsoc.ga.trainga.ga.{Data02, FitnessFunction}
+import vsoc.ga.trainga.ga.{Data02, FitnessFunction1}
 
 import scala.util.Random
 
 class PhenoTesterTeam(
                        val ran: Random,
-                       fitness: FitnessFunction[Data02],
+                       fitness: FitnessFunction1[Data02],
                        testFactor: Int
                      )
   extends PhenoTester[TeamGa, Data02]
@@ -33,11 +33,11 @@ class PhenoTesterTeam(
     }
 
     val _testedPhenos: Seq[(Data02, TeamGa)] = testedPhenos(mrc, phenos)
-    val _testedPhenos1: Seq[(Double, TeamGa)] = _testedPhenos.map { case (data, team) => (data.score, team) }
+    val _testedPhenos1: Seq[(Data02, TeamGa)] = _testedPhenos
 
     new PhenoTesterResult[TeamGa, Data02] {
 
-      override def testedPhenos: Seq[(Double, TeamGa)] = _testedPhenos1
+      override def testedPhenos: Seq[(Data02, TeamGa)] = _testedPhenos1
 
       override def populationScore: Option[Data02] = Some(createPopulationScore(_testedPhenos))
     }

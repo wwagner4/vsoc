@@ -5,7 +5,7 @@ trait PhenoTesterResult[P, S <: Score[S]] {
   /**
     * @return Sequence of Phenotypes with their score value
     */
-  def testedPhenos: Seq[(Double, P)]
+  def testedPhenos: Seq[(S, P)]
 
   /**
     * @return The mean score of the population

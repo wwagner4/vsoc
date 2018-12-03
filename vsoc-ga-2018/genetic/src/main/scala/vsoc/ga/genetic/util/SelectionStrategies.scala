@@ -1,7 +1,7 @@
 package vsoc.ga.genetic.util
 
 import vsoc.ga.common.describe.PropertiesProvider
-import vsoc.ga.genetic.{GeneticOps, SelectionStrategy}
+import vsoc.ga.genetic.{SelectionStrategy, Score}
 
 import scala.util.Random
 

@@ -6,7 +6,7 @@ import vsoc.ga.genetic._
 import vsoc.ga.genetic.util.SelectionStrategies
 import vsoc.ga.matches.Team
 import vsoc.ga.trainga.behav.{InputMapperNn, OutputMapperNn}
-import vsoc.ga.trainga.ga.{Data02, FitnessFunction, TrainGa}
+import vsoc.ga.trainga.ga.{Data02, FitnessFunction1, TrainGa}
 import vsoc.ga.trainga.nn.NeuralNet
 
 import scala.util.Random
@@ -17,7 +17,7 @@ abstract class TrainGaAbstract extends TrainGa[Data02] with PropertiesProvider {
 
   protected def createNeuralNet: () => NeuralNet
 
-  protected def fitness: FitnessFunction[Data02]
+  protected def fitness: FitnessFunction1[Data02]
 
   protected def testFactor: Int = 2
 
@@ -66,7 +66,7 @@ abstract class TrainGaAbstract extends TrainGa[Data02] with PropertiesProvider {
   protected lazy val selStrat: SelectionStrategy[Double] = SelectionStrategies.crossover(mutationRate, randomAllele, ran)
   protected lazy val transformer: Transformer[Double, TeamGa] = new TransformerTeam(playerCount, createNeuralNet, inMapper, outMapper)
 
-  lazy val ga: GA[Double, TeamGa, Data02] = new GA(tester, selStrat, transformer)
+  lazy val ga: GA[Double, TeamGa, Data02] = new GA(tester, selStrat, fitness,  transformer)
 
   def createRandomPopGeno: Seq[Seq[Double]] = {
     def ranSeq(size: Int): Seq[Double] =

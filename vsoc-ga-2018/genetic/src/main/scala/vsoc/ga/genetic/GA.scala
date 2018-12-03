@@ -20,16 +20,22 @@ package vsoc.ga.genetic
   *           next generation. It can help to decide if generating more generations makes sense
   */
 class GA[A, P, S <: Score[S]](
-                   val tester: PhenoTester[P, S],
-                   val selStrategy: SelectionStrategy[A],
-                   val transformer: Transformer[A, P],
-                 ) {
+                               val tester: PhenoTester[P, S],
+                               val selStrategy: SelectionStrategy[A],
+                               val fitnessFunction: FitnessFunction[S],
+                               val transformer: Transformer[A, P],
+                             ) {
 
   def nextPopulation(pop: Seq[Seq[A]]): GAResult[S, A] = {
 
     val phenos: Seq[P] = pop.map(transformer.toPheno)
     val testResult = tester.test(phenos)
-    val testedGenos: Seq[(Double, Seq[A])] = testResult.testedPhenos.map { case (r, g) => (r, transformer.toGeno(g)) }
+    val testedGenos: Seq[(Double, Seq[A])] =
+      testResult.testedPhenos.map {
+        case (r, g) => (
+          fitnessFunction.fitness(r),
+          transformer.toGeno(g))
+      }
     val newPop = selStrategy.select(testedGenos)
     new GAResult[S, A] {
 
@@ -39,4 +45,5 @@ class GA[A, P, S <: Score[S]](
 
     }
   }
+
 }

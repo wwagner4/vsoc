@@ -2,7 +2,7 @@ package vsoc.ga.trainga.ga
 
 object FitnessFunctions {
 
-  def data02A01: FitnessFunction[Data02] = new FitnessFunction[Data02] {
+  def data02A01: FitnessFunction1[Data02] = new FitnessFunction1[Data02] {
 
     override def id: String = "data02A01"
 
@@ -18,7 +18,7 @@ object FitnessFunctions {
     override def fullDesc: String = s"'$id' - Summary Fitnessfunction with max mean values"
   }
 
-  def data02A02: FitnessFunction[Data02] = new FitnessFunction[Data02] {
+  def data02A02: FitnessFunction1[Data02] = new FitnessFunction1[Data02] {
 
     override def id: String = "data02A02"
 
@@ -39,7 +39,7 @@ object FitnessFunctions {
        """.stripMargin
   }
 
-  def data02A03: FitnessFunction[Data02] = new FitnessFunction[Data02] {
+  def data02A03: FitnessFunction1[Data02] = new FitnessFunction1[Data02] {
 
     override def id: String = "data02A03"
 
@@ -60,7 +60,7 @@ object FitnessFunctions {
        """.stripMargin
   }
 
-  def data02A04: FitnessFunction[Data02] = new FitnessFunction[Data02] {
+  def data02A04: FitnessFunction1[Data02] = new FitnessFunction1[Data02] {
 
     override def id: String = "data02A04"
 
@@ -79,7 +79,7 @@ object FitnessFunctions {
        """.stripMargin
   }
 
-  def data02A05: FitnessFunction[Data02] = new FitnessFunction[Data02] {
+  def data02A05: FitnessFunction1[Data02] = new FitnessFunction1[Data02] {
 
     override def id: String = "data02A05"
 

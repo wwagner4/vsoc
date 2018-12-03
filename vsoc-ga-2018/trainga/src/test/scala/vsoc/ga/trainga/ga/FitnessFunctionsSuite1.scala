@@ -2,7 +2,7 @@ package vsoc.ga.trainga.ga
 
 import org.scalatest.{FunSuite, MustMatchers}
 
-class FitnessFunctionsSuite extends FunSuite with MustMatchers {
+class FitnessFunctionsSuite1 extends FunSuite with MustMatchers {
 
   test("data02A one kick") {
     val d = Data02(kicksMax = 1)

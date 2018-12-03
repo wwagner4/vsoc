@@ -1,6 +1,6 @@
 package vsoc.ga.trainga.ga
 
-import vsoc.ga.genetic.Score
+import vsoc.ga.genetic._
 
 trait DataBase {
   def trainGaId: String
@@ -41,7 +41,9 @@ case class Data02(
                    goalDifference: Double = 0.0,
 
                    score: Double = 0.0,
-                 ) extends DataBase with Score[Data02] {
+                 ) extends DataBase with Score[Data02]
+
+object Data02Ops extends ScoreOps[Data02] {
 
   override def sum(score1: Data02, score2: Data02): Data02 = Data02(
     trainGaId = score1.trainGaId,
@@ -82,4 +84,7 @@ case class Data02(
     goalDifference = score.goalDifference / divisor,
     score = score.score / divisor,
   )
+
+  override def unit: Data02 = Data02()
+
 }
