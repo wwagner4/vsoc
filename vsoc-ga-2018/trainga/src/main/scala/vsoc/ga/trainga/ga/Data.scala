@@ -41,7 +41,7 @@ case class Data02(
                    goalDifference: Double = 0.0,
 
                    score: Double = 0.0,
-                 ) extends DataBase with Score[Data02]
+                 ) extends DataBase
 
 object Data02Ops extends ScoreOps[Data02] {
 

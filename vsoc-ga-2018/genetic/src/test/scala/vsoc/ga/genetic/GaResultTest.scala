@@ -6,7 +6,7 @@ package vsoc.ga.genetic
   *           that where used to calculate that fitness value.
   * @tparam A Type of one parameter genotype parameter. Usually a Double
   */
-trait GaResultTest[S <: Score[S], A] {
+trait GaResultTest[S, A] {
 
   def score: Option[S]
 

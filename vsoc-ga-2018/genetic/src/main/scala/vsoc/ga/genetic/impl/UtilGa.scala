@@ -10,7 +10,7 @@ object UtilGa {
     (sorted.head, sum / values.size, sorted.last)
   }
 
-  def  meanScore[S <: Score[S]](s: Seq[S], ops: ScoreOps[S]): S = {
+  def  meanScore[S](s: Seq[S], ops: ScoreOps[S]): S = {
     if (s.isEmpty) ops.unit
     else {
       val len = s.size

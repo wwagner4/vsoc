@@ -67,10 +67,7 @@ class GaTestSuite extends FunSuite with MustMatchers {
                         minRating: Double,
                         meanRating: Double,
                         maxRating: Double,
-                      ) extends Score[TestScore] {
-
-    override def score: Double = meanRating
-  }
+                      )
 
   object TestScoreOps extends ScoreOps[TestScore] {
 
@@ -276,26 +273,6 @@ class GaTestSuite extends FunSuite with MustMatchers {
     dist(7) must contain(111)
 
   }
-
-
-}
-
-case class IntScore(value: Int) extends Score[IntScore] {
-
-  override def score: Double = value
-
-}
-
-object IntScoreOps extends ScoreOps[IntScore] {
-
-
-  override def sum(score1: IntScore, score2: IntScore): IntScore =
-    IntScore(score1.value + score2.value)
-
-  override def div(score: IntScore, divisor: Double): IntScore =
-    IntScore((score.value / divisor).toInt)
-
-  override def unit: IntScore = IntScore(0)
 
 }
 

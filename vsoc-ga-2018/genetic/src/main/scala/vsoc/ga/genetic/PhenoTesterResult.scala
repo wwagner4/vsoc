@@ -1,6 +1,6 @@
 package vsoc.ga.genetic
 
-trait PhenoTesterResult[P, S <: Score[S]] {
+trait PhenoTesterResult[P, S] {
 
   /**
     * @return Sequence of Phenotypes with their score value
