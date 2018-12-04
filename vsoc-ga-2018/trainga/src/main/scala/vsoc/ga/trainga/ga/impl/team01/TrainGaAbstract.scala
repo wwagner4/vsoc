@@ -1,4 +1,4 @@
-package vsoc.ga.trainga.ga.impl.team
+package vsoc.ga.trainga.ga.impl.team01
 
 import org.slf4j.LoggerFactory
 import vsoc.ga.common.describe.{DescribableFormatter, PropertiesProvider}
@@ -6,7 +6,7 @@ import vsoc.ga.genetic._
 import vsoc.ga.genetic.impl.SelectionStrategies
 import vsoc.ga.matches.Team
 import vsoc.ga.trainga.behav.{InputMapperNn, OutputMapperNn}
-import vsoc.ga.trainga.ga.{Data02, FitnessFunction1, TrainGa}
+import vsoc.ga.trainga.ga.{Data02, TrainGa, TrainGaFitnessFunction}
 import vsoc.ga.trainga.nn.NeuralNet
 
 import scala.util.Random
@@ -17,7 +17,7 @@ abstract class TrainGaAbstract extends TrainGa[Data02] with PropertiesProvider {
 
   protected def createNeuralNet: () => NeuralNet
 
-  protected def fitness: FitnessFunction1[Data02]
+  protected def fitness: TrainGaFitnessFunction[Data02]
 
   protected def testFactor: Int = 2
 
@@ -62,11 +62,11 @@ abstract class TrainGaAbstract extends TrainGa[Data02] with PropertiesProvider {
 
   def randomAllele(_ran: Random): Double = 2.0 * _ran.nextDouble() - 1.0
 
-  protected lazy val tester: PhenoTester[TeamGa, Data02] = new PhenoTesterTeam(ran, fitness, testFactor)
+  protected lazy val tester: PhenoTester[PhenoTeam, Data02] = new PhenoTesterTeam(ran, fitness, testFactor)
   protected lazy val selStrat: SelectionStrategy[Double] = SelectionStrategies.crossover(mutationRate, randomAllele, ran)
-  protected lazy val transformer: Transformer[Double, TeamGa] = new TransformerTeam(playerCount, createNeuralNet, inMapper, outMapper)
+  protected lazy val transformer: Transformer[Double, PhenoTeam] = new TransformerTeam(playerCount, createNeuralNet, inMapper, outMapper)
 
-  lazy val ga: GaTeam[Double, TeamGa, Data02] = new GaTeam(tester, selStrat, fitness,  transformer)
+  lazy val ga: GaTeam[Double, PhenoTeam, Data02] = new GaTeam(tester, selStrat, fitness,  transformer)
 
   def createRandomPopGeno: Seq[Seq[Double]] = {
     def ranSeq(size: Int): Seq[Double] =

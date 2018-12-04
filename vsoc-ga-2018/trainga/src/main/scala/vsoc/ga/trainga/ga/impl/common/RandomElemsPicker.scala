@@ -1,7 +1,6 @@
-package vsoc.ga.trainga.ga.impl.team
+package vsoc.ga.trainga.ga.impl.common
 
 import scala.util.Random
-;
 
 object RandomElemsPicker {
 

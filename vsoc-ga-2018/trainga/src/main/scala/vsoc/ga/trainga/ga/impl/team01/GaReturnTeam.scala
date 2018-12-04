@@ -1,4 +1,4 @@
-package vsoc.ga.trainga.ga.impl.team
+package vsoc.ga.trainga.ga.impl.team01
 
 import vsoc.ga.genetic._
 

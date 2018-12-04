@@ -1,11 +1,11 @@
-package vsoc.ga.trainga.ga.impl.team
+package vsoc.ga.trainga.ga.impl.team01
 
+import vsoc.ga.genetic._
 import vsoc.ga.matches.Team
 import vsoc.ga.trainga.nn.NeuralNet
-import vsoc.ga.genetic._
 
 
-trait TeamGa extends Pheno[Double] {
+trait PhenoTeam extends Pheno[Double] {
 
   def neuralNets: Seq[NeuralNet]
 

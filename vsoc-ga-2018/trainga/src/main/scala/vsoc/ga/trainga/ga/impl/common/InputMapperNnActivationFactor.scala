@@ -1,11 +1,11 @@
-package vsoc.ga.trainga.ga.impl.team
+package vsoc.ga.trainga.ga.impl.common
 
 import atan.model.Flag
 import vsoc.behaviour.Sensors
 import vsoc.ga.trainga.behav.InputMapperNn
 import vsoc.ga.trainga.retina.Retinas
 
-class InputMapperNnTeam(activationFactor: Double) extends InputMapperNn {
+class InputMapperNnActivationFactor(activationFactor: Double) extends InputMapperNn {
 
   private val size = 140
 

@@ -1,26 +1,26 @@
-package vsoc.ga.trainga.ga.impl.team
+package vsoc.ga.trainga.ga.impl.team01
 
 import org.slf4j.LoggerFactory
 import vsoc.ga.common.describe.PropertiesProvider
 import vsoc.ga.genetic.{PhenoTester, PhenoTesterResult}
 import vsoc.ga.matches.{MatchResult, Matches, TeamResult}
-import vsoc.ga.trainga.ga.{Data02, FitnessFunction1}
+import vsoc.ga.trainga.ga.{Data02, TrainGaFitnessFunction}
 
 import scala.util.Random
 
 class PhenoTesterTeam(
                        val ran: Random,
-                       fitness: FitnessFunction1[Data02],
+                       fitness: TrainGaFitnessFunction[Data02],
                        testFactor: Int
                      )
-  extends PhenoTester[TeamGa, Data02]
+  extends PhenoTester[PhenoTeam, Data02]
     with PropertiesProvider {
 
   private val log = LoggerFactory.getLogger(classOf[PhenoTesterTeam])
 
   def matchSteps: Int = 20000
 
-  override def test(phenos: Seq[TeamGa]): PhenoTesterResult[TeamGa, Data02] = {
+  override def test(phenos: Seq[PhenoTeam]): PhenoTesterResult[PhenoTeam, Data02] = {
     val teamCnt = phenos.size
     log.info(s"testing $teamCnt teams")
     val mrc = new PhenoTesterTeamCollector[Data02]()
@@ -32,12 +32,12 @@ class PhenoTesterTeam(
       mrc.addResult(i2, d2)
     }
 
-    val _testedPhenos: Seq[(Data02, TeamGa)] = testedPhenos(mrc, phenos)
-    val _testedPhenos1: Seq[(Data02, TeamGa)] = _testedPhenos
+    val _testedPhenos: Seq[(Data02, PhenoTeam)] = testedPhenos(mrc, phenos)
+    val _testedPhenos1: Seq[(Data02, PhenoTeam)] = _testedPhenos
 
-    new PhenoTesterResult[TeamGa, Data02] {
+    new PhenoTesterResult[PhenoTeam, Data02] {
 
-      override def testedPhenos: Seq[(Data02, TeamGa)] = _testedPhenos1
+      override def testedPhenos: Seq[(Data02, PhenoTeam)] = _testedPhenos1
 
       override def populationScore: Option[Data02] = Some(createPopulationScore(_testedPhenos))
     }
@@ -46,22 +46,15 @@ class PhenoTesterTeam(
   def str(result: TeamResult): String =
     s"kicks:${result.kickCount} kickOut:${result.kickOutCount}"
 
-  def playMatch(t1: TeamGa, t2: TeamGa): (Data02, Data02) = {
+  def playMatch(t1: PhenoTeam, t2: PhenoTeam): (Data02, Data02) = {
     val m = Matches.of(t1.vsocTeam, t2.vsocTeam)
     for (_ <- 1 to matchSteps) m.takeStep()
     val matchResult: MatchResult = m.state
     val eastResult = matchResult.teamEastResult
     val westResult = matchResult.teamWestResult
 
-    //println("--- east :" + str(eastResult))
-    //println("--- west :" + str(westResult))
-
     val d1 = PhenoTesterTeamUtil.resultToData(eastResult, westResult)
     val d2 = PhenoTesterTeamUtil.resultToData(westResult, eastResult)
-
-    //println("--- d1 :" + d1)
-    //println("--- d2 :" + d2)
-
 
     val s1: Double = fitness.fitness(d1)
     val s2: Double = fitness.fitness(d2)
@@ -69,7 +62,7 @@ class PhenoTesterTeam(
     (d1.copy(score = s1), d2.copy(score = s2))
   }
 
-  def testedPhenos(mcr: PhenoTesterTeamCollector[Data02], phenos: Seq[TeamGa]): Seq[(Data02, TeamGa)] = {
+  def testedPhenos(mcr: PhenoTesterTeamCollector[Data02], phenos: Seq[PhenoTeam]): Seq[(Data02, PhenoTeam)] = {
     val results: Map[Int, Seq[Data02]] = mcr.results
     for (i <- phenos.indices) yield {
       val rs: Seq[Data02] = results(i)
@@ -79,7 +72,7 @@ class PhenoTesterTeam(
     }
   }
 
-  def createPopulationScore(testedPhenos: Seq[(Data02, TeamGa)]): Data02 = {
+  def createPopulationScore(testedPhenos: Seq[(Data02, PhenoTeam)]): Data02 = {
     PhenoTesterTeamUtil.mean(testedPhenos.map(p => p._1))
   }
 
