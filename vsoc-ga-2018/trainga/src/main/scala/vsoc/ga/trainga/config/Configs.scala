@@ -158,6 +158,18 @@ object Configs {
       """Test"""
   }
 
+  def player01test: Config = new Config {
+
+    override def id: String = "player01test"
+
+    override def trainings: Seq[ConfigTrainGa] = Seq(
+      ConfigTrainGa("traingGaPlayer01", "test001"),
+      ConfigTrainGa("traingGaPlayer01", "test002"),
+    )
+
+    override def fullDesc: String =
+      "Testconfiguration: To be used during development"
+  }
 
 
 }
