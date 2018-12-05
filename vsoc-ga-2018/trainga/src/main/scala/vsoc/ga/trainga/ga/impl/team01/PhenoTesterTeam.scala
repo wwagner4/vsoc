@@ -4,7 +4,7 @@ import org.slf4j.LoggerFactory
 import vsoc.ga.common.describe.PropertiesProvider
 import vsoc.ga.genetic.{PhenoTester, PhenoTesterResult}
 import vsoc.ga.matches.{MatchResult, Matches, TeamResult}
-import vsoc.ga.trainga.ga.{Data02, TrainGaFitnessFunction}
+import vsoc.ga.trainga.ga.TrainGaFitnessFunction
 
 import scala.util.Random
 

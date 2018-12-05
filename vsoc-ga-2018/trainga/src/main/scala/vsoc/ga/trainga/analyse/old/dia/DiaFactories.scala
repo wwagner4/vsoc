@@ -1,7 +1,7 @@
 package vsoc.ga.trainga.analyse.old.dia
 
-import DataDia.FDia
-import vsoc.ga.trainga.ga.DataBase
+import vsoc.ga.trainga.analyse.old.dia.DataDia.FDia
+import vsoc.ga.trainga.ga.impl.team01.DataBase
 
 trait DiaFactories[T <: DataBase] {
 

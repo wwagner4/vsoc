@@ -1,7 +1,6 @@
 package vsoc.ga.trainga.ga.impl.team01
 
 import org.scalatest.{FunSuite, MustMatchers}
-import vsoc.ga.trainga.ga.Data02
 
 import scala.util.Random
 

@@ -1,5 +1,7 @@
 package vsoc.ga.trainga.ga
 
+import vsoc.ga.trainga.ga.impl.team01.Data02
+
 object FitnessFunctions {
 
   def data02A01: TrainGaFitnessFunction[Data02] = new TrainGaFitnessFunction[Data02] {

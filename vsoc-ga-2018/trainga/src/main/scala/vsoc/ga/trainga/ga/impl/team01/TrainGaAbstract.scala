@@ -6,7 +6,7 @@ import vsoc.ga.genetic._
 import vsoc.ga.genetic.impl.SelectionStrategies
 import vsoc.ga.matches.Team
 import vsoc.ga.trainga.behav.{InputMapperNn, OutputMapperNn}
-import vsoc.ga.trainga.ga.{Data02, TrainGa, TrainGaFitnessFunction}
+import vsoc.ga.trainga.ga._
 import vsoc.ga.trainga.nn.NeuralNet
 
 import scala.util.Random
