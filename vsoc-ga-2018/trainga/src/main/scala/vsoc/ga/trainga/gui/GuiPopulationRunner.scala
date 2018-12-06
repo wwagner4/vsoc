@@ -51,7 +51,7 @@ object GuiPopulationRunner {
       import vsoc.ga.common.UtilTransform._
 
       val genPath: Path = generationPath
-      val persistor = Persistors.nio(workDir)
+      val persistor = Persistors.nio
       val genDir = Paths.get(trainGa.id, populationNr, genPath.getFileName.toString)
       persistor.load(genDir) { ois =>
         val cont = ois.readObject().asInstanceOf[TrainGaContainer]

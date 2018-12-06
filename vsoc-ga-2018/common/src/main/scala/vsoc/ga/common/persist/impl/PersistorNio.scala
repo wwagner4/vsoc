@@ -6,15 +6,12 @@ import java.nio.file.{Files, Path}
 import vsoc.ga.common.persist.Persistor
 
 
-case class PersistorNio(absolute: Path) extends Persistor {
-
-  if (!absolute.isAbsolute) throw new IllegalArgumentException(s"'$absolute' must be absoluet")
+case class PersistorNio() extends Persistor {
 
   def save(path: Path)(f: ObjectOutputStream => Unit): Unit = {
-    if (path.isAbsolute)  throw new IllegalArgumentException(s"'$path' must be relative")
-    val filePath = absolute.resolve(path)
-    if (!Files.exists(filePath.getParent)) Files.createDirectories(filePath.getParent)
-    val os = Files.newOutputStream(filePath)
+    if (!path.isAbsolute)  throw new IllegalArgumentException(s"'$path' must be absolute")
+    if (!Files.exists(path.getParent)) Files.createDirectories(path.getParent)
+    val os = Files.newOutputStream(path)
     try {
       val oos = new ObjectOutputStream(os)
       f(oos)
@@ -24,11 +21,10 @@ case class PersistorNio(absolute: Path) extends Persistor {
   }
 
   def load[T](path: Path)(f: ObjectInputStream => T): Option[T] = {
-    if (path.isAbsolute)  throw new IllegalArgumentException(s"'$path' must be relative")
-    val filePath = absolute.resolve(path)
-    if (!Files.exists(filePath)) None
+    if (!path.isAbsolute)  throw new IllegalArgumentException(s"'$path' must be absolute")
+    if (!Files.exists(path)) None
     else {
-      val is = Files.newInputStream(filePath)
+      val is = Files.newInputStream(path)
       try {
         val ois = new ObjectInputStream(is)
         Some(f(ois))
@@ -38,11 +34,4 @@ case class PersistorNio(absolute: Path) extends Persistor {
     }
   }
 
-  override def dir(path: Path): Path = {
-    if (path.isAbsolute)  throw new IllegalArgumentException(s"'$path' must be relative")
-    val re = absolute.resolve(path)
-    if (!Files.exists(re)) Files.createDirectories(re)
-    else if (!Files.isDirectory(re)) throw new IllegalStateException(s"$re must be a directory")
-    re
-  }
 }

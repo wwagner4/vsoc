@@ -69,8 +69,8 @@ class TrainGaSuite extends FunSuite with MustMatchers {
     val params = Stream.continually(1.0).take(63).toArray
     nn.setParam(params)
 
-    val file = Paths.get(".test", "nn", "01.nn")
-    val p = Persistors.nio(workDirBaseTest)
+    val file = workDirBaseTest.resolve(Paths.get(".test", "nn", "01.nn"))
+    val p = Persistors.nio
 
     p.save(file)(oos => NeuralNetPersist.save(nn, oos))
 

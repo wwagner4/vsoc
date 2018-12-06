@@ -23,15 +23,15 @@ class TrainGaRunner[S <: AnyRef] {
     val nr = cfg.nr
     require(!id.isEmpty)
     require(!nr.isEmpty)
-    def persistor: Persistor = Persistors.nio(workDir)
-    val trainDir = Paths.get(id, nr)
-    val persDir = persistor.dir(trainDir)
 
-    val dataFile = persDir.resolve(s"$id-$nr-data.csv")
+    def persistor: Persistor = Persistors.nio
+    val trainDirAbs = workDir.resolve(Paths.get(id, nr))
+
+    val dataFile = trainDirAbs.resolve(s"$id-$nr-data.csv")
 
     val dh = new CsvWriter(dataFile)
 
-    val fileNameOpt: Optional[Path] = Files.list(persDir)
+    val fileNameOpt: Optional[Path] = Files.list(trainDirAbs)
       .filter(p => p.getFileName.toString.endsWith("ser"))
       .sorted(Comparator.reverseOrder())
       .findFirst()
@@ -39,12 +39,12 @@ class TrainGaRunner[S <: AnyRef] {
     val tga: TrainGa[S] = UtilTransform.asOption(fileNameOpt)
       .map(p => p.getFileName.toString)
       .flatMap { file: String =>
-        val path = trainDir.resolve(file)
+        val path = trainDirAbs.resolve(file)
         log.info(s"loading population from $path")
         persistor.load(path)(ois => new TrainGaPersist[S].load(ois))
       }
       .getOrElse {
-        log.info(s"could not population from $trainDir. creating a new one")
+        log.info(s"could not population from $trainDirAbs. creating a new one")
         UtilReflection.call(TrainGas, cfg.id, classOf[TrainGa[S]])
       }
 
@@ -56,7 +56,7 @@ class TrainGaRunner[S <: AnyRef] {
     def persListener: TrainGaListener[S] = (iteration: Int, _: Option[S]) => {
       val popnr = f"$iteration%04d"
       val filename = s"pop$popnr.ser"
-      val filePath = trainDir.resolve(filename)
+      val filePath = trainDirAbs.resolve(filename)
       log.info(s"saving population to $filePath")
       persistor.save(filePath)(oos => new TrainGaPersist[S].save(tga, oos))
       Thinner.thinFromTrainGaId(id, nr)

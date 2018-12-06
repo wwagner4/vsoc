@@ -20,7 +20,7 @@ class TrainGaPlayer01 extends TrainGa[DataPlayer01] {
     var score = DataPlayer01()
     try {
       if (population.isEmpty) {
-        population = Some(createRandomPopGeno)
+        population = Some(createInitialPopGeno)
       }
       if (iterations.isEmpty) {
         iterations = Some(0)
@@ -41,6 +41,6 @@ class TrainGaPlayer01 extends TrainGa[DataPlayer01] {
 
   override def fullDesc: String = "TrainGaPlayer01"
 
-  def createRandomPopGeno: Seq[Seq[Double]] = Seq(Seq.empty[Double])
+  def createInitialPopGeno: Seq[Seq[Double]] = Seq(Seq.empty[Double])
 
 }
