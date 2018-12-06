@@ -62,8 +62,8 @@ class TrainGaRunner[S <: AnyRef] {
       Thinner.thinFromTrainGaId(id, nr)
     }
     def dataListener: TrainGaListener[S] = (_: Int, sd: Option[S]) => {
-      sd.foreach(_sd => dh.writeLine(_sd))
-      log.info(s"wrote data to $dh")
+      sd.foreach(d => dh.writeLine(d))
+      log.info(s"wrote data $sd to $dh")
     }
 
   }

@@ -17,7 +17,7 @@ class TrainGaPlayer01 extends TrainGa[DataPlayer01] {
 
   override def run(trainGaId: String, trainGaNr: String): Unit = {
     log.info(s"start TrainGaPlayer01")
-    val score = Option.empty[DataPlayer01]
+    var score = DataPlayer01()
     try {
       if (population.isEmpty) {
         population = Some(createRandomPopGeno)
@@ -26,9 +26,11 @@ class TrainGaPlayer01 extends TrainGa[DataPlayer01] {
         iterations = Some(0)
       }
       while (true) {
-        listeners.foreach(l => l.onIterationFinished(iterations.get, score))
         Thread.sleep(1000)
+
         iterations = Some(iterations.get + 1)
+        score = score.copy(iterations = iterations.get)
+        listeners.foreach(l => l.onIterationFinished(iterations.get, Some(score)))
       }
     } catch {
       case e: Exception =>
