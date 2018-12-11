@@ -163,8 +163,8 @@ object Configs {
     override def id: String = "player01test"
 
     override def trainings: Seq[ConfigTrainGa] = Seq(
-      ConfigTrainGa("trainGaPlayer01", "test001"),
-      ConfigTrainGa("trainGaPlayer01", "test002"),
+      ConfigTrainGa("trainGaPlayer01Simple", "test001"),
+      ConfigTrainGa("trainGaPlayer01Simple", "test002"),
     )
 
     override def fullDesc: String =
