@@ -52,8 +52,9 @@ object GuiPopulationRunner {
 
       val genPath: Path = generationPath
       val persistor = Persistors.nio
-      val genDir = Paths.get(trainGa.id, populationNr, genPath.getFileName.toString)
-      persistor.load(genDir) { ois =>
+      val genDirRel = Paths.get(trainGa.id, populationNr, genPath.getFileName.toString)
+      val genDirAbs = workDir.resolve(genDirRel)
+      persistor.load(genDirAbs) { ois =>
         val cont = ois.readObject().asInstanceOf[TrainGaContainer]
         toSeq(cont.population)
       }.getOrElse(throw new IllegalStateException(s"Error loading genotype from $genPath"))
@@ -77,7 +78,4 @@ object GuiPopulationRunner {
     val t2: Team = teams(idx(1))
     Matches.of(t1, t2)
   }
-
-
-
 }
