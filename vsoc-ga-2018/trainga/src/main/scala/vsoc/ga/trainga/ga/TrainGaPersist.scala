@@ -9,17 +9,15 @@ class TrainGaPersist[S] {
   import vsoc.ga.common.UtilTransform._
 
   def save(trainga: TrainGa[S], oos: ObjectOutputStream): Unit = {
-    require(trainga.iterations.isDefined, "iterations must be defined")
-    require(trainga.population.isDefined, "population must be defined")
-    val cont = TrainGaContainer(trainga.id, trainga.iterations.get, asArray(trainga.population.get))
+    val cont = TrainGaContainer(trainga.id, trainga.iterations, asArray(trainga.population))
     oos.writeObject(cont)
   }
 
   def load(ois: ObjectInputStream): TrainGa[S] = {
     val cont = ois.readObject().asInstanceOf[TrainGaContainer]
     val tga = UtilReflection.call(TrainGas, cont.id, classOf[TrainGa[S]])
-    tga.iterations = Some(cont.iterations)
-    tga.population = Some(toSeq(cont.population))
+    tga.iterations = cont.iterations
+    tga.population = toSeq(cont.population)
     tga
   }
 

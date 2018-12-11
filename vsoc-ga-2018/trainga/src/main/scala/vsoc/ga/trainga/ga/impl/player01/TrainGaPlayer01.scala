@@ -11,7 +11,7 @@ class TrainGaPlayer01 extends TrainGa[DataPlayer01] {
 
   override def id: String = "trainGaPlayer01"
 
-  override def teamsFromGeno(geno: Seq[Seq[Double]]): Seq[Team] = ???
+  override def teamsFromPopulation: Seq[Team] = ???
 
   var cnt = 0;
 
@@ -20,17 +20,14 @@ class TrainGaPlayer01 extends TrainGa[DataPlayer01] {
     var score = DataPlayer01()
     try {
       if (population.isEmpty) {
-        population = Some(createInitialPopGeno)
-      }
-      if (iterations.isEmpty) {
-        iterations = Some(0)
+        population = createInitialPopGeno
       }
       while (true) {
         Thread.sleep(1000)
 
-        iterations = Some(iterations.get + 1)
-        score = score.copy(iterations = iterations.get)
-        listeners.foreach(l => l.onIterationFinished(iterations.get, Some(score)))
+        iterations += 1
+        score = score.copy(iterations = iterations)
+        listeners.foreach(l => l.onIterationFinished(iterations, Some(score)))
       }
     } catch {
       case e: Exception =>

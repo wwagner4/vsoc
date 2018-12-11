@@ -85,22 +85,20 @@ abstract class TrainGaAbstract extends TrainGa[Data02] with PropertiesProvider {
   override def run(trainGaId: String, trainGaNr: String): Unit = {
     log.info(s"start GaTeam populationSize: $populationSize playerCount: $playerCount playerParamSize:$playerParamSize")
     try {
-      val initialPop: Seq[Seq[Double]] = population.getOrElse(createRandomPopGeno)
+      val initialPop: Seq[Seq[Double]] = if (population.isEmpty) createRandomPopGeno else population
       var gar: GaReturnTeam[Data02, Double] = GAR(None, initialPop)
-      var i = iterations.getOrElse(0)
       while (true) {
-        i += 1
         gar = ga.nextPopulation(gar.newPopulation)
         val s = gar.score.map(d => f"${d.score}%.2f").getOrElse("-")
-        log.info(f"finished iteration $i. populationScore: $s")
-        iterations = Some(i)
-        population = Some(gar.newPopulation)
+        log.info(f"finished iteration $iterations. populationScore: $s")
+        population = gar.newPopulation
         val score = gar.score.map(s => s.copy(
           trainGaId = trainGaId,
           trainGaNr = trainGaNr,
-          iterations = i
+          iterations = iterations,
         ))
-        listeners.foreach(l => l.onIterationFinished(i, score))
+        listeners.foreach(l => l.onIterationFinished(iterations, score))
+        iterations += 1
       }
     } catch {
       case e: Exception =>
@@ -109,8 +107,8 @@ abstract class TrainGaAbstract extends TrainGa[Data02] with PropertiesProvider {
     }
   }
 
-  def teamsFromGeno(geno: Seq[Seq[Double]]): Seq[Team] = {
-    geno.map(transformer.toPheno(_).vsocTeam)
+  def teamsFromPopulation: Seq[Team] = {
+    population.map(transformer.toPheno(_).vsocTeam)
   }
 
 

@@ -47,7 +47,7 @@ class TrainGaRunner[S <: AnyRef] {
 
     val desc = DescribableFormatter.format(tga, 0)
     tga.listeners = tga.listeners :+ persListener :+ dataListener :+ thinnerListener
-    log.info(s"start ${tga.id}-${cfg.nr} at iteration ${tga.iterations.getOrElse(0)}\n\n--------------------------------------------------------\n$desc")
+    log.info(s"start ${tga.id}-${cfg.nr} at iteration ${tga.iterations}\n\n--------------------------------------------------------\n$desc")
     tga.run(cfg.id, cfg.nr)
 
     def persListener: TrainGaListener[S] = (iteration: Int, _: Option[S]) => {
