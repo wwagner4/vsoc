@@ -24,13 +24,10 @@ class TrainGaRunner[S <: AnyRef] {
     require(!id.isEmpty)
     require(!nr.isEmpty)
 
-    def persistor: Persistor = Persistors.nio
+    val persistor: Persistor = Persistors.nio
     val trainDirAbs = workDir.resolve(Paths.get(id, nr))
-
     val dataFile = trainDirAbs.resolve(s"$id-$nr-data.csv")
-
-    val dh = new CsvWriter(dataFile)
-
+    val csvWriter = new CsvWriter(dataFile)
     val fileNameOpt: Optional[Path] = Files.list(trainDirAbs)
       .filter(p => p.getFileName.toString.endsWith("ser"))
       .sorted(Comparator.reverseOrder())
@@ -49,7 +46,7 @@ class TrainGaRunner[S <: AnyRef] {
       }
 
     val desc = DescribableFormatter.format(tga, 0)
-    tga.listeners = tga.listeners :+ persListener :+ dataListener
+    tga.listeners = tga.listeners :+ persListener :+ dataListener :+ thinnerListener
     log.info(s"start ${tga.id}-${cfg.nr} at iteration ${tga.iterations.getOrElse(0)}\n\n--------------------------------------------------------\n$desc")
     tga.run(cfg.id, cfg.nr)
 
@@ -59,11 +56,15 @@ class TrainGaRunner[S <: AnyRef] {
       val filePath = trainDirAbs.resolve(filename)
       log.info(s"saving population to $filePath")
       persistor.save(filePath)(oos => new TrainGaPersist[S].save(tga, oos))
+    }
+
+    def thinnerListener: TrainGaListener[S] = (_: Int, _: Option[S]) => {
       Thinner.thinFromTrainGaId(id, nr)
     }
+
     def dataListener: TrainGaListener[S] = (_: Int, sd: Option[S]) => {
-      sd.foreach(d => dh.writeLine(d))
-      log.info(s"wrote data $sd to $dh")
+      sd.foreach(d => csvWriter.writeLine(d))
+      log.info(s"wrote data $sd to $csvWriter")
     }
 
   }

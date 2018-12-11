@@ -10,7 +10,7 @@ class TrainGaPersist[S] {
 
   def save(trainga: TrainGa[S], oos: ObjectOutputStream): Unit = {
     require(trainga.iterations.isDefined, "iterations must be defined")
-    require(trainga.population.isDefined, "pupulation must be defined")
+    require(trainga.population.isDefined, "population must be defined")
     val cont = TrainGaContainer(trainga.id, trainga.iterations.get, asArray(trainga.population.get))
     oos.writeObject(cont)
   }
