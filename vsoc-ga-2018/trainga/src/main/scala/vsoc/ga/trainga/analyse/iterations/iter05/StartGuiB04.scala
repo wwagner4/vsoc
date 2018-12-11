@@ -12,6 +12,6 @@ object StartGuiB04 extends App {
   val iterBaseDir = CreateAllResourcesB04.create(workDir)
   implicit val iterWorkDir: Path = iterBaseDir.resolve("work")
 
-  GuiPopulationRunner.run(ConfigTrainGa("trainGaB04", "bob004"), None)
+  GuiPopulationRunner.run(ConfigTrainGa("trainGaB04", "bob004"))
 
 }

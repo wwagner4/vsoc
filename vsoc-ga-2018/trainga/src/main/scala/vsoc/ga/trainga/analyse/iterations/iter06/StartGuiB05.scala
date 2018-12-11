@@ -9,6 +9,6 @@ object StartGuiB05 extends App {
 
   implicit val workDir: Path = ConfigHelper.workDir
 
-  GuiPopulationRunner.run(ConfigTrainGa("trainGaB05", "bob004"), None)
+  GuiPopulationRunner.run(ConfigTrainGa("trainGaB05", "bob004"))
 
 }
