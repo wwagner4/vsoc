@@ -13,7 +13,7 @@ class PhenoTesterTeam(
                        fitness: TrainGaFitnessFunction[Data02],
                        testFactor: Int
                      )
-  extends PhenoTester[PhenoTeam, Data02]
+  extends PhenoTester[PhenoTeam, Double, Data02]
     with PropertiesProvider {
 
   private val log = LoggerFactory.getLogger(classOf[PhenoTesterTeam])

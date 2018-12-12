@@ -62,7 +62,7 @@ abstract class TrainGaAbstract extends TrainGa[Data02] with PropertiesProvider {
 
   def randomAllele(_ran: Random): Double = 2.0 * _ran.nextDouble() - 1.0
 
-  protected lazy val tester: PhenoTester[PhenoTeam, Data02] = new PhenoTesterTeam(ran, fitness, testFactor)
+  protected lazy val tester: PhenoTester[PhenoTeam, Double, Data02] = new PhenoTesterTeam(ran, fitness, testFactor)
   protected lazy val selStrat: SelectionStrategy[Double] = SelectionStrategies.crossover(mutationRate, randomAllele, ran)
   protected lazy val transformer: Transformer[Double, PhenoTeam] = new TransformerTeam(playerCount, createNeuralNet, inMapper, outMapper)
 

@@ -22,7 +22,7 @@ import vsoc.ga.genetic._
   *           next generation. It can help to decide if generating more generations makes sense
   */
 class GaTeam[A, P <: Pheno[A], S](
-                                               val tester: PhenoTester[P, S],
+                                               val tester: PhenoTester[P, A, S],
                                                val selStrategy: SelectionStrategy[A],
                                                val fitnessFunction: FitnessFunction[S],
                                                val transformer: Transformer[A, P],

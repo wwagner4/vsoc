@@ -27,7 +27,7 @@ class GaTestSuite extends FunSuite with MustMatchers {
 
   case class PhenoTest(value: String, geno: Seq[Int]) extends Pheno[Int]
 
-  class PhenoTesterT extends PhenoTester[PhenoTest, TestScore] {
+  class PhenoTesterT extends PhenoTester[PhenoTest, Int, TestScore] {
     override def test(phenos: Seq[PhenoTest]): PhenoTesterResult[PhenoTest, TestScore] = {
       def test(p: PhenoTest): (TestScore, PhenoTest) = {
         val r: Double = p.value.toSeq.map(c => rating(c)).sum
