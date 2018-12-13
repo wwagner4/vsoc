@@ -1,7 +1,7 @@
 package vsoc.ga.genetic
 
 import org.scalatest.{FunSuite, MustMatchers}
-import vsoc.ga.genetic.impl.{GeneticOps, SelectionStrategies}
+import vsoc.ga.genetic.impl.{GeneticOps, SelectionStrategies, UtilGa}
 
 import scala.util.Random
 
@@ -33,6 +33,7 @@ class GaTestSuite extends FunSuite with MustMatchers {
         val r: Double = p.value.toSeq.map(c => rating(c)).sum
         (TestScore(r, r, r), p)
       }
+
       phenos.map(test)
     }
 
@@ -78,9 +79,9 @@ class GaTestSuite extends FunSuite with MustMatchers {
   }
 
   case class GaResultTestImpl(
-                           score: Option[TestScore],
-                           newPopulation: Seq[Seq[Int]]
-                         ) extends GaResultTest[TestScore, Int]
+                               score: Option[TestScore],
+                               newPopulation: Seq[Seq[Int]]
+                             ) extends GaResultTest[TestScore, Int]
 
   private def popToStr(pop: Seq[Seq[Int]]) = pop.map(p => p.map(x => intToChar(x)).mkString("")).mkString("  ")
 
@@ -95,12 +96,15 @@ class GaTestSuite extends FunSuite with MustMatchers {
 
   test("GaTest mutationOnly") {
 
+    def meanScoreOf(scores: Seq[TestScore]): TestScore =
+      UtilGa.meanScore(scores, TestScoreOps)
+
     val r1 = new Random(987987L)
     val tester: PhenoTesterT = new PhenoTesterT()
     val selStrat: SelectionStrategy[Int] = SelectionStrategies.mutationOnly(0.005, ranAllele, r1)
     val fitFunc = new TestFitnessFunction()
     val trans = new TransformerT
-    val gat = new GaTest(tester, selStrat, fitFunc, trans)
+    val gat = new GaTest(tester, selStrat, fitFunc, trans, meanScoreOf)
 
     def randomGenome: Seq[Int] = (1 to 10).map(_ => ranAllele(r1))
 
@@ -114,13 +118,16 @@ class GaTestSuite extends FunSuite with MustMatchers {
   }
 
   test("GaTest crossover") {
+    def meanScoreOf(scores: Seq[TestScore]): TestScore =
+      UtilGa.meanScore(scores, TestScoreOps)
 
     val ran = new Random(987987L)
     val gaTest = new GaTest(
       new PhenoTesterT(),
       SelectionStrategies.crossover(0.005, ranAllele, ran),
       new TestFitnessFunction(),
-      new TransformerT)
+      new TransformerT,
+      meanScoreOf)
 
     def randomGenome: Seq[Int] = (1 to 10).map(_ => ranAllele(ran))
 

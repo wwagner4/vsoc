@@ -20,30 +20,33 @@ package vsoc.ga.genetic
   *           next generation. It can help to decide if generating more generations makes sense
   */
 class GaTest[A, P <: Pheno[A], S](
-                               val tester: PhenoTester[P, A, S],
-                               val selStrategy: SelectionStrategy[A],
-                               val fitnessFunction: FitnessFunction[S],
-                               val transformer: Transformer[A, P],
-                             ) {
+                                   val tester: PhenoTester[P, A, S],
+                                   val selStrategy: SelectionStrategy[A],
+                                   val fitnessFunction: FitnessFunction[S],
+                                   val transformer: Transformer[A, P],
+                                   val meanOf: (Seq[S] => S),
+                                 ) {
 
-                               def nextPopulation(pop: Seq[Seq[A]]): GaResultTest[S, A] = {
+  def nextPopulation(pop: Seq[Seq[A]]): GaResultTest[S, A] = {
 
-                                 val phenos: Seq[P] = pop.map(transformer.toPheno)
-                                 val testResult = tester.test(phenos)
-                                 val testedGenos: Seq[(Double, Seq[A])] =
-                                   testResult.map {
-                                     case (r, g) => (
-                                       fitnessFunction.fitness(r),
-                                       g.geno)
-                                   }
-                                 val newPop = selStrategy.select(testedGenos)
-                                 new GaResultTest[S, A] {
+    val phenos: Seq[P] = pop.map(transformer.toPheno)
+    val testResult: Seq[(S, P)] = tester.test(phenos)
+    val testedGenos: Seq[(Double, Seq[A])] =
+      testResult.map {
+        case (r, g) => (
+          fitnessFunction.fitness(r),
+          g.geno)
+      }
+    val scores = testResult map { case (s, _) => s }
+    val scoreMean = meanOf(scores)
+    val newPop = selStrategy.select(testedGenos)
+    new GaResultTest[S, A] {
 
-                                   def score: Option[S] = None
+      def score: Option[S] = Some(scoreMean)
 
-                                   override def newPopulation: Seq[Seq[A]] = newPop
+      override def newPopulation: Seq[Seq[A]] = newPop
 
-                                 }
-                               }
+    }
+  }
 
-                             }
+}
