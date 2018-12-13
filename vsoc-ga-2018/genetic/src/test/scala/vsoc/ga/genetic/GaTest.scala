@@ -39,7 +39,7 @@ class GaTest[A, P <: Pheno[A], S](
                                  val newPop = selStrategy.select(testedGenos)
                                  new GaResultTest[S, A] {
 
-                                   def score: Option[S] = ???
+                                   def score: Option[S] = None
 
                                    override def newPopulation: Seq[Seq[A]] = newPop
 
