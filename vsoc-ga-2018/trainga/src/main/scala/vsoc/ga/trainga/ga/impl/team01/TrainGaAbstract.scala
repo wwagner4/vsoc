@@ -3,7 +3,7 @@ package vsoc.ga.trainga.ga.impl.team01
 import org.slf4j.LoggerFactory
 import vsoc.ga.common.describe.{DescribableFormatter, PropertiesProvider}
 import vsoc.ga.genetic._
-import vsoc.ga.genetic.impl.SelectionStrategies
+import vsoc.ga.genetic.impl.{SelectionStrategies, UtilGa}
 import vsoc.ga.matches.Team
 import vsoc.ga.trainga.behav.{InputMapperNn, OutputMapperNn}
 import vsoc.ga.trainga.ga._
@@ -66,7 +66,7 @@ abstract class TrainGaAbstract extends TrainGa[Data02] with PropertiesProvider {
   protected lazy val selStrat: SelectionStrategy[Double] = SelectionStrategies.crossover(mutationRate, randomAllele, ran)
   protected lazy val transformer: Transformer[Double, PhenoTeam] = new TransformerTeam(playerCount, createNeuralNet, inMapper, outMapper)
 
-  lazy val ga: GaTeam[Double, PhenoTeam, Data02] = new GaTeam(tester, selStrat, fitness,  transformer)
+  lazy val ga: GaTeam[Double, PhenoTeam, Data02] = new GaTeam(tester, selStrat, fitness, transformer, UtilGa.meanScore(_, Data02Ops))
 
   def createRandomPopGeno: Seq[Seq[Double]] = {
     def ranSeq(size: Int): Seq[Double] =

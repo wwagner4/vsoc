@@ -1,7 +1,7 @@
 package vsoc.ga.genetic
 
 import org.scalatest.{FunSuite, MustMatchers}
-import vsoc.ga.genetic.impl.{GeneticOps, SelectionStrategies, UtilGa}
+import vsoc.ga.genetic.impl.{GeneticOps, SelectionStrategies}
 
 import scala.util.Random
 
@@ -28,21 +28,12 @@ class GaTestSuite extends FunSuite with MustMatchers {
   case class PhenoTest(value: String, geno: Seq[Int]) extends Pheno[Int]
 
   class PhenoTesterT extends PhenoTester[PhenoTest, Int, TestScore] {
-    override def test(phenos: Seq[PhenoTest]): PhenoTesterResult[PhenoTest, TestScore] = {
+    override def test(phenos: Seq[PhenoTest]): Seq[(TestScore, PhenoTest)] = {
       def test(p: PhenoTest): (TestScore, PhenoTest) = {
         val r: Double = p.value.toSeq.map(c => rating(c)).sum
         (TestScore(r, r, r), p)
       }
-
-      val _testedPhenos: Seq[(TestScore, PhenoTest)] = phenos.map(test)
-      val _scores = _testedPhenos.map { case (b, _) => b }
-      val _score = UtilGa.meanScore(_scores, TestScoreOps)
-
-      new PhenoTesterResult[PhenoTest, TestScore] {
-        override def testedPhenos: Seq[(TestScore, PhenoTest)] = _testedPhenos
-
-        override def populationScore: Option[TestScore] = Some(_score)
-      }
+      phenos.map(test)
     }
 
     override def fullDesc: String = "test"

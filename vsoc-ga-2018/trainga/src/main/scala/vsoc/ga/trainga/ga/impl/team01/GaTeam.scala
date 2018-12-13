@@ -26,27 +26,32 @@ class GaTeam[A, P <: Pheno[A], S](
                                                val selStrategy: SelectionStrategy[A],
                                                val fitnessFunction: FitnessFunction[S],
                                                val transformer: Transformer[A, P],
+                                               val meanScore: (Seq[S] => S)
                                              ) {
 
   def nextPopulation(pop: Seq[Seq[A]]): GaReturnTeam[S, A] = {
 
     val phenos: Seq[P] = pop.map(transformer.toPheno)
-    val testResult: PhenoTesterResult[P, S] = tester.test(phenos)
+    val testResult: Seq[(S, P)] = tester.test(phenos)
     val testedGenos: Seq[(Double, Seq[A])] =
-      testResult.testedPhenos.map {
+      testResult.map {
         case (r, g) => (
           fitnessFunction.fitness(r),
           g.geno)
       }
 
+    val scores = testResult.map{case (s, _) => s}
+    val mscore: S = meanScore(scores)
+
     val newPop = selStrategy.select(testedGenos)
     new GaReturnTeam[S, A] {
 
-      def score: Option[S] = testResult.populationScore
+      def score: Option[S] = Some(mscore)
 
       override def newPopulation: Seq[Seq[A]] = newPop
 
     }
   }
+
 
 }

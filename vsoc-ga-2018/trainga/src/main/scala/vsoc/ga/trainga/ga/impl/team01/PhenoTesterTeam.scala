@@ -2,7 +2,7 @@ package vsoc.ga.trainga.ga.impl.team01
 
 import org.slf4j.LoggerFactory
 import vsoc.ga.common.describe.PropertiesProvider
-import vsoc.ga.genetic.{PhenoTester, PhenoTesterResult}
+import vsoc.ga.genetic.PhenoTester
 import vsoc.ga.matches.{MatchResult, Matches, TeamResult}
 import vsoc.ga.trainga.ga.TrainGaFitnessFunction
 
@@ -20,7 +20,7 @@ class PhenoTesterTeam(
 
   def matchSteps: Int = 20000
 
-  override def test(phenos: Seq[PhenoTeam]): PhenoTesterResult[PhenoTeam, Data02] = {
+  override def test(phenos: Seq[PhenoTeam]): Seq[(Data02, PhenoTeam)] = {
     val teamCnt = phenos.size
     log.info(s"testing $teamCnt teams")
     val mrc = new PhenoTesterTeamCollector[Data02]()
@@ -32,15 +32,7 @@ class PhenoTesterTeam(
       mrc.addResult(i2, d2)
     }
 
-    val _testedPhenos: Seq[(Data02, PhenoTeam)] = testedPhenos(mrc, phenos)
-    val _testedPhenos1: Seq[(Data02, PhenoTeam)] = _testedPhenos
-
-    new PhenoTesterResult[PhenoTeam, Data02] {
-
-      override def testedPhenos: Seq[(Data02, PhenoTeam)] = _testedPhenos1
-
-      override def populationScore: Option[Data02] = Some(createPopulationScore(_testedPhenos))
-    }
+    testedPhenos(mrc, phenos)
   }
 
   def str(result: TeamResult): String =

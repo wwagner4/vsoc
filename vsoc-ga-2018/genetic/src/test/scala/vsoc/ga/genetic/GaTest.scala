@@ -31,7 +31,7 @@ class GaTest[A, P <: Pheno[A], S](
                                  val phenos: Seq[P] = pop.map(transformer.toPheno)
                                  val testResult = tester.test(phenos)
                                  val testedGenos: Seq[(Double, Seq[A])] =
-                                   testResult.testedPhenos.map {
+                                   testResult.map {
                                      case (r, g) => (
                                        fitnessFunction.fitness(r),
                                        g.geno)
@@ -39,7 +39,7 @@ class GaTest[A, P <: Pheno[A], S](
                                  val newPop = selStrategy.select(testedGenos)
                                  new GaResultTest[S, A] {
 
-                                   def score: Option[S] = testResult.populationScore
+                                   def score: Option[S] = ???
 
                                    override def newPopulation: Seq[Seq[A]] = newPop
 
