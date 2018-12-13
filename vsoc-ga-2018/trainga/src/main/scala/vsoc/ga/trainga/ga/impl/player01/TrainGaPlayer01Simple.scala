@@ -12,15 +12,22 @@ class TrainGaPlayer01Simple extends TrainGaPlayer01 {
     s"""${super.fullDesc}
        |Just players with no roles""".stripMargin
 
-  override def createInitialPopGeno: Seq[Seq[Double]] = Seq(Seq.empty[Double])
+  val transformer = new TransformerPlayer01
+  val phenoTester = new PhenoTesterPlayer01
+
+  override def createInitialPopGeno: Seq[Seq[Double]] = ???
 
   override def nextPopulation(iterNr: Int, popGeno: Seq[Seq[Double]]): (DataPlayer01, Seq[Seq[Double]]) = {
+    val phenos = popGeno map transformer.toPheno
+    val testedPhenos = phenoTester.test(phenos)
+
+    // fitness function
+    // genetic operations
+
     log.info(s"nextPop $iterNr")
-    val score = new DataPlayer01(iterations = iterNr)
-    val geno = Seq.empty[Seq[Double]]
+    val score = ???
+    val geno = ???
     (score, geno)
   }
-
-
 
 }
