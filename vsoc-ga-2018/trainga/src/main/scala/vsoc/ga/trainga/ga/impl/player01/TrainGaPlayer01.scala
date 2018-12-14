@@ -21,7 +21,6 @@ abstract class TrainGaPlayer01 extends TrainGa[DataPlayer01] {
         population = createInitialPopGeno
       }
       while (true) {
-        Thread.sleep(1000)
         val (score, nextPop) = nextPopulation(iterations, population)
         iterations += 1
         listeners.foreach(l => l.onIterationFinished(iterations, Some(score)))

@@ -1,6 +1,9 @@
 package vsoc.ga.trainga.ga.impl.player01
 
 import org.slf4j.LoggerFactory
+import vsoc.ga.genetic.impl.{SelectionStrategies, UtilGa}
+
+import scala.util.Random
 
 class TrainGaPlayer01Simple extends TrainGaPlayer01 {
 
@@ -11,22 +14,30 @@ class TrainGaPlayer01Simple extends TrainGaPlayer01 {
   override def fullDesc: String =
     s"""${super.fullDesc}
        |Just players with no roles""".stripMargin
+  val popSize = 30
 
   val transformer = new TransformerPlayer01
   val phenoTester = new PhenoTesterPlayer01
+  val fitnessFunction = new FitnessFunctionPlayer01
+  val selection = SelectionStrategies.crossover(0.001, randomAllele, ran)
+  val ran = new Random()
 
-  override def createInitialPopGeno: Seq[Seq[Double]] = ???
+  override def createInitialPopGeno: Seq[Seq[Double]] = Seq.fill(popSize)(randomGeno(ran))
+
+  def randomAllele(ran: Random): Double = 2.0 * ran.nextDouble() - 1.0
+  def randomGeno(ran: Random): Seq[Double] = Seq.fill(200)(randomAllele(ran))
 
   override def nextPopulation(iterNr: Int, popGeno: Seq[Seq[Double]]): (DataPlayer01, Seq[Seq[Double]]) = {
     val phenos = popGeno map transformer.toPheno
-    val testedPhenos = phenoTester.test(phenos)
+    val testedPhenos: Seq[(DataPlayer01, PhenoPlayer01)] = phenoTester.test(phenos)
+    val ratedGenos: Seq[(Double, Seq[Double])] =
+      testedPhenos.map{case (score, pheno) => (fitnessFunction.fitness(score), pheno.geno)}
 
-    // fitness function
-    // genetic operations
 
-    log.info(s"nextPop $iterNr")
-    val score = ???
-    val geno = ???
+
+    val score = UtilGa.meanScore( testedPhenos map {case (score, _) => score}, DataPlayer01Ops).copy(iterations = iterNr)
+    val geno = selection.select(ratedGenos)
+    log.info(s"next population ready $iterNr")
     (score, geno)
   }
 

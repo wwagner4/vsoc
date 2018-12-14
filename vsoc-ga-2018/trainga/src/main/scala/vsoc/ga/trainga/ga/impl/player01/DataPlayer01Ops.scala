@@ -2,7 +2,7 @@ package vsoc.ga.trainga.ga.impl.player01
 
 import vsoc.ga.genetic.ScoreOps
 
-object DataPlayserOps extends ScoreOps[DataPlayer01] {
+object DataPlayer01Ops extends ScoreOps[DataPlayer01] {
   override def sum(score1: DataPlayer01, score2: DataPlayer01): DataPlayer01 = {
     require(score1.iterations == score2.iterations)
     DataPlayer01(
