@@ -1,6 +1,6 @@
 package vsoc.ga.trainga.ga
 
-import vsoc.ga.trainga.behav.{InputMapperNn, InputMapperNnActivationFactor, OutputMapperNn, OutputMappers}
+import vsoc.ga.trainga.behav.{InputMapperNn, InputMappers, OutputMapperNn, OutputMappers}
 import vsoc.ga.trainga.ga.impl.player01._
 import vsoc.ga.trainga.ga.impl.team01._
 import vsoc.ga.trainga.nn.{NeuralNet, NeuralNets}
@@ -18,7 +18,7 @@ object TrainGas {
 
     override protected def createNeuralNet: () => NeuralNet = () => NeuralNets.team02
 
-    override protected def inMapper: InputMapperNn = new InputMapperNnActivationFactor(1.0)
+    override protected def inMapper: InputMapperNn = InputMappers.default
 
     override protected def outMapper: OutputMapperNn = OutputMappers.om02
   }
@@ -36,7 +36,7 @@ object TrainGas {
 
     override protected def createNeuralNet: () => NeuralNet = () => NeuralNets.team02
 
-    override protected def inMapper: InputMapperNn = new InputMapperNnActivationFactor(1.0)
+    override protected def inMapper: InputMapperNn = InputMappers.default
 
     override protected def outMapper: OutputMapperNn = OutputMappers.om02
   }
@@ -54,7 +54,7 @@ object TrainGas {
 
     override protected def createNeuralNet: () => NeuralNet = () => NeuralNets.team02
 
-    override protected def inMapper: InputMapperNn = new InputMapperNnActivationFactor(1.0)
+    override protected def inMapper: InputMapperNn = InputMappers.default
 
     override protected def outMapper: OutputMapperNn = OutputMappers.om02
 
@@ -73,7 +73,7 @@ object TrainGas {
 
     override protected def createNeuralNet: () => NeuralNet = () => NeuralNets.team02
 
-    override protected def inMapper: InputMapperNn = new InputMapperNnActivationFactor(1.0)
+    override protected def inMapper: InputMapperNn = InputMappers.default
 
     override protected def outMapper: OutputMapperNn = OutputMappers.om02
 
@@ -93,7 +93,7 @@ object TrainGas {
 
     override protected def createNeuralNet: () => NeuralNet = () => NeuralNets.team02
 
-    override protected def inMapper: InputMapperNn = new InputMapperNnActivationFactor(1.0)
+    override protected def inMapper: InputMapperNn = InputMappers.default
 
     override protected def outMapper: OutputMapperNn = OutputMappers.om02
 

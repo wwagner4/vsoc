@@ -8,7 +8,7 @@ import org.scalatest.{FunSuite, MustMatchers}
 import vsoc.behaviour.{DistDirVision, Sensors}
 import vsoc.ga.common.UtilReflection
 import vsoc.ga.common.persist.Persistors
-import vsoc.ga.trainga.behav.{InputMapperNnActivationFactor, OutputMappers}
+import vsoc.ga.trainga.behav._
 import vsoc.ga.trainga.ga.impl.common.RandomElemsPicker
 import vsoc.ga.trainga.nn.{NeuralNet, NeuralNetPersist, NeuralNets}
 
@@ -88,93 +88,93 @@ class TrainGaSuite extends FunSuite with MustMatchers {
 
   test("InputMapperNnTeam(1.0) empty sensor") {
     val sens: Sensors = emptySensor
-    val m = new InputMapperNnActivationFactor(1.0)
+    val m = InputMappers.default
     m.mapSensors(sens) mustBe None
   }
 
   test("InputMapperNnTeam(1.0) sensor with irrelevant info flags right") {
     val sens: Sensors = sensorFlags(Flag.FLAG_RIGHT_10, Flag.FLAG_RIGHT_30)
-    val m = new InputMapperNnActivationFactor(1.0)
+    val m = InputMappers.default
     m.mapSensors(sens) mustBe None
   }
 
   test("InputMapperNnTeam(1.0) sensor with irrelevant info flags other") {
     val sens: Sensors = sensorFlags(Flag.FLAG_OTHER_20, Flag.FLAG_OTHER_40)
-    val m = new InputMapperNnActivationFactor(1.0)
+    val m = InputMappers.default
     m.mapSensors(sens) mustBe None
   }
 
   test("InputMapperNnTeam(1.0) sensor with irrelevant info flags own") {
     val sens: Sensors = sensorFlags(Flag.FLAG_OWN_20)
-    val m = new InputMapperNnActivationFactor(1.0)
+    val m = InputMappers.default
     m.mapSensors(sens) mustBe None
   }
 
   test("InputMapperNnTeam(1.0) sensor with irrelevant info flags left") {
     val sens: Sensors = sensorFlags(Flag.FLAG_LEFT_10, Flag.FLAG_LEFT_20, Flag.FLAG_LEFT_30)
-    val m = new InputMapperNnActivationFactor(1.0)
+    val m = InputMappers.default
     m.mapSensors(sens) mustBe None
   }
 
   test("InputMapperNnTeam(1.0) sensor goal own left") {
     val sens: Sensors = sensorGoalOwn(Flag.FLAG_LEFT)
-    val m = new InputMapperNnActivationFactor(1.0)
+    val m = InputMappers.default
     val a = m.mapSensors(sens).get
     (0 to 4).exists(a(_) > 0.0) mustBe true
   }
 
   test("InputMapperNnTeam(1.0) sensor goal own center") {
     val sens: Sensors = sensorGoalOwn(Flag.FLAG_CENTER)
-    val m = new InputMapperNnActivationFactor(1.0)
+    val m = InputMappers.default
     val a = m.mapSensors(sens).get
     (5 to 9).exists(a(_) > 0.0) mustBe true
   }
 
   test("InputMapperNnTeam(1.0) sensor goal own right") {
     val sens: Sensors = sensorGoalOwn(Flag.FLAG_RIGHT)
-    val mapper = new InputMapperNnActivationFactor(1.0)
+    val mapper = InputMappers.default
     val a = mapper.mapSensors(sens).get
     (10 to 14).exists(a(_) > 0.0) mustBe true
   }
 
   test("InputMapperNnTeam(1.0) sensor penalty other center") {
     val sens: Sensors = sensorPenaltyOther(Flag.FLAG_CENTER)
-    val mapper = new InputMapperNnActivationFactor(0.1)
+    val mapper = InputMappers.withActivationFactor(0.1)
     val a = mapper.mapSensors(sens).get
     (65 to 69).exists(a(_) > 0.0) mustBe true
   }
 
   test("InputMapperNnTeam(1.0) sensor penalty other right") {
     val sens: Sensors = sensorPenaltyOther(Flag.FLAG_RIGHT)
-    val mapper = new InputMapperNnActivationFactor(1.0)
+    val mapper = InputMappers.default
     val a = mapper.mapSensors(sens).get
     (70 to 74).exists(a(_) > 0.0) mustBe true
   }
 
   test("InputMapperNnTeam(1.0) sensor corner other right") {
     val sens: Sensors = sensorCornerOther(Flag.FLAG_RIGHT)
-    val mapper = new InputMapperNnActivationFactor(1.4)
+    val mapper = InputMappers.withActivationFactor(1.4)
     val a = mapper.mapSensors(sens).get
     (85 to 89).exists(a(_) > 0.0) mustBe true
   }
 
   test("InputMapperNnTeam(1.0) sensor corner other center") {
     val sens: Sensors = sensorCornerOther(Flag.FLAG_CENTER)
-    val mapper = new InputMapperNnActivationFactor(1.0)
+    val mapper = InputMappers.default
     val a = mapper.mapSensors(sens).get
     (80 to 84).exists(a(_) > 0.0) mustBe true
   }
 
   test("InputMapperNnTeam(1.0) sensor center other center") {
     val sens: Sensors = sensorCenter(Flag.FLAG_CENTER)
-    val mapper = new InputMapperNnActivationFactor(1.2)
+    val mapper = InputMappers.withActivationFactor(1.2)
     val a = mapper.mapSensors(sens).get
     (95 to 99).exists(a(_) > 0.0) mustBe true
   }
 
   test("InputMapperNnTeam(1.0) sensor ball") {
     val sens: Sensors = sensorBall
-    val mapper = new InputMapperNnActivationFactor(1.0)
+    val mapper = InputMappers.default
     val a = mapper.mapSensors(sens).get
     (135 to 139).exists(a(_) > 0.0) mustBe true
   }
