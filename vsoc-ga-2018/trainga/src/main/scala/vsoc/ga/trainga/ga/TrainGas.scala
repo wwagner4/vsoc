@@ -1,7 +1,6 @@
 package vsoc.ga.trainga.ga
 
-import vsoc.ga.trainga.behav.{InputMapperNn, OutputMapperNn}
-import vsoc.ga.trainga.ga.impl.common.InputMapperNnActivationFactor
+import vsoc.ga.trainga.behav.{InputMapperNn, InputMapperNnActivationFactor, OutputMapperNn, OutputMappers}
 import vsoc.ga.trainga.ga.impl.player01._
 import vsoc.ga.trainga.ga.impl.team01._
 import vsoc.ga.trainga.nn.{NeuralNet, NeuralNets}

@@ -2,7 +2,7 @@ package vsoc.ga.trainga.nn.analyse
 
 import vsoc.behaviour.Behaviour
 import vsoc.ga.matches.{Behaviours, Matches, Teams}
-import vsoc.ga.trainga.ga.impl.common.InputMapperNnActivationFactor
+import vsoc.ga.trainga.behav.InputMapperNnActivationFactor
 
 class InputDataModel {
 

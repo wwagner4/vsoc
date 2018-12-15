@@ -2,7 +2,9 @@ package vsoc.ga.trainga.ga.impl.player01
 
 import org.slf4j.LoggerFactory
 import vsoc.ga.genetic.PhenoTester
-import vsoc.ga.matches.{MatchResult, Matches, Team, TeamResult}
+import vsoc.ga.matches._
+
+import scala.util.Random
 
 class PhenoTesterPlayer01 extends PhenoTester[PhenoPlayer01, Double, DataPlayer01] {
 
@@ -16,54 +18,53 @@ class PhenoTesterPlayer01 extends PhenoTester[PhenoPlayer01, Double, DataPlayer0
       |Plays a number of matches that each player is at least in two matches
     """.stripMargin
 
+
   override def test(phenos: Seq[PhenoPlayer01]): Seq[(DataPlayer01, PhenoPlayer01)] = {
-    var _phenos = phenos.map(p => new _Player(p))
+    val _phenos = phenos.map(p => new _Player(p))
     var cnt = 0
     while (minMatchesPlayed(_phenos) < 2) {
 
-      val teamEast: _Team = createTeam(_phenos)
-      val teamWest: _Team = createTeam(_phenos)
+      val shuffeled = Random.shuffle(_phenos)
 
-      val m = Matches.of(teamEast.team, teamWest.team)
+      val p0 = shuffeled(0)
+      val p1 = shuffeled(1)
+      val p2 = shuffeled(2)
+
+      val p3 = shuffeled(3)
+      val p4 = shuffeled(4)
+      val p5 = shuffeled(5)
+
+      val teamEast: Team = Teams.behaviours(
+        Seq(p0.pheno.behav, p1.pheno.behav, p2.pheno.behav), "")
+      val teamWest: Team = Teams.behaviours(
+        Seq(p3.pheno.behav, p4.pheno.behav, p5.pheno.behav), "")
+
+      val m = Matches.of(teamEast, teamWest)
       for (_ <- 1 to matchSteps) m.takeStep()
       val result: MatchResult = m.state
 
-      teamEast.player0.scores = score(result.teamEastResult, 0) :: teamEast.player0.scores
-      teamEast.player1.scores = score(result.teamEastResult, 1) :: teamEast.player1.scores
-      teamEast.player2.scores = score(result.teamEastResult, 2) :: teamEast.player2.scores
+      p0.scores = score(result.teamEastResult, 0) :: p0.scores
+      p1.scores = score(result.teamEastResult, 1) :: p1.scores
+      p2.scores = score(result.teamEastResult, 2) :: p2.scores
 
-      teamWest.player0.scores = score(result.teamWestResult, 0) :: teamWest.player0.scores
-      teamWest.player1.scores = score(result.teamWestResult, 1) :: teamWest.player1.scores
-      teamWest.player2.scores = score(result.teamWestResult, 2) :: teamWest.player2.scores
+      p3.scores = score(result.teamWestResult, 0) :: p3.scores
+      p4.scores = score(result.teamWestResult, 1) :: p4.scores
+      p5.scores = score(result.teamWestResult, 2) :: p5.scores
+
       cnt += 1
       log.info(s"played $cnt matches")
     }
     _phenos.map(p => playerToRatedPheno(p))
   }
 
-  def score(teamEastResult: TeamResult, i: Int): DataPlayer01 = ???
-
-  private class _Player(pheno: PhenoPlayer01) {
+  private class _Player(val pheno: PhenoPlayer01) {
     var scores = List.empty[DataPlayer01]
   }
 
-  private case class _Team(player0: _Player,
-                           player1: _Player,
-                           player2: _Player,
-                          ) {
-    def team: Team = ???
-  }
-
-  private def playerToRatedPheno(p: _Player): (DataPlayer01, PhenoPlayer01) = ???
+  private def score(teamEastResult: TeamResult, i: Int): DataPlayer01 = ???
 
   private def minMatchesPlayed(players: Seq[_Player]): Int = players.map(p => p.scores.size).min
 
-
-  private def createTeam(players: Seq[_Player]): _Team = {
-    require(players.size >= 3)
-    val sp: Seq[_Player] = scala.util.Random.shuffle(players)
-    _Team(sp(0), sp(1), sp(2))
-  }
-
+  private def playerToRatedPheno(p: _Player): (DataPlayer01, PhenoPlayer01) = ???
 
 }

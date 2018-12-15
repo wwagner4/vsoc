@@ -16,11 +16,11 @@ class TrainGaPlayer01Simple extends TrainGaPlayer01 {
        |Just players with no roles""".stripMargin
   val popSize = 30
 
+  val ran = new Random()
   val transformer = new TransformerPlayer01
   val phenoTester = new PhenoTesterPlayer01
   val fitnessFunction = new FitnessFunctionPlayer01
-  val selection = SelectionStrategies.crossover(0.001, randomAllele, ran)
-  val ran = new Random()
+  private val selection = SelectionStrategies.crossover(0.001, randomAllele, ran)
 
   override def createInitialPopGeno: Seq[Seq[Double]] = Seq.fill(popSize)(randomGeno(ran))
 
@@ -31,7 +31,7 @@ class TrainGaPlayer01Simple extends TrainGaPlayer01 {
     val phenos = popGeno map transformer.toPheno
     val testedPhenos: Seq[(DataPlayer01, PhenoPlayer01)] = phenoTester.test(phenos)
     val ratedGenos: Seq[(Double, Seq[Double])] =
-      testedPhenos.map{case (score, pheno) => (fitnessFunction.fitness(score), pheno.geno)}
+      testedPhenos.map{case (s, p) => (fitnessFunction.fitness(s), p.geno)}
 
 
 

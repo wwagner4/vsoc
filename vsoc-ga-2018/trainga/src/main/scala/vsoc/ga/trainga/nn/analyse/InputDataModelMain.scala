@@ -1,6 +1,6 @@
 package vsoc.ga.trainga.nn.analyse
 
-import vsoc.ga.trainga.ga.OutputMappers
+import vsoc.ga.trainga.behav.OutputMappers
 import vsoc.ga.trainga.nn.NeuralNets
 
 object InputDataModelMain extends App {

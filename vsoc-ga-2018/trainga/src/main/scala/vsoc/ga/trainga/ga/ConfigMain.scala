@@ -4,7 +4,7 @@ import vsoc.ga.trainga.config._
 
 object ConfigMain extends App {
 
-  val cfg = Configs.player01test
+  val cfg = Configs.b05test
 
   new ConfigRunner().run(cfg)
 

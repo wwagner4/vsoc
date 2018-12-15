@@ -1,8 +1,7 @@
-package vsoc.ga.trainga.ga.impl.common
+package vsoc.ga.trainga.behav
 
 import atan.model.Flag
 import vsoc.behaviour.Sensors
-import vsoc.ga.trainga.behav.InputMapperNn
 import vsoc.ga.trainga.retina.Retinas
 
 class InputMapperNnActivationFactor(activationFactor: Double) extends InputMapperNn {
@@ -11,7 +10,7 @@ class InputMapperNnActivationFactor(activationFactor: Double) extends InputMappe
 
   private val retinas: Retinas = Retinas(_activationFactor = activationFactor)
 
-  val _retinas = Seq(
+  private val _retinas = Seq(
     retinas.goalOwn(0, 5, Flag.FLAG_LEFT),
     retinas.goalOwn(5, 5, Flag.FLAG_CENTER),
     retinas.goalOwn(10, 5, Flag.FLAG_RIGHT),
