@@ -186,5 +186,22 @@ object Configs {
       "Player simulation running on bob"
   }
 
+  def player01work: Config = new Config {
+
+    override def id: String = "player01work"
+
+    override def trainings: Seq[ConfigTrainGa] = Seq(
+      ConfigTrainGa("trainGaPlayer01Simple", "work000"),
+      ConfigTrainGa("trainGaPlayer01Simple", "work001"),
+      ConfigTrainGa("trainGaPlayer01Simple", "work002"),
+      ConfigTrainGa("trainGaPlayer01Simple", "work003"),
+      ConfigTrainGa("trainGaPlayer01Simple", "work004"),
+      ConfigTrainGa("trainGaPlayer01Simple", "work005"),
+    )
+
+    override def fullDesc: String =
+      "Player simulation running on work"
+  }
+
 
 }
