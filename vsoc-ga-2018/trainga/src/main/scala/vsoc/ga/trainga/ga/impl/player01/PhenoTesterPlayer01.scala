@@ -2,6 +2,7 @@ package vsoc.ga.trainga.ga.impl.player01
 
 import org.slf4j.LoggerFactory
 import vsoc.ga.genetic.PhenoTester
+import vsoc.ga.genetic.impl.UtilGa
 import vsoc.ga.matches._
 
 import scala.util.Random
@@ -22,7 +23,8 @@ class PhenoTesterPlayer01 extends PhenoTester[PhenoPlayer01, Double, DataPlayer0
   override def test(phenos: Seq[PhenoPlayer01]): Seq[(DataPlayer01, PhenoPlayer01)] = {
     val _phenos = phenos.map(p => new _Player(p))
     var cnt = 0
-    while (minMatchesPlayed(_phenos) < 2) {
+    var minMatch = 0
+    while (minMatch < 2) {
 
       val shuffeled = Random.shuffle(_phenos)
 
@@ -52,19 +54,28 @@ class PhenoTesterPlayer01 extends PhenoTester[PhenoPlayer01, Double, DataPlayer0
       p5.scores = score(result.teamWestResult, 2) :: p5.scores
 
       cnt += 1
-      log.info(s"played $cnt matches")
+      minMatch = minMatchesPlayed(_phenos)
+      log.info(s"played $cnt matches. min $minMatch")
     }
-    _phenos.map(p => playerToRatedPheno(p))
+    _phenos.map(playerToRatedPheno)
   }
 
   private class _Player(val pheno: PhenoPlayer01) {
     var scores = List.empty[DataPlayer01]
   }
 
-  private def score(teamEastResult: TeamResult, i: Int): DataPlayer01 = ???
+  private def score(teamResult: TeamResult, i: Int): DataPlayer01 = {
+    val kicks: Double = teamResult.playerResults(i).kickCount
+    val goals: Double = teamResult.playerResults(i).otherGoalCount
+    DataPlayer01(kicks = kicks, goals = goals)
+  }
 
   private def minMatchesPlayed(players: Seq[_Player]): Int = players.map(p => p.scores.size).min
 
-  private def playerToRatedPheno(p: _Player): (DataPlayer01, PhenoPlayer01) = ???
+  private def playerToRatedPheno(p: _Player): (DataPlayer01, PhenoPlayer01) = {
+    require(!p.scores.isEmpty)
+    val score = UtilGa.meanScore(p.scores, DataPlayer01Ops)
+    (score, p.pheno)
+  }
 
 }
