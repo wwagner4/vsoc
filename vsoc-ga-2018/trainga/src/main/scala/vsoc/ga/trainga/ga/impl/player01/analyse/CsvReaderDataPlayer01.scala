@@ -9,9 +9,12 @@ class CsvReaderDataPlayer01 extends CsvReader[DataPlayer01] {
   override def toBean(line: String): DataPlayer01 = {
     val sl = line.split(";")
     DataPlayer01(
-      iterations = toInt(sl(0)),
-      kicks = toDouble(sl(1)),
-      goals = toDouble(sl(2)),
+      id = sl(0),
+      nr = sl(1),
+      iterations = toInt(sl(2)),
+      kicks = toDouble(sl(3)),
+      goals = toDouble(sl(4)),
+      score = toDouble(sl(5)),
     )
   }
 

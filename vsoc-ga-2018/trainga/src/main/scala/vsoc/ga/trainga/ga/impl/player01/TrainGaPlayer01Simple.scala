@@ -27,7 +27,7 @@ class TrainGaPlayer01Simple extends TrainGaPlayer01 {
   def randomAllele(ran: Random): Double = 2.0 * ran.nextDouble() - 1.0
   def randomGeno(ran: Random): Seq[Double] = Seq.fill(200)(randomAllele(ran))
 
-  override def nextPopulation(iterNr: Int, popGeno: Seq[Seq[Double]]): (DataPlayer01, Seq[Seq[Double]]) = {
+  override def nextPopulation(id: String, nr: String, iterNr: Int, popGeno: Seq[Seq[Double]]): (DataPlayer01, Seq[Seq[Double]]) = {
     val phenos = popGeno map transformer.toPheno
     val testedPhenos: Seq[(DataPlayer01, PhenoPlayer01)] = phenoTester.test(phenos)
     val ratedGenos: Seq[(Double, Seq[Double])] =
@@ -35,9 +35,15 @@ class TrainGaPlayer01Simple extends TrainGaPlayer01 {
 
 
 
-    val score = UtilGa.meanScore( testedPhenos map {case (score, _) => score}, DataPlayer01Ops).copy(iterations = iterNr)
+    val score = UtilGa.meanScore( testedPhenos map {case (s, _) => s}, DataPlayer01Ops)
+      .copy(
+        id = id,
+        nr = nr,
+        iterations = iterNr,
+      )
     val geno = selection.select(ratedGenos)
     log.info(s"next population ready $iterNr")
+
     (score, geno)
   }
 

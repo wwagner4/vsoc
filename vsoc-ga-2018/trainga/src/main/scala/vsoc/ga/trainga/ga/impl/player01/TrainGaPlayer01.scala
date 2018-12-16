@@ -10,9 +10,9 @@ abstract class TrainGaPlayer01 extends TrainGa[DataPlayer01] {
 
   override def fullDesc: String = s"Training of players"
 
-  override def teamsFromPopulation: Seq[Team] = ???
+  override def teamsFromPopulation: Seq[Team] = Seq.empty[Team]
 
-  var cnt = 0;
+  var cnt = 0
 
   override def run(trainGaId: String, trainGaNr: String): Unit = {
     log.info(s"start $trainGaId $trainGaNr")
@@ -21,9 +21,10 @@ abstract class TrainGaPlayer01 extends TrainGa[DataPlayer01] {
         population = createInitialPopGeno
       }
       while (true) {
-        val (score, nextPop) = nextPopulation(iterations, population)
+        val (score, nextPop) = nextPopulation(trainGaId, trainGaNr, iterations, population)
         iterations += 1
         listeners.foreach(l => l.onIterationFinished(iterations, Some(score)))
+        population = nextPop
       }
     } catch {
       case e: Exception =>
@@ -34,7 +35,7 @@ abstract class TrainGaPlayer01 extends TrainGa[DataPlayer01] {
 
   def createInitialPopGeno: Seq[Seq[Double]]
 
-  def nextPopulation(iterNr: Int, population: Seq[Seq[Double]]): (DataPlayer01, Seq[Seq[Double]])
+  def nextPopulation(id: String, nr: String, iterNr: Int, population: Seq[Seq[Double]]): (DataPlayer01, Seq[Seq[Double]])
 
   def id: String
 
