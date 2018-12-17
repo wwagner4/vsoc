@@ -30,10 +30,11 @@ class TrainGaPlayer01Simple extends TrainGaPlayer01 {
   override def nextPopulation(id: String, nr: String, iterNr: Int, popGeno: Seq[Seq[Double]]): (DataPlayer01, Seq[Seq[Double]]) = {
     val phenos = popGeno map transformer.toPheno
     val testedPhenos: Seq[(DataPlayer01, PhenoPlayer01)] = phenoTester.test(phenos)
+
+    testedPhenos.map {case (s, p) => (s.copy(score = fitnessFunction.fitness(s)), p)}
+
     val ratedGenos: Seq[(Double, Seq[Double])] =
       testedPhenos.map{case (s, p) => (fitnessFunction.fitness(s), p.geno)}
-
-
 
     val score = UtilGa.meanScore( testedPhenos map {case (s, _) => s}, DataPlayer01Ops)
       .copy(
