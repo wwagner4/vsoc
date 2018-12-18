@@ -5,8 +5,11 @@ import java.nio.file.{Files, Path}
 import entelijan.viz.{Viz, VizCreator}
 import entelijan.viz.creators.VizCreatorGnuplot
 import vsoc.ga.trainga.config.ConfigHelper
+import vsoc.ga.trainga.analyse.old.smooth.Smoothing._
 
 object AnalyseMain extends App {
+
+  val grpSize = 30
 
   implicit val wd: Path = ConfigHelper.workDir
   val reader = new CsvReaderDataPlayer01()
@@ -15,17 +18,20 @@ object AnalyseMain extends App {
   val gdatas = allDatas.groupBy(d => d.nr).toList
 
   gdatas.foreach{case (name, datas) =>
+    val kdata = datas.map(d => Viz.XY(d.iterations, d.kicks))
     val kicks = Viz.DataRow(
       name = Some("kicks"),
-      data = datas.map(d => Viz.XY(d.iterations, d.kicks)),
+      data = smooth(kdata, grpSize),
     )
+    val gdata = datas.map(d => Viz.XY(d.iterations, d.goals * 100))
     val goals = Viz.DataRow(
       name = Some("goals x 100"),
-      data = datas.map(d => Viz.XY(d.iterations, d.goals * 100)),
+      data = smooth(gdata, grpSize),
     )
+    val sdata = datas.map(d => Viz.XY(d.iterations, d.score * 2))
     val score = Viz.DataRow(
       name = Some("score x 2"),
-      data = datas.map(d => Viz.XY(d.iterations, d.score * 2)),
+      data = smooth(sdata, grpSize),
     )
     val dia = Viz.Diagram(
       id = s"player01_$name",

@@ -10,8 +10,6 @@ abstract class TrainGaPlayer01 extends TrainGa[DataPlayer01] {
 
   override def fullDesc: String = s"Training of players"
 
-  override def teamsFromPopulation: Seq[Team] = Seq.empty[Team]
-
   var cnt = 0
 
   override def run(trainGaId: String, trainGaNr: String): Unit = {
