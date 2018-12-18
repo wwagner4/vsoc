@@ -20,12 +20,12 @@ object AnalyseMain extends App {
       data = datas.map(d => Viz.XY(d.iterations, d.kicks)),
     )
     val goals = Viz.DataRow(
-      name = Some("goals"),
-      data = datas.map(d => Viz.XY(d.iterations, d.goals)),
+      name = Some("goals x 100"),
+      data = datas.map(d => Viz.XY(d.iterations, d.goals * 100)),
     )
     val score = Viz.DataRow(
-      name = Some("score"),
-      data = datas.map(d => Viz.XY(d.iterations, d.score)),
+      name = Some("score x 2"),
+      data = datas.map(d => Viz.XY(d.iterations, d.score * 2)),
     )
     val dia = Viz.Diagram(
       id = s"player01_$name",
