@@ -18,7 +18,7 @@ class TrainGaPlayer01Simple extends TrainGaPlayer01 {
     s"""${super.fullDesc}
        |Just players with no roles""".stripMargin
 
-  val popSize = 30
+  val popSize = 50
 
   val ran = new Random()
   val net: NeuralNet = NeuralNets.team02

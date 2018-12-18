@@ -11,7 +11,7 @@ class PhenoTesterPlayer01 extends PhenoTester[PhenoPlayer01, Double, DataPlayer0
 
   private val log = LoggerFactory.getLogger(classOf[PhenoTesterPlayer01])
 
-  val matchSteps = 30000
+  val matchSteps = 25000
 
   override def fullDesc: String =
     """Creates two teams from the population of players.
