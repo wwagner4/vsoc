@@ -2,7 +2,7 @@ package vsoc.ga.trainga.ga.impl.player01.analyse
 
 import java.nio.file.Path
 
-import vsoc.ga.trainga.config.{ConfigHelper, ConfigTrainGa, Configs}
+import vsoc.ga.trainga.config.{ConfigHelper, ConfigTrainGa}
 import vsoc.ga.trainga.gui.GuiPopulationRunner
 
 object GuiMain extends App {
