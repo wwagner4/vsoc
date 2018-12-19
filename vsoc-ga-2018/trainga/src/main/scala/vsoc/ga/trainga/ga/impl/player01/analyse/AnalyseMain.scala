@@ -9,7 +9,7 @@ import vsoc.ga.trainga.analyse.old.smooth.Smoothing._
 
 object AnalyseMain extends App {
 
-  val grpSize = 30
+  val grpSize = 4
 
   implicit val wd: Path = ConfigHelper.workDir
   val reader = new CsvReaderDataPlayer01()
@@ -28,9 +28,9 @@ object AnalyseMain extends App {
       name = Some("goals x 100"),
       data = smooth(gdata, grpSize),
     )
-    val sdata = datas.map(d => Viz.XY(d.iterations, d.score * 2))
+    val sdata = datas.map(d => Viz.XY(d.iterations, d.score))
     val score = Viz.DataRow(
-      name = Some("score x 2"),
+      name = Some("score"),
       data = smooth(sdata, grpSize),
     )
     val dia = Viz.Diagram(
