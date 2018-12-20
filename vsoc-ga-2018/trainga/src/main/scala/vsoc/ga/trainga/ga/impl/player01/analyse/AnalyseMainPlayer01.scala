@@ -2,14 +2,14 @@ package vsoc.ga.trainga.ga.impl.player01.analyse
 
 import java.nio.file.{Files, Path}
 
-import entelijan.viz.{Viz, VizCreator}
 import entelijan.viz.creators.VizCreatorGnuplot
-import vsoc.ga.trainga.config.ConfigHelper
+import entelijan.viz.{Viz, VizCreator}
 import vsoc.ga.trainga.analyse.old.smooth.Smoothing._
+import vsoc.ga.trainga.config.ConfigHelper
 
-object AnalyseMain extends App {
+object AnalyseMainPlayer01 extends App {
 
-  val grpSize = 4
+  val grpSize = 10
 
   implicit val wd: Path = ConfigHelper.workDir
   val reader = new CsvReaderDataPlayer01()
@@ -36,6 +36,8 @@ object AnalyseMain extends App {
     val dia = Viz.Diagram(
       id = s"player01_$name",
       title = s"Player 01 $name",
+      // xRange=Some(Viz.Range(Some(0), Some(30))),
+      // yRange=Some(Viz.Range(Some(0), Some(30))),
       dataRows = Seq(kicks, goals, score)
     )
 
