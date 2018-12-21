@@ -1,10 +1,10 @@
-package vsoc.ga.trainga.analyse.old.dia
+package vsoc.ga.trainga.analyse.common.dia
 
 import java.nio.file.{Files, Path}
 
 import entelijan.viz.{Viz, VizCreator, VizCreators}
 import org.slf4j.LoggerFactory
-import vsoc.ga.trainga.analyse.old.dia.DataDia.FDia
+import vsoc.ga.trainga.analyse.common.dia.DataDia.FDia
 
 object DataDia {
 

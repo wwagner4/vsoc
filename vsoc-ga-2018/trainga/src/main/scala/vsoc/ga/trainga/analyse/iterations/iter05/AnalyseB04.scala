@@ -2,8 +2,7 @@ package vsoc.ga.trainga.analyse.iterations.iter05
 
 import java.nio.file.Path
 
-import vsoc.ga.trainga.analyse.old.CreateAllResourcesB04
-import vsoc.ga.trainga.analyse.old.dia.CreateDiasData02
+import vsoc.ga.trainga.analyse.common.dia.CreateDiasData02
 import vsoc.ga.trainga.config.ConfigHelper
 
 object AnalyseB04 extends App {

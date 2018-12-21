@@ -1,4 +1,4 @@
-package vsoc.ga.trainga.analyse.old.dia
+package vsoc.ga.trainga.analyse.common.dia
 
 import java.nio.file.Path
 

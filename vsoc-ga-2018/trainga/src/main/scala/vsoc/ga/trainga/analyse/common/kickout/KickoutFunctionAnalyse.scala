@@ -1,4 +1,4 @@
-package vsoc.ga.trainga.analyse.old.kickout
+package vsoc.ga.trainga.analyse.common.kickout
 
 import entelijan.viz.{Viz, VizCreator, VizCreators}
 import vsoc.ga.trainga.config.ConfigHelper

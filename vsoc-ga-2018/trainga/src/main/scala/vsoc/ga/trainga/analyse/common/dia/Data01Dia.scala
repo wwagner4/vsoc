@@ -1,4 +1,4 @@
-package vsoc.ga.trainga.analyse.old.dia
+package vsoc.ga.trainga.analyse.common.dia
 
 import vsoc.ga.trainga.ga.impl.team01.Data01
 

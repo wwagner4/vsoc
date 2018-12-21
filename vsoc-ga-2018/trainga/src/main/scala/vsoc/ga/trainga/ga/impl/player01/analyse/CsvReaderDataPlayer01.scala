@@ -1,6 +1,6 @@
 package vsoc.ga.trainga.ga.impl.player01.analyse
 
-import vsoc.ga.trainga.analyse.old.dia.CsvReader
+import vsoc.ga.trainga.analyse.common.dia.CsvReader
 import vsoc.ga.trainga.ga.impl.player01.DataPlayer01
 
 
