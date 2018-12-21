@@ -36,8 +36,8 @@ object AnalyseMainPlayer01 extends App {
     val dia = Viz.Diagram(
       id = s"player01_$name",
       title = s"Player 01 $name",
-      // xRange=Some(Viz.Range(Some(0), Some(30))),
-      // yRange=Some(Viz.Range(Some(0), Some(30))),
+      xRange=Some(Viz.Range(Some(0), Some(450))),
+      yRange=Some(Viz.Range(Some(0), Some(200))),
       dataRows = Seq(kicks, goals, score)
     )
 
