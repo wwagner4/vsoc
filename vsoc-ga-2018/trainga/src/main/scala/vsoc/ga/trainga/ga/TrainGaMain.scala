@@ -1,7 +1,6 @@
 package vsoc.ga.trainga.ga
 
-import vsoc.ga.common.commandline.WithConfigRunner
-import vsoc.ga.common.config.Config
+import vsoc.ga.trainga.config.{Config, WithConfigRunner}
 
 object TrainGaMain extends  WithConfigRunner {
 

@@ -2,7 +2,7 @@ package vsoc.ga.trainga.nn.analyse
 
 import vsoc.behaviour.Behaviour
 import vsoc.ga.matches.{Behaviours, Matches, Teams}
-import vsoc.ga.trainga.ga.impl.InputMapperNnTeam
+import vsoc.ga.trainga.behav.InputMappers
 
 class InputDataModel {
 
@@ -10,7 +10,7 @@ class InputDataModel {
 
     def testBehav: Behaviour = {
       val child: Behaviour = Behaviours.randomHelix(Behaviours.remainOnField)
-      val inMapper = new InputMapperNnTeam(1.0)
+      val inMapper = InputMappers.default
       new BehaviourInputDataAnalyse(handler, child, inMapper)
     }
 

@@ -1,10 +1,10 @@
 package vsoc.ga.trainga.ga
 
-import vsoc.ga.common.data.Data02
+import vsoc.ga.trainga.ga.impl.team01.Data02
 
 object FitnessFunctions {
 
-  def data02A01: FitnessFunction[Data02] = new FitnessFunction[Data02] {
+  def data02A01: TrainGaFitnessFunction[Data02] = new TrainGaFitnessFunction[Data02] {
 
     override def id: String = "data02A01"
 
@@ -20,7 +20,7 @@ object FitnessFunctions {
     override def fullDesc: String = s"'$id' - Summary Fitnessfunction with max mean values"
   }
 
-  def data02A02: FitnessFunction[Data02] = new FitnessFunction[Data02] {
+  def data02A02: TrainGaFitnessFunction[Data02] = new TrainGaFitnessFunction[Data02] {
 
     override def id: String = "data02A02"
 
@@ -41,7 +41,7 @@ object FitnessFunctions {
        """.stripMargin
   }
 
-  def data02A03: FitnessFunction[Data02] = new FitnessFunction[Data02] {
+  def data02A03: TrainGaFitnessFunction[Data02] = new TrainGaFitnessFunction[Data02] {
 
     override def id: String = "data02A03"
 
@@ -62,7 +62,7 @@ object FitnessFunctions {
        """.stripMargin
   }
 
-  def data02A04: FitnessFunction[Data02] = new FitnessFunction[Data02] {
+  def data02A04: TrainGaFitnessFunction[Data02] = new TrainGaFitnessFunction[Data02] {
 
     override def id: String = "data02A04"
 
@@ -81,7 +81,7 @@ object FitnessFunctions {
        """.stripMargin
   }
 
-  def data02A05: FitnessFunction[Data02] = new FitnessFunction[Data02] {
+  def data02A05: TrainGaFitnessFunction[Data02] = new TrainGaFitnessFunction[Data02] {
 
     override def id: String = "data02A05"
 

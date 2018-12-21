@@ -8,8 +8,8 @@ import org.scalatest.{FunSuite, MustMatchers}
 import vsoc.behaviour.{DistDirVision, Sensors}
 import vsoc.ga.common.UtilReflection
 import vsoc.ga.common.persist.Persistors
-import vsoc.ga.trainga.ga.OutputMappers
-import vsoc.ga.trainga.ga.impl.{InputMapperNnTeam, RandomElemsPicker}
+import vsoc.ga.trainga.behav._
+import vsoc.ga.trainga.ga.impl.common.RandomElemsPicker
 import vsoc.ga.trainga.nn.{NeuralNet, NeuralNetPersist, NeuralNets}
 
 import scala.collection.JavaConverters._
@@ -69,8 +69,8 @@ class TrainGaSuite extends FunSuite with MustMatchers {
     val params = Stream.continually(1.0).take(63).toArray
     nn.setParam(params)
 
-    val file = Paths.get(".test", "nn", "01.nn")
-    val p = Persistors.nio(workDirBaseTest)
+    val file = workDirBaseTest.resolve(Paths.get(".test", "nn", "01.nn"))
+    val p = Persistors.nio
 
     p.save(file)(oos => NeuralNetPersist.save(nn, oos))
 
@@ -88,143 +88,95 @@ class TrainGaSuite extends FunSuite with MustMatchers {
 
   test("InputMapperNnTeam(1.0) empty sensor") {
     val sens: Sensors = emptySensor
-    val m = new InputMapperNnTeam(1.0)
+    val m = InputMappers.default
     m.mapSensors(sens) mustBe None
   }
 
   test("InputMapperNnTeam(1.0) sensor with irrelevant info flags right") {
     val sens: Sensors = sensorFlags(Flag.FLAG_RIGHT_10, Flag.FLAG_RIGHT_30)
-    val m = new InputMapperNnTeam(1.0)
+    val m = InputMappers.default
     m.mapSensors(sens) mustBe None
   }
 
   test("InputMapperNnTeam(1.0) sensor with irrelevant info flags other") {
     val sens: Sensors = sensorFlags(Flag.FLAG_OTHER_20, Flag.FLAG_OTHER_40)
-    val m = new InputMapperNnTeam(1.0)
+    val m = InputMappers.default
     m.mapSensors(sens) mustBe None
   }
 
   test("InputMapperNnTeam(1.0) sensor with irrelevant info flags own") {
     val sens: Sensors = sensorFlags(Flag.FLAG_OWN_20)
-    val m = new InputMapperNnTeam(1.0)
+    val m = InputMappers.default
     m.mapSensors(sens) mustBe None
   }
 
   test("InputMapperNnTeam(1.0) sensor with irrelevant info flags left") {
     val sens: Sensors = sensorFlags(Flag.FLAG_LEFT_10, Flag.FLAG_LEFT_20, Flag.FLAG_LEFT_30)
-    val m = new InputMapperNnTeam(1.0)
+    val m = InputMappers.default
     m.mapSensors(sens) mustBe None
   }
 
   test("InputMapperNnTeam(1.0) sensor goal own left") {
     val sens: Sensors = sensorGoalOwn(Flag.FLAG_LEFT)
-    val m = new InputMapperNnTeam(1.0)
+    val m = InputMappers.default
     val a = m.mapSensors(sens).get
     (0 to 4).exists(a(_) > 0.0) mustBe true
   }
 
   test("InputMapperNnTeam(1.0) sensor goal own center") {
     val sens: Sensors = sensorGoalOwn(Flag.FLAG_CENTER)
-    val m = new InputMapperNnTeam(1.0)
+    val m = InputMappers.default
     val a = m.mapSensors(sens).get
     (5 to 9).exists(a(_) > 0.0) mustBe true
   }
 
   test("InputMapperNnTeam(1.0) sensor goal own right") {
     val sens: Sensors = sensorGoalOwn(Flag.FLAG_RIGHT)
-    val mapper = new InputMapperNnTeam(1.0)
+    val mapper = InputMappers.default
     val a = mapper.mapSensors(sens).get
     (10 to 14).exists(a(_) > 0.0) mustBe true
   }
 
   test("InputMapperNnTeam(1.0) sensor penalty other center") {
     val sens: Sensors = sensorPenaltyOther(Flag.FLAG_CENTER)
-    val mapper = new InputMapperNnTeam(0.1)
+    val mapper = InputMappers.withActivationFactor(0.1)
     val a = mapper.mapSensors(sens).get
     (65 to 69).exists(a(_) > 0.0) mustBe true
   }
 
   test("InputMapperNnTeam(1.0) sensor penalty other right") {
     val sens: Sensors = sensorPenaltyOther(Flag.FLAG_RIGHT)
-    val mapper = new InputMapperNnTeam(1.0)
+    val mapper = InputMappers.default
     val a = mapper.mapSensors(sens).get
     (70 to 74).exists(a(_) > 0.0) mustBe true
   }
 
   test("InputMapperNnTeam(1.0) sensor corner other right") {
     val sens: Sensors = sensorCornerOther(Flag.FLAG_RIGHT)
-    val mapper = new InputMapperNnTeam(1.4)
+    val mapper = InputMappers.withActivationFactor(1.4)
     val a = mapper.mapSensors(sens).get
     (85 to 89).exists(a(_) > 0.0) mustBe true
   }
 
   test("InputMapperNnTeam(1.0) sensor corner other center") {
     val sens: Sensors = sensorCornerOther(Flag.FLAG_CENTER)
-    val mapper = new InputMapperNnTeam(1.0)
+    val mapper = InputMappers.default
     val a = mapper.mapSensors(sens).get
     (80 to 84).exists(a(_) > 0.0) mustBe true
   }
 
   test("InputMapperNnTeam(1.0) sensor center other center") {
     val sens: Sensors = sensorCenter(Flag.FLAG_CENTER)
-    val mapper = new InputMapperNnTeam(1.2)
+    val mapper = InputMappers.withActivationFactor(1.2)
     val a = mapper.mapSensors(sens).get
     (95 to 99).exists(a(_) > 0.0) mustBe true
   }
 
   test("InputMapperNnTeam(1.0) sensor ball") {
     val sens: Sensors = sensorBall
-    val mapper = new InputMapperNnTeam(1.0)
+    val mapper = InputMappers.default
     val a = mapper.mapSensors(sens).get
     (135 to 139).exists(a(_) > 0.0) mustBe true
-  }
-
-  test("OutputMapperNnTeam no activation") {
-    val p = PlayerTest(0)
-    val out: Array[Double] = Array(0.0, 0.0, 0.0, 0.0)
-    val m = OutputMappers.om01FDefault
-    m.applyOutput(p, out)
-    p.result mustBe ""
-  }
-
-  test("OutputMapperNnTeam dash 1.0") {
-    val p = PlayerTest(0)
-    val out: Array[Double] = Array(1.0, 0.0, 0.0, 0.0)
-    val m = OutputMappers.om01FDefault
-    m.applyOutput(p, out)
-    p.result mustBe "dash[100]"
-  }
-
-  test("OutputMapperNnTeam dash 2.3 + kick") {
-    val p = PlayerTest(0)
-    val out: Array[Double] = Array(2.29, 4.1, 0.0, 0.0)
-    val m = OutputMappers.om01FDefault
-    m.applyOutput(p, out)
-    p.result mustBe "dash[229]kick[410,0.00]"
-  }
-
-  test("OutputMapperNnTeam dash 2.71 + kick + turn") {
-    val p = PlayerTest(0)
-    val out: Array[Double] = Array(2.716, 4.1, 1.0, 0.01)
-    val m = OutputMappers.om01FDefault
-    m.applyOutput(p, out)
-    p.result mustBe "dash[272]kick[410,10.00]turn[0.10]"
-  }
-
-  test("OutputMapperNnTeam kick 4.1 + turn") {
-    val p = PlayerTest(0)
-    val out: Array[Double] = Array(0.00499, 4.1, 1.0, 3.0)
-    val m = OutputMappers.om01FDefault
-    m.applyOutput(p, out)
-    p.result mustBe "kick[410,10.00]turn[30.00]"
-  }
-
-  test("OutputMapperNnTeam kick 4.2 + turn") {
-    val p = PlayerTest(0)
-    val out: Array[Double] = Array(-2, 4.2, 1.0, -3.1111)
-    val m = OutputMappers.om01FDefault
-    m.applyOutput(p, out)
-    p.result mustBe "kick[420,10.00]turn[-31.11]"
   }
 
   test("RandomElemsPicker") {

@@ -4,18 +4,18 @@ import java.nio.file.{Files, Path, Paths}
 import java.util.{Comparator, Optional}
 
 import org.slf4j.LoggerFactory
-import vsoc.ga.common.config.{ConfigHelper, ConfigTrainGa}
-import vsoc.ga.common.data.{CsvWriter, Data02}
+import vsoc.ga.common.data.CsvWriter
 import vsoc.ga.common.describe.DescribableFormatter
 import vsoc.ga.common.persist.{Persistor, Persistors}
-import vsoc.ga.common.{UtilPath, UtilReflection, UtilTransform}
+import vsoc.ga.common.{UtilReflection, UtilTransform}
+import vsoc.ga.trainga.config.{ConfigHelper, ConfigTrainGa}
 import vsoc.ga.trainga.thinner.Thinner
 
-object TrainGaRunner {
+class TrainGaRunner[S <: AnyRef] {
 
-  private val log = LoggerFactory.getLogger(TrainGaRunner.getClass)
+  private val log = LoggerFactory.getLogger(classOf[TrainGaRunner[_]])
 
-  private val workDir = UtilPath.workDir
+  private val workDir = ConfigHelper.workDir
 
   def run (cfg: ConfigTrainGa): Unit = {
 
@@ -23,47 +23,48 @@ object TrainGaRunner {
     val nr = cfg.nr
     require(!id.isEmpty)
     require(!nr.isEmpty)
-    def persistor: Persistor = Persistors.nio(workDir)
-    val trainDir = Paths.get(id, nr)
-    val persDir = persistor.dir(trainDir)
 
-    val dataFile = persDir.resolve(s"$id-$nr-data.csv")
-
-    val dh = new CsvWriter(dataFile)
-
-    val fileNameOpt: Optional[Path] = Files.list(persDir)
+    val persistor: Persistor = Persistors.nio
+    val trainDirAbs = workDir.resolve(Paths.get(id, nr))
+    val dataFile = trainDirAbs.resolve(s"$id-$nr-data.csv")
+    val csvWriter = new CsvWriter(dataFile)
+    val fileNameOpt: Optional[Path] = Files.list(trainDirAbs)
       .filter(p => p.getFileName.toString.endsWith("ser"))
       .sorted(Comparator.reverseOrder())
       .findFirst()
 
-    val tga: TrainGa[Data02] = UtilTransform.asOption(fileNameOpt)
+    val tga: TrainGa[S] = UtilTransform.asOption(fileNameOpt)
       .map(p => p.getFileName.toString)
       .flatMap { file: String =>
-        val path = trainDir.resolve(file)
+        val path = trainDirAbs.resolve(file)
         log.info(s"loading population from $path")
-        persistor.load(path)(ois => new TrainGaPersist[Data02].load(ois))
+        persistor.load(path)(ois => new TrainGaPersist[S].load(ois))
       }
       .getOrElse {
-        log.info(s"could not population from $trainDir. creating a new one")
-        UtilReflection.call(TrainGas, cfg.id, classOf[TrainGa[Data02]])
+        log.info(s"could not population from $trainDirAbs. creating a new one")
+        UtilReflection.call(TrainGas, cfg.id, classOf[TrainGa[S]])
       }
 
     val desc = DescribableFormatter.format(tga, 0)
-    tga.listeners = tga.listeners :+ persListener :+ dataListener
-    log.info(s"start ${tga.id}-${cfg.nr} at iteration ${tga.iterations.getOrElse(0)}\n\n--------------------------------------------------------\n$desc")
+    tga.listeners = tga.listeners :+ persListener :+ dataListener :+ thinnerListener
+    log.info(s"start ${tga.id}-${cfg.nr} at iteration ${tga.iterations}\n\n--------------------------------------------------------\n$desc")
     tga.run(cfg.id, cfg.nr)
 
-    def persListener: TrainGaListener[Data02] = (iteration: Int, _: Option[Data02]) => {
+    def persListener: TrainGaListener[S] = (iteration: Int, _: Option[S]) => {
       val popnr = f"$iteration%04d"
       val filename = s"pop$popnr.ser"
-      val filePath = trainDir.resolve(filename)
+      val filePath = trainDirAbs.resolve(filename)
       log.info(s"saving population to $filePath")
-      persistor.save(filePath)(oos => new TrainGaPersist[Data02].save(tga, oos))
+      persistor.save(filePath)(oos => new TrainGaPersist[S].save(tga, oos))
+    }
+
+    def thinnerListener: TrainGaListener[S] = (_: Int, _: Option[S]) => {
       Thinner.thinFromTrainGaId(id, nr)
     }
-    def dataListener: TrainGaListener[Data02] = (_: Int, sd: Option[Data02]) => {
-      sd.foreach(_sd => dh.writeLine(_sd))
-      log.info(s"wrote data to $dh")
+
+    def dataListener: TrainGaListener[S] = (_: Int, sd: Option[S]) => {
+      sd.foreach(d => csvWriter.writeLine(d))
+      log.info(s"wrote data $sd to $csvWriter")
     }
 
   }

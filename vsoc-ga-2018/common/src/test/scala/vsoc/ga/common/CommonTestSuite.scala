@@ -1,6 +1,6 @@
 package vsoc.ga.common
 
-import java.nio.file.Paths
+import java.nio.file.{Path, Paths}
 
 import org.scalatest.{FunSuite, MustMatchers}
 import vsoc.ga.common.persist.Persistors
@@ -9,20 +9,24 @@ class CommonTestSuite extends FunSuite with MustMatchers {
 
   private val testDir = Paths.get(System.getProperty("user.home"), ".test")
 
+  def filePath(dirRel: String, fname: String): Path =
+    testDir.resolve(Paths.get(dirRel, fname))
+
   test("persist") {
 
-    val p  = Persistors.nio(testDir)
+    val p  = Persistors.nio
     val a = ToBePersisted("hello", List(0.0, 0.2, -0.5))
 
-    p.save(Paths.get(".test", "01.ser")) {
+    p.save(filePath(".test", "01.ser")) {
       oos => oos.writeObject(a)
     }
 
-    val b = p.load(Paths.get(".test", "01.ser")) {
+    val file = filePath(".test", "01.ser")
+    val b = p.load(file) {
       ois => ois.readObject().asInstanceOf[ToBePersisted]
     }
 
-    val c = p.load(Paths.get(".test", "02.ser")) {
+    val c = p.load(filePath(".test", "02.ser")) {
       ois => ois.readObject().asInstanceOf[ToBePersisted]
     }
 
@@ -78,12 +82,12 @@ class CommonTestSuite extends FunSuite with MustMatchers {
   test("persist seq of double") {
     import UtilTransform._
 
-    val p  = Persistors.nio(testDir)
+    val p  = Persistors.nio
 
     val s = Seq(Seq(1.0, 2.0, -3.0), Seq(5.0), Seq())
     val a = asArray(s)
 
-    val file = Paths.get("test", "seq.ser")
+    val file = filePath("test", "seq.ser")
     p.save(file)(s => s.writeObject(a))
 
     val a1 = p.load(file)(s => s.readObject().asInstanceOf[Array[Array[Double]]])

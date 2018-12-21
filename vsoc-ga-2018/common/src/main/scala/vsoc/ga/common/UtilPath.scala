@@ -1,14 +1,13 @@
 package vsoc.ga.common
 
-import java.io.FileOutputStream
 import java.nio.file.{Files, Path, Paths}
 import java.util.Comparator
 import java.util.zip.ZipInputStream
 
-import org.apache.commons.compress.archivers.sevenz.{SevenZFile, SevenZOutputFile}
-import vsoc.ga.common.config.ConfigHelper
+import org.apache.commons.compress.archivers.sevenz.SevenZFile
 
 object UtilPath {
+
   def unzip(zipFile: Path, outDir: Path): Unit = {
     UtilTryWithResource.withResources(new ZipInputStream(Files.newInputStream(zipFile))) { zipInputStream =>
       var entry = zipInputStream.getNextEntry
@@ -51,6 +50,5 @@ object UtilPath {
 
   def tmpDir: Path = Paths.get(System.getProperty("java.io.tmpdir"))
 
-  def workDir: Path = ConfigHelper.workDir
 
 }

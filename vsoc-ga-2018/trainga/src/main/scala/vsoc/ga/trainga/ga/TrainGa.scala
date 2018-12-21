@@ -10,15 +10,15 @@ import vsoc.ga.matches.Team
   */
 trait TrainGa[S] extends Describable {
 
-  var iterations: Option[Int] = Option.empty
+  def id: String
 
-  var population: Option[Seq[Seq[Double]]] = Option.empty
+  var iterations: Int = 0
+
+  var population: Seq[Seq[Double]] = Seq.empty[Seq[Double]]
 
   var listeners: Seq[TrainGaListener[S]] = Seq.empty[TrainGaListener[S]]
 
-  def id: String
-
-  def teamsFromGeno(geno: Seq[Seq[Double]]): Seq[Team]
+  def teamsFromPopulation: Seq[Team]
 
   def run(trainGaId: String, trainGaNr: String): Unit
 
