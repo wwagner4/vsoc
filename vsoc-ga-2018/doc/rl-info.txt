@@ -1,0 +1,4 @@
+http://adventuresinmachinelearning.com/reinforcement-learning-tutorial-python-keras/
+http://old.nbu.bg/cogs/events/2000/Readings/Petrov/rltutorial.pdf
+https://github.com/udacity/deep-reinforcement-learning
+https://github.com/dennybritz/reinforcement-learning
