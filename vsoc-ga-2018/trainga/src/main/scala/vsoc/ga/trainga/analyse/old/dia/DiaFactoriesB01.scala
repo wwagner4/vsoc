@@ -1,8 +1,8 @@
 package vsoc.ga.trainga.analyse.old.dia
 
 import entelijan.viz.Viz
+import vsoc.ga.common.viz.Smoothing
 import vsoc.ga.trainga.analyse.old.dia.DataDia.FDia
-import vsoc.ga.trainga.analyse.old.smooth.Smoothing
 import vsoc.ga.trainga.ga.impl.team01.Data02
 
 object DiaFactoriesB01 extends DiaFactories[Data02] {

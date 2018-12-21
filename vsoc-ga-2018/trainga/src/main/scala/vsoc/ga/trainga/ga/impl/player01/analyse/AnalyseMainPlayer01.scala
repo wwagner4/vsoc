@@ -4,7 +4,7 @@ import java.nio.file.{Files, Path}
 
 import entelijan.viz.creators.VizCreatorGnuplot
 import entelijan.viz.{Viz, VizCreator}
-import vsoc.ga.trainga.analyse.old.smooth.Smoothing._
+import vsoc.ga.common.viz.Smoothing._
 import vsoc.ga.trainga.config.ConfigHelper
 
 object AnalyseMainPlayer01 extends App {
