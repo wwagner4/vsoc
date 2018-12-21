@@ -5,8 +5,8 @@ import java.util.Optional
 import vsoc.behaviour.Behaviour
 import vsoc.ga.genetic.Transformer
 import vsoc.ga.matches.behav.{BehaviourNeuralNet, InputMapperNn, OutputMapperNn}
+import vsoc.ga.matches.nn.NeuralNet
 import vsoc.ga.matches.{Behaviours, Team, Teams}
-import vsoc.ga.trainga.nn.NeuralNet
 
 class TransformerTeam(playerCount: Int, createNeuralNet: () => NeuralNet, _in: InputMapperNn, _out: OutputMapperNn) extends Transformer[Double, PhenoTeam] {
 

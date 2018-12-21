@@ -1,4 +1,4 @@
-package vsoc.ga.trainga.nn
+package vsoc.ga.matches.nn
 
 import java.io.{ObjectInputStream, ObjectOutputStream}
 

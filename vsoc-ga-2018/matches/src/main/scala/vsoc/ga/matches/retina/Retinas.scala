@@ -1,8 +1,8 @@
-package vsoc.ga.trainga.retina
+package vsoc.ga.matches.retina
 
 import atan.model.Flag
 import vsoc.behaviour.{DistDirVision, Sensors}
-import vsoc.ga.trainga.retina.impl.AbstractRetina
+import vsoc.ga.matches.retina.impl.AbstractRetina
 
 case class Retinas(_activationFactor: Double = 1.0) {
 

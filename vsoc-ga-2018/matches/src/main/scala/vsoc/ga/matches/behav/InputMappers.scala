@@ -2,7 +2,7 @@ package vsoc.ga.matches.behav
 
 import atan.model.Flag
 import vsoc.behaviour.Sensors
-import vsoc.ga.trainga.retina.Retinas
+import vsoc.ga.matches.retina.Retinas
 
 object InputMappers {
 

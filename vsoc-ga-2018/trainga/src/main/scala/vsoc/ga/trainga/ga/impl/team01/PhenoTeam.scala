@@ -2,7 +2,7 @@ package vsoc.ga.trainga.ga.impl.team01
 
 import vsoc.ga.genetic._
 import vsoc.ga.matches.Team
-import vsoc.ga.trainga.nn.NeuralNet
+import vsoc.ga.matches.nn.NeuralNet
 
 
 trait PhenoTeam extends Pheno[Double] {

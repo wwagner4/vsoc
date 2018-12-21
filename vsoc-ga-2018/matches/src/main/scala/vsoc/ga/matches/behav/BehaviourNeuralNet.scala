@@ -4,7 +4,7 @@ import java.util.Optional
 
 import atan.model.Player
 import vsoc.behaviour.{Behaviour, Sensors}
-import vsoc.ga.trainga.nn.NeuralNet
+import vsoc.ga.matches.nn.NeuralNet
 
 class BehaviourNeuralNet(
                           val neuralNet: NeuralNet,

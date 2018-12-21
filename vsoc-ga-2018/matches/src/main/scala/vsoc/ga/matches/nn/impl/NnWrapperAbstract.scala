@@ -1,10 +1,10 @@
-package vsoc.ga.trainga.nn.impl
+package vsoc.ga.matches.nn.impl
 
 import org.deeplearning4j.nn.conf.MultiLayerConfiguration
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork
 import org.nd4j.linalg.api.ndarray.INDArray
 import org.nd4j.linalg.factory.Nd4j
-import vsoc.ga.trainga.nn.NeuralNet
+import vsoc.ga.matches.nn.NeuralNet
 
 abstract class NnWrapperAbstract extends NeuralNet {
 

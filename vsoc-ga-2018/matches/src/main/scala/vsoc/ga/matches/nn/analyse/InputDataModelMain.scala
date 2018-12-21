@@ -1,9 +1,9 @@
-package vsoc.ga.trainga.nn.analyse
+package vsoc.ga.matches.nn.analyse
 
 import java.nio.file.{Files, Path, Paths}
 
 import vsoc.ga.matches.behav.OutputMappers
-import vsoc.ga.trainga.nn.NeuralNets
+import vsoc.ga.matches.nn.NeuralNets
 
 object InputDataModelMain extends App {
 

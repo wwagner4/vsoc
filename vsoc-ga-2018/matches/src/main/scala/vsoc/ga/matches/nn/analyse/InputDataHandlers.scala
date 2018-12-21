@@ -1,11 +1,11 @@
-package vsoc.ga.trainga.nn.analyse
+package vsoc.ga.matches.nn.analyse
 
 import java.nio.file.{Files, Path}
 
 import atan.model.{Player, ViewAngle, ViewQuality}
 import entelijan.viz.{Viz, VizCreator, VizCreators}
 import vsoc.ga.matches.behav.OutputMapperNn
-import vsoc.ga.trainga.nn.NeuralNet
+import vsoc.ga.matches.nn.NeuralNet
 
 object InputDataHandlers {
 

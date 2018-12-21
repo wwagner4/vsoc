@@ -1,4 +1,4 @@
-package vsoc.ga.trainga.nn
+package vsoc.ga.matches.nn
 
 object NeuralNetsInfo extends App {
 

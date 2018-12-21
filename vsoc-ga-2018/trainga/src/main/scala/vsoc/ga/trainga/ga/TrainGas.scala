@@ -1,9 +1,9 @@
 package vsoc.ga.trainga.ga
 
 import vsoc.ga.matches.behav.{InputMapperNn, InputMappers, OutputMapperNn, OutputMappers}
+import vsoc.ga.matches.nn.{NeuralNet, NeuralNets}
 import vsoc.ga.trainga.ga.impl.player01._
 import vsoc.ga.trainga.ga.impl.team01._
-import vsoc.ga.trainga.nn.{NeuralNet, NeuralNets}
 
 object TrainGas {
 

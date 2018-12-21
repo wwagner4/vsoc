@@ -3,7 +3,7 @@ package vsoc.ga.trainga.ga.impl.player01
 import vsoc.behaviour.Behaviour
 import vsoc.ga.genetic.Transformer
 import vsoc.ga.matches.behav.{BehaviourNeuralNet, InputMappers, OutputMappers}
-import vsoc.ga.trainga.nn.NeuralNets
+import vsoc.ga.matches.nn.NeuralNets
 
 class TransformerPlayer01 extends Transformer[Double, PhenoPlayer01] {
 

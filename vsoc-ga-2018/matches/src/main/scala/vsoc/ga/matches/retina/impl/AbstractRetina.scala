@@ -1,7 +1,7 @@
-package vsoc.ga.trainga.retina.impl
+package vsoc.ga.matches.retina.impl
 
 import vsoc.behaviour.{DistDirVision, Sensors}
-import vsoc.ga.trainga.retina.Retina
+import vsoc.ga.matches.retina.Retina
 
 abstract class AbstractRetina extends Retina {
   /**

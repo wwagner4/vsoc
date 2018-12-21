@@ -1,11 +1,11 @@
-package vsoc.ga.trainga.nn
+package vsoc.ga.matches.nn
 
 import org.deeplearning4j.nn.conf.layers.{DenseLayer, OutputLayer}
 import org.deeplearning4j.nn.conf.{MultiLayerConfiguration, NeuralNetConfiguration}
 import org.deeplearning4j.nn.weights.WeightInit
 import org.nd4j.linalg.activations.Activation
 import org.nd4j.linalg.lossfunctions.LossFunctions
-import vsoc.ga.trainga.nn.impl.NnWrapperAbstract
+import vsoc.ga.matches.nn.impl.NnWrapperAbstract
 
 object NeuralNets {
 

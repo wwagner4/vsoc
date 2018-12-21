@@ -1,4 +1,4 @@
-package vsoc.ga.trainga.retina
+package vsoc.ga.matches.retina
 
 import vsoc.behaviour.Sensors
 

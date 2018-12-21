@@ -2,7 +2,8 @@ package vsoc.ga.trainga.retina
 
 import org.scalatest.{FunSuite, MustMatchers}
 import vsoc.behaviour.{DistDirVision, Sensors}
-import vsoc.ga.trainga.retina.impl.Functions
+import vsoc.ga.matches.retina.Retinas
+import vsoc.ga.matches.retina.impl.Functions
 
 class RetinaSuite extends FunSuite with MustMatchers {
 

@@ -1,4 +1,4 @@
-package vsoc.ga.trainga.nn.analyse
+package vsoc.ga.matches.nn.analyse
 
 trait InputDataHandler {
 

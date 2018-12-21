@@ -1,4 +1,4 @@
-package vsoc.ga.trainga.retina.impl
+package vsoc.ga.matches.retina.impl
 
 object Functions {
 
