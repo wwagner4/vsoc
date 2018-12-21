@@ -5,7 +5,7 @@ import vsoc.ga.common.describe.{DescribableFormatter, PropertiesProvider}
 import vsoc.ga.genetic._
 import vsoc.ga.genetic.impl.{SelectionStrategies, UtilGa}
 import vsoc.ga.matches.Team
-import vsoc.ga.trainga.behav.{InputMapperNn, OutputMapperNn}
+import vsoc.ga.matches.behav.{InputMapperNn, OutputMapperNn}
 import vsoc.ga.trainga.ga._
 import vsoc.ga.trainga.nn.NeuralNet
 

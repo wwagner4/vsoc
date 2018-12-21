@@ -8,7 +8,7 @@ import org.scalatest.{FunSuite, MustMatchers}
 import vsoc.behaviour.{DistDirVision, Sensors}
 import vsoc.ga.common.UtilReflection
 import vsoc.ga.common.persist.Persistors
-import vsoc.ga.trainga.behav._
+import vsoc.ga.matches.behav.InputMappers
 import vsoc.ga.trainga.ga.impl.common.RandomElemsPicker
 import vsoc.ga.trainga.nn.{NeuralNet, NeuralNetPersist, NeuralNets}
 

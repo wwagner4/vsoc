@@ -1,4 +1,4 @@
-package vsoc.ga.trainga.behav
+package vsoc.ga.matches.behav
 
 import atan.model.Player
 

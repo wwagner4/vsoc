@@ -27,7 +27,10 @@ lazy val matches = (project in file("matches"))
     // Is a module of https://github.com/wwagner4/vsoc.git
     // cd vsoc/vsoc-2007 && mvn install
     libraryDependencies += "net.entelijan" % "vsoc-core" % "0.0.1",
+    libraryDependencies += "org.deeplearning4j" % "deeplearning4j-nn" % "0.9.1" exclude("com.github.stephenc.findbugs", "findbugs-annotations"),
+    libraryDependencies += "org.nd4j" % "nd4j-native-platform" % "0.9.1" exclude("com.github.stephenc.findbugs", "findbugs-annotations")
   )
+  .dependsOn(common)
 
 lazy val common = (project in file("common"))
   .settings(
@@ -45,7 +48,5 @@ lazy val genetic = (project in file("genetic"))
 lazy val trainga = (project in file("trainga"))
   .settings(
     name := "trainga",
-    commonSettings,
-    libraryDependencies += "org.deeplearning4j" % "deeplearning4j-nn" % "0.9.1" exclude("com.github.stephenc.findbugs", "findbugs-annotations"),
-    libraryDependencies += "org.nd4j" % "nd4j-native-platform" % "0.9.1" exclude("com.github.stephenc.findbugs", "findbugs-annotations"))
+    commonSettings)
   .dependsOn(matches, genetic)

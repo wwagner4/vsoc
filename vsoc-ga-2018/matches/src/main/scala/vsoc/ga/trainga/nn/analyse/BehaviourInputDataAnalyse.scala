@@ -4,7 +4,7 @@ import java.util.Optional
 
 import atan.model.Player
 import vsoc.behaviour.{Behaviour, Sensors}
-import vsoc.ga.trainga.behav.InputMapperNn
+import vsoc.ga.matches.behav.InputMapperNn
 
 class BehaviourInputDataAnalyse(
                                  val inHandler: InputDataHandler,

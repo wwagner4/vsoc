@@ -1,4 +1,4 @@
-package vsoc.ga.trainga.ga
+package vsoc.ga.matches
 
 object Activation {
 

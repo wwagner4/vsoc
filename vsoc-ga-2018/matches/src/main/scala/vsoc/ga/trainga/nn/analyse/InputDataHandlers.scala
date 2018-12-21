@@ -1,11 +1,10 @@
 package vsoc.ga.trainga.nn.analyse
 
-import java.nio.file.Files
+import java.nio.file.{Files, Path}
 
 import atan.model.{Player, ViewAngle, ViewQuality}
 import entelijan.viz.{Viz, VizCreator, VizCreators}
-import vsoc.ga.trainga.behav.OutputMapperNn
-import vsoc.ga.trainga.config.ConfigHelper
+import vsoc.ga.matches.behav.OutputMapperNn
 import vsoc.ga.trainga.nn.NeuralNet
 
 object InputDataHandlers {
@@ -20,7 +19,7 @@ object InputDataHandlers {
   }
 
 
-  def boxPlots(_id: String, _nn: NeuralNet, _outputMapperNn: OutputMapperNn, _minMax: Option[Int]): InputDataHandler =
+  def boxPlots(_id: String, _nn: NeuralNet, _outputMapperNn: OutputMapperNn, _minMax: Option[Int], wd: Path): InputDataHandler =
     new InputDataHandler {
 
       val player: CollectingPlayer = new CollectingPlayer
@@ -33,7 +32,6 @@ object InputDataHandlers {
       override def close(): Unit = {
 
         implicit val vizCreator: VizCreator[Viz.X] = {
-          val wd = ConfigHelper.workDir
           val scriptDir = wd.resolve(".script")
           Files.createDirectories(scriptDir)
           val imgDir = wd.resolve("viz_img")

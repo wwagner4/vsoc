@@ -3,8 +3,8 @@ package vsoc.ga.trainga
 import java.nio.file.Files
 
 import entelijan.viz.{Viz, VizCreator, VizCreators}
+import vsoc.ga.matches.Activation
 import vsoc.ga.trainga.config.ConfigHelper
-import vsoc.ga.trainga.ga.Activation
 
 object ActivationTryout extends App {
 

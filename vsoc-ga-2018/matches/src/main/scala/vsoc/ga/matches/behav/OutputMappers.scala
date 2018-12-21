@@ -1,7 +1,7 @@
-package vsoc.ga.trainga.behav
+package vsoc.ga.matches.behav
 
 import atan.model.Player
-import vsoc.ga.trainga.ga.Activation
+import vsoc.ga.matches.Activation
 
 object OutputMappers {
 

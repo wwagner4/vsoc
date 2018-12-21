@@ -1,8 +1,8 @@
 package vsoc.ga.trainga.nn.analyse
 
 import vsoc.behaviour.Behaviour
+import vsoc.ga.matches.behav.InputMappers
 import vsoc.ga.matches.{Behaviours, Matches, Teams}
-import vsoc.ga.trainga.behav.InputMappers
 
 class InputDataModel {
 
