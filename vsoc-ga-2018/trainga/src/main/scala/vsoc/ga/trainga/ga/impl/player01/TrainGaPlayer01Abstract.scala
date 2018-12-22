@@ -3,6 +3,7 @@ package vsoc.ga.trainga.ga.impl.player01
 import org.slf4j.LoggerFactory
 import vsoc.behaviour.Behaviour
 import vsoc.ga.genetic.impl.{SelectionStrategies, UtilGa}
+import vsoc.ga.matches.nn.NeuralNetFactories
 import vsoc.ga.matches.{Team, Teams}
 import vsoc.ga.trainga.ga.{FitnessFunctions, TrainGa, TrainGaFitnessFunction}
 
@@ -18,7 +19,8 @@ abstract class TrainGaPlayer01Abstract extends TrainGa[DataPlayer01] {
 
   private val popSize = 30
   private val ran = new Random()
-  private val transformer = new TransformerPlayer01
+  private val neuralNetFactory = NeuralNetFactories.team02
+  private val transformer = new TransformerPlayer01(neuralNetFactory)
   private val phenoTester = new PhenoTesterPlayer01
   protected def fitnessFunction: TrainGaFitnessFunction[DataPlayer01] = FitnessFunctions.dataPlayer01A
   private val selection = SelectionStrategies.crossover(0.001, randomAllele, ran)
@@ -46,7 +48,7 @@ abstract class TrainGaPlayer01Abstract extends TrainGa[DataPlayer01] {
 
   private def randomAllele(ran: Random): Double = 2.0 * ran.nextDouble() - 1.0
 
-  private def randomGeno(ran: Random): Seq[Double] = Seq.fill(19704)(randomAllele(ran))
+  private def randomGeno(ran: Random): Seq[Double] = Seq.fill(neuralNetFactory.parameterSize)(randomAllele(ran))
 
   private def nextPopulation(id: String, nr: String, iterNr: Int, popGeno: Seq[Seq[Double]]): (DataPlayer01, Seq[Seq[Double]]) = {
     val phenos: Seq[PhenoPlayer01] = popGeno map transformer.toPheno

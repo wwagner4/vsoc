@@ -103,6 +103,8 @@ object TrainGas {
 
   def trainGaPlayer01Simple: TrainGa[DataPlayer01] = new TrainGaPlayer01A
 
+  def trainGaPlayer01A: TrainGa[DataPlayer01] = new TrainGaPlayer01A
+
   def trainGaPlayer01B: TrainGa[DataPlayer01] = new TrainGaPlayer01B
 
 }
