@@ -171,6 +171,19 @@ object Configs {
       "Testconfiguration: To be used during development"
   }
 
+  def player01Btest: Config = new Config {
+
+    override def id: String = "player01Btest"
+
+    override def trainings: Seq[ConfigTrainGa] = Seq(
+      ConfigTrainGa("trainGaPlayer01B", "test000"),
+      ConfigTrainGa("trainGaPlayer01B", "test001"),
+    )
+
+    override def fullDesc: String =
+      "Testconfiguration: To be used during development"
+  }
+
   def player01bob: Config = new Config {
 
     override def id: String = "player01bob"
@@ -201,6 +214,38 @@ object Configs {
 
     override def fullDesc: String =
       "Player simulation running on work"
+  }
+
+  def player01Bwork: Config = new Config {
+
+    override def id: String = "player01Bwork"
+
+    override def trainings: Seq[ConfigTrainGa] = Seq(
+      ConfigTrainGa("trainGaPlayer01B", "work000"),
+      ConfigTrainGa("trainGaPlayer01B", "work001"),
+      ConfigTrainGa("trainGaPlayer01B", "work002"),
+      ConfigTrainGa("trainGaPlayer01B", "work003"),
+      ConfigTrainGa("trainGaPlayer01B", "work004"),
+      ConfigTrainGa("trainGaPlayer01B", "work005"),
+    )
+
+    override def fullDesc: String =
+      "Player simulation running on work"
+  }
+
+  def player01Bbob: Config = new Config {
+
+    override def id: String = "player01Bbob"
+
+    override def trainings: Seq[ConfigTrainGa] = Seq(
+      ConfigTrainGa("trainGaPlayer01B", "bob000"),
+      ConfigTrainGa("trainGaPlayer01B", "bob001"),
+      ConfigTrainGa("trainGaPlayer01B", "bob002"),
+      ConfigTrainGa("trainGaPlayer01B", "bob003"),
+    )
+
+    override def fullDesc: String =
+      "Player simulation running on bob"
   }
 
 

@@ -1,14 +1,14 @@
 git clone https://github.com/wwagner4/vsoc.git
 
 ------ windows training ------
-start "player01work iter6" /LOW java -Xmx8g ^
+start "player01Bbob" /LOW java -Xmx8g ^
   -cp C:\ta30\entw1\vsoc\vsoc-ga-2018\trainga\target\scala-2.12\trainga-assembly-0.0.1-SNAPSHOT.jar ^
-  vsoc.ga.trainga.ga.TrainGaMain player01work
+  vsoc.ga.trainga.ga.TrainGaMain player01Bbob
 
 ------ bob training -----
 nohup nice -6 java -Xmx6g \
  -cp $HOME/prj/vsoc/vsoc-ga-2018/trainga/target/scala-2.12/trainga-assembly-0.0.1-SNAPSHOT.jar \
- vsoc.ga.trainga.ga.TrainGaMain player01bob &
+ vsoc.ga.trainga.ga.TrainGaMain player01Bbob &
 
 ----- sync -----
 rsync -arv bob:~/work/work-vsoc-ga-2018/ ~/work/work-vsoc-ga-2018
