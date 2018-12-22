@@ -1,10 +1,11 @@
-
+lazy val _scalaVersion = "2.12.8"
+lazy val _dl4jVersion = "0.9.1"
 
 lazy val userHome = System.getProperty("user.home")
 
 lazy val commonSettings = Seq(
   organization := "net.entelijan",
-  scalaVersion := "2.12.7",
+  scalaVersion := _scalaVersion,
   version := "0.0.1-SNAPSHOT",
   fork := true,
   // libraries like vsoc-core and viz
@@ -27,15 +28,15 @@ lazy val matches = (project in file("matches"))
     // Is a module of https://github.com/wwagner4/vsoc.git
     // cd vsoc/vsoc-2007 && mvn install
     libraryDependencies += "net.entelijan" % "vsoc-core" % "0.0.1",
-    libraryDependencies += "org.deeplearning4j" % "deeplearning4j-nn" % "0.9.1" exclude("com.github.stephenc.findbugs", "findbugs-annotations"),
-    libraryDependencies += "org.nd4j" % "nd4j-native-platform" % "0.9.1" exclude("com.github.stephenc.findbugs", "findbugs-annotations")
+    libraryDependencies += "org.deeplearning4j" % "deeplearning4j-nn" % _dl4jVersion exclude("com.github.stephenc.findbugs", "findbugs-annotations"),
+    libraryDependencies += "org.nd4j" % "nd4j-native-platform" % _dl4jVersion exclude("com.github.stephenc.findbugs", "findbugs-annotations")
   )
   .dependsOn(common)
 
 lazy val common = (project in file("common"))
   .settings(
     name := "common",
-    libraryDependencies += "org.scala-lang" % "scala-reflect" % "2.12.7",
+    libraryDependencies += "org.scala-lang" % "scala-reflect" % _scalaVersion,
     libraryDependencies += "org.apache.commons" % "commons-compress" % "1.18",
     libraryDependencies += "org.tukaani" % "xz" % "1.8",
     commonSettings,
