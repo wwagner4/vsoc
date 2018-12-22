@@ -1,5 +1,6 @@
 package vsoc.ga.trainga.ga
 
+import vsoc.ga.trainga.ga.impl.player01.DataPlayer01
 import vsoc.ga.trainga.ga.impl.team01.Data02
 
 object FitnessFunctions {
@@ -98,6 +99,23 @@ object FitnessFunctions {
       s"""'$id' - Summary Fitnessfunction
          |Iteration 6
        """.stripMargin
+  }
+
+  def dataPlayer01A: TrainGaFitnessFunction[DataPlayer01] = new TrainGaFitnessFunction[DataPlayer01] {
+    override def id: String = "dataPlayer01A01"
+
+    override def fitness(score: DataPlayer01): Double = {
+      val k: Double = score.kicks
+      val g: Double = score.goals
+      val k1 = if (k > 150) 150 else k
+      k1 + (g * 10.0)
+    }
+
+    override def fullDesc: String =
+      """Uses only Kicks and Goals
+        |Kicks limited to 150
+        |Goals rated 10 times more than kicks
+      """.stripMargin
   }
 
 }
