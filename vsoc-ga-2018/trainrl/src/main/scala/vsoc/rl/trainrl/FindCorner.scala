@@ -1,6 +1,5 @@
 package vsoc.rl.trainrl
 
-
 object FindCorner extends App {
 
   val DIM = 4 // Do not change
@@ -9,34 +8,18 @@ object FindCorner extends App {
   val env = new Environment
   val ran = new Ran
   val strat = Strategies.random(env)
-  val sizes = (1 to 1000) map { _ =>
-    val mvs = moves(ran.ranAgent, 0)
-    mvs.size
-  }
-  val sizes1 = sizes
-    .groupBy(s => s)
-    .toSeq
-    .map { case (n: Int, l) => (n, l.size) }
-    .sortBy{case (n, _) => n}
 
-  println(sizes1)
+  for (i <- 0 until DIM) {
+    for (j <- 0 until DIM) {
+      val v: Double = ValueFunction.calc(State(i, j), env, strat, ReinforcementFunction.calc)
+      val str = if (v <= -100.0) "%5s " format "_" else "%5.0f " format v
+      print(str)
+    }
+    println()
+  }
+
   println("FINISHED Find Corner")
 
-
-  def moves(agent: Agent, len: Int): List[Agent] = {
-    if (len >= 100) Nil
-    else {
-      val x = agent.x
-      val y = agent.y
-      val cell = env.grid(x)(y)
-      cell.state match {
-        case STOP => agent :: Nil
-        case MOVE =>
-          val dir = strat.move(x, y)
-          agent :: moves(Agent(x + dir.xoff, y + dir.yoff), len + 1)
-      }
-    }
-  }
 
   sealed trait Direction {
     def xoff: Int
@@ -96,9 +79,52 @@ object FindCorner extends App {
 
   }
 
-  case class Cell(state: CellState, dir: Direction*)
+  object ReinforcementFunction {
 
-  case class Agent(x: Int, y: Int)
+    def calc(state: State, environment: Environment): Double = {
+      val x = state.x
+      val y = state.y
+      val cell = environment.grid(x)(y)
+      cell.state match {
+        case STOP => 0
+        case MOVE => -1
+      }
+    }
+
+  }
+
+  object ValueFunction {
+
+    def calc(state: State, environment: Environment, strategy: Strategy,
+             reinforcementFunction: (State, Environment) => Double): Double = {
+
+      def _calc(currentState: State, value: Double, count: Int): Double = {
+        //println("### currentState " + currentState)
+        if (count >= 100) value
+        else {
+          val x = currentState.x
+          val y = currentState.y
+          val cell = environment.grid(x)(y)
+          cell.state match {
+            case STOP => value
+            case MOVE =>
+              val dir = strat.move(x, y)
+              //println("### dir " + dir)
+              val nextValue = reinforcementFunction(currentState, environment)
+              val nextState = State(x + dir.xoff, y + dir.yoff)
+              //println("### nextState " + nextState)
+              value + _calc(nextState, nextValue, count + 1)
+          }
+        }
+      }
+      _calc(state, 0.0, 0)
+    }
+
+  }
+
+  case class State(x: Int, y: Int)
+
+  case class Cell(state: CellState, dir: Direction*)
 
   trait Strategy {
 
@@ -117,8 +143,8 @@ object FindCorner extends App {
       shuffeled(0)
     }
 
-    def ranAgent: Agent =
-      Agent(ranPos, ranPos)
+    def ranAgent: State =
+      State(ranPos, ranPos)
 
   }
 
