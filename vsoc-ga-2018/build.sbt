@@ -18,7 +18,7 @@ lazy val commonSettings = Seq(
 
 lazy val root = (project in file("."))
   .settings(name := "vsoc-ga-2018-root")
-  .aggregate(common, matches, genetic, trainga)
+  .aggregate(common, matches, genetic, trainga, trainrl)
 
 lazy val matches = (project in file("matches"))
   .settings(
@@ -51,3 +51,8 @@ lazy val trainga = (project in file("trainga"))
     name := "trainga",
     commonSettings)
   .dependsOn(matches, genetic)
+
+lazy val trainrl = (project in file("trainrl"))
+  .settings(
+    name := "trainrl",
+    commonSettings)

@@ -15,8 +15,8 @@ class PhenoTesterPlayer01 extends PhenoTester[PhenoPlayer01, Double, DataPlayer0
 
   override def fullDesc: String =
     """Creates two teams from the population of players.
-      |For each team tree random players are choosen.
-      |Plays a number of matches that each player is at least in two matches
+      |For each team three random players are choosen.
+      |Plays matches until each player was at least in two matches
     """.stripMargin
 
 
