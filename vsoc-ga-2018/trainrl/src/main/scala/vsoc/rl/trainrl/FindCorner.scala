@@ -1,7 +1,5 @@
 package vsoc.rl.trainrl
 
-import scala.annotation.tailrec
-import scala.util.Random
 
 object FindCorner extends App {
 
@@ -11,7 +9,7 @@ object FindCorner extends App {
   val env = new Environment
   val ran = new Ran
   val strat = Strategies.random(env)
-  val sizes = (1 to 1000) map { s =>
+  val sizes = (1 to 1000) map { _ =>
     val mvs = moves(ran.ranAgent, 0)
     mvs.size
   }
