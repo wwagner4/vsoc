@@ -99,7 +99,6 @@ object FindCorner extends App {
              reinforcementFunction: (State, Environment) => Double): Double = {
 
       def _calc(currentState: State, value: Double, count: Int): Double = {
-        //println("### currentState " + currentState)
         if (count >= 100) value
         else {
           val x = currentState.x
@@ -109,10 +108,8 @@ object FindCorner extends App {
             case STOP => value
             case MOVE =>
               val dir = strat.move(x, y)
-              //println("### dir " + dir)
               val nextValue = reinforcementFunction(currentState, environment)
               val nextState = State(x + dir.xoff, y + dir.yoff)
-              //println("### nextState " + nextState)
               value + _calc(nextState, nextValue, count + 1)
           }
         }
