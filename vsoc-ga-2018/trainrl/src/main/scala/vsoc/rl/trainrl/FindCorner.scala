@@ -5,14 +5,18 @@ object FindCorner extends App {
   val DIM = 4 // Do not change
 
   println("STARTED Find Corner")
+
   val env = new Environment
   val ran = new Ran
+  //val strat = Strategies.optimal
   val strat = Strategies.random(env)
+  val valFunc = ValueFunctions.default _
+  val reinfFunc = ReinforcementFunctions.pureDelayedReward _
 
   for (i <- 0 until DIM) {
     for (j <- 0 until DIM) {
-      val v: Double = ValueFunction.calc(State(i, j), env, strat, ReinforcementFunction.calc)
-      val str = if (v <= -100.0) "%5s " format "_" else "%5.0f " format v
+      val v: Double = valFunc(State(i, j), env, strat, reinfFunc)
+      val str = "%5.0f " format v
       print(str)
     }
     println()
@@ -79,9 +83,9 @@ object FindCorner extends App {
 
   }
 
-  object ReinforcementFunction {
+  object ReinforcementFunctions {
 
-    def calc(state: State, environment: Environment): Double = {
+    def minTimeToGoal(state: State, environment: Environment): Double = {
       val x = state.x
       val y = state.y
       val cell = environment.grid(x)(y)
@@ -91,30 +95,40 @@ object FindCorner extends App {
       }
     }
 
+    def pureDelayedReward(state: State, environment: Environment): Double = {
+      val x = state.x
+      val y = state.y
+      val cell = environment.grid(x)(y)
+      cell.state match {
+        case STOP => 1
+        case MOVE => 0
+      }
+    }
+
   }
 
-  object ValueFunction {
+  object ValueFunctions {
 
-    def calc(state: State, environment: Environment, strategy: Strategy,
-             reinforcementFunction: (State, Environment) => Double): Double = {
+    def default(state: State, environment: Environment, strategy: Strategy,
+                reinforcementFunction: (State, Environment) => Double): Double = {
 
-      def _calc(currentState: State, value: Double, count: Int): Double = {
-        if (count >= 100) value
+      def _default(currentState: State, value: Double, count: Int): Double = {
+        if (count >= 99) value - 1
         else {
           val x = currentState.x
           val y = currentState.y
+          val nextValue = reinforcementFunction(currentState, environment)
           val cell = environment.grid(x)(y)
           cell.state match {
-            case STOP => value
+            case STOP => value + nextValue
             case MOVE =>
               val dir = strat.move(x, y)
-              val nextValue = reinforcementFunction(currentState, environment)
               val nextState = State(x + dir.xoff, y + dir.yoff)
-              value + _calc(nextState, nextValue, count + 1)
+              _default(nextState, value + nextValue, count + 1)
           }
         }
       }
-      _calc(state, 0.0, 0)
+      _default(state, 0.0, 0)
     }
 
   }
@@ -154,6 +168,27 @@ object FindCorner extends App {
           val cell = env.grid(x)(y)
           dirs(x)(y) = ran.ranDir(cell)
         }
+      (x: Int, y: Int) => dirs(x)(y)
+    }
+
+    def optimal: Strategy = {
+      val dirs = Array.ofDim[Direction](DIM, DIM)
+      dirs(0)(0) = _
+      dirs(1)(0) = L
+      dirs(2)(0) = L
+      dirs(3)(0) = L
+      dirs(0)(1) = U
+      dirs(1)(1) = U
+      dirs(2)(1) = U
+      dirs(3)(1) = D
+      dirs(0)(2) = U
+      dirs(1)(2) = U
+      dirs(2)(2) = D
+      dirs(3)(2) = D
+      dirs(0)(3) = R
+      dirs(1)(3) = R
+      dirs(2)(3) = R
+      dirs(3)(3) = _
       (x: Int, y: Int) => dirs(x)(y)
     }
 
