@@ -10,10 +10,11 @@ import vsoc.ga.trainga.config.ConfigHelper
 object AnalyseMainPlayer01 extends App {
 
   val grpSize = 10
+  val iteration = "C"
 
   implicit val wd: Path = ConfigHelper.workDir
   val reader = new CsvReaderDataPlayer01()
-  val allDatas = reader.read(s"trainGaPlayer01Simple")
+  val allDatas = reader.read(s"trainGaPlayer01$iteration")
 
   val gdatas = allDatas.groupBy(d => d.nr).toList
 
@@ -34,10 +35,10 @@ object AnalyseMainPlayer01 extends App {
       data = smooth(sdata, grpSize),
     )
     val dia = Viz.Diagram(
-      id = s"player01_$name",
-      title = s"Player 01 $name",
-      xRange=Some(Viz.Range(Some(0), Some(650))),
-      //yRange=Some(Viz.Range(Some(0), Some(250))),
+      id = s"player01_${iteration}_$name",
+      title = s"Player 01 $iteration $name",
+      //xRange=Some(Viz.Range(Some(0), Some(650))),
+      //yRange=Some(Viz.Range(Some(0), Some(400))),
       dataRows = Seq(kicks, goals, score)
     )
 

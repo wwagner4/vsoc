@@ -135,4 +135,22 @@ object FitnessFunctions {
       """.stripMargin
   }
 
+  def dataPlayer01C: TrainGaFitnessFunction[DataPlayer01] = new TrainGaFitnessFunction[DataPlayer01] {
+    override def id: String = "dataPlayer01B"
+
+    override def fitness(score: DataPlayer01): Double = {
+      val k: Double = score.kicks
+      val g: Double = score.goals
+      val k1 = if (k > 150) 150 else k
+      k1 + (g * 150.0)
+    }
+
+    override def fullDesc: String =
+      """Uses only Kicks and Goals
+        |Kicks limited to 150
+        |Goals rated 150 times more than kicks
+        |Higher rating of goals compared to dataPlayer01B
+      """.stripMargin
+  }
+
 }
