@@ -14,7 +14,7 @@ object TrainGas {
 
     override protected def fitness: TrainGaFitnessFunction[Data02] = FitnessFunctions.data02A01
 
-    override def fullDescHeading: String = "B initial test"
+    override def fullDesc: String = "B initial test"
 
     override protected def createNeuralNet: () => NeuralNet = () => NeuralNets.team02
 
@@ -29,7 +29,7 @@ object TrainGas {
 
     override protected def fitness: TrainGaFitnessFunction[Data02] = FitnessFunctions.data02A02
 
-    override def fullDescHeading: String =
+    override def fullDesc: String =
       """B first improvement
         |Tryout better Fitness function
       """.stripMargin
@@ -47,7 +47,7 @@ object TrainGas {
 
     override protected def fitness: TrainGaFitnessFunction[Data02] = FitnessFunctions.data02A03
 
-    override def fullDescHeading: String =
+    override def fullDesc: String =
       """More training matches by increasing the test factor (2 -> 4)
         |New fitness function A03
       """.stripMargin
@@ -68,7 +68,7 @@ object TrainGas {
 
     override protected def fitness: TrainGaFitnessFunction[Data02] = FitnessFunctions.data02A04
 
-    override def fullDescHeading: String =
+    override def fullDesc: String =
       """New fitness function data02A04"""
 
     override protected def createNeuralNet: () => NeuralNet = () => NeuralNets.team02
@@ -87,7 +87,7 @@ object TrainGas {
 
     override protected def fitness: TrainGaFitnessFunction[Data02] = FitnessFunctions.data02A05
 
-    override def fullDescHeading: String =
+    override def fullDesc: String =
       """Iteration 6
         |New fitness function data02A05""".stripMargin
 

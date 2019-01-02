@@ -1,7 +1,6 @@
 package vsoc.ga.trainga.ga.impl.team01
 
 import org.slf4j.LoggerFactory
-import vsoc.ga.common.describe.PropertiesProvider
 import vsoc.ga.genetic.PhenoTester
 import vsoc.ga.matches.{MatchResult, Matches, TeamResult}
 import vsoc.ga.trainga.ga.TrainGaFitnessFunction
@@ -13,8 +12,7 @@ class PhenoTesterTeam(
                        fitness: TrainGaFitnessFunction[Data02],
                        testFactor: Int
                      )
-  extends PhenoTester[PhenoTeam, Double, Data02]
-    with PropertiesProvider {
+  extends PhenoTester[PhenoTeam, Double, Data02] {
 
   private val log = LoggerFactory.getLogger(classOf[PhenoTesterTeam])
 
@@ -68,14 +66,8 @@ class PhenoTesterTeam(
     PhenoTesterTeamUtil.mean(testedPhenos.map(p => p._1))
   }
 
-  override def properties: Seq[(String, Any)] = Seq(
-    ("matchsteps", matchSteps),
-    ("matchfact", testFactor),
-  )
-
   override def fullDesc: String =
     s"""Phenotester playing matches
-       |$propsFmt
        | matchfact - defines the amount of matches played. amount of matches = matchfact * population size
     """.stripMargin
 
@@ -174,13 +166,15 @@ object PhenoTesterTeamUtil {
 
   def pairs(size: Int, testFactor: Int): Seq[(Int, Int)] = {
 
-    def contaisEqual(pairs: Seq[(Int, Int)]):Boolean = {
+    def contaisEqual(pairs: Seq[(Int, Int)]): Boolean = {
       !pairs.forall(t => t._1 != t._2)
     }
 
     require(testFactor >= 1)
     val base = Seq.fill(testFactor)(0 until size).flatten
+
     def ran: Seq[Int] = Random.shuffle(base)
+
     val re = base.zip(ran)
     if (contaisEqual(re)) pairs(size, testFactor)
     else re

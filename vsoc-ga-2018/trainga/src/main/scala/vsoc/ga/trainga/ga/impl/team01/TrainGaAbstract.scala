@@ -1,7 +1,6 @@
 package vsoc.ga.trainga.ga.impl.team01
 
 import org.slf4j.LoggerFactory
-import vsoc.ga.common.describe.{DescribableFormatter, PropertiesProvider}
 import vsoc.ga.genetic._
 import vsoc.ga.genetic.impl.{SelectionStrategies, UtilGa}
 import vsoc.ga.matches.Team
@@ -11,7 +10,7 @@ import vsoc.ga.trainga.ga._
 
 import scala.util.Random
 
-abstract class TrainGaAbstract extends TrainGa[Data02] with PropertiesProvider {
+abstract class TrainGaAbstract extends TrainGa[Data02]  {
 
   private val log = LoggerFactory.getLogger(classOf[TrainGaAbstract])
 
@@ -36,24 +35,6 @@ abstract class TrainGaAbstract extends TrainGa[Data02] with PropertiesProvider {
   private val playerParamSize: Int = nnTempl.getParam.length
 
   def ran: Random = Random.javaRandomToRandom(new java.util.Random())
-
-  override def properties: Seq[(String, Any)] = Seq(
-    ("player cnt", playerCount),
-    ("pop size", populationSize),
-    ("test factor", testFactor),
-    ("matches", populationSize * testFactor),
-    ("mut rate", mutationRate),
-    ("nn", nnTempl),
-    ("fit func", fitness),
-  )
-
-  def fullDescHeading: String
-
-  override def fullDesc: String = {
-    s"""'$id' - $fullDescHeading
-       |${DescribableFormatter.format(properties, 0)}
-    """.stripMargin
-  }
 
   private case class GAR(
                           score: Option[Data02],

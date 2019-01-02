@@ -11,7 +11,7 @@ object FindCorner extends App {
   //val strat = Strategies.optimal
   val strat = Strategies.random(env)
   val valFunc = ValueFunctions.default _
-  val reinfFunc = ReinforcementFunctions.pureDelayedReward _
+  val reinfFunc = ReinforcementFunctions.minTimeToGoal _
 
   for (i <- 0 until DIM) {
     for (j <- 0 until DIM) {

@@ -38,7 +38,7 @@ object AnalyseMainPlayer01 extends App {
       id = s"player01_${iteration}_$name",
       title = s"Player 01 $iteration $name",
       //xRange=Some(Viz.Range(Some(0), Some(650))),
-      //yRange=Some(Viz.Range(Some(0), Some(400))),
+      yRange=Some(Viz.Range(Some(0), Some(160))),
       dataRows = Seq(kicks, goals, score)
     )
 

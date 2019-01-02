@@ -3,7 +3,7 @@ import vsoc.ga.trainga.ga.{FitnessFunctions, TrainGaFitnessFunction}
 
 class TrainGaPlayer01B extends TrainGaPlayer01Abstract {
 
-  override def id: String = "trainGaPlayer01A"
+  override def id: String = "TrainGaPlayer01B"
 
   override def fullDesc: String =
     """Training each player individually

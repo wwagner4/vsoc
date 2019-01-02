@@ -5,7 +5,6 @@ import java.util.{Comparator, Optional}
 
 import org.slf4j.LoggerFactory
 import vsoc.ga.common.data.CsvWriter
-import vsoc.ga.common.describe.DescribableFormatter
 import vsoc.ga.common.persist.{Persistor, Persistors}
 import vsoc.ga.common.{UtilReflection, UtilTransform}
 import vsoc.ga.trainga.config.{ConfigHelper, ConfigTrainGa}
@@ -45,7 +44,7 @@ class TrainGaRunner[S <: AnyRef] {
         UtilReflection.call(TrainGas, cfg.id, classOf[TrainGa[S]])
       }
 
-    val desc = DescribableFormatter.format(tga, 0)
+    val desc = tga.fullDesc
     tga.listeners = tga.listeners :+ persListener :+ dataListener :+ thinnerListener
     log.info(s"start ${tga.id}-${cfg.nr} at iteration ${tga.iterations}\n\n--------------------------------------------------------\n$desc")
     tga.run(cfg.id, cfg.nr)
