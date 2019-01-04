@@ -1,0 +1,13 @@
+<project name="vsoc" default="dist" basedir=".">
+
+    <loadproperties srcFile="common\src\main\resources\application.properties"/>
+
+    <target name="collectPlayer01">
+        <echo message="copy from ${vsoc.workdir}"/>
+          <copy todir="doc/training-results/exchange/workPlayer01">
+              <fileset dir="${vsoc.workdir}">
+                  <include name="trainGaPlayer01*/**/*.csv"/>
+              </fileset>
+          </copy>
+    </target>
+</project>

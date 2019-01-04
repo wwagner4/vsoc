@@ -30,7 +30,7 @@ object AnalyseMainPlayer01 extends App {
       .groupBy(d => (d.id, d.iterations))
       .toSeq
       .map { case ((id, iter), data) => (id, iter, meanGoals(data)) }
-      .groupBy { case (iter, _, _) => iter }
+      .groupBy { case (id, _, _) => id }
       .map { case (id, d) =>
         val all = d.map { case (_, x, y) => Viz.XY(x, y) }
           .sortBy(xy => xy.x.intValue())
