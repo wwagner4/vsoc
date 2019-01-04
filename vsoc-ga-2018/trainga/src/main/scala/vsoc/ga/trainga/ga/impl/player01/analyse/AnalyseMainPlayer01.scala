@@ -6,42 +6,90 @@ import entelijan.viz.creators.VizCreatorGnuplot
 import entelijan.viz.{Viz, VizCreator}
 import vsoc.ga.common.viz.Smoothing._
 import vsoc.ga.trainga.config.ConfigHelper
+import vsoc.ga.trainga.ga.impl.player01.DataPlayer01
 
 object AnalyseMainPlayer01 extends App {
 
-  val grpSize = 10
-  val iteration = "C"
+  kicksAndGoals(Seq("Simple", "C"), 5)
+  meanGoals
 
-  implicit val wd: Path = ConfigHelper.workDir
-  val reader = new CsvReaderDataPlayer01()
-  val allDatas = reader.read(s"trainGaPlayer01$iteration")
+  def meanGoals: Unit = {
+    def meanGoals(data: Seq[DataPlayer01]): Double = {
+      require(data.nonEmpty)
+      val sum = data.map(_.goals).sum
+      sum / data.size
+    }
 
-  val gdatas = allDatas.groupBy(d => d.nr).toList
+    val allData = Seq("C", "Simple").flatMap { trainId =>
+      implicit val wd: Path = ConfigHelper.workDir
+      val reader = new CsvReaderDataPlayer01()
+      reader.read(s"trainGaPlayer01$trainId")
+    }
 
-  gdatas.foreach{case (name, datas) =>
-    val kdata = datas.map(d => Viz.XY(d.iterations, d.kicks))
-    val kicks = Viz.DataRow(
-      name = Some("kicks"),
-      data = smooth(kdata, grpSize),
-    )
-    val gdata = datas.map(d => Viz.XY(d.iterations, d.goals * 100))
-    val goals = Viz.DataRow(
-      name = Some("goals x 100"),
-      data = smooth(gdata, grpSize),
-    )
-    val sdata = datas.map(d => Viz.XY(d.iterations, d.score))
-    val score = Viz.DataRow(
-      name = Some("score"),
-      data = smooth(sdata, grpSize),
-    )
+    val dataRows = allData
+      .groupBy(d => (d.id, d.iterations))
+      .toSeq
+      .map { case ((id, iter), data) => (id, iter, meanGoals(data)) }
+      .groupBy { case (iter, _, _) => iter }
+      .map { case (id, d) =>
+        val all = d.map { case (_, x, y) => Viz.XY(x, y) }
+          .sortBy(xy => xy.x.intValue())
+        val sm = smooth(all, 10)
+        Viz.DataRow(
+          name = Some(id),
+          data = sm)
+      }.toSeq
+
     val dia = Viz.Diagram(
-      id = s"player01_${iteration}_$name",
-      title = s"Player 01 $iteration $name",
-      //xRange=Some(Viz.Range(Some(0), Some(650))),
-      yRange=Some(Viz.Range(Some(0), Some(160))),
-      dataRows = Seq(kicks, goals, score)
+      id = s"player01_goals",
+      title = s"Player 01 goals per player per match",
+      //xRange = Some(Viz.Range(Some(0), Some(1000))),
+      //yRange = Some(Viz.Range(Some(0), Some(300))),
+      dataRows = dataRows
     )
+    writeDia(dia)
+  }
 
+
+
+  def kicksAndGoals(trainIds: Seq[String], grpSize: Int): Unit = {
+    trainIds.foreach { trainId =>
+      implicit val wd: Path = ConfigHelper.workDir
+      val reader = new CsvReaderDataPlayer01()
+      val allDatas = reader.read(s"trainGaPlayer01$trainId")
+
+      val gdatas = allDatas.groupBy(d => d.nr).toList
+
+      gdatas.foreach { case (nr, datas) =>
+        val kdata = datas.map(d => Viz.XY(d.iterations, d.kicks))
+        val kicks = Viz.DataRow(
+          name = Some("kicks"),
+          data = smooth(kdata, grpSize),
+        )
+        val gdata = datas.map(d => Viz.XY(d.iterations, d.goals * 100))
+        val goals = Viz.DataRow(
+          name = Some("goals x 100"),
+          data = smooth(gdata, grpSize),
+        )
+        val sdata = datas.map(d => Viz.XY(d.iterations, d.score))
+        val score = Viz.DataRow(
+          name = Some("score"),
+          data = smooth(sdata, grpSize),
+        )
+        val dia = Viz.Diagram(
+          id = s"player01_${trainId}_$nr",
+          title = s"Player 01 $trainId $nr",
+          xRange = Some(Viz.Range(Some(0), Some(1000))),
+          yRange = Some(Viz.Range(Some(0), Some(400))),
+          dataRows = Seq(kicks, goals, score)
+        )
+        writeDia(dia)
+      }
+
+    }
+  }
+
+  def writeDia(dia: Viz.Diagram[Viz.XY]): Unit = {
     val scripDir = ConfigHelper.workDir.resolve(".script")
     if (!Files.exists(scripDir)) Files.createDirectories(scripDir)
     val diaDir = ConfigHelper.workDir.resolve("diagram")
@@ -50,7 +98,5 @@ object AnalyseMainPlayer01 extends App {
       VizCreatorGnuplot(scripDir.toFile, diaDir.toFile, execute = true)
     Viz.createDiagram(dia)
   }
-
-
 
 }
