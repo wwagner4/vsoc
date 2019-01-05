@@ -10,17 +10,17 @@ import vsoc.ga.trainga.ga.impl.player01.DataPlayer01
 
 object AnalyseMainPlayer01 extends App {
 
-  kicksAndGoals(Seq("Simple", "C"), 5)
-  meanGoals
+  kicksAndGoals(Seq("Simple", "B", "C"), 50)
+  meanGoals(Seq("Simple", "B", "C"), 100)
 
-  def meanGoals: Unit = {
+  def meanGoals(trainIds: Seq[String], grpSize: Int): Unit = {
     def meanGoals(data: Seq[DataPlayer01]): Double = {
       require(data.nonEmpty)
       val sum = data.map(_.goals).sum
       sum / data.size
     }
 
-    val allData = Seq("C", "Simple").flatMap { trainId =>
+    val allData = trainIds.flatMap { trainId =>
       implicit val wd: Path = ConfigHelper.workDir
       val reader = new CsvReaderDataPlayer01()
       reader.read(s"trainGaPlayer01$trainId")
@@ -34,7 +34,7 @@ object AnalyseMainPlayer01 extends App {
       .map { case (id, d) =>
         val all = d.map { case (_, x, y) => Viz.XY(x, y) }
           .sortBy(xy => xy.x.intValue())
-        val sm = smooth(all, 10)
+        val sm = smooth(all, grpSize)
         Viz.DataRow(
           name = Some(id),
           data = sm)
@@ -43,8 +43,8 @@ object AnalyseMainPlayer01 extends App {
     val dia = Viz.Diagram(
       id = s"player01_goals",
       title = s"Player 01 goals per player per match",
-      //xRange = Some(Viz.Range(Some(0), Some(1000))),
-      //yRange = Some(Viz.Range(Some(0), Some(300))),
+      //xRange = Some(Viz.Range(Some(0), Some(4000))),
+      //yRange = Some(Viz.Range(Some(0), Some(500))),
       dataRows = dataRows
     )
     writeDia(dia)
@@ -79,8 +79,8 @@ object AnalyseMainPlayer01 extends App {
         val dia = Viz.Diagram(
           id = s"player01_${trainId}_$nr",
           title = s"Player 01 $trainId $nr",
-          xRange = Some(Viz.Range(Some(0), Some(1000))),
-          yRange = Some(Viz.Range(Some(0), Some(400))),
+          xRange = Some(Viz.Range(Some(0), Some(6000))),
+          yRange = Some(Viz.Range(Some(0), Some(500))),
           dataRows = Seq(kicks, goals, score)
         )
         writeDia(dia)

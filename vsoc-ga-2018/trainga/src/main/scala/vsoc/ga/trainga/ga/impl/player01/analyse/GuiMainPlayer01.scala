@@ -8,7 +8,7 @@ import vsoc.ga.trainga.gui.GuiPopulationRunner
 object GuiMainPlayer01 extends App {
 
   implicit val wd: Path = ConfigHelper.workDir
-  val cfg = ConfigTrainGa("trainGaPlayer01C", "work005")
+  val cfg = ConfigTrainGa("trainGaPlayer01B", "bob003")
    GuiPopulationRunner.run(cfg)
 
 }
