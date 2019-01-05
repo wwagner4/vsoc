@@ -28,8 +28,8 @@ lazy val matches = (project in file("matches"))
     // Is a module of https://github.com/wwagner4/vsoc.git
     // cd vsoc/vsoc-2007 && mvn install
     libraryDependencies += "net.entelijan" % "vsoc-core" % "0.0.1",
-    libraryDependencies += "org.deeplearning4j" % "deeplearning4j-nn" % _dl4jVersion exclude("com.github.stephenc.findbugs", "findbugs-annotations"),
-    libraryDependencies += "org.nd4j" % "nd4j-native-platform" % _dl4jVersion exclude("com.github.stephenc.findbugs", "findbugs-annotations")
+    libraryDependencies += "org.deeplearning4j" % "deeplearning4j-nn" % _dl4jVersion exclude("org.nd4j", "nd4j-base64"),
+    libraryDependencies += "org.nd4j" % "nd4j-native-platform" % _dl4jVersion,
   )
   .dependsOn(common)
 
