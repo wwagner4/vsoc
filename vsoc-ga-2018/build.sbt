@@ -1,5 +1,5 @@
 lazy val _scalaVersion = "2.12.8"
-lazy val _dl4jVersion = "0.9.1"
+lazy val _dl4jVersion = "1.0.0-beta3"
 
 lazy val userHome = System.getProperty("user.home")
 

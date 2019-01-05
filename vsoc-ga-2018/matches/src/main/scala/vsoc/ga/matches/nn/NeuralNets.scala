@@ -20,7 +20,7 @@ object NeuralNets {
 
     protected def nnConfiguration(): MultiLayerConfiguration = {
       new NeuralNetConfiguration.Builder()
-        .iterations(1)
+        .maxNumLineSearchIterations(1)
         .weightInit(WeightInit.XAVIER)
         .list
         .layer(0, new DenseLayer.Builder()
@@ -59,7 +59,7 @@ object NeuralNets {
 
     override protected def nnConfiguration(): MultiLayerConfiguration = {
       new NeuralNetConfiguration.Builder()
-        .iterations(1)
+        .maxNumLineSearchIterations(1)
         .weightInit(WeightInit.XAVIER)
         .list
         .layer(0, new DenseLayer.Builder()
@@ -97,7 +97,7 @@ object NeuralNets {
 
     override protected def nnConfiguration(): MultiLayerConfiguration = {
       new NeuralNetConfiguration.Builder()
-        .iterations(1)
+        .maxNumLineSearchIterations(1)
         .weightInit(WeightInit.XAVIER)
         .list
         .layer(0, new DenseLayer.Builder()

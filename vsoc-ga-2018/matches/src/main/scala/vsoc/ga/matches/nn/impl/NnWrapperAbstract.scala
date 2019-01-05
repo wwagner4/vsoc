@@ -24,7 +24,7 @@ abstract class NnWrapperAbstract extends NeuralNet {
     lazy val len: Int = cols * rows
   }
 
-  val paramTypes = Seq(B, W)
+  val paramTypes: Seq[ParamType] = Seq(B, W)
 
   def numInputNodes: Int
 
@@ -86,7 +86,7 @@ abstract class NnWrapperAbstract extends NeuralNet {
       val out = new Array[Double](pd.len)
       for (r <- 0 until pd.rows; c <- 0 until pd.cols) {
         val i = (r * pd.cols) + c
-        val v = p.getDouble(r, c)
+        val v = p.getDouble(r.toLong, c.toLong)
         out(i) = v
       }
       out
