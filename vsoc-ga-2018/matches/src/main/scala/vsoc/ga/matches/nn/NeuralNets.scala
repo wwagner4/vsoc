@@ -1,7 +1,7 @@
 package vsoc.ga.matches.nn
 
 import org.deeplearning4j.nn.conf.layers.recurrent.SimpleRnn
-import org.deeplearning4j.nn.conf.layers.{DenseLayer, OutputLayer}
+import org.deeplearning4j.nn.conf.layers.{DenseLayer, OutputLayer, RnnOutputLayer}
 import org.deeplearning4j.nn.conf.{MultiLayerConfiguration, NeuralNetConfiguration}
 import org.deeplearning4j.nn.weights.WeightInit
 import org.nd4j.linalg.activations.Activation
@@ -210,7 +210,7 @@ object NeuralNets {
           .nOut(numHiddenNodes3)
           .activation(Activation.TANH)
           .build)
-        .layer(3, new OutputLayer.Builder(LossFunctions.LossFunction.MSE)
+        .layer(3, new RnnOutputLayer.Builder()
           .activation(Activation.IDENTITY).nIn(numHiddenNodes3)
           .nOut(numOutputNodes)
           .build)
