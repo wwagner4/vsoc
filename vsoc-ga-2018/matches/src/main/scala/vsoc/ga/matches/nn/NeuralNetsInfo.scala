@@ -7,6 +7,7 @@ object NeuralNetsInfo extends App {
     NeuralNets.team01,
     NeuralNets.team02,
     NeuralNets.test,
+    NeuralNets.rnn01,
   )
 
   nets.foreach{nn =>

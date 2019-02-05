@@ -1,5 +1,6 @@
 package vsoc.ga.matches.nn
 
+import org.deeplearning4j.nn.conf.layers.recurrent.SimpleRnn
 import org.deeplearning4j.nn.conf.layers.{DenseLayer, OutputLayer}
 import org.deeplearning4j.nn.conf.{MultiLayerConfiguration, NeuralNetConfiguration}
 import org.deeplearning4j.nn.weights.WeightInit
@@ -174,6 +175,46 @@ object NeuralNets {
 
     }
 
+  }
+
+  def rnn01 = new NnWrapperAbstract  {
+    override def id: String = "rnn01"
+
+    override def fullDesc: String = "Simple recurrent neural Net"
+
+    override def numInputNodes: Int = 140
+
+    override def numOutputNodes: Int = 4
+
+    val numHiddenNodes1 = 100
+
+    val numHiddenNodes2 = 50
+
+    val numHiddenNodes3 = 10
+
+    override protected def nnConfiguration(): MultiLayerConfiguration =
+      new NeuralNetConfiguration.Builder()
+        .list
+        .layer(0, new SimpleRnn.Builder()
+          .nIn(numInputNodes)
+          .nOut(numHiddenNodes1)
+          .activation(Activation.TANH)
+          .build)
+        .layer(1, new SimpleRnn.Builder()
+          .nIn(numHiddenNodes1)
+          .nOut(numHiddenNodes2)
+          .activation(Activation.TANH)
+          .build)
+        .layer(2, new SimpleRnn.Builder()
+          .nIn(numHiddenNodes2)
+          .nOut(numHiddenNodes3)
+          .activation(Activation.TANH)
+          .build)
+        .layer(3, new OutputLayer.Builder(LossFunctions.LossFunction.MSE)
+          .activation(Activation.IDENTITY).nIn(numHiddenNodes3)
+          .nOut(numOutputNodes)
+          .build)
+        .build
   }
 
 }

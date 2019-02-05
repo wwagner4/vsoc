@@ -38,10 +38,11 @@ class VsocMatchFrame(title: String, subtitle: String, matchFactory: () => Match)
     else if (!running) {
       running = true
       Future {
+        var ns = System.nanoTime
         while (running) {
           _match.get.takeStep()
-          pause(delay)
-        }
+          ns += delay
+          Thread.sleep(Math.max(0, (ns - System.nanoTime) / 10000000))        }
       }
     }
     // else nothing to do
