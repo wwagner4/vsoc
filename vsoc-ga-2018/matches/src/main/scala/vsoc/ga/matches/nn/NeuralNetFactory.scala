@@ -1,5 +1,7 @@
 package vsoc.ga.matches.nn
 
+import scala.util.Random
+
 trait NeuralNetFactory {
 
   def neuralNet: NeuralNet
@@ -9,5 +11,8 @@ trait NeuralNetFactory {
   def inputSize: Int
 
   def outputSize: Int
+
+  def randomAllele(ran: Random): Double
+
 
 }

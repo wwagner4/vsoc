@@ -281,5 +281,35 @@ object Configs {
       "Player simulation running on bob"
   }
 
+  def player01CRec01bob: Config = new Config {
+
+    override def id: String = "player01CRec01bob"
+
+    override def trainings: Seq[ConfigTrainGa] = Seq(
+      ConfigTrainGa("trainGaPlayer01CRec01", "bob000"),
+      ConfigTrainGa("trainGaPlayer01CRec01", "bob001"),
+      ConfigTrainGa("trainGaPlayer01CRec01", "bob002"),
+      ConfigTrainGa("trainGaPlayer01CRec01", "bob003"),
+    )
+
+    override def fullDesc: String =
+      "Player simulation with recurrent NN running on bob"
+  }
+
+  def player01CRec01work: Config = new Config {
+
+    override def id: String = "player01CRec01work"
+
+    override def trainings: Seq[ConfigTrainGa] = Seq(
+      ConfigTrainGa("trainGaPlayer01CRec01", "work000"),
+      ConfigTrainGa("trainGaPlayer01CRec01", "work001"),
+      ConfigTrainGa("trainGaPlayer01CRec01", "work002"),
+      ConfigTrainGa("trainGaPlayer01CRec01", "work003"),
+    )
+
+    override def fullDesc: String =
+      "Player simulation with recurrent NN running on work"
+  }
+
 
 }

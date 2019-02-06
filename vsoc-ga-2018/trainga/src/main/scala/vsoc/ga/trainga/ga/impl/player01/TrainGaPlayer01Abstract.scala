@@ -19,11 +19,11 @@ abstract class TrainGaPlayer01Abstract extends TrainGa[DataPlayer01] {
 
   private val popSize = 30
   private val ran = new Random()
-  private val neuralNetFactory = NeuralNetFactories.team02
+  protected def neuralNetFactory = NeuralNetFactories.team02
   private val transformer = new TransformerPlayer01(neuralNetFactory)
   private val phenoTester = new PhenoTesterPlayer01
   protected def fitnessFunction: TrainGaFitnessFunction[DataPlayer01] = FitnessFunctions.dataPlayer01A
-  private val selection = SelectionStrategies.crossover(0.001, randomAllele, ran)
+  private val selection = SelectionStrategies.crossover(0.001, neuralNetFactory.randomAllele, ran)
 
   override def run(trainGaId: String, trainGaNr: String): Unit = {
     log.info(s"start $trainGaId $trainGaNr")
@@ -46,9 +46,7 @@ abstract class TrainGaPlayer01Abstract extends TrainGa[DataPlayer01] {
 
   private def createInitialPopGeno: Seq[Seq[Double]] = Seq.fill(popSize)(randomGeno(ran))
 
-  private def randomAllele(ran: Random): Double = 2.0 * ran.nextDouble() - 1.0
-
-  private def randomGeno(ran: Random): Seq[Double] = Seq.fill(neuralNetFactory.parameterSize)(randomAllele(ran))
+  private def randomGeno(ran: Random): Seq[Double] = Seq.fill(neuralNetFactory.parameterSize)(neuralNetFactory.randomAllele(ran))
 
   private def nextPopulation(id: String, nr: String, iterNr: Int, popGeno: Seq[Seq[Double]]): (DataPlayer01, Seq[Seq[Double]]) = {
     val phenos: Seq[PhenoPlayer01] = popGeno map transformer.toPheno

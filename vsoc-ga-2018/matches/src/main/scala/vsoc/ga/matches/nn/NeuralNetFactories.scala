@@ -1,6 +1,11 @@
 package vsoc.ga.matches.nn
 
+import scala.util.Random
+
 object NeuralNetFactories {
+
+
+  private def randomAlleleDefault(ran: Random): Double = 2.0 * ran.nextDouble() - 1.0
 
   def default: NeuralNetFactory = new NeuralNetFactory {
     override def neuralNet: NeuralNet = NeuralNets.default
@@ -10,6 +15,8 @@ object NeuralNetFactories {
     override def inputSize: Int = 2
 
     override def outputSize: Int = 3
+
+    override def randomAllele(ran: Random): Double = randomAlleleDefault(ran)
   }
 
   def test: NeuralNetFactory = new NeuralNetFactory {
@@ -20,6 +27,8 @@ object NeuralNetFactories {
     override def inputSize: Int = 2
 
     override def outputSize: Int = 3
+
+    override def randomAllele(ran: Random): Double = randomAlleleDefault(ran)
   }
 
   def team01: NeuralNetFactory = new NeuralNetFactory {
@@ -30,6 +39,8 @@ object NeuralNetFactories {
     override def inputSize: Int = 140
 
     override def outputSize: Int = 4
+
+    override def randomAllele(ran: Random): Double = randomAlleleDefault(ran)
   }
 
   def team02: NeuralNetFactory = new NeuralNetFactory {
@@ -40,6 +51,8 @@ object NeuralNetFactories {
     override def inputSize: Int = 140
 
     override def outputSize: Int = 4
+
+    override def randomAllele(ran: Random): Double = randomAlleleDefault(ran)
   }
 
   def rnn01: NeuralNetFactory =
@@ -52,5 +65,7 @@ object NeuralNetFactories {
       override def inputSize: Int = 140
 
       override def outputSize: Int = 4
+
+      override def randomAllele(ran: Random): Double = ran.nextDouble()
     }
 }
