@@ -4,9 +4,14 @@ import org.deeplearning4j.nn.conf.MultiLayerConfiguration
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork
 import org.nd4j.linalg.api.ndarray.INDArray
 import org.nd4j.linalg.factory.Nd4j
+import org.nd4j.linalg.util.ArrayUtil
 import vsoc.ga.matches.nn.NeuralNet
 
 abstract class NnWrapperAbstract extends NeuralNet {
+
+  val valueHistory = new ValuesHistory(historyLength, numInputNodes)
+
+  def historyLength: Int
 
   sealed trait ParamType {
     def code: String
@@ -51,7 +56,13 @@ abstract class NnWrapperAbstract extends NeuralNet {
   }
 
   def output(in: Array[Double]): Array[Double] = {
-    val in1: INDArray = Nd4j.create(in)
+    valueHistory.addData(in)
+    val in1 = if (valueHistory.historyLength == 1) {
+      Nd4j.create(valueHistory.data(0))
+    } else {
+      val flat = ArrayUtil.flatten(valueHistory.data)
+      Nd4j.create(flat, Array(historyLength, numInputNodes, 1))
+    }
     val out: INDArray = nn.output(in1)
     out.data().asDouble()
   }

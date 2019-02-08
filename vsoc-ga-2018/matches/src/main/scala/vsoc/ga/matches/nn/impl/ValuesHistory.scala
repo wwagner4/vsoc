@@ -3,7 +3,7 @@ import scala.collection.immutable
 
 class ValuesHistory(val historyLength: Int, dataLength: Int) {
 
-  require(historyLength > 1, s"History length must be greater 1 but is: $historyLength")
+  require(historyLength > 0, s"History length must be greater 0 but is: $historyLength")
   require(dataLength > 0, s"Data length must be greater 0 but is: $dataLength")
 
   private var buffer = initBuffer

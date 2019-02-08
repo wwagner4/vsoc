@@ -4,6 +4,43 @@ import org.scalatest.{FunSuite, MustMatchers}
 
 class ValuesHistoryTest extends FunSuite with MustMatchers {
 
+  test("dimension [1,1]") {
+    val vh = new ValuesHistory(1,1)
+    val d1 = vh.data
+    d1.length mustBe 1
+
+    d1(0).length mustBe 1
+
+    d1(0)(0) mustBe 0.00 +- 0.0001
+  }
+
+  test("dimension [1,1] add one value") {
+    val vh = new ValuesHistory(1,1)
+    vh.addData(Array(1.1))
+
+    val d1 = vh.data
+    d1.length mustBe 1
+
+    d1(0).length mustBe 1
+
+    d1(0)(0) mustBe 1.1 +- 0.0001
+  }
+
+  test("dimension [1,1] add four valuea") {
+    val vh = new ValuesHistory(1,1)
+    vh.addData(Array(1.1))
+    vh.addData(Array(2.1))
+    vh.addData(Array(3.1))
+    vh.addData(Array(4.1))
+
+    val d1 = vh.data
+    d1.length mustBe 1
+
+    d1(0).length mustBe 1
+
+    d1(0)(0) mustBe 4.1 +- 0.0001
+  }
+
   test("dimension [2,1]") {
     val vh = new ValuesHistory(2,1)
     val d1 = vh.data

@@ -15,9 +15,9 @@ object NeuralNets {
     // id must be the name of the method creating the neural net
     def id = "default"
 
-    val numInputNodes = 2
-    val numHiddenNodes = 5
-    val numOutputNodes = 3
+    def numInputNodes = 2
+    def numHiddenNodes = 5
+    def numOutputNodes = 3
 
     protected def nnConfiguration(): MultiLayerConfiguration = {
       new NeuralNetConfiguration.Builder()
@@ -42,6 +42,8 @@ object NeuralNets {
     }
 
     override def fullDesc: String = s"'$id' - Default Neural Net. Used for testing purposes"
+
+    override def historyLength: Int = 1
   }
 
   /**
@@ -52,11 +54,11 @@ object NeuralNets {
     // id must be the name of the method creating the neural net
     def id = "test"
 
-    override val numInputNodes: Int = 2
+    override def numInputNodes: Int = 2
 
-    private val numHiddenNodes: Int = 5
+    private def numHiddenNodes: Int = 5
 
-    override val numOutputNodes: Int = 3
+    override def numOutputNodes: Int = 3
 
     override protected def nnConfiguration(): MultiLayerConfiguration = {
       new NeuralNetConfiguration.Builder()
@@ -82,6 +84,7 @@ object NeuralNets {
 
     override def fullDesc: String = s"'$id' - Standard Neural Net. Used for testing purposes"
 
+    override def historyLength: Int = 1
 
   }
 
@@ -90,11 +93,11 @@ object NeuralNets {
     // id must be the name of the method creating the neural net
     def id = "team01"
 
-    override val numInputNodes: Int = 140
+    override def numInputNodes: Int = 140
 
-    private val numHiddenNodes: Int = 150
+    private def numHiddenNodes: Int = 150
 
-    override val numOutputNodes: Int = 4
+    override def numOutputNodes: Int = 4
 
     override protected def nnConfiguration(): MultiLayerConfiguration = {
       new NeuralNetConfiguration.Builder()
@@ -124,6 +127,7 @@ object NeuralNets {
          |""".stripMargin
 
     }
+    override def historyLength: Int = 1
 
   }
 
@@ -132,15 +136,15 @@ object NeuralNets {
     // id must be the name of the method creating the neural net
     def id = "team02"
 
-    override val numInputNodes: Int = 140
+    override def numInputNodes: Int = 140
 
-    private val numHiddenNodes1: Int = 100
+    private def numHiddenNodes1: Int = 100
 
-    private val numHiddenNodes2: Int = 50
+    private def numHiddenNodes2: Int = 50
 
-    private val numHiddenNodes3: Int = 10
+    private def numHiddenNodes3: Int = 10
 
-    override val numOutputNodes: Int = 4
+    override def numOutputNodes: Int = 4
 
 
     override protected def nnConfiguration(): MultiLayerConfiguration = {
@@ -175,6 +179,7 @@ object NeuralNets {
 
     }
 
+    override def historyLength: Int = 1
   }
 
   def rnn01 = new NnWrapperAbstract  {
@@ -216,6 +221,9 @@ object NeuralNets {
           .nOut(numOutputNodes)
           .build)
         .build
+
+    override def historyLength: Int = 5
+
   }
 
 }
