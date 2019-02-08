@@ -6,7 +6,7 @@ import org.scalatest.{FunSuite, MustMatchers}
 
 class NdArrayRankTest extends FunSuite with MustMatchers {
 
-  test("[3,3] random values") {
+  test("[2,3,1] random values") {
     val d = Array(
       Array(3.2, 2.0, 4.0),
       Array(-1.0, 1.0, 2.0),
