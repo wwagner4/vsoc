@@ -1,11 +1,15 @@
 package vsoc.ga.matches.nn
 
+import java.lang
+
 import org.deeplearning4j.nn.conf.layers.recurrent.SimpleRnn
 import org.deeplearning4j.nn.conf.layers.{DenseLayer, OutputLayer, RnnOutputLayer}
 import org.deeplearning4j.nn.conf.{MultiLayerConfiguration, NeuralNetConfiguration}
 import org.deeplearning4j.nn.weights.WeightInit
-import org.nd4j.linalg.activations.Activation
-import org.nd4j.linalg.lossfunctions.LossFunctions
+import org.nd4j.linalg.activations.{Activation, IActivation}
+import org.nd4j.linalg.api.ndarray.INDArray
+import org.nd4j.linalg.lossfunctions.{ILossFunction, LossFunctions}
+import org.nd4j.linalg.primitives
 import vsoc.ga.matches.nn.impl.NnWrapperAbstract
 
 object NeuralNets {
@@ -16,7 +20,9 @@ object NeuralNets {
     def id = "default"
 
     def numInputNodes = 2
+
     def numHiddenNodes = 5
+
     def numOutputNodes = 3
 
     protected def nnConfiguration(): MultiLayerConfiguration = {
@@ -127,6 +133,7 @@ object NeuralNets {
          |""".stripMargin
 
     }
+
     override def historyLength: Int = 1
 
   }
@@ -182,7 +189,7 @@ object NeuralNets {
     override def historyLength: Int = 1
   }
 
-  def rnn01 = new NnWrapperAbstract  {
+  def rnn01: NeuralNet = new NnWrapperAbstract {
     override def id: String = "rnn01"
 
     override def fullDesc: String = "Simple recurrent neural Net"
@@ -203,20 +210,21 @@ object NeuralNets {
         .layer(0, new SimpleRnn.Builder()
           .nIn(numInputNodes)
           .nOut(numHiddenNodes1)
-          .activation(Activation.SIGMOID)
+          .activation(Activation.TANH)
           .build)
         .layer(1, new SimpleRnn.Builder()
           .nIn(numHiddenNodes1)
           .nOut(numHiddenNodes2)
-          .activation(Activation.SIGMOID)
+          .activation(Activation.TANH)
           .build)
         .layer(2, new SimpleRnn.Builder()
           .nIn(numHiddenNodes2)
           .nOut(numHiddenNodes3)
-          .activation(Activation.SIGMOID)
+          .activation(Activation.TANH)
           .build)
         .layer(3, new RnnOutputLayer.Builder()
-          .activation(Activation.SOFTMAX)
+          .lossFunction(new LF)
+          .activation(Activation.TANH)
           .nIn(numHiddenNodes3)
           .nOut(numOutputNodes)
           .build)
@@ -224,6 +232,22 @@ object NeuralNets {
 
     override def historyLength: Int = 5
 
+  }
+
+  class LF extends ILossFunction {
+    override def computeScore(labels: INDArray, preOutput: INDArray, activationFn: IActivation, mask: INDArray, average: Boolean): Double =
+      throw new IllegalStateException("should never be called")
+
+    override def computeScoreArray(labels: INDArray, preOutput: INDArray, activationFn: IActivation, mask: INDArray): INDArray =
+      throw new IllegalStateException("should never be called")
+
+    override def computeGradient(labels: INDArray, preOutput: INDArray, activationFn: IActivation, mask: INDArray): INDArray =
+      throw new IllegalStateException("should never be called")
+
+    override def computeGradientAndScore(labels: INDArray, preOutput: INDArray, activationFn: IActivation, mask: INDArray, average: Boolean): primitives.Pair[lang.Double, INDArray] =
+      throw new IllegalStateException("should never be called")
+
+    override def name(): String = "LF"
   }
 
 }

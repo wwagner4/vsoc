@@ -66,6 +66,6 @@ object NeuralNetFactories {
 
       override def outputSize: Int = 4
 
-      override def randomAllele(ran: Random): Double = ran.nextDouble()
+      override def randomAllele(ran: Random): Double = randomAlleleDefault(ran)
     }
 }

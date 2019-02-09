@@ -296,6 +296,19 @@ object Configs {
       "Player simulation with recurrent NN running on bob"
   }
 
+  def player01CRec01test: Config = new Config {
+
+    override def id: String = "player01CRec01test"
+
+    override def trainings: Seq[ConfigTrainGa] = Seq(
+      ConfigTrainGa("trainGaPlayer01CRec01", "test000"),
+      ConfigTrainGa("trainGaPlayer01CRec01", "test001"),
+    )
+
+    override def fullDesc: String =
+      "Player simulation with recurrent NN running for test"
+  }
+
   def player01CRec01work: Config = new Config {
 
     override def id: String = "player01CRec01work"
